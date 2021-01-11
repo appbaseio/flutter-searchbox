@@ -296,8 +296,7 @@ class SearchComponent extends Base {
       fields = [...fields, ...popularSuggestionFields];
     }
     return getSuggestions(
-            fields, this.results.data, this.value, this.showDistinctSuggestions)
-        .sublist(0, this.size);
+        fields, this.results.data, this.value, this.showDistinctSuggestions);
   }
 
   // Method to get the raw query based on the current state
@@ -352,15 +351,6 @@ class SearchComponent extends Base {
     }
     return '';
   }
-
-  // get mappedProps(): Object {
-  //   const mappedProps = {};
-  //   Object.keys(searchBaseMappings).forEach(key => {
-  //     // $FlowFixMe
-  //     mappedProps[searchBaseMappings[key]] = this[key];
-  //   });
-  //   return mappedProps;
-  // }
 
   /* -------- Public methods -------- */
 
@@ -430,7 +420,6 @@ class SearchComponent extends Base {
       this._applyOptions(options, 'value', prev, this.value);
     }
 
-    ;
     if (this.beforeValueChange != null) {
       try {
         await beforeValueChange(value);
@@ -544,7 +533,7 @@ class SearchComponent extends Base {
       this._setRequestStatus(RequestStatus.PENDING);
       final results = await this._fetchRequest({
         'query': this.query is List ? this.query : [this.query],
-        'settings': this.appbaseSettings.toJSON()
+        'settings': this.appbaseSettings?.toJSON()
       }, false);
       final prev = this.results;
       final Map rawResults =
@@ -554,12 +543,11 @@ class SearchComponent extends Base {
           this._handleAggregationResponse(rawResults['aggregations'],
               options: new Options(stateChanges: options?.stateChanges));
         }
-        this._setRequestStatus(RequestStatus.PENDING);
+        this._setRequestStatus(RequestStatus.INACTIVE);
         this._applyOptions(new Options(stateChanges: options?.stateChanges),
             'results', prev, this.results);
       }
 
-      ;
       if ((this.type == null || this.type == QueryType.search) &&
           this.enablePopularSuggestions == true) {
         final rawPopularSuggestions =
@@ -575,6 +563,7 @@ class SearchComponent extends Base {
               rawResults['hits'] != null &&
               rawResults['hits']['hits'] != null) {
             rawResults['hits']['hits'] = [
+              ...rawResults['hits']['hits'],
               ...(popularSuggestionsData['hits']['hits'] as List)
                   .map((hit) => ({
                         ...hit,
@@ -582,7 +571,6 @@ class SearchComponent extends Base {
                         '_popular_suggestion': true
                       }))
                   .toList(),
-              ...rawResults['hits']['hits']
             ];
           }
           this._appendResults(rawResults);
@@ -631,7 +619,7 @@ class SearchComponent extends Base {
         final finalGeneratedQuery = this._generateQuery();
         final results = await this._fetchRequest({
           'query': finalGeneratedQuery.requestBody,
-          'settings': this.appbaseSettings.toJSON()
+          'settings': this.appbaseSettings?.toJSON()
         }, false);
         // Update the state for components
         finalGeneratedQuery.orderOfQueries.forEach((id) {
@@ -741,12 +729,13 @@ class SearchComponent extends Base {
   }
 
   // Method to subscribe the state changes
-  subscribeToStateChanges(Function fn, List<String> propertiesToSubscribe) {
+  subscribeToStateChanges(
+      SubscriptionFunction fn, List<String> propertiesToSubscribe) {
     this.stateChanges.subscribe(fn, propertiesToSubscribe);
   }
 
   // Method to unsubscribe the state changes
-  unsubscribeToStateChanges(Function fn) {
+  unsubscribeToStateChanges(SubscriptionFunction fn) {
     this.stateChanges.unsubscribe(fn);
   }
 
@@ -821,15 +810,16 @@ class SearchComponent extends Base {
       this.triggerCustomQuery();
     }
     if (options == null || options.stateChanges) {
-      this.stateChanges.next({
-        key: {'prev': prevValue, 'next': nextValue}
-      }, key);
+      this.stateChanges.next({key: new Changes(prevValue, nextValue)}, key);
     }
   }
 
   Future<List<Suggestion>> getRecentSearches(
       {RecentSearchOptions queryOptions, Options options}) async {
     String queryString = '';
+    if (queryOptions == null) {
+      queryOptions = RecentSearchOptions();
+    }
     void addParam(String key, String value) {
       if (queryString != "") {
         queryString += "&${key}=${value}";
@@ -838,12 +828,8 @@ class SearchComponent extends Base {
       }
     }
 
-    ;
     if (this.appbaseSettings != null && this.appbaseSettings.userId != null) {
       addParam('user_id', this.appbaseSettings.userId);
-    }
-    if (queryOptions == null) {
-      queryOptions = RecentSearchOptions();
     }
     if (queryOptions.size != null) {
       addParam('size', queryOptions.size.toString());

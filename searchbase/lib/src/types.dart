@@ -1,5 +1,12 @@
 typedef TransformRequest = Future<Object> Function(Map requestOptions);
 typedef TransformResponse = Future Function(dynamic response);
+typedef SubscriptionFunction = Function(Map<String, Changes> change);
+
+class Changes {
+  final dynamic prev;
+  final dynamic next;
+  Changes(this.prev, this.next);
+}
 
 class AppbaseSettings {
   bool recordAnalytics;
@@ -38,14 +45,12 @@ class RecentSearchOptions {
   String from;
   String to;
   Map<String, String> customEvents;
-  RecentSearchOptions({size, minChars, this.from, this.to, this.customEvents}) {
-    if (size == null) {
-      size = 5;
-    }
-    if (minChars == null) {
-      minChars = 3;
-    }
-  }
+  RecentSearchOptions(
+      {this.size = 5,
+      this.minChars = 3,
+      this.from,
+      this.to,
+      this.customEvents});
 }
 
 class Options {

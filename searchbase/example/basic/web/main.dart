@@ -12,8 +12,9 @@ void main() {
   final index = 'gitxplore-app';
   final url = 'https://@arc-cluster-appbase-demo-6pjy6z.searchbase.io';
   final credentials = 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61';
-  final searchbase = new SearchBase(index, url, credentials,
-      appbaseConfig: new AppbaseSettings(recordAnalytics: true));
+
+  final searchbase = SearchBase(index, url, credentials,
+      appbaseConfig: AppbaseSettings(recordAnalytics: true));
   // Register search component => To render the suggestions
   final searchComponent = searchbase.register('search-component', {
     'enablePopularSuggestions': true,
@@ -87,7 +88,7 @@ void main() {
   resultComponent.triggerDefaultQuery();
 
   resultComponent.subscribeToStateChanges((change) {
-    final results = change['results']['next'];
+    final results = change['results'].next;
     final items = results.data?.map((i) {
       return """
     <div id=${i['_id']} class="result-set">
@@ -115,7 +116,7 @@ void main() {
   filterComponent.triggerDefaultQuery();
 
   filterComponent.subscribeToStateChanges((change) {
-    final aggregations = change['aggregationData']['next'];
+    final aggregations = change['aggregationData'].next;
     final container = document.getElementById('language-filter');
     container.setInnerHtml('');
     aggregations.data.forEach((i) {

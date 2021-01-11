@@ -31,9 +31,9 @@ class Results {
   }
 
   // Total time taken by request (in ms)
-  double get time {
+  int get time {
     // calculate from raw response
-    if (this.raw != null && this.raw['took'] is double) {
+    if (this.raw != null) {
       return this.raw['took'];
     }
     return 0;

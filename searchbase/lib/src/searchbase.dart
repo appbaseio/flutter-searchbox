@@ -38,7 +38,7 @@ class SearchBase extends Base {
     SearchComponent componentInstance;
     if (component != null && component is Map) {
       // create instance from object with all the options
-      componentInstance = new SearchComponent(
+      componentInstance = SearchComponent(
         component["index"] != null ? component["index"] : this.index,
         component["url"] != null ? component["url"] : this.url,
         component["credentials"] != null
@@ -72,6 +72,7 @@ class SearchBase extends Base {
         includeNullValues: component["includeNullValues"],
         includeFields: component["includeFields"],
         excludeFields: component["excludeFields"],
+        results: component["results"],
         fuzziness: component["fuzziness"],
         searchOperators: component["searchOperators"],
         highlight: component["highlight"],
@@ -116,7 +117,7 @@ class SearchBase extends Base {
 
   // To un-register a component
   void unregister(String componentId) {
-    if (componentId == '') {
+    if (componentId != '') {
       this._components.remove(componentId);
     }
   }
