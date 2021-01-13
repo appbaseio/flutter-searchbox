@@ -80,7 +80,7 @@ class HomePage extends StatelessWidget {
                 id: 'result-widget',
                 dataField: 'original_title',
                 react: {
-                  'and': ['search-widget'],
+                  'and': ['search-widget', 'author-filter'],
                 },
                 size: 10,
                 triggerQueryOnInit: true,

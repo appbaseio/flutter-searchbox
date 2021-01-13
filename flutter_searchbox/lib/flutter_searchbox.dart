@@ -925,7 +925,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   }
 
   ListView getSuggestionList(
-      BuildContext context, SearchWidget SearchWidget, List<Suggestion> list,
+      BuildContext context, SearchWidget searchWidget, List<Suggestion> list,
       {bool isRecentSearch = false}) {
     List<Widget> suggestionsList = list
         .map((suggestion) => Container(
@@ -935,16 +935,17 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
                 child: ListTile(
                   onTap: () {
                     // Perform actions on suggestions tap
-                    SearchWidget.setValue(suggestion.value,
+                    searchWidget.setValue(suggestion.value,
                         options: Options(triggerCustomQuery: true));
                     this.query = suggestion.value;
-
-                    String objectId = suggestion.source != null
-                        ? null
-                        : suggestion.source['_id'];
+                    String objectId;
+                    if (suggestion.source != null &&
+                        suggestion.source['_id'] is String) {
+                      objectId = suggestion.source['_id'];
+                    }
                     if (objectId != null && suggestion.clickId != null) {
                       // Record click analytics
-                      SearchWidget.recordClick({objectId: suggestion.clickId},
+                      searchWidget.recordClick({objectId: suggestion.clickId},
                           isSuggestionClick: true);
                     }
 
