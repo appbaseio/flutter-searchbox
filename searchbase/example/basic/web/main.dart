@@ -15,8 +15,8 @@ void main() {
 
   final searchbase = SearchBase(index, url, credentials,
       appbaseConfig: AppbaseSettings(recordAnalytics: true));
-  // Register search component => To render the suggestions
-  final searchComponent = searchbase.register('search-component', {
+  // Register search widget => To render the suggestions
+  final searchWidget = searchbase.register('search-widget', {
     'enablePopularSuggestions': true,
     'dataField': [
       'name',
@@ -28,19 +28,19 @@ void main() {
     ]
   });
 
-// Register filter component with dependency on search component
+// Register filter widget with dependency on search widget
   final filterComponent = searchbase.register('language-filter', {
     'type': QueryType.term,
     'dataField': 'language.keyword',
-    'react': {'and': 'search-component'},
+    'react': {'and': 'search-widget'},
     'value': List<String>()
   });
 
-// Register result component with react dependency on search and filter component => To render the results
-  final resultComponent = searchbase.register('result-component', {
+// Register result widget with react dependency on search and filter widget => To render the results
+  final resultComponent = searchbase.register('result-widget', {
     'dataField': 'name',
     'react': {
-      'and': ['search-component', 'language-filter']
+      'and': ['search-widget', 'language-filter']
     },
   });
 
@@ -67,7 +67,7 @@ void main() {
   final input = querySelector('#input');
   void handleInput(e) {
     // Set the value to fetch the suggestions
-    searchComponent.setValue(e.target.value,
+    searchWidget.setValue(e.target.value,
         options: Options(triggerDefaultQuery: true));
   }
 
@@ -77,7 +77,7 @@ void main() {
     // Fetch the results
     if (e.key == 'Enter') {
       e.preventDefault();
-      searchComponent.triggerCustomQuery();
+      searchWidget.triggerCustomQuery();
     }
   }
 
@@ -149,9 +149,9 @@ void main() {
     });
   }, ['aggregationData']);
 
-  searchComponent.subscribeToStateChanges((change) {
+  searchWidget.subscribeToStateChanges((change) {
     print('Track State Updates');
     print("Search Suggestions");
-    window.console.log(searchComponent.suggestions);
+    window.console.log(searchWidget.suggestions);
   }, ['results']);
 }

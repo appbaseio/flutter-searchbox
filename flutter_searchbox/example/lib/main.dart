@@ -18,11 +18,11 @@ class FlutterSearchBoxApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // The StoreProvider should wrap your MaterialApp or WidgetsApp. This will
+    // The SearchBaseProvider should wrap your MaterialApp or WidgetsApp. This will
     // ensure all routes have access to the store.
     return SearchBaseProvider(
-      // Pass the store to the StoreProvider. Any ancestor `StoreConnector`
-      // Widgets will find and use this value as the `Store`.
+      // Pass the searchbase instance to the SearchBaseProvider. Any ancestor `SearchWidgetConnector`
+      // Widgets will find and use this value as the `SearchWidget`.
       searchbase: SearchBase(index, url, credentials,
           appbaseConfig: AppbaseSettings(recordAnalytics: true)),
       child: MaterialApp(
@@ -42,21 +42,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'SearchBox Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Scaffold(
@@ -65,10 +53,13 @@ class HomePage extends StatelessWidget {
               IconButton(
                   icon: Icon(Icons.search),
                   onPressed: () {
+                    // Invoke the Search Delegate to display search UI with autosuggestions
                     showSearch(
                         context: context,
+                        // SearchBox widget from flutter searchbox
                         delegate: SearchBox(
-                          id: 'search-component',
+                          // A unique identifier that can be used by other widgetss to reactively update data
+                          id: 'search-widget',
                           enableRecentSearches: true,
                           enablePopularSuggestions: true,
                           showAutoFill: true,
@@ -84,18 +75,21 @@ class HomePage extends StatelessWidget {
             title: Text('SearchBox Demo'),
           ),
           body: Center(
-            child: SearchComponentConnector(
-                id: 'result-component',
+            // A custom UI widget to render a list of results
+            child: SearchWidgetConnector(
+                id: 'result-widget',
                 dataField: 'original_title',
                 react: {
-                  'and': ['search-component', 'author-filter'],
+                  'and': ['search-widget'],
                 },
                 size: 10,
                 triggerQueryOnInit: true,
                 preserveResults: true,
-                builder: (context, component) => ResultsWidget(component)),
+                builder: (context, searchWidget) =>
+                    ResultsWidget(searchWidget)),
           ),
-          drawer: SearchComponentConnector(
+          // A custom UI widget to render a list of authors
+          drawer: SearchWidgetConnector(
             id: 'author-filter',
             type: QueryType.term,
             dataField: "authors.keyword",
@@ -103,19 +97,19 @@ class HomePage extends StatelessWidget {
             // Initialize with default value
             value: List<String>(),
             react: {
-              'and': ['search-component']
+              'and': ['search-widget']
             },
-            builder: (context, component) {
-              // Call component's query at first time
-              if (component.query == null) {
-                component.triggerDefaultQuery();
+            builder: (context, searchWidget) {
+              // Call searchWidget's query at first time
+              if (searchWidget.query == null) {
+                searchWidget.triggerDefaultQuery();
               }
-              return AuthorFilter(component);
+              return AuthorFilter(searchWidget);
             },
-            // Avoid fetching query for each open/close action instead call it manually;
+            // Avoid fetching query for each open/close action instead call it manually
             triggerQueryOnInit: false,
-            // Do not remove the component's insantce after unmount
-            destroyOnUnmount: false,
+            // Do not remove the search widget's instance after unmount
+            destroyOnDispose: false,
           )),
     );
   }

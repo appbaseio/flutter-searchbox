@@ -22,7 +22,7 @@ class SearchBaseProviderError<S> extends Error {
   * Wrapping your MaterialApp with the SearchBase, 
   rather than an individual Route
   * Providing full type information to your SearchBaseProvider, 
-  SearchBase and SearchComponentConnector
+  SearchBase and SearchWidgetConnector
   * Ensure you are using consistent and complete imports. 
   E.g. always use `import 'package:my_app/app_state.dart';
   
@@ -33,7 +33,7 @@ https://github.com/appbaseio/flutter-searchbox/issues/new
 }
 
 /// Provides a SearchBase instance to all descendants of this Widget. This should
-/// generally be a root widget in your App. Connect a component by using [SearchComponent] or [SearchBox].
+/// generally be a root widget in your App. Connect a component by using [SearchWidget] or [SearchBox].
 class SearchBaseProvider extends InheritedWidget {
   final SearchBase _searchbase;
 
@@ -69,7 +69,7 @@ class SearchBaseProvider extends InheritedWidget {
 /// derived from the [SearchBase] using a [SearchBaseConverter].
 typedef ViewModelBuilder<ViewModel> = Widget Function(
   BuildContext context,
-  SearchComponent vm,
+  SearchWidget vm,
 );
 
 // Can be used to access the searchbase context
@@ -88,15 +88,15 @@ class SearchBaseConnector<S, ViewModel> extends StatelessWidget {
   }
 }
 
-class SearchComponentListenerState<S, ViewModel>
-    extends State<SearchComponentListener<S, ViewModel>> {
+class SearchWidgetListenerState<S, ViewModel>
+    extends State<SearchWidgetListener<S, ViewModel>> {
   final ViewModelBuilder<ViewModel> builder;
 
   final SearchBase searchbase;
 
   final String id;
 
-  final SearchComponent componentInstance;
+  final SearchWidget componentInstance;
 
   final List<String> subscribeTo;
 
@@ -107,9 +107,9 @@ class SearchComponentListenerState<S, ViewModel>
   final bool shouldListenForChanges;
 
   /// Defaults to `true`. If set to `false` then component will not get removed from seachbase context i.e can participate in query generation.
-  final bool destroyOnUnmount;
+  final bool destroyOnDispose;
 
-  SearchComponentListenerState({
+  SearchWidgetListenerState({
     @required this.searchbase,
     @required this.builder,
     @required this.id,
@@ -117,7 +117,7 @@ class SearchComponentListenerState<S, ViewModel>
     this.subscribeTo,
     this.triggerQueryOnInit,
     this.shouldListenForChanges,
-    this.destroyOnUnmount,
+    this.destroyOnDispose,
   })  : assert(searchbase != null),
         assert(builder != null),
         assert(id != null),
@@ -142,7 +142,7 @@ class SearchComponentListenerState<S, ViewModel>
   void dispose() {
     // Remove subscriptions
     componentInstance.unsubscribeToStateChanges(subscribeToState);
-    if (destroyOnUnmount != false) {
+    if (destroyOnDispose != false) {
       // Unregister component
       searchbase.unregister(id);
     }
@@ -165,12 +165,12 @@ class SearchComponentListenerState<S, ViewModel>
   }
 }
 
-class SearchComponentListener<S, ViewModel> extends StatefulWidget {
+class SearchWidgetListener<S, ViewModel> extends StatefulWidget {
   final ViewModelBuilder<ViewModel> builder;
 
   final SearchBase searchbase;
 
-  final SearchComponent componentInstance;
+  final SearchWidget componentInstance;
 
   final List<String> subscribeTo;
 
@@ -181,7 +181,7 @@ class SearchComponentListener<S, ViewModel> extends StatefulWidget {
   final bool shouldListenForChanges;
 
   /// Defaults to `true`. If set to `false` then component will not get removed from seachbase context i.e can participate in query generation.
-  final bool destroyOnUnmount;
+  final bool destroyOnDispose;
 
   // Properties to configure search component
   final String id;
@@ -243,9 +243,9 @@ class SearchComponentListener<S, ViewModel> extends StatefulWidget {
 
   final bool showMissing;
 
-  final Map Function(SearchComponent component) defaultQuery;
+  final Map Function(SearchWidget component) defaultQuery;
 
-  final Map Function(SearchComponent component) customQuery;
+  final Map Function(SearchWidget component) customQuery;
 
   final bool execute;
 
@@ -298,7 +298,7 @@ class SearchComponentListener<S, ViewModel> extends StatefulWidget {
   // called when query changes
   final void Function(Map next, {Map prev}) onQueryChange;
 
-  SearchComponentListener({
+  SearchWidgetListener({
     Key key,
     @required this.searchbase,
     @required this.builder,
@@ -309,7 +309,7 @@ class SearchComponentListener<S, ViewModel> extends StatefulWidget {
     this.subscribeTo,
     this.triggerQueryOnInit,
     this.shouldListenForChanges,
-    this.destroyOnUnmount,
+    this.destroyOnDispose,
     // properties to configure search component class
     this.appbaseConfig,
     this.transformRequest,
@@ -419,8 +419,8 @@ class SearchComponentListener<S, ViewModel> extends StatefulWidget {
         super(key: key);
 
   @override
-  SearchComponentListenerState createState() =>
-      SearchComponentListenerState<S, ViewModel>(
+  SearchWidgetListenerState createState() =>
+      SearchWidgetListenerState<S, ViewModel>(
         id: id,
         searchbase: searchbase,
         componentInstance: componentInstance,
@@ -428,15 +428,15 @@ class SearchComponentListener<S, ViewModel> extends StatefulWidget {
         subscribeTo: subscribeTo,
         triggerQueryOnInit: triggerQueryOnInit,
         shouldListenForChanges: shouldListenForChanges,
-        destroyOnUnmount: destroyOnUnmount,
+        destroyOnDispose: destroyOnDispose,
       );
 }
 
-/// SearchComponentConnector performs the following tasks
+/// SearchWidgetConnector performs the following tasks
 /// - Register a component with id
 /// - unregister a component
 /// - trigger rebuid based on state changes
-class SearchComponentConnector<S, ViewModel> extends StatelessWidget {
+class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// Build a Widget using the [BuildContext] and [ViewModel]. The [ViewModel]
   /// is created by the [converter] function.
   final ViewModelBuilder<ViewModel> builder;
@@ -450,7 +450,7 @@ class SearchComponentConnector<S, ViewModel> extends StatelessWidget {
   final bool shouldListenForChanges;
 
   /// Defaults to `true`. If set to `false` then component will not get removed from seachbase context i.e can participate in query generation.
-  final bool destroyOnUnmount;
+  final bool destroyOnDispose;
 
   // Properties to configure search component
   final String id;
@@ -512,9 +512,9 @@ class SearchComponentConnector<S, ViewModel> extends StatelessWidget {
 
   final bool showMissing;
 
-  final Map Function(SearchComponent component) defaultQuery;
+  final Map Function(SearchWidget component) defaultQuery;
 
-  final Map Function(SearchComponent component) customQuery;
+  final Map Function(SearchWidget component) customQuery;
 
   final bool execute;
 
@@ -567,14 +567,14 @@ class SearchComponentConnector<S, ViewModel> extends StatelessWidget {
   // called when query changes
   final void Function(Map next, {Map prev}) onQueryChange;
 
-  SearchComponentConnector({
+  SearchWidgetConnector({
     Key key,
     @required this.builder,
     @required this.id,
     this.subscribeTo,
     this.triggerQueryOnInit,
     this.shouldListenForChanges,
-    this.destroyOnUnmount,
+    this.destroyOnDispose,
     // properties to configure search component
     this.credentials,
     this.index,
@@ -634,14 +634,14 @@ class SearchComponentConnector<S, ViewModel> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SearchBaseConnector(
-        child: (searchbase) => SearchComponentListener(
+        child: (searchbase) => SearchWidgetListener(
             id: id,
             searchbase: searchbase,
             builder: builder,
             subscribeTo: subscribeTo,
             triggerQueryOnInit: triggerQueryOnInit,
             shouldListenForChanges: shouldListenForChanges,
-            destroyOnUnmount: destroyOnUnmount,
+            destroyOnDispose: destroyOnDispose,
             // properties to configure search component
             credentials: credentials,
             index: index,
@@ -758,9 +758,9 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
 
   final bool showMissing;
 
-  final Map Function(SearchComponent component) defaultQuery;
+  final Map Function(SearchWidget component) defaultQuery;
 
-  final Map Function(SearchComponent component) customQuery;
+  final Map Function(SearchWidget component) customQuery;
 
   final bool execute;
 
@@ -915,8 +915,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      SearchComponent component =
-          SearchBaseProvider.of(context).getComponent(id);
+      SearchWidget component = SearchBaseProvider.of(context).getComponent(id);
       if (component != null && query.isNotEmpty) {
         component.setValue(query, options: Options(triggerCustomQuery: true));
         close(context, null);
@@ -925,8 +924,8 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
     return Container();
   }
 
-  ListView getSuggestionList(BuildContext context,
-      SearchComponent searchComponent, List<Suggestion> list,
+  ListView getSuggestionList(
+      BuildContext context, SearchWidget SearchWidget, List<Suggestion> list,
       {bool isRecentSearch = false}) {
     List<Widget> suggestionsList = list
         .map((suggestion) => Container(
@@ -936,7 +935,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
                 child: ListTile(
                   onTap: () {
                     // Perform actions on suggestions tap
-                    searchComponent.setValue(suggestion.value,
+                    SearchWidget.setValue(suggestion.value,
                         options: Options(triggerCustomQuery: true));
                     this.query = suggestion.value;
 
@@ -945,8 +944,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
                         : suggestion.source['_id'];
                     if (objectId != null && suggestion.clickId != null) {
                       // Record click analytics
-                      searchComponent.recordClick(
-                          {objectId: suggestion.clickId},
+                      SearchWidget.recordClick({objectId: suggestion.clickId},
                           isSuggestionClick: true);
                     }
 
@@ -977,10 +975,10 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return SearchComponentConnector(
+    return SearchWidgetConnector(
         id: id,
         triggerQueryOnInit: false,
-        destroyOnUnmount: false,
+        destroyOnDispose: false,
         subscribeTo: [
           'error',
           'requestPending',
@@ -1040,31 +1038,30 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
         preserveResults: preserveResults,
         value: value,
         results: results,
-        builder: (context, searchComponent) {
-          if (query != searchComponent.value) {
+        builder: (context, searchWidget) {
+          if (query != searchWidget.value) {
             if (query.isEmpty) {
               if (enableRecentSearches == true) {
                 // Fetch recent searches
-                searchComponent.getRecentSearches();
+                searchWidget.getRecentSearches();
               }
             }
             // To fetch the suggestions
-            searchComponent.setValue(query,
+            searchWidget.setValue(query,
                 options: Options(triggerDefaultQuery: query.isNotEmpty));
           }
           if (query.isEmpty &&
-              searchComponent.recentSearches?.isNotEmpty == true) {
+              searchWidget.recentSearches?.isNotEmpty == true) {
             return getSuggestionList(
-                context, searchComponent, searchComponent.recentSearches,
+                context, searchWidget, searchWidget.recentSearches,
                 isRecentSearch: true);
           }
-          final List<Suggestion> popularSuggestions = searchComponent
-              .suggestions
+          final List<Suggestion> popularSuggestions = searchWidget.suggestions
               .where((suggestion) =>
                   suggestion.source != null &&
                   suggestion.source['_popular_suggestion'] == true)
               .toList();
-          List<Suggestion> filteredSuggestions = searchComponent.suggestions
+          List<Suggestion> filteredSuggestions = searchWidget.suggestions
               .where((suggestion) =>
                   suggestion.source != null &&
                   suggestion.source['_popular_suggestion'] != true)
@@ -1081,13 +1078,12 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
             ];
           }
           return (popularSuggestions.isEmpty && filteredSuggestions.isEmpty)
-              ? ((query.isNotEmpty && searchComponent.requestPending == false)
+              ? ((query.isNotEmpty && searchWidget.requestPending == false)
                   ? Container(
                       child: Text('No items found'),
                     )
                   : Container())
-              : getSuggestionList(
-                  context, searchComponent, filteredSuggestions);
+              : getSuggestionList(context, searchWidget, filteredSuggestions);
         });
   }
 }

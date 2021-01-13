@@ -24,8 +24,8 @@ class StarDisplay extends StatelessWidget {
 }
 
 class ResultsWidget extends StatelessWidget {
-  final SearchComponent searchComponent;
-  ResultsWidget(this.searchComponent);
+  final SearchWidget searchWidget;
+  ResultsWidget(this.searchWidget);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -37,7 +37,7 @@ class ResultsWidget extends StatelessWidget {
               color: Colors.white,
               height: 20,
               child: Text(
-                  '${searchComponent.results.numberOfResults} results found in ${searchComponent.results.time.toString()} ms'),
+                  '${searchWidget.results.numberOfResults} results found in ${searchWidget.results.time.toString()} ms'),
             ),
           ),
         ),
@@ -46,19 +46,19 @@ class ResultsWidget extends StatelessWidget {
             itemBuilder: (context, index) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 var offset =
-                    (searchComponent.from != null ? searchComponent.from : 0) +
-                        searchComponent.size;
+                    (searchWidget.from != null ? searchWidget.from : 0) +
+                        searchWidget.size;
                 if (index == offset - 1) {
-                  if (searchComponent.results.numberOfResults > offset) {
+                  if (searchWidget.results.numberOfResults > offset) {
                     // Load next set of results
-                    searchComponent.setFrom(offset,
+                    searchWidget.setFrom(offset,
                         options: Options(triggerDefaultQuery: true));
                   }
                 }
               });
 
               return Container(
-                  child: (index < searchComponent.results.data.length)
+                  child: (index < searchWidget.results.data.length)
                       ? Container(
                           margin: const EdgeInsets.all(0.5),
                           padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -75,7 +75,7 @@ class ResultsWidget extends StatelessWidget {
                                       semanticContainer: true,
                                       clipBehavior: Clip.antiAliasWithSaveLayer,
                                       child: Image.network(
-                                        searchComponent.results.data[index]
+                                        searchWidget.results.data[index]
                                             ["image_medium"],
                                         fit: BoxFit.fill,
                                       ),
@@ -115,18 +115,18 @@ class ResultsWidget extends StatelessWidget {
                                                 color: Colors.white,
                                               ),
                                               message:
-                                                  'By: ${searchComponent.results.data[index]["original_title"]}',
+                                                  'By: ${searchWidget.results.data[index]["original_title"]}',
                                               child: Text(
-                                                searchComponent
+                                                searchWidget
                                                             .results
                                                             .data[index][
                                                                 "original_title"]
                                                             .length <
                                                         40
-                                                    ? searchComponent
+                                                    ? searchWidget
                                                             .results.data[index]
                                                         ["original_title"]
-                                                    : '${searchComponent.results.data[index]["original_title"].substring(0, 39)}...',
+                                                    : '${searchWidget.results.data[index]["original_title"].substring(0, 39)}...',
                                                 style: TextStyle(
                                                   fontSize: 20.0,
                                                 ),
@@ -152,16 +152,16 @@ class ResultsWidget extends StatelessWidget {
                                                 color: Colors.white,
                                               ),
                                               message:
-                                                  'By: ${searchComponent.results.data[index]["authors"]}',
+                                                  'By: ${searchWidget.results.data[index]["authors"]}',
                                               child: Text(
-                                                searchComponent
+                                                searchWidget
                                                             .results
                                                             .data[index]
                                                                 ["authors"]
                                                             .length >
                                                         50
-                                                    ? 'By: ${searchComponent.results.data[index]["authors"].substring(0, 49)}...'
-                                                    : 'By: ${searchComponent.results.data[index]["authors"]}',
+                                                    ? 'By: ${searchWidget.results.data[index]["authors"].substring(0, 49)}...'
+                                                    : 'By: ${searchWidget.results.data[index]["authors"]}',
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                 ),
@@ -182,8 +182,7 @@ class ResultsWidget extends StatelessWidget {
                                                   size: 48,
                                                 ),
                                                 child: StarDisplay(
-                                                    value: searchComponent
-                                                            .results
+                                                    value: searchWidget.results
                                                             .data[index][
                                                         "average_rating_rounded"]),
                                               ),
@@ -193,7 +192,7 @@ class ResultsWidget extends StatelessWidget {
                                                   const EdgeInsets.fromLTRB(
                                                       10, 5, 0, 0),
                                               child: Text(
-                                                '(${searchComponent.results.data[index]["average_rating"]} avg)',
+                                                '(${searchWidget.results.data[index]["average_rating"]} avg)',
                                                 style: TextStyle(
                                                   fontSize: 12.0,
                                                 ),
@@ -208,7 +207,7 @@ class ResultsWidget extends StatelessWidget {
                                                   const EdgeInsets.fromLTRB(
                                                       27, 10, 0, 0),
                                               child: Text(
-                                                'Pub: ${searchComponent.results.data[index]["original_publication_year"]}',
+                                                'Pub: ${searchWidget.results.data[index]["original_publication_year"]}',
                                                 style: TextStyle(
                                                   fontSize: 12.0,
                                                 ),
@@ -224,16 +223,15 @@ class ResultsWidget extends StatelessWidget {
                             ],
                           ),
                         )
-                      : (searchComponent.requestPending
+                      : (searchWidget.requestPending
                           ? Center(child: CircularProgressIndicator())
                           : ListTile(
                               title: Center(
                                 child: RichText(
                                   text: TextSpan(
-                                    text:
-                                        searchComponent.results.data.length > 0
-                                            ? "No more results"
-                                            : 'No results found',
+                                    text: searchWidget.results.data.length > 0
+                                        ? "No more results"
+                                        : 'No results found',
                                     style: TextStyle(
                                         color: Colors.black54,
                                         fontSize: 20,
@@ -243,7 +241,7 @@ class ResultsWidget extends StatelessWidget {
                               ),
                             )));
             },
-            itemCount: searchComponent.results.data.length + 1,
+            itemCount: searchWidget.results.data.length + 1,
           ),
         ),
       ],

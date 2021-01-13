@@ -1,5 +1,5 @@
 name: flutter_searchbox
-description: Flutter Searchbox provides declarative API to query Elasticsearch, and bind UI components with different types of search queries. As the name suggests, it provides a default UI widget for searchbox.
+description: Flutter Searchbox provides declarative API to query Elasticsearch, and bind UI widgets with different types of search queries. As the name suggests, it provides a default UI widget for searchbox.
 version: 1.0.0-alpha
 author:
 homepage:

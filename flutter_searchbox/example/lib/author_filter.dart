@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:searchbase/searchbase.dart';
 
-typedef void MyCallback(String foo);
-
 class FilterHeader extends PreferredSize {
   final double height;
   final Widget child;
@@ -36,9 +34,9 @@ class FilterHeader extends PreferredSize {
 }
 
 class AuthorFilter extends StatelessWidget {
-  final SearchComponent searchComponent;
+  final SearchWidget searchWidget;
 
-  AuthorFilter(this.searchComponent);
+  AuthorFilter(this.searchWidget);
 
   @override
   Widget build(BuildContext context) {
@@ -72,11 +70,11 @@ class AuthorFilter extends StatelessWidget {
                         ],
                       ),
                     ),
-                    body: searchComponent.requestPending
+                    body: searchWidget.requestPending
                         ? Center(child: CircularProgressIndicator())
                         : ListView(
-                            children: searchComponent.aggregationData.data
-                                .map((bucket) {
+                            children:
+                                searchWidget.aggregationData.data.map((bucket) {
                               return Container(
                                 child: Column(
                                   children: [
@@ -87,21 +85,21 @@ class AuthorFilter extends StatelessWidget {
                                       dense: true,
                                       title: new Text(
                                           "${bucket['_key']} (${bucket['_doc_count']})"),
-                                      value: (searchComponent.value == null
+                                      value: (searchWidget.value == null
                                               ? []
-                                              : searchComponent.value)
+                                              : searchWidget.value)
                                           .contains(bucket['_key']),
                                       onChanged: (bool value) {
                                         final List<String> values =
-                                            searchComponent.value == null
+                                            searchWidget.value == null
                                                 ? []
-                                                : searchComponent.value;
+                                                : searchWidget.value;
                                         if (values.contains(bucket['_key'])) {
                                           values.remove(bucket['_key']);
                                         } else {
                                           values.add(bucket['_key']);
                                         }
-                                        searchComponent.setValue(values);
+                                        searchWidget.setValue(values);
                                       },
                                     ),
                                     const Divider(
@@ -146,7 +144,7 @@ class AuthorFilter extends StatelessWidget {
                               ),
                             ),
                             onPressed: () {
-                              searchComponent.triggerCustomQuery();
+                              searchWidget.triggerCustomQuery();
                               Navigator.of(context).pop();
                             },
                           ),

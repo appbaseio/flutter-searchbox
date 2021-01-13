@@ -1,6 +1,6 @@
 import 'package:searchbase/src/base.dart';
 import 'types.dart';
-import 'searchcomponent.dart';
+import 'searchwidget.dart';
 import 'constants.dart';
 
 /**
@@ -10,7 +10,7 @@ import 'constants.dart';
 class SearchBase extends Base {
   /* ------ Private properties only for the internal use ----------- */
   // active components
-  Map<String, SearchComponent> _components;
+  Map<String, SearchWidget> _components;
 
   SearchBase(String index, String url, String credentials,
       {AppbaseSettings appbaseConfig,
@@ -27,7 +27,7 @@ class SearchBase extends Base {
 
   // methods
   // To register a component
-  SearchComponent register(String componentId, dynamic component) {
+  SearchWidget register(String componentId, dynamic component) {
     if (componentId == "") {
       throw (ErrorMessages[InvalidIndex]);
     }
@@ -35,10 +35,10 @@ class SearchBase extends Base {
       // return existing instance
       return this._components[componentId];
     }
-    SearchComponent componentInstance;
+    SearchWidget componentInstance;
     if (component != null && component is Map) {
       // create instance from object with all the options
-      componentInstance = SearchComponent(
+      componentInstance = SearchWidget(
         component["index"] != null ? component["index"] : this.index,
         component["url"] != null ? component["url"] : this.url,
         component["credentials"] != null
@@ -103,7 +103,7 @@ class SearchBase extends Base {
         preserveResults: component["preserveResults"],
         value: component["value"],
       );
-    } else if (component is SearchComponent) {
+    } else if (component is SearchWidget) {
       componentInstance = component;
       // set the id property on instance
       componentInstance.id = componentId;
@@ -123,12 +123,12 @@ class SearchBase extends Base {
   }
 
   // To get component instance
-  SearchComponent getComponent(String componentId) {
+  SearchWidget getComponent(String componentId) {
     return this._components[componentId];
   }
 
   // To get the list of registered components
-  Map<String, SearchComponent> getComponents() {
+  Map<String, SearchWidget> getComponents() {
     return this._components;
   }
 }

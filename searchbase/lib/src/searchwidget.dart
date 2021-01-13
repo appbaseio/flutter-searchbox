@@ -12,13 +12,13 @@ import 'utils.dart';
 const suggestionQueryID = 'DataSearch__suggestions';
 
 /**
- * SearchComponent class is responsible for the following things:
+ * SearchWidget class is responsible for the following things:
  * - It provides the methods to trigger the query
  * - It maintains the request state for e.g loading, error etc.
  * - It handles the 'custom' and 'default' queries
- * - Basically the SearchComponent class provides all the utilities to build any ReactiveSearch component
+ * - Basically the SearchWidget class provides all the utilities to build any ReactiveSearch component
  */
-class SearchComponent extends Base {
+class SearchWidget extends Base {
   // RS API properties
   String id;
 
@@ -72,9 +72,9 @@ class SearchComponent extends Base {
 
   bool showMissing;
 
-  Map Function(SearchComponent component) defaultQuery;
+  Map Function(SearchWidget component) defaultQuery;
 
-  Map Function(SearchComponent component) customQuery;
+  Map Function(SearchWidget component) customQuery;
 
   bool execute;
 
@@ -159,7 +159,7 @@ class SearchComponent extends Base {
   // called when mic status changes
   void Function(MicStatusField next, {MicStatusField prev}) onMicStatusChange;
 
-  SearchComponent(
+  SearchWidget(
     String index,
     String url,
     String credentials,
@@ -483,7 +483,7 @@ class SearchComponent extends Base {
 
   // Method to set the default query
   void setDefaultQuery(
-      Map<dynamic, dynamic> Function(SearchComponent) defaultQuery,
+      Map<dynamic, dynamic> Function(SearchWidget) defaultQuery,
       {Options options}) {
     final prev = this.defaultQuery;
     this.defaultQuery = defaultQuery;
@@ -491,8 +491,7 @@ class SearchComponent extends Base {
   }
 
   // Method to set the custom query
-  void setCustomQuery(
-      Map<dynamic, dynamic> Function(SearchComponent) customQuery,
+  void setCustomQuery(Map<dynamic, dynamic> Function(SearchWidget) customQuery,
       {Options options}) {
     final prev = this.customQuery;
     this.customQuery = customQuery;

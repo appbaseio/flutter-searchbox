@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 /**
- * Base class is the abstract class for SearchBase and SearchComponent classes.
+ * Base class is the abstract class for SearchBase and SearchWidget classes.
  */
 class Base {
   // to enable the recording of analytics

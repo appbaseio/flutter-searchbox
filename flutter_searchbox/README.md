@@ -1,14 +1,5 @@
-# flutter_searchbox
+## Flutter SearchBox
 
-A new Flutter package project.
+Flutter Searchbox provides declarative API to query Elasticsearch, and bind UI widgets with different types of search queries. As the name suggests, it provides a default UI widget for searchbox.
 
-## Getting Started
-
-This project is a starting point for a Dart
-[package](https://flutter.dev/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+Please check the docs at [here](https://docs.appbase.io/docs/reactivesearch/flutter-searchbox/overview/QuickStart/)
