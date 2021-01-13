@@ -84,5 +84,6 @@ class Suggestion {
   String label;
   String value;
   Map source;
-  Suggestion(this.label, this.value, {this.source}) {}
+  int clickId;
+  Suggestion(this.label, this.value, {this.source, this.clickId}) {}
 }

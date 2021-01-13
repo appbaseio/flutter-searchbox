@@ -8,6 +8,14 @@ List<Map> withClickIds(List<Map> results) {
   return results.map((result) => ({...result, "_click_id": ++index})).toList();
 }
 
+List<Suggestion> withSuggestionClickIds(List<Suggestion> suggestions) {
+  int index = 0;
+  return suggestions
+      .map((suggestion) => Suggestion(suggestion.label, suggestion.value,
+          source: suggestion.source, clickId: index++))
+      .toList();
+}
+
 Map highlightResults(Map result) {
   final data = {...result};
   if (data["highlight"] is Map) {
@@ -237,7 +245,7 @@ List<Suggestion> getSuggestions(
     traverseSuggestions();
   }
 
-  return suggestionsList;
+  return withSuggestionClickIds(suggestionsList);
 }
 
 List<Map> parseCompAggToHits(String aggFieldName, List<Map> buckets) {

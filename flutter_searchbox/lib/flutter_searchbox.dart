@@ -935,9 +935,21 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
             child: Container(
                 child: ListTile(
                   onTap: () {
+                    // Perform actions on suggestions tap
                     searchComponent.setValue(suggestion.value,
                         options: Options(triggerCustomQuery: true));
                     this.query = suggestion.value;
+
+                    String objectId = suggestion.source != null
+                        ? null
+                        : suggestion.source['_id'];
+                    if (objectId != null && suggestion.clickId != null) {
+                      // Record click analytics
+                      searchComponent.recordClick(
+                          {objectId: suggestion.clickId},
+                          isSuggestionClick: true);
+                    }
+
                     close(context, null);
                   },
                   leading: isRecentSearch
