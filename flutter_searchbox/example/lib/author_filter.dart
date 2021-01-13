@@ -181,8 +181,6 @@ class AuthorFilter extends StatelessWidget {
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            // shape: RoundedRectangleBorder(
-                            //     borderRadius: BorderRadius.circular(50.0)),
                           ),
                         ),
                       ],

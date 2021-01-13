@@ -33,7 +33,7 @@ https://github.com/appbaseio/flutter-searchbox/issues/new
 }
 
 /// Provides a SearchBase instance to all descendants of this Widget. This should
-/// generally be a root widget in your App. Connect a component by using [SearchWidget] or [SearchBox].
+/// generally be a root widget in your App. Connect a component by using [SearchWidgetConnector] or [SearchBox].
 class SearchBaseProvider extends InheritedWidget {
   final SearchBase _searchbase;
 
@@ -73,10 +73,10 @@ typedef ViewModelBuilder<ViewModel> = Widget Function(
 );
 
 // Can be used to access the searchbase context
-class SearchBaseConnector<S, ViewModel> extends StatelessWidget {
+class _SearchBaseConnector<S, ViewModel> extends StatelessWidget {
   final Widget Function(SearchBase searchbase) child;
 
-  const SearchBaseConnector({
+  const _SearchBaseConnector({
     Key key,
     @required this.child,
   })  : assert(child != null),
@@ -88,8 +88,8 @@ class SearchBaseConnector<S, ViewModel> extends StatelessWidget {
   }
 }
 
-class SearchWidgetListenerState<S, ViewModel>
-    extends State<SearchWidgetListener<S, ViewModel>> {
+class _SearchWidgetListenerState<S, ViewModel>
+    extends State<_SearchWidgetListener<S, ViewModel>> {
   final ViewModelBuilder<ViewModel> builder;
 
   final SearchBase searchbase;
@@ -109,7 +109,7 @@ class SearchWidgetListenerState<S, ViewModel>
   /// Defaults to `true`. If set to `false` then component will not get removed from seachbase context i.e can participate in query generation.
   final bool destroyOnDispose;
 
-  SearchWidgetListenerState({
+  _SearchWidgetListenerState({
     @required this.searchbase,
     @required this.builder,
     @required this.id,
@@ -165,7 +165,7 @@ class SearchWidgetListenerState<S, ViewModel>
   }
 }
 
-class SearchWidgetListener<S, ViewModel> extends StatefulWidget {
+class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
   final ViewModelBuilder<ViewModel> builder;
 
   final SearchBase searchbase;
@@ -298,7 +298,7 @@ class SearchWidgetListener<S, ViewModel> extends StatefulWidget {
   // called when query changes
   final void Function(Map next, {Map prev}) onQueryChange;
 
-  SearchWidgetListener({
+  _SearchWidgetListener({
     Key key,
     @required this.searchbase,
     @required this.builder,
@@ -419,8 +419,8 @@ class SearchWidgetListener<S, ViewModel> extends StatefulWidget {
         super(key: key);
 
   @override
-  SearchWidgetListenerState createState() =>
-      SearchWidgetListenerState<S, ViewModel>(
+  _SearchWidgetListenerState createState() =>
+      _SearchWidgetListenerState<S, ViewModel>(
         id: id,
         searchbase: searchbase,
         componentInstance: componentInstance,
@@ -434,16 +434,17 @@ class SearchWidgetListener<S, ViewModel> extends StatefulWidget {
 
 /// SearchWidgetConnector performs the following tasks
 /// - Register a component with id
-/// - unregister a component
-/// - trigger rebuid based on state changes
+/// - unregister a component (can be controlled by destroyOnDispose property)
+/// - trigger rebuild based on state changes
 class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
-  /// Build a Widget using the [BuildContext] and [ViewModel]. The [ViewModel]
-  /// is created by the [converter] function.
+  /// Build a Widget using the [BuildContext] and [ViewModel]
   final ViewModelBuilder<ViewModel> builder;
 
+  /// This property allows to define a list of properties of [SearchWidget] class which can trigger the re-build when any changes happen.
+  /// For example, if `subscribeTo` is defined as `['results']` then it'll only update the UI when results property would change.
   final List<String> subscribeTo;
 
-  /// Defaults to `true`. It can be used to prevent the default query execution.
+  /// Defaults to `true`. It can be used to prevent the default query execution at the time of initial build.
   final bool triggerQueryOnInit;
 
   /// Defaults to `true`. It can be used to prevent state updates.
@@ -452,7 +453,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// Defaults to `true`. If set to `false` then component will not get removed from seachbase context i.e can participate in query generation.
   final bool destroyOnDispose;
 
-  // Properties to configure search component
+  /// Properties to configure search component
   final String id;
 
   final String index;
@@ -633,8 +634,8 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SearchBaseConnector(
-        child: (searchbase) => SearchWidgetListener(
+    return _SearchBaseConnector(
+        child: (searchbase) => _SearchWidgetListener(
             id: id,
             searchbase: searchbase,
             builder: builder,
@@ -821,6 +822,11 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   // To enable auto fill
   final bool showAutoFill;
 
+  /// It can be used to render the custom UI for suggestion list item.
+  /// In case of a popular suggestion the source property of the `Suggestion` would have a key named _popular_suggestion as true.
+  final Widget Function(Suggestion suggestion, bool isRecentSearch)
+      buildSuggestionItem;
+
   SearchBox({
     Key key,
     @required this.id,
@@ -879,6 +885,8 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
     // searchbox specific properties
     this.enableRecentSearches = false,
     this.showAutoFill = false,
+    // to customize ui
+    this.buildSuggestionItem,
   }) : assert(id != null);
 
   @override
@@ -931,44 +939,48 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
         .map((suggestion) => Container(
             alignment: Alignment.topLeft,
             height: 50,
-            child: Container(
-                child: ListTile(
-                  onTap: () {
-                    // Perform actions on suggestions tap
-                    searchWidget.setValue(suggestion.value,
-                        options: Options(triggerCustomQuery: true));
-                    this.query = suggestion.value;
-                    String objectId;
-                    if (suggestion.source != null &&
-                        suggestion.source['_id'] is String) {
-                      objectId = suggestion.source['_id'];
-                    }
-                    if (objectId != null && suggestion.clickId != null) {
-                      // Record click analytics
-                      searchWidget.recordClick({objectId: suggestion.clickId},
-                          isSuggestionClick: true);
-                    }
+            child: buildSuggestionItem != null
+                ? buildSuggestionItem(suggestion, isRecentSearch)
+                : Container(
+                    child: ListTile(
+                      onTap: () {
+                        // Perform actions on suggestions tap
+                        searchWidget.setValue(suggestion.value,
+                            options: Options(triggerCustomQuery: true));
+                        this.query = suggestion.value;
+                        String objectId;
+                        if (suggestion.source != null &&
+                            suggestion.source['_id'] is String) {
+                          objectId = suggestion.source['_id'];
+                        }
+                        if (objectId != null && suggestion.clickId != null) {
+                          // Record click analytics
+                          searchWidget.recordClick(
+                              {objectId: suggestion.clickId},
+                              isSuggestionClick: true);
+                        }
 
-                    close(context, null);
-                  },
-                  leading: isRecentSearch
-                      ? Icon(Icons.history)
-                      : (suggestion.source != null &&
-                              suggestion.source['_popular_suggestion'] == true)
-                          ? Icon(Icons.trending_up)
-                          : Icon(Icons.search),
-                  title: Text(suggestion.label,
-                      maxLines: 1, overflow: TextOverflow.ellipsis),
-                  trailing: showAutoFill == true
-                      ? IconButton(
-                          icon: Icon(FeatherIcons.arrowUpLeft),
-                          onPressed: () => {this.query = suggestion.value})
-                      : null,
-                ),
-                decoration: new BoxDecoration(
-                    border: new Border(
-                        bottom: new BorderSide(
-                            color: Color(0xFFC8C8C8), width: 0.5))))))
+                        close(context, null);
+                      },
+                      leading: isRecentSearch
+                          ? Icon(Icons.history)
+                          : (suggestion.source != null &&
+                                  suggestion.source['_popular_suggestion'] ==
+                                      true)
+                              ? Icon(Icons.trending_up)
+                              : Icon(Icons.search),
+                      title: Text(suggestion.label,
+                          maxLines: 1, overflow: TextOverflow.ellipsis),
+                      trailing: showAutoFill == true
+                          ? IconButton(
+                              icon: Icon(FeatherIcons.arrowUpLeft),
+                              onPressed: () => {this.query = suggestion.value})
+                          : null,
+                    ),
+                    decoration: new BoxDecoration(
+                        border: new Border(
+                            bottom: new BorderSide(
+                                color: Color(0xFFC8C8C8), width: 0.5))))))
         .toList();
     return ListView(
         padding: const EdgeInsets.all(8), children: suggestionsList);
