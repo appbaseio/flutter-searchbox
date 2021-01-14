@@ -1,3 +1,5 @@
-## [0.0.1] - TODO: Add release date.
+## [1.0.0-alpha] - 14-01-2021.
 
-* TODO: Describe initial release.
+- Add `SearchBaseProvider` widget
+- Add `SearchBox` widget
+- Add `SearchWidgetConnector` widget
