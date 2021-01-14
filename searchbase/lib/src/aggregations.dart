@@ -1,22 +1,25 @@
 import 'utils.dart';
 
+/// Represents the elasticsearch aggregations response for [QueryType.term] queries
 class Aggregations {
-  // An array of composite aggregations obtained from the applied aggs in options.
+  /// An array of composite aggregations obtained from the applied aggs in options.
   List<Map> data;
 
-  // useful when loading data of greater size
+  /// If the number of composite buckets is too high (or unknown) to be returned in a single response use the `afterKey` parameter to retrieve the next results.
+  /// This property will only be present for `composite` aggregations.
   Map afterKey;
 
-  // Raw aggregations returned by ES query
+  /// Raw aggregations returned by ES query
   Map raw;
 
-  Aggregations({this.data}) {}
+  Aggregations({this.data});
 
-  // An object of raw response as-is from elasticsearch query
+  /// An object of raw response as-is from elasticsearch query.
   Map get rawData {
     return this.raw;
   }
 
+  /// to set the raw response from elasticsearch
   void setRaw(Map rawResponse) {
     // set response
     this.raw = rawResponse;
@@ -27,11 +30,12 @@ class Aggregations {
     }
   }
 
+  /// to set the after value to implement pagination for composite aggregations
   void setAfterKey(Map key) {
     this.afterKey = key;
   }
 
-  // Method to set data explicitly
+  /// Method to set data explicitly
   void setData(String aggField, List<Map> data) {
     // parse aggregation buckets
     this.data = parseCompAggToHits(aggField, data);

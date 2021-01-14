@@ -2,16 +2,25 @@ typedef TransformRequest = Future<Object> Function(Map requestOptions);
 typedef TransformResponse = Future Function(dynamic response);
 typedef SubscriptionFunction = Function(Map<String, Changes> change);
 
+/// Represents the change object with `prev` and `next` values.
 class Changes {
   final dynamic prev;
   final dynamic next;
   Changes(this.prev, this.next);
 }
 
+/// AppbaseSettings allows you to customize the analytics experience when appbase.io is used as a backend.
 class AppbaseSettings {
+  /// allows recording search analytics (and click analytics) when set to `true` and appbase.io is used as a backend. Defaults to `false`.
   bool recordAnalytics;
+
+  /// If `false`, then appbase.io will not apply the query rules on the search requests. Defaults to `true`.
   bool enableQueryRules;
+
+  /// It allows you to define the user id to be used to record the appbase.io analytics. Defaults to the client's IP address.
   String userId;
+
+  /// It allows you to set the custom events which can be used to build your own analytics on top of appbase.io analytics. Further, these events can be used to filter the analytics stats from the appbase.io dashboard.
   Map<String, String> customEvents;
 
   AppbaseSettings({
@@ -39,6 +48,7 @@ class AppbaseSettings {
   }
 }
 
+/// Options to configure the recent searches request
 class RecentSearchOptions {
   int size;
   int minChars;
@@ -53,6 +63,7 @@ class RecentSearchOptions {
       this.customEvents});
 }
 
+/// Allows to configure the effects of an update in a particular property
 class Options {
   bool triggerDefaultQuery;
   bool triggerCustomQuery;
@@ -67,6 +78,7 @@ class Options {
   }
 }
 
+/// Allows to configure the effects after executing a query
 class Option {
   bool stateChanges;
   Option({stateChanges}) {
@@ -74,12 +86,14 @@ class Option {
   }
 }
 
+/// Represents the format of query response
 class GenerateQueryResponse {
   List<Map> requestBody;
   List<String> orderOfQueries;
   GenerateQueryResponse(this.requestBody, this.orderOfQueries) {}
 }
 
+/// Represents a suggestion object
 class Suggestion {
   String label;
   String value;

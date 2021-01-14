@@ -11,80 +11,344 @@ import 'utils.dart';
 
 const suggestionQueryID = 'DataSearch__suggestions';
 
-/**
- * SearchWidget class is responsible for the following things:
- * - It provides the methods to trigger the query
- * - It maintains the request state for e.g loading, error etc.
- * - It handles the 'custom' and 'default' queries
- * - Basically the SearchWidget class provides all the utilities to build any ReactiveSearch component
- */
+/// The [SearchWidget] class represents a search widget that can be used to build different kinds of search UI for examples,
+///
+/// -   a category filter widget,
+/// -   a search bar widget,
+/// -   a price range widget,
+/// -   a location filter widget,
+/// -   a widget to render the search results etc.
 class SearchWidget extends Base {
   // RS API properties
+  /// unique identifier of the component, can be referenced in other components' `react` prop.
   String id;
 
+  /// This property represents the type of the query which is defaults to [QueryType.search], valid values are `search`, `term`, `range` & `geo`. You can read more [here](https://docs.appbase.io/docs/search/reactivesearch-api/implement#type-of-queries).
   QueryType type;
 
+  /// is useful for components whose data view should reactively update when on or more dependent components change their states,
+  ///
+  /// e.g. a component to display the results can depend on the search component to filter the results.
+  ///  -   **key** `string`
+  ///      one of `and`, `or`, `not` defines the combining clause.
+  ///      -   **and** clause implies that the results will be filtered by matches from **all** of the associated component states.
+  ///      -   **or** clause implies that the results will be filtered by matches from **at least one** of the associated component states.
+  ///      -   **not** clause implies that the results will be filtered by an **inverse** match of the associated component states.
+  ///  -   **value** `string or Array or Object`
+  ///      -   `string` is used for specifying a single component by its `id`.
+  ///      -   `Array` is used for specifying multiple components by their `id`.
+  ///      -   `Object` is used for nesting other key clauses.
+
+  /// An example of a `react` clause where all three clauses are used and values are `Object`, `Array` and `string`.
+
+  ///  ```dart
+  /// {
+  ///		'and': {
+  ///			'or': ['CityComp', 'TopicComp'],
+  ///			'not': 'BlacklistComp',
+  ///		},
+  ///	}
+  /// ```
+
+  /// Here, we are specifying that the results should update whenever one of the blacklist items is not present and simultaneously any one of the city or topics matches.
   Map<String, dynamic> react;
 
+  /// Sets the query format, can be **or** or **and**. Defaults to **or**.
+  ///
+  /// -   **or** returns all the results matching **any** of the search query text's parameters. For example, searching for "bat man" with **or** will return all the results matching either "bat" or "man".
+  /// -   On the other hand with **and**, only results matching both "bat" and "man" will be returned. It returns the results matching **all** of the search query text's parameters.
   String queryFormat;
 
+  /// index field(s) to be connected to the component’s UI view.
+  ///
+  /// It accepts an `List<String>` in addition to `<String>`, which is useful for searching across multiple fields with or without field weights.
+  ///
+  /// Field weights allow weighted search for the index fields. A higher number implies a higher relevance weight for the corresponding field in the search results.
+  ///
+  /// You can define the `dataField` property as a `List<Map>` of to set the field weights. The object must have the `field` and `weight` keys.
   dynamic dataField;
 
+  /// Data field which has the category values mapped.
   String categoryField;
 
+  /// This is the selected category value. It is used for informing the search result.
   String categoryValue;
 
+  /// set the `nested` field path that allows an array of objects to be indexed in a way that can be queried independently of each other.
+  ///
+  /// Applicable only when dataField's mapping is of `nested` type.
   String nestedField;
 
+  /// represents the current state of the `from` value. This property is useful to implement pagination.
   int from;
 
+  /// current state of the `size` of results to be returned by query
   int size;
 
+  /// current state of the sort value
   SortType sortBy;
 
+  /// Represents the value for a particular [QueryType].
+  ///
+  /// Depending on the query type, the value format would differ.
+  /// You can refer to the different value formats over [here](https://docs.appbase.io/docs/search/reactivesearch-api/reference#value).
   dynamic value;
 
+  /// aggregationField enables you to get `DISTINCT` results (useful when you are dealing with sessions, events, and logs type data).
+  ///
+  /// It utilizes [composite aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-composite-aggregation.html) which are newly introduced in ES v6 and offer vast performance benefits over a traditional terms aggregation.
   String aggregationField;
 
+  /// This property can be used to implement the pagination for `aggregations`.
+  ///
+  /// We use the [composite aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-composite-aggregation.html) of `Elasticsearch` to execute the aggregations' query,
+  /// the response of composite aggregations includes a key named `after_key` which can be used to fetch the next set of aggregations for the same query.
+  /// You can read more about the pagination for composite aggregations at [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-composite-aggregation.html#_pagination).
   Map after;
 
+  /// If you have sparse data or documents or items not having the value in the specified field or mapping, then this prop enables you to show that data.
   bool includeNullValues;
 
+  // useful to include the fields from Elastissearch response
   List<String> includeFields;
 
+  // useful to exclude the fields from Elastissearch response
   List<String> excludeFields;
 
+  /// Useful for showing the correct results for an incorrect search parameter by taking the fuzziness into account.
+  ///
+  /// For example, with a substitution of one character, `fox` can become `box`.
+  /// Read more about it in the elastic search https://www.elastic.co/guide/en/elasticsearch/guide/current/fuzziness.html.
   dynamic fuzziness;
 
+  /// Defaults to `false`.
+  ///
+  /// If set to `true`, then you can use special characters in the search query to enable the advanced search.
+  ///
+  /// Read more about it [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html).
   bool searchOperators;
 
+  /// Defaults to `false`.
+  ///
+  /// whether highlighting should be enabled in the returned results.
   bool highlight;
 
+  /// when highlighting is enabled, this prop allows specifying the fields which should be returned with the matching highlights.
+  ///
+  /// When not specified, it defaults to applying highlights on the field(s) specified in the **dataField** prop.
+  /// It can be of type `String` or `List<Sting>`.
   dynamic highlightField;
 
+  /// It can be used to set the custom highlight settings.
+  ///
+  /// You can read the `Elasticsearch` docs for the highlight options at [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-highlighting.html).
   Map customHighlight;
 
+  /// To set the histogram bar interval, applicable when [aggregations](/docs/search/reactivesearch-api/reference/#aggregations) value is set to `["histogram"]`.
+  ///
+  /// Defaults to `Math.ceil((range.end - range.start) / 100) || 1`.
   int interval;
 
+  /// It helps you to utilize the built-in aggregations for `range` type of queries directly, valid values are:
+  /// -   `max`: to retrieve the maximum value for a `dataField`,
+  /// -   `min`: to retrieve the minimum value for a `dataField`,
+  /// -   `histogram`: to retrieve the histogram aggregations for a particular `interval`
   List<String> aggregations;
 
-  String missingLabel;
-
+  /// Defaults to `false`. When set to `true` then it also retrieves the aggregations for missing fields.
   bool showMissing;
 
-  Map Function(SearchWidget component) defaultQuery;
+  /// Defaults to `N/A`. It allows you to specify a custom label to show when [showMissing](/docs/search/reactivesearch-api/reference/#showmissing) is set to `true`.
+  String missingLabel;
 
-  Map Function(SearchWidget component) customQuery;
+  /// is a callback function that takes the [SearchWidget] instance as parameter and **returns** the data query to be applied to the source component, as defined in Elasticsearch Query DSL, which doesn't get leaked to other components.
+  /// In simple words, `defaultQuery` is used with data-driven components to impact their own data.
+  /// It is meant to modify the default query which is used by a component to render the UI.
+  ///
+  ///  Some of the valid use-cases are:
+  ///
+  ///  -   To modify the query to render the `suggestions` or `results` in [QueryType.search] type of components.
+  ///  -   To modify the `aggregations` in [QueryType.term] type of components.
+  ///
+  ///  For example, in a [QueryType.term] type of component showing a list of cities, you may only want to render cities belonging to `India`.
+  ///
+  ///```dart
+  /// Map (SearchWidget searchWidget) => ({
+  ///   		'query': {
+  ///   			'terms': {
+  ///   				'country': ['India'],
+  ///   			},
+  ///   		},
+  ///   	}
+  ///   )
+  ///```
+  Map Function(SearchWidget searchWidget) defaultQuery;
 
+  /// takes [SearchWidget] instance as parameter and **returns** the query to be applied to the dependent widgets by `react` prop, as defined in Elasticsearch Query DSL.
+  ///
+  /// For example, the following example has two components `search-widget`(to render the suggestions) and `result-widget`(to render the results).
+  /// The `result-widget` depends on the `search-widget` to update the results based on the selected suggestion.
+  /// The `search-widget` has the `customQuery` prop defined that will not affect the query for suggestions(that is how `customQuery` is different from `defaultQuery`)
+  /// but it'll affect the query for `result-widget` because of the `react` dependency on `search-widget`.
+  ///
+  /// ```dart
+  /// SearchWidgetConnector(
+  ///   id: "search-widget",
+  ///   dataField: ["original_title", "original_title.search"],
+  ///   customQuery: (SearchWidget searchWidget) => ({
+  ///     'timeout': '1s',
+  ///      'query': {
+  ///       'match_phrase_prefix': {
+  ///         'fieldName': {
+  ///           'query': 'hello world',
+  ///           'max_expansions': 10,
+  ///         },
+  ///       },
+  ///     },
+  ///   })
+  /// )
+  ///
+  /// SearchWidgetConnector(
+  ///   id: "result-widget",
+  ///   dataField: "original_title",
+  ///   react: {
+  ///    'and': ['search-component']
+  ///   }
+  /// )
+  /// ```
+  Map Function(SearchWidget searchWidget) customQuery;
+
+  /// To define whether to execute query or not.
   bool execute;
 
+  /// This property can be used to control (enable/disable) the synonyms behavior for a particular query.
+  ///
+  /// Defaults to `true`, if set to `false` then fields having `.synonyms` suffix will not affect the query.
   bool enableSynonyms;
 
+  /// This property allows you to add a new property in the list with a particular value in such a way that
+  /// when selected i.e `value` is similar/contains to that label(`selectAllLabel`) then [QueryType.term] query will make sure that
+  /// the `field` exists in the `results`.
   String selectAllLabel;
 
+  /// This property allows you to implement the `pagination` for [QueryType.term] type of queries.
+  ///
+  /// If `pagination` is set to `true` then appbase will use the [composite aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-composite-aggregation.html) of Elasticsearch
+  /// instead of [terms aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-terms-aggregation.html).
   bool pagination;
 
+  /// Defaults to `false`.
+  ///
+  /// If set to `true` than it allows you to create a complex search that includes wildcard characters, searches across multiple fields, and more.
+  /// Read more about it [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html).
   bool queryString;
+
+  ///  Defaults to `false`. When enabled, it can be useful to curate search suggestions based on actual search queries that your users are making.
+  ///
+  /// Read more about it over [here](https://docs.appbase.io/docs/analytics/popular-suggestions).
+  bool enablePopularSuggestions;
+
+  /// can be used to configure the size of popular suggestions. The default value is `5`.
+  int maxPopularSuggestions;
+
+  /// Show 1 suggestion per document.
+  ///
+  /// If set to `false` multiple suggestions may show up for the same document as the searched value might appear in multiple fields of the same document,
+  /// this is true only if you have configured multiple fields in `dataField` prop. Defaults to `true`.
+  ///
+  ///  **Example** if you have `showDistinctSuggestions` is set to `false` and have the following configurations
+  ///
+  ///  ```dart
+  ///  // Your document:
+  ///  {
+  ///  	"name": "Warn",
+  ///  	"address": "Washington"
+  ///  }
+  ///  // SearchWidgetConnector:
+  ///  dataField: ['name', 'address']
+  ///
+  ///  // Search Query:
+  ///  "wa"
+  ///  ```
+
+  ///  Then there will be 2 suggestions from the same document
+  ///  as we have the search term present in both the fields
+  ///  specified in `dataField`.
+  ///
+  ///  ```
+  ///  Warn
+  ///  Washington
+  ///  ```
+  bool showDistinctSuggestions;
+
+  /// preserve the previously loaded results data for infinite loading
+  bool preserveResults;
+
+  /// it is an object that represents the elasticsearch query response.
+  Results results;
+
+  // other properties
+
+  /// represents the error response returned by elasticsearch
+  dynamic error;
+
+  /// subject to track state changes and update listeners
+  Observable stateChanges;
+
+  /// represents the current status of the request
+  RequestStatus requestStatus;
+
+  /// an object that contains the aggregations data for [QueryType.term] queries
+  Aggregations aggregationData;
+
+  /// a list of recent searches
+  List<Suggestion> recentSearches;
+
+  /* ---- callbacks to create the side effects while querying ----- */
+
+  /// is a callback function which accepts component's future **value** as a
+  /// parameter and **returns** a [Future].
+  ///It is called every-time before a component's value changes.
+  ///The promise, if and when resolved, triggers the execution of the component's query and if rejected, kills the query execution.
+  ///This method can act as a gatekeeper for query execution, since it only executes the query after the provided promise has been resolved.
+  ///
+  ///  For example:
+  /// ```dart
+  /// Future (value) {
+  ///   // called before the value is set
+  ///   // returns a [Future]
+  ///   // update state or component props
+  ///   return Future.value(value);
+  ///   // or Future.error()
+  /// }
+  /// ```
+  final Future Function(String value) beforeValueChange;
+
+  /* ------------- change events -------------------------------- */
+
+  /// It is called every-time the widget's value changes.
+  ///
+  /// This property is handy in cases where you want to generate a side-effect on value selection.
+  /// For example: You want to show a pop-up modal with the valid discount coupon code when a user searches for a product in a [SearchWidget].
+  final void Function(String next, {String prev}) onValueChange;
+
+  /// can be used to listen for the `results` changes
+  final void Function(List<Map> next, {List<Map> prev}) onResults;
+
+  /// can be used to listen for the `aggregationData` property changes
+  final void Function(List<Map> next, {List<Map> prev}) onAggregationData;
+
+  /// gets triggered in case of an error while fetching results
+  final void Function(Error error) onError;
+
+  /// can be used to listen for the request status changes
+  final void Function(String next, {String prev}) onRequestStatusChange;
+
+  /// is a callback function which accepts widget's **prevQuery** and **nextQuery** as parameters.
+  ///
+  /// It is called everytime the widget's query changes.
+  /// This property is handy in cases where you want to generate a side-effect whenever the widget's query would change.
+  final void Function(Map next, {Map prev}) onQueryChange;
 
   /* ------ Private properties only for the internal use ----------- */
   SearchBase _parent;
@@ -92,72 +356,11 @@ class SearchWidget extends Base {
   // Counterpart of the query
   List<Map> _query;
 
-  // mic status
-  MicStatusField _micStatus;
-
   // mic instance
   dynamic _micInstance;
 
   // query search ID
   String _queryId;
-
-  // other properties
-
-  // To enable the popular suggestions
-  bool enablePopularSuggestions;
-
-  // size of the popular suggestions
-  int maxPopularSuggestions;
-
-  // To show the distinct suggestions
-  bool showDistinctSuggestions;
-
-  // preserve the data for infinite loading
-  bool preserveResults;
-
-  // query error
-  dynamic error;
-
-  // state changes subject
-  Observable stateChanges;
-
-  // request status
-  RequestStatus requestStatus;
-
-  // results
-  Results results;
-
-  // aggregations
-  Aggregations aggregationData;
-
-  // recent searches
-  List<Suggestion> recentSearches;
-
-  /* ---- callbacks to create the side effects while querying ----- */
-
-  Future Function(String value) beforeValueChange;
-
-  /* ------------- change events -------------------------------- */
-
-  // called when value changes
-  void Function(String next, {String prev}) onValueChange;
-
-  // called when results change
-  void Function(List<Map> next, {List<Map> prev}) onResults;
-
-  // called when composite aggregationData change
-  void Function(List<Map> next, {List<Map> prev}) onAggregationData;
-  // called when there is an error while fetching results
-  void Function(Error error) onError;
-
-  // called when request status changes
-  void Function(String next, {String prev}) onRequestStatusChange;
-
-  // called when query changes
-  void Function(Map next, {Map prev}) onQueryChange;
-
-  // called when mic status changes
-  void Function(MicStatusField next, {MicStatusField prev}) onMicStatusChange;
 
   SearchWidget(
     String index,
@@ -206,7 +409,7 @@ class SearchWidget extends Base {
     this.onError,
     this.onRequestStatusChange,
     this.onQueryChange,
-    this.onMicStatusChange,
+    // this.onMicStatusChange,
     this.enablePopularSuggestions,
     this.maxPopularSuggestions,
     this.showDistinctSuggestions,
@@ -243,40 +446,23 @@ class SearchWidget extends Base {
     }
   }
 
-  // getters
-  MicStatusField get micStatus {
-    return this._micStatus;
-  }
-
-  dynamic get micInstance {
-    return this._micInstance;
-  }
-
-  bool get micActive {
-    return this._micStatus == MicStatusField.ACTIVE;
-  }
-
-  bool get micInactive {
-    return this._micStatus == MicStatusField.INACTIVE;
-  }
-
-  bool get micDenied {
-    return this._micStatus == MicStatusField.DENIED;
-  }
-
+  /// returns the last query executed by the widget
   List<Map> get query {
     return this._query;
   }
 
+  /// Useful for getting the status of the API, whether it has been executed or not
   bool get requestPending {
     return this.requestStatus == RequestStatus.PENDING;
   }
 
+  /// represnts the current appbase settings
   AppbaseSettings get appbaseSettings {
     return this.appbaseConfig;
   }
 
-  // To get the parsed suggestions from the results
+  /// can be used to get the parsed suggestions from the `results`.
+  /// If `enablePopularSuggestions` property is set to `true` then the popular suggestions will get appended at the bottom with a property in `source` object named `_popular_suggestion` as `true`.
   List<Suggestion> get suggestions {
     if (this.type != null && this.type != QueryType.search) {
       return [];
@@ -299,7 +485,7 @@ class SearchWidget extends Base {
         fields, this.results.data, this.value, this.showDistinctSuggestions);
   }
 
-  // Method to get the raw query based on the current state
+  /// to get the raw query based on the current state
   Map get componentQuery {
     Map query = {
       'id': id,
@@ -340,6 +526,7 @@ class SearchWidget extends Base {
     return query;
   }
 
+  /// represents the query id to track Appbase analytics
   String get queryId {
     // Get query ID from parent(searchbase) if exist
     if (this._parent != null && this._parent.queryId != "") {
@@ -354,65 +541,14 @@ class SearchWidget extends Base {
 
   /* -------- Public methods -------- */
 
-  // mic click handler
-  // onMicClick = (
-  //   micOptions: Object = {},
-  //   options: Options = {
-  //     triggerDefaultQuery: false,
-  //     triggerCustomQuery: false,
-  //     stateChanges: true
-  //   }
-  // ) => {
-  //   const prevStatus = this._micStatus;
-  //   if (typeof window !== 'undefined') {
-  //     window.SpeechRecognition =
-  //       window.webkitSpeechRecognition || window.SpeechRecognition || null;
-  //   }
-  //   if (
-  //     window &&
-  //     window.SpeechRecognition &&
-  //     prevStatus !== MIC_STATUS.denied
-  //   ) {
-  //     if (prevStatus === MIC_STATUS.active) {
-  //       this._setMicStatus(MIC_STATUS.inactive, options);
-  //     }
-  //     const { SpeechRecognition } = window;
-  //     if (this._micInstance) {
-  //       this._stopMic();
-  //       return;
-  //     }
-  //     this._micInstance = new SpeechRecognition();
-  //     this._micInstance.continuous = true;
-  //     this._micInstance.interimResults = true;
-  //     Object.assign(this._micInstance, micOptions);
-  //     this._micInstance.start();
-  //     this._micInstance.onstart = () => {
-  //       this._setMicStatus(MIC_STATUS.active, options);
-  //     };
-  //     this._micInstance.onresult = ({ results }) => {
-  //       if (results && results[0] && results[0].isFinal) {
-  //         this._stopMic();
-  //       }
-  //       this._handleVoiceResults({ results }, options);
-  //     };
-  //     this._micInstance.onerror = e => {
-  //       if (e.error === 'no-speech' || e.error === 'audio-capture') {
-  //         this._setMicStatus(MIC_STATUS.inactive, options);
-  //       } else if (e.error === 'not-allowed') {
-  //         this._setMicStatus(MIC_STATUS.denied, options);
-  //       }
-  //       console.error(e);
-  //     };
-  //   }
-
-  // Method to set the dataField option
+  /// can be used to set the `dataField` property
   void setDataField(dynamic dataField, {Options options}) {
     final prev = this.dataField;
     this.dataField = dataField;
     this._applyOptions(options, 'dataField', prev, dataField);
   }
 
-  // Method to set the value
+  /// can be used to set the `value` property
   void setValue(dynamic value, {Options options}) async {
     void performUpdate() {
       final prev = this.value;
@@ -432,56 +568,56 @@ class SearchWidget extends Base {
     }
   }
 
-  // Method to set the size option
+  /// sets the `size` property
   void setSize(int size, {Options options}) {
     final prev = this.size;
     this.size = size;
     this._applyOptions(options, 'size', prev, this.size);
   }
 
-  // Method to set the from option
+  /// sets the `from` property that is helpful to implement pagination
   void setFrom(int from, {Options options}) {
     final prev = this.from;
     this.from = from;
     this._applyOptions(options, 'from', prev, this.from);
   }
 
-  // Method to set the fuzziness option
+  /// sets the `fuzziness` property
   void setFuzziness(dynamic fuzziness, {Options options}) {
     final prev = this.fuzziness;
     this.fuzziness = fuzziness;
     this._applyOptions(options, 'fuzziness', prev, this.fuzziness);
   }
 
-  // Method to set the includeFields option
+  /// can be used to set the `includeFields` property
   void setIncludeFields(List<String> includeFields, {Options options}) {
     final prev = this.includeFields;
     this.includeFields = includeFields;
     this._applyOptions(options, 'includeFields', prev, includeFields);
   }
 
-  // Method to set the excludeFields option
+  /// can be used to set the `excludeFields` property
   void setExcludeFields(List<String> excludeFields, {Options options}) {
     final prev = this.excludeFields;
     this.excludeFields = excludeFields;
     this._applyOptions(options, 'excludeFields', prev, excludeFields);
   }
 
-  // Method to set the sortBy option
+  /// to set `soryBy` property
   void setSortBy(SortType sortBy, {Options options}) {
     final prev = this.sortBy;
     this.sortBy = sortBy;
     this._applyOptions(options, 'sortBy', prev, sortBy);
   }
 
-  // Method to set the sortBy option
+  /// to update `react` property
   void setReact(Map<String, dynamic> react, {Options options}) {
     final prev = this.react;
     this.react = react;
     this._applyOptions(options, 'react', prev, react);
   }
 
-  // Method to set the default query
+  /// to update `defaultQuery` property
   void setDefaultQuery(
       Map<dynamic, dynamic> Function(SearchWidget) defaultQuery,
       {Options options}) {
@@ -490,7 +626,7 @@ class SearchWidget extends Base {
     this._applyOptions(options, 'defaultQuery', prev, defaultQuery);
   }
 
-  // Method to set the custom query
+  /// sets the `customQuery` property
   void setCustomQuery(Map<dynamic, dynamic> Function(SearchWidget) customQuery,
       {Options options}) {
     final prev = this.customQuery;
@@ -498,30 +634,41 @@ class SearchWidget extends Base {
     this._applyOptions(options, 'customQuery', prev, customQuery);
   }
 
-  // Method to set the after key for composite aggs pagination
+  /// can be used to set the `after` property, which is useful while implementing pagination with [QueryType.term] type of widgets
   void setAfter(Map after, {Options options}) {
     final prev = this.after;
     this.after = after;
     this._applyOptions(options, 'after', prev, after);
   }
 
+  /// to record click analytics of a search request.
+  ///
+  /// Set the `isSuggestionClick` to `true` to record suggestion click.
+  /// For example,
+  /// ```dart
+  /// searchWidget.recordClick({
+  ///   'cf827a07-60a6-43ef-ab93-e1f8e1e3e1a8': 2 // [_id]: click_position
+  /// }, true);
+  /// ```
   Future recordClick(Map<String, int> objects,
       {bool isSuggestionClick = false}) async {
     return this.click(objects, queryId: this.queryId);
   }
 
+  /// to record a search conversion.
+  ///
+  /// For example,
+  /// ```dart
+  /// searchWidget.recordConversions(['cf827a07-60a6-43ef-ab93-e1f8e1e3e1a8']);
+  /// ```
   Future recordConversions(List<String> objects) async {
     return this.conversion(objects, queryId: this.queryId);
   }
 
-  Future handleError(dynamic err, {Option options}) {
-    this._setError(err,
-        options: new Options(stateChanges: options?.stateChanges));
-    print(err);
-    return Future.error(err);
-  }
-
-  // Method to execute the component's own query i.e default query
+  /// can be used to execute the default query for a particular widget.
+  /// For examples,
+  /// - to display the `suggestions` or `results` for a [QueryType.search] type of widget,
+  /// - to display the filter options(`aggregations`) for a [QueryType.term] type of widget
   Future triggerDefaultQuery({Option options}) async {
     // To prevent duplicate queries
     if (isEqual(this._query, this.componentQuery)) {
@@ -550,7 +697,7 @@ class SearchWidget extends Base {
       if ((this.type == null || this.type == QueryType.search) &&
           this.enablePopularSuggestions == true) {
         final rawPopularSuggestions =
-            await this._fetchRequest(this.getSuggestionsQuery(), true);
+            await this._fetchRequest(this._getSuggestionsQuery(), true);
         if (rawPopularSuggestions != null) {
           final popularSuggestionsData =
               rawPopularSuggestions[suggestionQueryID];
@@ -581,11 +728,11 @@ class SearchWidget extends Base {
       }
       return Future.value(rawResults);
     } catch (err) {
-      return handleError(err);
+      return _handleError(err);
     }
   }
 
-  // Method to execute the query for watcher components
+  /// can be used to execute queries for the dependent/watcher components.
   Future triggerCustomQuery({Option options}) async {
     // Generate query again after resetting changes
     final generatedQuery = this._generateQuery();
@@ -595,7 +742,7 @@ class SearchWidget extends Base {
       }
       // set the request loading to true for all the requests
       generatedQuery.orderOfQueries.forEach((id) {
-        final componentInstance = this._parent.getComponent(id);
+        final componentInstance = this._parent.getSearchWidget(id);
         if (componentInstance != null) {
           // Reset `from` and `after` values
           componentInstance.setFrom(0,
@@ -622,7 +769,7 @@ class SearchWidget extends Base {
         }, false);
         // Update the state for components
         finalGeneratedQuery.orderOfQueries.forEach((id) {
-          final componentInstance = this._parent.getComponent(id);
+          final componentInstance = this._parent.getSearchWidget(id);
           if (componentInstance != null) {
             componentInstance._setRequestStatus(RequestStatus.INACTIVE);
             // Reset value for dependent components
@@ -655,13 +802,167 @@ class SearchWidget extends Base {
         });
         return Future.value(results);
       } catch (e) {
-        return handleError(e);
+        return _handleError(e);
       }
     }
     return Future.value(true);
   }
 
-  Map getSuggestionsQuery() {
+  /// to subscribe the state changes
+  ///
+  /// Although we have callbacks for change events that can be used to update the UI based on particular property changes,
+  /// the `subscribeToStateChanges` method gives you more control over the UI rendering logic and is more efficient.
+  ///
+  /// ### How does it work?
+  /// 1. This method is controlled by the `stateChanges` property which can be defined in the setter methods while updating a particular property.
+  /// If `stateChanges` is set to `true`, then only the subscribed functions will be called, unlike events callback which gets called every time when a property changes its value.
+  /// So basically, `subscribeToStateChanges` provides more control over the event's callback in a way that you can define whether to update the UI or not while setting a particular property's value.
+  /// 2. You can define the properties for which you want to update the UI.
+  /// 3. It allows you to register multiple callback functions for search state updates.
+  ///
+  /// ### Usage
+  /// This method can be used to subscribe to the state changes of the properties.
+  /// A common use-case is to subscribe to a component or DOM element to a particular property or a set of properties & update the UI according to the changes.
+  /// The callback function accepts an object in the following shape:
+  /// ```dart
+  /// {
+  ///   [propertyName]: [Changes]
+  /// }
+  /// ```
+  /// These are the properties that can be subscribed for the changes:
+  ///
+  /// -   `results`
+  /// -   `aggregationData`
+  /// -   `requestStatus`
+  /// -   `error`
+  /// -   `value`
+  /// -   `query`
+  /// -   `dataField`
+  /// -   `size`
+  /// -   `from`
+  /// -   `fuzziness`
+  /// -   `includeFields`
+  /// -   `excludeFields`
+  /// -   `sortBy`
+  /// -   `react`
+  /// -   `defaultQuery`
+  /// -   `customQuery`
+  ///
+  subscribeToStateChanges(
+      SubscriptionFunction fn, List<String> propertiesToSubscribe) {
+    this.stateChanges.subscribe(fn, propertiesToSubscribe);
+  }
+
+  /// It is recommended to unsubscribe the callback functions after the component has been unmounted.
+  unsubscribeToStateChanges(SubscriptionFunction fn) {
+    this.stateChanges.unsubscribe(fn);
+  }
+
+  /// to empty results
+  void clearResults({options: Options}) {
+    final prev = this.results;
+    this.results.setRaw({
+      'hits': {'hits': []}
+    });
+    this._applyOptions(new Options(stateChanges: options?.stateChanges),
+        'results', prev, this.results);
+  }
+
+  /// to get recent searches
+  Future<List<Suggestion>> getRecentSearches(
+      {RecentSearchOptions queryOptions, Options options}) async {
+    String queryString = '';
+    if (queryOptions == null) {
+      queryOptions = RecentSearchOptions();
+    }
+    void addParam(String key, String value) {
+      if (queryString != "") {
+        queryString += "&${key}=${value}";
+      } else {
+        queryString += "${key}=${value}";
+      }
+    }
+
+    if (this.appbaseSettings != null && this.appbaseSettings.userId != null) {
+      addParam('user_id', this.appbaseSettings.userId);
+    }
+    if (queryOptions.size != null) {
+      addParam('size', queryOptions.size.toString());
+    }
+    if (queryOptions.minChars != null) {
+      addParam('min_chars', queryOptions.minChars.toString());
+    }
+    if (queryOptions.from != null) {
+      addParam('from', queryOptions.from);
+    }
+    if (queryOptions.to != null) {
+      addParam('to', queryOptions.to);
+    }
+    if (queryOptions.customEvents != null) {
+      queryOptions.customEvents.keys.forEach((key) {
+        addParam(key, queryOptions.customEvents[key]);
+      });
+    }
+    final String url =
+        "${this.url}/_analytics/${this.index}/recent-searches?${queryString}";
+    try {
+      final res = await http.get(url, headers: this.headers);
+      if (res.statusCode >= 500) {
+        return Future.error(res);
+      }
+      if (res.statusCode >= 400) {
+        return Future.error(res);
+      }
+      final recentSearches = jsonDecode(res.body);
+      final prev = this.recentSearches;
+      // Populate the recent searches
+      this.recentSearches = ((recentSearches as List).map((searchObject) =>
+          Suggestion(searchObject['key'], searchObject['key']))).toList();
+      this._applyOptions(new Options(stateChanges: options?.stateChanges),
+          'recentSearches', prev, this.recentSearches);
+      return Future.value(this.recentSearches);
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
+
+  // To set the parent (SearchBase) instance for the component
+  void setParent(SearchBase parent) {
+    this._parent = parent;
+  }
+
+  /* -------- Private methods only for the internal use -------- */
+  _appendResults(Map rawResults) {
+    if (this.preserveResults != null &&
+        rawResults != null &&
+        rawResults['hits'] != null &&
+        rawResults['hits']['hits'] is List &&
+        this.results.rawData != null &&
+        this.results.rawData['hits'] != null &&
+        this.results.rawData['hits']['hits'] is List) {
+      this.results.setRaw({
+        ...rawResults,
+        'hits': {
+          ...rawResults['hits'],
+          'hits': [
+            ...this.results.rawData['hits']['hits'],
+            ...rawResults['hits']['hits']
+          ]
+        }
+      });
+    } else {
+      this.results.setRaw(rawResults);
+    }
+  }
+
+  Future _handleError(dynamic err, {Option options}) {
+    this._setError(err,
+        options: new Options(stateChanges: options?.stateChanges));
+    print(err);
+    return Future.error(err);
+  }
+
+  Map _getSuggestionsQuery() {
     return {
       'query': [
         {
@@ -727,62 +1028,8 @@ class SearchWidget extends Base {
     };
   }
 
-  // Method to subscribe the state changes
-  subscribeToStateChanges(
-      SubscriptionFunction fn, List<String> propertiesToSubscribe) {
-    this.stateChanges.subscribe(fn, propertiesToSubscribe);
-  }
-
-  // Method to unsubscribe the state changes
-  unsubscribeToStateChanges(SubscriptionFunction fn) {
-    this.stateChanges.unsubscribe(fn);
-  }
-
-  // Method to clear results
-  void clearResults({options: Options}) {
-    final prev = this.results;
-    this.results.setRaw({
-      'hits': {'hits': []}
-    });
-    this._applyOptions(new Options(stateChanges: options?.stateChanges),
-        'results', prev, this.results);
-  }
-
-  // To set the parent (SearchBase) instance for the component
-  void setParent(SearchBase parent) {
-    this._parent = parent;
-  }
-
-  /* -------- Private methods only for the internal use -------- */
-  _appendResults(Map rawResults) {
-    if (this.preserveResults != null &&
-        rawResults != null &&
-        rawResults['hits'] != null &&
-        rawResults['hits']['hits'] is List &&
-        this.results.rawData != null &&
-        this.results.rawData['hits'] != null &&
-        this.results.rawData['hits']['hits'] is List) {
-      this.results.setRaw({
-        ...rawResults,
-        'hits': {
-          ...rawResults['hits'],
-          'hits': [
-            ...this.results.rawData['hits']['hits'],
-            ...rawResults['hits']['hits']
-          ]
-        }
-      });
-    } else {
-      this.results.setRaw(rawResults);
-    }
-  }
-
   // Method to apply the changed based on set options
   void _applyOptions(Options options, String key, prevValue, nextValue) {
-    // // Trigger mic events
-    if (key == 'micStatus' && this.onMicStatusChange != null) {
-      this.onMicStatusChange(nextValue, prev: prevValue);
-    }
     // Trigger events
     if (key == 'query' && this.onQueryChange != null) {
       this.onQueryChange(nextValue, prev: prevValue);
@@ -810,63 +1057,6 @@ class SearchWidget extends Base {
     }
     if (options == null || options.stateChanges) {
       this.stateChanges.next({key: new Changes(prevValue, nextValue)}, key);
-    }
-  }
-
-  Future<List<Suggestion>> getRecentSearches(
-      {RecentSearchOptions queryOptions, Options options}) async {
-    String queryString = '';
-    if (queryOptions == null) {
-      queryOptions = RecentSearchOptions();
-    }
-    void addParam(String key, String value) {
-      if (queryString != "") {
-        queryString += "&${key}=${value}";
-      } else {
-        queryString += "${key}=${value}";
-      }
-    }
-
-    if (this.appbaseSettings != null && this.appbaseSettings.userId != null) {
-      addParam('user_id', this.appbaseSettings.userId);
-    }
-    if (queryOptions.size != null) {
-      addParam('size', queryOptions.size.toString());
-    }
-    if (queryOptions.minChars != null) {
-      addParam('min_chars', queryOptions.minChars.toString());
-    }
-    if (queryOptions.from != null) {
-      addParam('from', queryOptions.from);
-    }
-    if (queryOptions.to != null) {
-      addParam('to', queryOptions.to);
-    }
-    if (queryOptions.customEvents != null) {
-      queryOptions.customEvents.keys.forEach((key) {
-        addParam(key, queryOptions.customEvents[key]);
-      });
-    }
-    final String url =
-        "${this.url}/_analytics/${this.index}/recent-searches?${queryString}";
-    try {
-      final res = await http.get(url, headers: this.headers);
-      if (res.statusCode >= 500) {
-        return Future.error(res);
-      }
-      if (res.statusCode >= 400) {
-        return Future.error(res);
-      }
-      final recentSearches = jsonDecode(res.body);
-      final prev = this.recentSearches;
-      // Populate the recent searches
-      this.recentSearches = ((recentSearches as List).map((searchObject) =>
-          Suggestion(searchObject['key'], searchObject['key']))).toList();
-      this._applyOptions(new Options(stateChanges: options?.stateChanges),
-          'recentSearches', prev, this.recentSearches);
-      return Future.value(this.recentSearches);
-    } catch (e) {
-      return Future.error(e);
     }
   }
 
@@ -937,7 +1127,7 @@ class SearchWidget extends Base {
      * 4. Update results and trigger events => Call 'setResults' or 'setAggregations' based on the results
      */
     if (this._parent != null) {
-      final components = this._parent.getComponents();
+      final components = this._parent.getActiveWidgets();
       final List<String> watcherComponents = [];
       // Find all the  watcher components
       components.keys.forEach((id) {
@@ -952,7 +1142,7 @@ class SearchWidget extends Base {
       final Map<String, Map> requestQuery = {};
       // Generate the request body for watchers
       watcherComponents.forEach((watcherId) {
-        final component = this._parent.getComponent(watcherId);
+        final component = this._parent.getSearchWidget(watcherId);
         if (component != null) {
           requestQuery[watcherId] = component.componentQuery;
           // collect queries for all components defined in the `react` property
@@ -961,7 +1151,7 @@ class SearchWidget extends Base {
           flattenReact.forEach((id) {
             // only add if not present
             if (requestQuery[id] == null) {
-              final dependentComponent = this._parent.getComponent(id);
+              final dependentComponent = this._parent.getSearchWidget(id);
               if (dependentComponent != null &&
                   dependentComponent.value != null) {
                 // Set the execute to `false` for dependent components
@@ -1037,7 +1227,7 @@ class SearchWidget extends Base {
     final flattenReact = flatReactProp(this.react, this.id);
     flattenReact.forEach((id) {
       // only add if not present
-      final watcherComponent = this._parent.getComponent(id);
+      final watcherComponent = this._parent.getSearchWidget(id);
       if (watcherComponent != null && watcherComponent.value != null) {
         // Set the execute to `false` for watcher components
         final watcherQuery = watcherComponent.componentQuery;
@@ -1049,37 +1239,5 @@ class SearchWidget extends Base {
     this._query = query != null ? query : finalQuery;
     this._applyOptions(
         new Options(stateChanges: false), 'query', prevQuery, this._query);
-  }
-
-  // mic
-  void _handleVoiceResults(Map payload, {Options options}) {
-    if (payload != null &&
-        payload["results"] != null &&
-        payload["results"][0] != null &&
-        payload["results"][0].isFinal is bool &&
-        payload["results"][0].isFinal &&
-        payload["results"][0][0] != null &&
-        payload["results"][0][0].transcript is String &&
-        payload["results"][0][0].transcript.trim()) {
-      this.setValue(payload["results"][0][0].transcript.trim(),
-          options: Options(
-              triggerDefaultQuery: true,
-              triggerCustomQuery: true,
-              stateChanges: options?.stateChanges));
-    }
-  }
-
-  void _stopMic() {
-    if (this._micInstance) {
-      this._micInstance.stop();
-      this._micInstance = null;
-      this._setMicStatus(MicStatusField.INACTIVE);
-    }
-  }
-
-  void _setMicStatus(MicStatusField status, {Options options}) {
-    final prevStatus = this._micStatus;
-    this._micStatus = status;
-    this._applyOptions(options, 'micStatus', prevStatus, this._micStatus);
   }
 }

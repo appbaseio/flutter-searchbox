@@ -15,18 +15,14 @@ const Map ErrorMessages = {
       'SearchBase: Only components with `search` type supports the multiple data fields. Please define `dataField` as a string.'
 };
 
-enum MicStatusField {
-  INACTIVE,
-  ACTIVE,
-  DENIED,
-}
-
+/// Represents the current status of the elasticsearch request
 enum RequestStatus {
   INACTIVE,
   PENDING,
   ERROR,
 }
 
+/// Represents the type of the query which is defaults to [QueryType.search], valid values are `search`, `term`, `range` & `geo`. You can read more [here](https://docs.appbase.io/docs/search/reactivesearch-api/implement#type-of-queries).
 enum QueryType { search, term, geo, range }
 
 extension QueryTypeExtension on QueryType {

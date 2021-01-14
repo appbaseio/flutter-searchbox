@@ -29,7 +29,7 @@ void main() {
   });
 
 // Register filter widget with dependency on search widget
-  final filterComponent = searchbase.register('language-filter', {
+  final filterWidget = searchbase.register('language-filter', {
     'type': QueryType.term,
     'dataField': 'language.keyword',
     'react': {'and': 'search-widget'},
@@ -37,7 +37,7 @@ void main() {
   });
 
 // Register result widget with react dependency on search and filter widget => To render the results
-  final resultComponent = searchbase.register('result-widget', {
+  final resultWidget = searchbase.register('result-widget', {
     'dataField': 'name',
     'react': {
       'and': ['search-widget', 'language-filter']
@@ -85,9 +85,9 @@ void main() {
 
   final resultElement = querySelector('#results');
   // Fetch initial results
-  resultComponent.triggerDefaultQuery();
+  resultWidget.triggerDefaultQuery();
 
-  resultComponent.subscribeToStateChanges((change) {
+  resultWidget.subscribeToStateChanges((change) {
     final results = change['results'].next;
     final items = results.data?.map((i) {
       return """
@@ -113,9 +113,9 @@ void main() {
   }, ['results']);
 
   // Fetch initial filter options
-  filterComponent.triggerDefaultQuery();
+  filterWidget.triggerDefaultQuery();
 
-  filterComponent.subscribeToStateChanges((change) {
+  filterWidget.subscribeToStateChanges((change) {
     final aggregations = change['aggregationData'].next;
     final container = document.getElementById('language-filter');
     container.setInnerHtml('');
@@ -128,14 +128,14 @@ void main() {
         checkbox.id = i['_key'];
         checkbox.addEventListener('click', (event) {
           final List<String> values =
-              filterComponent.value != null ? filterComponent.value : [];
+              filterWidget.value != null ? filterWidget.value : [];
           if (values.contains(i['_key'])) {
             values.remove(i['_key']);
           } else {
             values.add(i['_key']);
           }
           // Set filter value and trigger custom query
-          filterComponent.setValue(values,
+          filterWidget.setValue(values,
               options: Options(stateChanges: true, triggerCustomQuery: true));
         });
         final label = document.createElement('label');

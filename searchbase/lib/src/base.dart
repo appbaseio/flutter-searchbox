@@ -3,29 +3,74 @@ import 'constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-/**
- * Base class is the abstract class for SearchBase and SearchWidget classes.
- */
+/// [Base] class is the abstract class for [SearchBase] and [SearchWidget] classes.
 class Base {
-  // to enable the recording of analytics
-  AppbaseSettings appbaseConfig;
-
-  // auth credentials if any
-  String credentials;
-
-  // custom headers object
-  Map<String, String> headers;
-
-  // es index name
+  // RS API properties
+  /// Refers to an index of the Elasticsearch cluster.
+  ///
+  /// `Note:` Multiple indexes can be connected to by specifying comma-separated index names.
   String index;
 
-  // es url
+  /// URL for the Elasticsearch cluster.
   String url;
+
+  /// Basic Auth credentials if required for authentication purposes.
+  ///
+  /// It should be a string of the format `username:password`. If you are using an appbase.io cluster, you will find credentials under the `Security > API credentials` section of the appbase.io dashboard.
+  /// If you are not using an appbase.io cluster, credentials may not be necessary - although having open access to your Elasticsearch cluster is not recommended.
+  String credentials;
+
+  /// Set custom headers to be sent with each server request as key/value pairs.
+  Map<String, String> headers;
+
+  /// It allows you to customize the analytics experience when appbase.io is used as a backend.
+  AppbaseSettings appbaseConfig;
 
   /* ---- callbacks to create the side effects while querying ----- */
 
+  /// Enables transformation of network request before execution.
+  /// This function will give you the request object as the param and expect an updated request in return, for execution.
+  ///
+  /// For example, we will add the `credentials` property in the request using `transformRequest`.
+  ///
+  /// ```dart
+  /// Future (Map request) =>
+  ///      Future.value({
+  ///          ...request,
+  ///          'credentials': 'include',
+  ///      })
+  ///  }
+  /// ```
   TransformRequest transformRequest;
 
+  /// Enables transformation of search network response before rendering them.
+  ///
+  /// It is an asynchronous function which will accept an Elasticsearch response object as param and is expected to return an updated response as the return value.
+  ///
+  /// For example:
+  /// ```dart
+  /// Future (Map elasticsearchResponse) async {
+  ///	 final ids = elasticsearchResponse['hits']['hits'].map(item => item._id);
+  ///	 final extraInformation = await getExtraInformation(ids);
+  ///	 final hits = elasticsearchResponse['hits']['hits'].map(item => {
+  ///		final extraInformationItem = extraInformation.find(
+  ///			otherItem => otherItem._id === item._id,
+  ///		);
+  ///		return Future.value({
+  ///			...item,
+  ///			...extraInformationItem,
+  ///		};
+  ///	}));
+  ///
+  ///	return Future.value({
+  ///		...elasticsearchResponse,
+  ///		'hits': {
+  ///			...elasticsearchResponse.hits,
+  ///			hits,
+  ///		},
+  ///	});
+  ///}
+  /// ```
   TransformResponse transformResponse;
 
   /* ------ Private properties only for the internal use ----------- */
@@ -63,22 +108,22 @@ class Base {
     }
   }
 
-  // To to set the custom headers
+  /// To to set the custom headers
   void setHeaders(Map<String, String> headers) {
     this.headers = {...this.headers, ...headers};
   }
 
-  // To set the query ID
+  /// To set the query ID
   void setQueryID(String queryID) {
     this._queryId = queryID;
   }
 
-  // To get the query ID
+  /// To get the query ID
   String get queryId {
     return this._queryId;
   }
 
-  // use this methods to record a search click event
+  /// use this methods to record a search click event
   Future click(Map<String, int> objects,
       {bool isSuggestionClick = false, String queryId}) async {
     String queryID = queryId;
@@ -109,7 +154,7 @@ class Base {
     return Future.error("Query ID not found. Make sure analytics is enabled");
   }
 
-  // use this methods to record a search conversion
+  /// use this methods to record a search conversion
   Future conversion(List<String> objects, {String queryId}) async {
     String queryID = queryId;
     if (queryId == null || queryId == "") {

@@ -1,5 +1,6 @@
 import 'utils.dart';
 
+/// Represents the response for [QueryType.search], [QueryType.geo] and [QueryType.range] queries
 class Results {
   // An array of results obtained from the applied query.
   List<Map> data;

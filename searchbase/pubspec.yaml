@@ -1,9 +1,8 @@
 name: searchbase
-version: 1.0.0-alpha
+version: 1.0.0-alpha.2
 description: >-
   SearchBase is a library to build the search UIs with Elasticsearch.
 homepage: https://github.com/appbaseio/flutter-searchbox
-documentation: https://docs.appbase.io/docs/reactivesearch/searchbase/overview/apireference/
 environment:
   sdk: ">=2.10.0 <3.0.0"
 dependencies:
