@@ -824,7 +824,8 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
 
   /// It can be used to render the custom UI for suggestion list item.
   /// In case of a popular suggestion the source property of the `Suggestion` would have a key named _popular_suggestion as true.
-  final Widget Function(Suggestion suggestion, bool isRecentSearch)
+  final Widget Function(
+          Suggestion suggestion, bool isRecentSearch, Function handleTap)
       buildSuggestionItem;
 
   SearchBox({
@@ -935,53 +936,53 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   ListView getSuggestionList(
       BuildContext context, SearchWidget searchWidget, List<Suggestion> list,
       {bool isRecentSearch = false}) {
-    List<Widget> suggestionsList = list
-        .map((suggestion) => Container(
-            alignment: Alignment.topLeft,
-            height: 50,
-            child: buildSuggestionItem != null
-                ? buildSuggestionItem(suggestion, isRecentSearch)
-                : Container(
-                    child: ListTile(
-                      onTap: () {
-                        // Perform actions on suggestions tap
-                        searchWidget.setValue(suggestion.value,
-                            options: Options(triggerCustomQuery: true));
-                        this.query = suggestion.value;
-                        String objectId;
-                        if (suggestion.source != null &&
-                            suggestion.source['_id'] is String) {
-                          objectId = suggestion.source['_id'];
-                        }
-                        if (objectId != null && suggestion.clickId != null) {
-                          // Record click analytics
-                          searchWidget.recordClick(
-                              {objectId: suggestion.clickId},
-                              isSuggestionClick: true);
-                        }
+    List<Widget> suggestionsList = list.map((suggestion) {
+      void handleTap() {
+        // Perform actions on suggestions tap
+        searchWidget.setValue(suggestion.value,
+            options: Options(triggerCustomQuery: true));
+        this.query = suggestion.value;
+        String objectId;
+        if (suggestion.source != null && suggestion.source['_id'] is String) {
+          objectId = suggestion.source['_id'];
+        }
+        if (objectId != null && suggestion.clickId != null) {
+          // Record click analytics
+          searchWidget.recordClick({objectId: suggestion.clickId},
+              isSuggestionClick: true);
+        }
 
-                        close(context, null);
-                      },
-                      leading: isRecentSearch
-                          ? Icon(Icons.history)
-                          : (suggestion.source != null &&
-                                  suggestion.source['_popular_suggestion'] ==
-                                      true)
-                              ? Icon(Icons.trending_up)
-                              : Icon(Icons.search),
-                      title: Text(suggestion.label,
-                          maxLines: 1, overflow: TextOverflow.ellipsis),
-                      trailing: showAutoFill == true
-                          ? IconButton(
-                              icon: Icon(FeatherIcons.arrowUpLeft),
-                              onPressed: () => {this.query = suggestion.value})
-                          : null,
-                    ),
-                    decoration: new BoxDecoration(
-                        border: new Border(
-                            bottom: new BorderSide(
-                                color: Color(0xFFC8C8C8), width: 0.5))))))
-        .toList();
+        close(context, null);
+      }
+
+      return Container(
+          alignment: Alignment.topLeft,
+          height: 50,
+          child: buildSuggestionItem != null
+              ? buildSuggestionItem(suggestion, isRecentSearch, handleTap)
+              : Container(
+                  child: ListTile(
+                    onTap: handleTap,
+                    leading: isRecentSearch
+                        ? Icon(Icons.history)
+                        : (suggestion.source != null &&
+                                suggestion.source['_popular_suggestion'] ==
+                                    true)
+                            ? Icon(Icons.trending_up)
+                            : Icon(Icons.search),
+                    title: Text(suggestion.label,
+                        maxLines: 1, overflow: TextOverflow.ellipsis),
+                    trailing: showAutoFill == true
+                        ? IconButton(
+                            icon: Icon(FeatherIcons.arrowUpLeft),
+                            onPressed: () => {this.query = suggestion.value})
+                        : null,
+                  ),
+                  decoration: new BoxDecoration(
+                      border: new Border(
+                          bottom: new BorderSide(
+                              color: Color(0xFFC8C8C8), width: 0.5)))));
+    }).toList();
     return ListView(
         padding: const EdgeInsets.all(8), children: suggestionsList);
   }
