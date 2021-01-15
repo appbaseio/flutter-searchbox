@@ -1,22 +1,24 @@
 ## Flutter SearchBox
 
-[flutter-searchbox](https://github.com/appbaseio/flutter-searchbox/tree/master/flutter_searchbox) provides declarative API to query Elasticsearch, and bind UI widgets with different types of search queries. As the name suggests, it provides a default UI component for searchbox.
+[flutter_searchbox](https://github.com/appbaseio/flutter-searchbox/tree/master/flutter_searchbox) provides declarative API to query Elasticsearch, and binds UI widgets with different types of search queries. As the name suggests, it provides a searchbox UI widget for Elasticsearch and Appbase.io.
 
 ## Installation
 
-To install `flutter-searchbox`, please follow the following steps:
+To install `flutter_searchbox`, please follow the following steps:
 
 1. Depend on it
-   Add this to your package's `pubspec.yaml` file:
+
+Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter-searchbox: ^1.0.0
+  flutter_searchbox: ^1.0.0
   searchbase: ^1.0.0
 ```
 
 2. Install it
-   You can install packages from the command line:
+
+You can install packages from the command line:
 
 ```bash
 $ flutter pub get
@@ -28,7 +30,7 @@ $ flutter pub get
 
 ![Basic Example](http://g.recordit.co/N0M8IOYeqT.gif)
 
-The following example renders an autosuggestion search bar(`search-widget`) with one custom widget(`result-widget`) to render the results. The `result-widget` watches the `search-widget` for input changes and updates its UI when the user selects a suggestion.
+The following example renders an autosuggestion [SearchBox](`search-widget`) with one custom widget [SearchWidgetConnector](`result-widget`) to render the results. The `result-widget` watches the `search-widget` for input changes and updates its UI when the user selects a suggestion.
 
 ```dart
 import 'package:flutter/material.dart';

@@ -430,7 +430,7 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
       );
 }
 
-/// SearchWidgetConnector performs the following tasks
+/// SearchWidgetConnector performs the following tasks:
 /// - Register a component with id
 /// - unregister a component (can be controlled by destroyOnDispose property)
 /// - trigger rebuild based on state changes
@@ -455,19 +455,19 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// unique identifier of the component, can be referenced in other components' `react` prop.
   final String id;
 
-  /// Refers to an index of the Elasticsearch cluster. If not defined then value will be inherited from [SearchBaseProvider].
+  /// Refers to an index of the Elasticsearch cluster. If not defined, then value will be inherited from [SearchBaseProvider].
   ///
   /// `Note:` Multiple indexes can be connected to by specifying comma-separated index names.
   final String index;
 
-  /// URL for the Elasticsearch cluster. If not defined then value will be inherited from [SearchBaseProvider].
+  /// URL for the Elasticsearch cluster. If not defined, then value will be inherited from [SearchBaseProvider].
   final String url;
 
   /// Basic Auth credentials if required for authentication purposes.
   ///
   /// It should be a string of the format `username:password`. If you are using an appbase.io cluster, you will find credentials under the `Security > API credentials` section of the appbase.io dashboard.
   /// If you are not using an appbase.io cluster, credentials may not be necessary - although having open access to your Elasticsearch cluster is not recommended.
-  /// If not defined then value will be inherited from [SearchBaseProvider].
+  /// If not defined, then value will be inherited from [SearchBaseProvider].
   final String credentials;
 
   /// Set custom headers to be sent with each server request as key/value pairs. If not defined then value will be inherited from [SearchBaseProvider].
@@ -521,7 +521,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// You can define the `dataField` property as a `List<Map>` of to set the field weights. The object must have the `field` and `weight` keys.
   final dynamic dataField;
 
-  /// Data field which has the category values mapped.
+  /// Index field mapped to the category value.
   final String categoryField;
 
   /// This is the selected category value. It is used for informing the search result.
@@ -639,10 +639,10 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
 
   /// takes [SearchWidget] instance as parameter and **returns** the query to be applied to the dependent widgets by `react` prop, as defined in Elasticsearch Query DSL.
   ///
-  /// For example, the following example has two components `search-widget`(to render the suggestions) and `result-widget`(to render the results).
-  /// The `result-widget` depends on the `search-widget` to update the results based on the selected suggestion.
-  /// The `search-widget` has the `customQuery` prop defined that will not affect the query for suggestions(that is how `customQuery` is different from `defaultQuery`)
-  /// but it'll affect the query for `result-widget` because of the `react` dependency on `search-widget`.
+  /// For example, the following example has two components **search-widget**(to render the suggestions) and **result-widget**(to render the results).
+  /// The **result-widget** depends on the **search-widget** to update the results based on the selected suggestion.
+  /// The **search-widget** has the `customQuery` prop defined that will not affect the query for suggestions(that is how `customQuery` is different from `defaultQuery`)
+  /// but it'll affect the query for **result-widget** because of the `react` dependency on **search-widget**.
   ///
   /// ```dart
   /// SearchWidgetConnector(
@@ -963,31 +963,32 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   }
 }
 
+/// A UI widget to render a search with auto-suggestions
 class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   // Properties to configure search component
 
   /// unique identifier of the component, can be referenced in other components' `react` prop.
   final String id;
 
-  /// Refers to an index of the Elasticsearch cluster. If not defined then value will be inherited from [SearchBaseProvider].
+  /// Refers to an index of the Elasticsearch cluster. If not defined, then value will be inherited from [SearchBaseProvider].
   ///
   /// `Note:` Multiple indexes can be connected to by specifying comma-separated index names.
   final String index;
 
-  /// URL for the Elasticsearch cluster. If not defined then value will be inherited from [SearchBaseProvider].
+  /// URL for the Elasticsearch cluster. If not defined, then value will be inherited from [SearchBaseProvider].
   final String url;
 
   /// Basic Auth credentials if required for authentication purposes.
   ///
   /// It should be a string of the format `username:password`. If you are using an appbase.io cluster, you will find credentials under the `Security > API credentials` section of the appbase.io dashboard.
   /// If you are not using an appbase.io cluster, credentials may not be necessary - although having open access to your Elasticsearch cluster is not recommended.
-  /// If not defined then value will be inherited from [SearchBaseProvider].
+  /// If not defined, then value will be inherited from [SearchBaseProvider].
   final String credentials;
 
-  /// Set custom headers to be sent with each server request as key/value pairs. If not defined then value will be inherited from [SearchBaseProvider].
+  /// Set custom headers to be sent with each server request as key/value pairs. If not defined, then value will be inherited from [SearchBaseProvider].
   final Map<String, String> headers;
 
-  /// It allows you to customize the analytics experience when appbase.io is used as a backend. If not defined then value will be inherited from [SearchBaseProvider].
+  /// It allows you to customize the analytics experience when appbase.io is used as a backend. If not defined, then value will be inherited from [SearchBaseProvider].
   final AppbaseSettings appbaseConfig;
 
   // RS API properties
@@ -1034,7 +1035,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   /// You can define the `dataField` property as a `List<Map>` of to set the field weights. The object must have the `field` and `weight` keys.
   final dynamic dataField;
 
-  /// Data field which has the category values mapped.
+  /// Index field mapped to the category value.
   final String categoryField;
 
   /// This is the selected category value. It is used for informing the search result.

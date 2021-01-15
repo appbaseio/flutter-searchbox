@@ -79,8 +79,9 @@ class HomePage extends StatelessWidget {
             child: SearchWidgetConnector(
                 id: 'result-widget',
                 dataField: 'original_title',
+                // subscribeTo: ['requestPending'],
                 react: {
-                  'and': ['search-widget', 'author-filter'],
+                  'and': 'search-widget',
                 },
                 size: 10,
                 triggerQueryOnInit: true,

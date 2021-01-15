@@ -1,3 +1,11 @@
+## 1.0.0-alpha.4
+
+- Format docs
+
+## 1.0.0-alpha.3
+
+- Fix docs link
+
 ## 1.0.0-alpha.2
 
 - Fix docs link

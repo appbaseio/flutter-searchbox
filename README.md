@@ -1,1 +1,1 @@
-# flutter-searchbox
+# flutter_searchbox

@@ -68,7 +68,7 @@ class SearchWidget extends Base {
   /// You can define the `dataField` property as a `List<Map>` of to set the field weights. The object must have the `field` and `weight` keys.
   dynamic dataField;
 
-  /// Data field which has the category values mapped.
+  /// Index field mapped to the category value.
   String categoryField;
 
   /// This is the selected category value. It is used for informing the search result.
@@ -109,10 +109,10 @@ class SearchWidget extends Base {
   /// If you have sparse data or documents or items not having the value in the specified field or mapping, then this prop enables you to show that data.
   bool includeNullValues;
 
-  // useful to include the fields from Elastissearch response
+  /// useful to include the fields from Elastissearch response
   List<String> includeFields;
 
-  // useful to exclude the fields from Elastissearch response
+  /// useful to exclude the fields from Elastissearch response
   List<String> excludeFields;
 
   /// Useful for showing the correct results for an incorrect search parameter by taking the fuzziness into account.
