@@ -81,7 +81,7 @@ class HomePage extends StatelessWidget {
                 dataField: 'original_title',
                 // subscribeTo: ['requestPending'],
                 react: {
-                  'and': 'search-widget',
+                  'and': ['search-widget', 'author-filter'],
                 },
                 size: 10,
                 triggerQueryOnInit: true,
