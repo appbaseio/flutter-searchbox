@@ -339,7 +339,7 @@ class SearchWidget extends Base {
   final void Function(List<Map> next, {List<Map> prev}) onAggregationData;
 
   /// gets triggered in case of an error while fetching results
-  final void Function(Error error) onError;
+  final void Function(dynamic error) onError;
 
   /// can be used to listen for the request status changes
   final void Function(String next, {String prev}) onRequestStatusChange;

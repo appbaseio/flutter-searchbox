@@ -288,7 +288,7 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
   // called when composite aggregationData change
   final void Function(List<Map> next, {List<Map> prev}) onAggregationData;
   // called when there is an error while fetching results
-  final void Function(Error error) onError;
+  final void Function(dynamic error) onError;
 
   // called when request status changes
   final void Function(String next, {String prev}) onRequestStatusChange;
@@ -822,7 +822,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   final void Function(List<Map> next, {List<Map> prev}) onAggregationData;
 
   /// gets triggered in case of an error while fetching results
-  final void Function(Error error) onError;
+  final void Function(dynamic error) onError;
 
   /// can be used to listen for the request status changes
   final void Function(String next, {String prev}) onRequestStatusChange;
@@ -1153,10 +1153,10 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
 
   /// takes [SearchWidget] instance as parameter and **returns** the query to be applied to the dependent widgets by `react` prop, as defined in Elasticsearch Query DSL.
   ///
-  /// For example, the following example has two components `search-widget`(to render the suggestions) and `result-widget`(to render the results).
-  /// The `result-widget` depends on the `search-widget` to update the results based on the selected suggestion.
-  /// The `search-widget` has the `customQuery` prop defined that will not affect the query for suggestions(that is how `customQuery` is different from `defaultQuery`)
-  /// but it'll affect the query for `result-widget` because of the `react` dependency on `search-widget`.
+  /// For example, the following example has two components **search-widget**(to render the suggestions) and **result-widget**(to render the results).
+  /// The **result-widget** depends on the **search-widget** to update the results based on the selected suggestion.
+  /// The **search-widget** has the `customQuery` prop defined that will not affect the query for suggestions(that is how `customQuery` is different from `defaultQuery`)
+  /// but it'll affect the query for **result-widget** because of the `react` dependency on **search-widget**.
   ///
   /// ```dart
   /// SearchWidgetConnector(
@@ -1336,7 +1336,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   final void Function(List<Map> next, {List<Map> prev}) onAggregationData;
 
   /// gets triggered in case of an error while fetching results
-  final void Function(Error error) onError;
+  final void Function(dynamic error) onError;
 
   /// can be used to listen for the request status changes
   final void Function(String next, {String prev}) onRequestStatusChange;
