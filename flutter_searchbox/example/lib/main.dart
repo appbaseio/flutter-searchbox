@@ -24,7 +24,10 @@ class FlutterSearchBoxApp extends StatelessWidget {
       // Pass the searchbase instance to the SearchBaseProvider. Any ancestor `SearchWidgetConnector`
       // Widgets will find and use this value as the `SearchWidget`.
       searchbase: SearchBase(index, url, credentials,
-          appbaseConfig: AppbaseSettings(recordAnalytics: true)),
+          appbaseConfig: AppbaseSettings(
+              recordAnalytics: true,
+              // Use unique user id to personalize the recent searches
+              userId: 'jon@appbase.io')),
       child: MaterialApp(
         title: "SearchBox Demo",
         theme: ThemeData(

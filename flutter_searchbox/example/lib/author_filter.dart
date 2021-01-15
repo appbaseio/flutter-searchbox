@@ -60,7 +60,7 @@ class AuthorFilter extends StatelessWidget {
                         children: [
                           RichText(
                             text: TextSpan(
-                                text: 'Selects Authors',
+                                text: 'Select Authors',
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
@@ -101,13 +101,6 @@ class AuthorFilter extends StatelessWidget {
                                         }
                                         searchWidget.setValue(values);
                                       },
-                                    ),
-                                    const Divider(
-                                      color: Colors.black,
-                                      height: 10,
-                                      thickness: 0.1,
-                                      indent: 25,
-                                      endIndent: 20,
                                     )
                                   ],
                                 ),
