@@ -3,7 +3,7 @@ import 'package:searchbase/searchbase.dart';
 
 const popularSuggestionFields = ['key', 'key.autosuggest'];
 
-List<Map> withClickIds(List<Map> results) {
+List<Map<String, dynamic>> withClickIds(List<Map<String, dynamic>> results) {
   int index = 0;
   return results.map((result) => ({...result, "_click_id": ++index})).toList();
 }
@@ -32,12 +32,12 @@ Map highlightResults(Map result) {
   return data;
 }
 
-List<Map> parseHits(List<Map> hits) {
-  List<Map> results = [];
+List<Map<String, dynamic>> parseHits(List<Map<String, dynamic>> hits) {
+  List<Map<String, dynamic>> results = [];
   results = [...hits].map((item) {
     final data = highlightResults(item);
-    Map result = {};
-    if (data['_source'] is Map) {
+    Map<String, dynamic> result = {};
+    if (data['_source'] is Map<String, dynamic>) {
       result = {...data['_source']};
     }
     // Copy the other properties
@@ -264,75 +264,3 @@ bool isEqual(dynamic x, dynamic y) {
   Function deepEq = const DeepCollectionEquality().equals;
   return deepEq(x, y);
 }
-
-// export const searchBaseMappings = {
-//   id: 'id',
-//   type: 'type',
-//   react: 'react',
-//   queryFormat: 'queryFormat',
-//   dataField: 'dataField',
-//   categoryField: 'categoryField',
-//   categoryValue: 'categoryValue',
-//   nestedField: 'nestedField',
-//   from: 'from',
-//   size: 'size',
-//   sortBy: 'sortBy',
-//   value: 'value',
-//   aggregationField: 'aggregationField',
-//   after: 'after',
-//   includeNullValues: 'includeNullValues',
-//   includeFields: 'includeFields',
-//   excludeFields: 'excludeFields',
-//   fuzziness: 'fuzziness',
-//   searchOperators: 'searchOperators',
-//   highlight: 'highlight',
-//   highlightField: 'highlightField',
-//   customHighlight: 'customHighlight',
-//   interval: 'interval',
-//   aggregations: 'aggregations',
-//   missingLabel: 'missingLabel',
-//   showMissing: 'showMissing',
-//   enableSynonyms: 'enableSynonyms',
-//   selectAllLabel: 'selectAllLabel',
-//   pagination: 'pagination',
-//   queryString: 'queryString',
-//   enablePopularSuggestions: 'enablePopularSuggestions',
-//   showDistinctSuggestions: 'showDistinctSuggestions',
-//   error: 'error',
-//   defaultQuery: 'defaultQuery',
-//   customQuery: 'customQuery',
-//   requestStatus: 'requestStatus',
-//   results: 'results',
-//   aggregationData: 'aggregationData',
-//   micStatus: 'micStatus',
-//   micInstance: 'micInstance',
-//   micActive: 'micActive',
-//   micInactive: 'micInactive',
-//   micDenied: 'micDenied',
-//   query: 'query',
-//   requestPending: 'loading',
-//   appbaseSettings: 'appbaseConfig',
-//   suggestions: 'suggestions',
-//   queryId: 'queryId',
-//   recentSearches: 'recentSearches',
-//   // ---------------- Methods -----------------------
-//   onMicClick: 'handleMicClick',
-//   triggerDefaultQuery: 'triggerDefaultQuery',
-//   triggerCustomQuery: 'triggerCustomQuery',
-//   recordClick: 'recordClick',
-//   recordConversions: 'recordConversions',
-//   subscribeToStateChanges: 'subscribeToStateChanges',
-//   unsubscribeToStateChanges: 'unsubscribeToStateChanges',
-//   // ---------------- Setter Methods ----------------
-//   setDataField: 'setDataField',
-//   setValue: 'setValue',
-//   setSize: 'setSize',
-//   setFrom: 'setFrom',
-//   setFuzziness: 'setFuzziness',
-//   setIncludeFields: 'setIncludeFields',
-//   setExcludeFields: 'setExcludeFields',
-//   setSortBy: 'setSortBy',
-//   setReact: 'setReact',
-//   setDefaultQuery: 'setDefaultQuery',
-//   setCustomQuery: 'setCustomQuery'
-// };

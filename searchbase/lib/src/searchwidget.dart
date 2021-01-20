@@ -478,11 +478,9 @@ class SearchWidget extends Base {
     if (fields.length == 0 &&
         this.results.data != null &&
         this.results.data.length > 0 &&
-        this.results.data[0] != null &&
-        this.results.data[0]['_source'] is Map &&
-        this.results.data[0]['_source'] != null) {
+        this.results.data[0] != null) {
       // Extract fields from _source
-      fields = this.results.data[0]['_source'].keys;
+      fields = this.results.data[0].keys.toList();
     }
     if (this.enablePopularSuggestions == true) {
       // extract suggestions from popular suggestion fields too

@@ -1056,12 +1056,6 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   /// current state of the sort value
   final SortType sortBy;
 
-  /// Represents the value for a particular [QueryType].
-  ///
-  /// Depending on the query type, the value format would differ.
-  /// You can refer to the different value formats over [here](https://docs.appbase.io/docs/search/reactivesearch-api/reference#value).
-  final dynamic value;
-
   /// aggregationField enables you to get `DISTINCT` results (useful when you are dealing with sessions, events, and logs type data).
   ///
   /// It utilizes [composite aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-composite-aggregation.html) which are newly introduced in ES v6 and offer vast performance benefits over a traditional terms aggregation.
@@ -1419,7 +1413,6 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
     this.maxPopularSuggestions,
     this.showDistinctSuggestions = true,
     this.preserveResults,
-    this.value,
     this.results,
     // searchbox specific properties
     this.enableRecentSearches = false,
@@ -1429,19 +1422,19 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   }) : assert(id != null);
 
   @override
-  ThemeData appBarTheme(BuildContext context) {
-    assert(context != null);
-    final ThemeData theme = Theme.of(context);
-    assert(theme != null);
-    return theme;
-  }
-
-  @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
           icon: Icon(Icons.clear),
           onPressed: () {
+            SearchWidget component =
+                SearchBaseProvider.of(context).getSearchWidget(id);
+            // clear value
+            if (component != null) {
+              component.setValue('',
+                  options: Options(
+                      triggerCustomQuery: true, triggerDefaultQuery: true));
+            }
             query = '';
           })
     ];
@@ -1591,20 +1584,21 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
         maxPopularSuggestions: maxPopularSuggestions,
         showDistinctSuggestions: showDistinctSuggestions,
         preserveResults: preserveResults,
-        value: value,
+        value: query,
         results: results,
         builder: (context, searchWidget) {
           if (query != searchWidget.value) {
-            if (query.isEmpty) {
-              if (enableRecentSearches == true) {
-                // Fetch recent searches
-                searchWidget.getRecentSearches();
-              }
-            }
             // To fetch the suggestions
             searchWidget.setValue(query,
                 options: Options(triggerDefaultQuery: query.isNotEmpty));
           }
+          if (query.isEmpty) {
+            if (enableRecentSearches == true) {
+              // Fetch recent searches
+              searchWidget.getRecentSearches();
+            }
+          }
+          // If query is empty then render recent searches
           if (query.isEmpty &&
               searchWidget.recentSearches?.isNotEmpty == true) {
             return getSuggestionList(
@@ -1630,9 +1624,11 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
           return (popularSuggestions.isEmpty && filteredSuggestions.isEmpty)
               ? ((query.isNotEmpty && searchWidget.requestPending == false)
                   ? Container(
-                      child: Text('No items found'),
+                      child: Center(child: Text('No suggestions found')),
                     )
-                  : Container())
+                  : searchWidget.requestPending
+                      ? Center(child: CircularProgressIndicator())
+                      : Container())
               : getSuggestionList(context, searchWidget, filteredSuggestions);
         });
   }

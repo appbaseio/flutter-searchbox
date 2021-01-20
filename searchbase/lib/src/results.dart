@@ -3,13 +3,14 @@ import 'utils.dart';
 /// Represents the response for [QueryType.search], [QueryType.geo] and [QueryType.range] queries
 class Results {
   // An array of results obtained from the applied query.
-  List<Map> data;
+  List<Map<String, dynamic>> data;
 
   // Raw response returned by ES query
   Map raw;
 
   // Results parser
-  List<Map> Function(List<Map> results, [List<Map> sourceData]) parseResults;
+  List<Map<String, dynamic>> Function(List<Map> results, [List<Map> sourceData])
+      parseResults;
 
   Results(this.data) {}
 
@@ -81,8 +82,8 @@ class Results {
     if (rawResponse != null) {
       this.raw = rawResponse;
       if (this.raw['hits'] != null && this.raw['hits']['hits'] is List) {
-        final mapped =
-            (this.raw['hits']['hits'] as List).map((model) => Map.from(model));
+        final mapped = (this.raw['hits']['hits'] as List)
+            .map((model) => Map<String, dynamic>.from(model));
         data = mapped.toList();
         this.setData(data);
       }
@@ -90,9 +91,9 @@ class Results {
   }
 
   // Method to set data explicitly
-  void setData(List<Map> data) {
+  void setData(List<Map<String, dynamic>> data) {
     // parse hits
-    List<Map> filteredResults = parseHits(data);
+    List<Map<String, dynamic>> filteredResults = parseHits(data);
     // filter results & remove duplicates if any
     if (this.promotedData.length != 0) {
       final List<String> ids = this.promotedData.map((item) => item["_id"]);
