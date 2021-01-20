@@ -11,7 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_feather_icons: ^1.0.3
-  searchbase: ^1.0.0-alpha.4
+  searchbase:
+    path: ./../searchbase
   provider: ^4.3.2+3
 
 dev_dependencies:

@@ -9,6 +9,13 @@ import 'aggregations.dart';
 import 'types.dart';
 import 'utils.dart';
 
+// Represents the format of query response
+class _GenerateQueryResponse {
+  List<Map> requestBody;
+  List<String> orderOfQueries;
+  _GenerateQueryResponse(this.requestBody, this.orderOfQueries) {}
+}
+
 const suggestionQueryID = 'DataSearch__suggestions';
 
 /// The [SearchWidget] class represents a search widget that can be used to build different kinds of search UI for examples,
@@ -787,7 +794,7 @@ class SearchWidget extends Base {
             if (rawResults['hits'] != null) {
               componentInstance.results.setRaw(rawResults);
               componentInstance._applyOptions(
-                  new Options(stateChanges: options?.stateChanges),
+                  Options(stateChanges: options?.stateChanges),
                   'results',
                   prev,
                   componentInstance.results);
@@ -1118,7 +1125,7 @@ class SearchWidget extends Base {
   }
 
   // Method to generate the final query based on the component's value changes
-  GenerateQueryResponse _generateQuery() {
+  _GenerateQueryResponse _generateQuery() {
     /**
      * This method performs the following tasks to generate the query
      * 1. Get all the watcher components for a particular component ID
@@ -1165,9 +1172,9 @@ class SearchWidget extends Base {
         }
       });
       final queries = requestQuery.values.toList();
-      return GenerateQueryResponse(queries, watcherComponents);
+      return _GenerateQueryResponse(queries, watcherComponents);
     }
-    return GenerateQueryResponse([], []);
+    return _GenerateQueryResponse([], []);
   }
 
   Future<Map> _handleTransformResponse(Map res) {

@@ -1,0 +1,26 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "flutter_searchbox",
+            "cwd": "flutter_searchbox",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "searchbase",
+            "cwd": "searchbase",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "example",
+            "cwd": "flutter_searchbox/example",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}

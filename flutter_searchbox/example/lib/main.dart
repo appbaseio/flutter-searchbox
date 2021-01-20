@@ -9,12 +9,18 @@ void main() {
 }
 
 class FlutterSearchBoxApp extends StatelessWidget {
-  final SearchBase searchbase;
-  final index = 'good-books-ds';
-  final credentials = 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61';
-  final url = 'https://arc-cluster-appbase-demo-6pjy6z.searchbase.io';
+  // Avoid creating searchbase instance in build method
+  // to preserve state on hot reloading
+  final searchbaseInstance = SearchBase(
+      'good-books-ds',
+      'https://arc-cluster-appbase-demo-6pjy6z.searchbase.io',
+      'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61',
+      appbaseConfig: AppbaseSettings(
+          recordAnalytics: true,
+          // Use unique user id to personalize the recent searches
+          userId: 'jon@appbase.io'));
 
-  FlutterSearchBoxApp({Key key, this.searchbase}) : super(key: key);
+  FlutterSearchBoxApp({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +29,7 @@ class FlutterSearchBoxApp extends StatelessWidget {
     return SearchBaseProvider(
       // Pass the searchbase instance to the SearchBaseProvider. Any ancestor `SearchWidgetConnector`
       // Widgets will find and use this value as the `SearchWidget`.
-      searchbase: SearchBase(index, url, credentials,
-          appbaseConfig: AppbaseSettings(
-              recordAnalytics: true,
-              // Use unique user id to personalize the recent searches
-              userId: 'jon@appbase.io')),
+      searchbase: searchbaseInstance,
       child: MaterialApp(
         title: "SearchBox Demo",
         theme: ThemeData(
@@ -82,7 +84,6 @@ class HomePage extends StatelessWidget {
             child: SearchWidgetConnector(
                 id: 'result-widget',
                 dataField: 'original_title',
-                // subscribeTo: ['requestPending'],
                 react: {
                   'and': ['search-widget', 'author-filter'],
                 },
@@ -112,8 +113,6 @@ class HomePage extends StatelessWidget {
             },
             // Avoid fetching query for each open/close action instead call it manually
             triggerQueryOnInit: false,
-            // Do not remove the search widget's instance after unmount
-            destroyOnDispose: false,
           )),
     );
   }

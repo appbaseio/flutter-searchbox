@@ -94,7 +94,7 @@ class _SearchWidgetListenerState<S, ViewModel>
 
   final String id;
 
-  final SearchWidget componentInstance;
+  SearchWidget componentInstance;
 
   final List<String> subscribeTo;
 
@@ -104,31 +104,34 @@ class _SearchWidgetListenerState<S, ViewModel>
   /// Defaults to `true`. It can be used to prevent state updates.
   final bool shouldListenForChanges;
 
-  /// Defaults to `true`. If set to `false` then component will not get removed from seachbase context i.e can participate in query generation.
+  /// If set to `true` then on dispose the widget will get removed from seachbase context i.e can not participate in query generation.
   final bool destroyOnDispose;
+
+  Map componentConfig;
 
   _SearchWidgetListenerState({
     @required this.searchbase,
     @required this.builder,
     @required this.id,
-    @required this.componentInstance,
     this.subscribeTo,
     this.triggerQueryOnInit,
     this.shouldListenForChanges,
-    this.destroyOnDispose,
+    this.destroyOnDispose = false,
+    this.componentConfig,
   })  : assert(searchbase != null),
         assert(builder != null),
-        assert(id != null),
-        assert(componentInstance != null);
-
-  @override
-  void initState() {
+        assert(id != null) {
     // Subscribe to state changes
+    this.componentInstance = searchbase.register(id, componentConfig);
     if (this.shouldListenForChanges != false) {
       this
           .componentInstance
           .subscribeToStateChanges(subscribeToState, subscribeTo);
     }
+  }
+
+  @override
+  void initState() {
     // Trigger the initial query
     if (triggerQueryOnInit != false) {
       componentInstance.triggerDefaultQuery();
@@ -140,7 +143,7 @@ class _SearchWidgetListenerState<S, ViewModel>
   void dispose() {
     // Remove subscriptions
     componentInstance.unsubscribeToStateChanges(subscribeToState);
-    if (destroyOnDispose != false) {
+    if (destroyOnDispose == true) {
       // Unregister component
       searchbase.unregister(id);
     }
@@ -167,8 +170,6 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
   final ViewModelBuilder<ViewModel> builder;
 
   final SearchBase searchbase;
-
-  final SearchWidget componentInstance;
 
   final List<String> subscribeTo;
 
@@ -296,6 +297,8 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
   // called when query changes
   final void Function(Map next, {Map prev}) onQueryChange;
 
+  Map componentConfig;
+
   _SearchWidgetListener({
     Key key,
     @required this.searchbase,
@@ -360,8 +363,14 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
   })  : assert(searchbase != null),
         assert(builder != null),
         assert(id != null),
-        // Register component
-        componentInstance = searchbase.register(id, {
+        super(key: key);
+
+  @override
+  _SearchWidgetListenerState createState() =>
+      _SearchWidgetListenerState<S, ViewModel>(
+        id: id,
+        searchbase: searchbase,
+        componentConfig: {
           'index': index,
           'url': url,
           'credentials': credentials,
@@ -413,15 +422,7 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
           'showDistinctSuggestions': showDistinctSuggestions,
           'preserveResults': preserveResults,
           'value': value,
-        }),
-        super(key: key);
-
-  @override
-  _SearchWidgetListenerState createState() =>
-      _SearchWidgetListenerState<S, ViewModel>(
-        id: id,
-        searchbase: searchbase,
-        componentInstance: componentInstance,
+        },
         builder: builder,
         subscribeTo: subscribeTo,
         triggerQueryOnInit: triggerQueryOnInit,
@@ -1487,10 +1488,16 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
         if (suggestion.source != null && suggestion.source['_id'] is String) {
           objectId = suggestion.source['_id'];
         }
-        if (objectId != null && suggestion.clickId != null) {
-          // Record click analytics
-          searchWidget.recordClick({objectId: suggestion.clickId},
-              isSuggestionClick: true);
+        if (objectId != null &&
+            suggestion.clickId != null &&
+            searchWidget.appbaseSettings?.recordAnalytics == true) {
+          try {
+            // Record click analytics
+            searchWidget.recordClick({objectId: suggestion.clickId},
+                isSuggestionClick: true);
+          } catch (e) {
+            print(e);
+          }
         }
 
         close(context, null);
@@ -1533,7 +1540,6 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
     return SearchWidgetConnector(
         id: id,
         triggerQueryOnInit: false,
-        destroyOnDispose: false,
         subscribeTo: [
           'error',
           'requestPending',

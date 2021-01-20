@@ -86,13 +86,6 @@ class Option {
   }
 }
 
-/// Represents the format of query response
-class GenerateQueryResponse {
-  List<Map> requestBody;
-  List<String> orderOfQueries;
-  GenerateQueryResponse(this.requestBody, this.orderOfQueries) {}
-}
-
 /// Represents a suggestion object
 class Suggestion {
   String label;
