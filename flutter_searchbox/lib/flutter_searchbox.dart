@@ -1526,7 +1526,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     return SearchWidgetConnector(
         id: id,
-        triggerQueryOnInit: false,
+        triggerQueryOnInit: true,
         subscribeTo: [
           'error',
           'requestPending',
@@ -1590,7 +1590,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
           if (query != searchWidget.value) {
             // To fetch the suggestions
             searchWidget.setValue(query,
-                options: Options(triggerDefaultQuery: query.isNotEmpty));
+                options: Options(triggerDefaultQuery: true));
           }
           if (query.isEmpty) {
             if (enableRecentSearches == true) {
@@ -1607,12 +1607,16 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
           final List<Suggestion> popularSuggestions = searchWidget.suggestions
               .where((suggestion) => suggestion.isPopularSuggestion)
               .toList();
-          List<Suggestion> filteredSuggestions = searchWidget.suggestions
-              .where((suggestion) => !suggestion.isPopularSuggestion)
-              .toList();
-          // Limit the suggestions by size
-          if (filteredSuggestions.length > this.size) {
-            filteredSuggestions.sublist(0, this.size);
+          List<Suggestion> filteredSuggestions = [];
+          // Only display relevant suggestions when query is not empty
+          if (query.isNotEmpty) {
+            filteredSuggestions = searchWidget.suggestions
+                .where((suggestion) => !suggestion.isPopularSuggestion)
+                .toList();
+            // Limit the suggestions by size
+            if (filteredSuggestions.length > this.size) {
+              filteredSuggestions.sublist(0, this.size);
+            }
           }
           // Append popular suggestions at bottom
           if (popularSuggestions.isNotEmpty) {

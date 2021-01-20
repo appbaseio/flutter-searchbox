@@ -60,21 +60,27 @@ class HomePage extends StatelessWidget {
                   onPressed: () {
                     // Invoke the Search Delegate to display search UI with autosuggestions
                     showSearch(
-                        context: context,
-                        // SearchBox widget from flutter searchbox
-                        delegate: SearchBox(
-                          // A unique identifier that can be used by other widgetss to reactively update data
-                          id: 'search-widget',
-                          enableRecentSearches: true,
-                          enablePopularSuggestions: true,
-                          showAutoFill: true,
-                          maxPopularSuggestions: 3,
-                          size: 10,
-                          dataField: [
-                            {'field': 'original_title', 'weight': 1},
-                            {'field': 'original_title.search', 'weight': 3}
-                          ],
-                        ));
+                      context: context,
+                      // SearchBox widget from flutter searchbox
+                      delegate: SearchBox(
+                        // A unique identifier that can be used by other widgetss to reactively update data
+                        id: 'search-widget',
+                        enableRecentSearches: true,
+                        enablePopularSuggestions: true,
+                        showAutoFill: true,
+                        maxPopularSuggestions: 3,
+                        size: 10,
+                        dataField: [
+                          {'field': 'original_title', 'weight': 1},
+                          {'field': 'original_title.search', 'weight': 3}
+                        ],
+                      ),
+                      // Initialize query to persist suggestions for active search
+                      query: SearchBaseProvider?.of(context)
+                          ?.getSearchWidget('search-widget')
+                          ?.value
+                          ?.toString(),
+                    );
                   }),
             ],
             title: Text('SearchBox Demo'),

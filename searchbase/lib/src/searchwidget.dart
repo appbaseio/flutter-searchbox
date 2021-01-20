@@ -866,13 +866,13 @@ class SearchWidget extends Base {
   }
 
   /// to empty results
-  void clearResults({options: Options}) {
+  void clearResults({Options options}) {
     final prev = this.results;
     this.results.setRaw({
       'hits': {'hits': []}
     });
-    this._applyOptions(new Options(stateChanges: options?.stateChanges),
-        'results', prev, this.results);
+    this._applyOptions(Options(stateChanges: options?.stateChanges), 'results',
+        prev, this.results);
   }
 
   /// to get recent searches
