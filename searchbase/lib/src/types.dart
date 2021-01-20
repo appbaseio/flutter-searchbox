@@ -88,9 +88,30 @@ class Option {
 
 /// Represents a suggestion object
 class Suggestion {
-  String label;
-  String value;
-  Map source;
-  int clickId;
-  Suggestion(this.label, this.value, {this.source, this.clickId}) {}
+  /// suggestion label to display in UI
+  final String label;
+
+  /// suggestion value to perform query
+  final String value;
+
+  /// represents that if a suggestion is a type of recent search
+  final bool isRecentSearch;
+
+  /// represents that if a suggestion is a type of popular suggestion
+  bool isPopularSuggestion;
+
+  /// source object from Elasticsearch response
+  final Map source;
+
+  /// click id, useful to record click analytics
+  final int clickId;
+
+  Suggestion(this.label, this.value,
+      {this.isRecentSearch = false,
+      this.source,
+      this.clickId,
+      this.isPopularSuggestion = false}) {
+    this.isPopularSuggestion =
+        this.source != null && this.source['_popular_suggestion'] == true;
+  }
 }

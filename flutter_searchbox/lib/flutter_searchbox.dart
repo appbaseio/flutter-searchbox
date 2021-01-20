@@ -1364,10 +1364,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   final bool showAutoFill;
 
   /// It can be used to render the custom UI for suggestion list item.
-  ///
-  /// In case of a popular suggestion the source property of the `Suggestion` would have a key named _popular_suggestion as true.
-  final Widget Function(
-          Suggestion suggestion, bool isRecentSearch, Function handleTap)
+  final Widget Function(Suggestion suggestion, Function handleTap)
       buildSuggestionItem;
 
   SearchBox({
@@ -1476,8 +1473,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   }
 
   ListView getSuggestionList(
-      BuildContext context, SearchWidget searchWidget, List<Suggestion> list,
-      {bool isRecentSearch = false}) {
+      BuildContext context, SearchWidget searchWidget, List<Suggestion> list) {
     List<Widget> suggestionsList = list.map((suggestion) {
       void handleTap() {
         // Perform actions on suggestions tap
@@ -1486,7 +1482,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
         this.query = suggestion.value;
         String objectId;
         if (suggestion.source != null && suggestion.source['_id'] is String) {
-          objectId = suggestion.source['_id'];
+          objectId = suggestion.source['_id'].toString();
         }
         if (objectId != null &&
             suggestion.clickId != null &&
@@ -1507,15 +1503,13 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
           alignment: Alignment.topLeft,
           height: 50,
           child: buildSuggestionItem != null
-              ? buildSuggestionItem(suggestion, isRecentSearch, handleTap)
+              ? buildSuggestionItem(suggestion, handleTap)
               : Container(
                   child: ListTile(
                     onTap: handleTap,
-                    leading: isRecentSearch
+                    leading: suggestion.isRecentSearch
                         ? Icon(Icons.history)
-                        : (suggestion.source != null &&
-                                suggestion.source['_popular_suggestion'] ==
-                                    true)
+                        : (suggestion.isPopularSuggestion)
                             ? Icon(Icons.trending_up)
                             : Icon(Icons.search),
                     title: Text(suggestion.label,
@@ -1614,18 +1608,13 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
           if (query.isEmpty &&
               searchWidget.recentSearches?.isNotEmpty == true) {
             return getSuggestionList(
-                context, searchWidget, searchWidget.recentSearches,
-                isRecentSearch: true);
+                context, searchWidget, searchWidget.recentSearches);
           }
           final List<Suggestion> popularSuggestions = searchWidget.suggestions
-              .where((suggestion) =>
-                  suggestion.source != null &&
-                  suggestion.source['_popular_suggestion'] == true)
+              .where((suggestion) => suggestion.isPopularSuggestion)
               .toList();
           List<Suggestion> filteredSuggestions = searchWidget.suggestions
-              .where((suggestion) =>
-                  suggestion.source != null &&
-                  suggestion.source['_popular_suggestion'] != true)
+              .where((suggestion) => !suggestion.isPopularSuggestion)
               .toList();
           // Limit the suggestions by size
           if (filteredSuggestions.length > this.size) {

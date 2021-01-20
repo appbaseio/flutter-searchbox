@@ -683,7 +683,7 @@ class SearchWidget extends Base {
     }
     try {
       this._updateQuery();
-      this._setRequestStatus(RequestStatus.PENDING);
+      this._setRequestStatus(RequestStatus.PENDING, options: options);
       final results = await this._fetchRequest({
         'query': this.query is List ? this.query : [this.query],
         'settings': this.appbaseSettings?.toJSON()
@@ -696,7 +696,7 @@ class SearchWidget extends Base {
           this._handleAggregationResponse(rawResults['aggregations'],
               options: new Options(stateChanges: options?.stateChanges));
         }
-        this._setRequestStatus(RequestStatus.INACTIVE);
+        this._setRequestStatus(RequestStatus.INACTIVE, options: options);
         this._applyOptions(new Options(stateChanges: options?.stateChanges),
             'results', prev, this.results);
       }
@@ -762,7 +762,8 @@ class SearchWidget extends Base {
                   triggerDefaultQuery: false,
                   triggerCustomQuery: false,
                   stateChanges: true));
-          componentInstance._setRequestStatus(RequestStatus.PENDING);
+          componentInstance._setRequestStatus(RequestStatus.PENDING,
+              options: options);
           // Update the query
           componentInstance._updateQuery();
         }
@@ -778,7 +779,8 @@ class SearchWidget extends Base {
         finalGeneratedQuery.orderOfQueries.forEach((id) {
           final componentInstance = this._parent.getSearchWidget(id);
           if (componentInstance != null) {
-            componentInstance._setRequestStatus(RequestStatus.INACTIVE);
+            componentInstance._setRequestStatus(RequestStatus.INACTIVE,
+                options: options);
             // Reset value for dependent components
             componentInstance.setValue(null,
                 options: new Options(
@@ -924,7 +926,8 @@ class SearchWidget extends Base {
       final prev = this.recentSearches;
       // Populate the recent searches
       this.recentSearches = ((recentSearches as List).map((searchObject) =>
-          Suggestion(searchObject['key'], searchObject['key']))).toList();
+          Suggestion(searchObject['key'], searchObject['key'],
+              isRecentSearch: true))).toList();
       this._applyOptions(new Options(stateChanges: options?.stateChanges),
           'recentSearches', prev, this.recentSearches);
       return Future.value(this.recentSearches);
@@ -1213,17 +1216,18 @@ class SearchWidget extends Base {
   }
 
   _setError(dynamic error, {Options options}) {
-    this._setRequestStatus(RequestStatus.ERROR);
+    this._setRequestStatus(RequestStatus.ERROR,
+        options: Option(stateChanges: options?.stateChanges));
     final prev = this.error;
     this.error = error;
     this._applyOptions(options, 'error', prev, this.error);
   }
 
-  _setRequestStatus(RequestStatus requestStatus) {
+  _setRequestStatus(RequestStatus requestStatus, {Option options}) {
     final prev = this.requestStatus;
     this.requestStatus = requestStatus;
-    this._applyOptions(new Options(stateChanges: true), 'requestStatus', prev,
-        this.requestStatus);
+    this._applyOptions(Options(stateChanges: options?.stateChanges),
+        'requestStatus', prev, this.requestStatus);
   }
 
   // Method to set the default query value
