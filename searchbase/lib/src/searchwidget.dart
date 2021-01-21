@@ -18,13 +18,14 @@ class _GenerateQueryResponse {
 
 const suggestionQueryID = 'DataSearch__suggestions';
 
-/// The [SearchWidget] class represents a search widget that can be used to build different kinds of search UI for examples,
+/// The [SearchWidget] class is a search widget that can be used to bind to different kinds of search UI widgets.
 ///
+/// For example,
 /// -   a category filter widget,
 /// -   a search bar widget,
 /// -   a price range widget,
 /// -   a location filter widget,
-/// -   a widget to render the search results etc.
+/// -   a widget to render the search results.
 class SearchWidget extends Base {
   // RS API properties
   /// unique identifier of the component, can be referenced in other components' `react` prop.

@@ -31,13 +31,14 @@ https://github.com/appbaseio/flutter-searchbox/issues/new
   }
 }
 
-/// Provides a [SearchBase] instance to all descendants of this Widget. This should
-/// generally be a root widget in your App. Connect a component by using [SearchWidgetConnector] or [SearchBox].
+/// [SearchBaseProvider] is a provider widget that provides the [SearchBase] context to all descendants of this Widget.
+///
+/// Generally it should be a root widget in your App. Connect a widget by using [SearchWidgetConnector] or [SearchBox].
+/// [SearchBaseProvider] binds the backend app (data source) with the UI view widgets (elements wrapped within [SearchBaseProvider]), allowing a UI widget to be reactively updated every time there is a change in the data source or in other UI widgets.
 class SearchBaseProvider extends InheritedWidget {
   final SearchBase _searchbase;
 
-  /// Create a [SearchBaseProvider] by passing in the required [searchbase] and [child]
-  /// parameters.
+  /// Create a [SearchBaseProvider] by passing in the required [searchbase] and [child] parameters.
   const SearchBaseProvider({
     Key key,
     @required SearchBase searchbase,
@@ -431,10 +432,15 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
       );
 }
 
-/// SearchWidgetConnector performs the following tasks:
-/// - Register a component with id
-/// - unregister a component (can be controlled by destroyOnDispose property)
-/// - trigger rebuild based on state changes
+/// [SearchWidgetConnector] represents a search widget that can be used to bind to different kinds of search UI widgets.
+///
+/// It uses the [SearchWidget] class to bind any UI widget to be able to query appbase.io declaratively. Some examples of components you can bind this with:
+/// -   a category filter widget,
+/// -   a search bar widget,
+/// -   a price range widget,
+/// -   a location filter widget,
+/// -   a widget to render the search results.
+///
 class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// Build a Widget using the [BuildContext] and [ViewModel]
   final ViewModelBuilder<ViewModel> builder;
@@ -444,24 +450,33 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// For example, if `subscribeTo` is defined as `['results']` then it'll only update the UI when results property would change.
   final List<String> subscribeTo;
 
-  /// Defaults to `true`. It can be used to prevent the default query execution at the time of initial build.
+  /// It can be used to prevent the default query execution at the time of initial build.
+  ///
+  /// Defaults to `true`.
   final bool triggerQueryOnInit;
 
-  /// Defaults to `true`. It can be used to prevent state updates. If set to `false` then no rebuild would be performed.
+  /// It can be used to prevent state updates.
+  ///
+  /// Defaults to `true`. If set to `false` then no rebuild would be performed.
   final bool shouldListenForChanges;
 
-  /// Defaults to `true`. If set to `false` then component will not get removed from seachbase context i.e can participate in query generation.
+  /// If set to `false` then after dispose the component will not get removed from seachbase context i.e can actively participate in query generation.
+  ///
+  /// Defaults to `true`.
   final bool destroyOnDispose;
 
-  /// unique identifier of the component, can be referenced in other components' `react` prop.
+  /// A unique identifier of the component, can be referenced in other widgets' `react` prop to reactively update data.
   final String id;
 
-  /// Refers to an index of the Elasticsearch cluster. If not defined, then value will be inherited from [SearchBaseProvider].
+  /// Refers to an index of the Elasticsearch cluster.
   ///
-  /// `Note:` Multiple indexes can be connected to by specifying comma-separated index names.
+  /// If not defined, then value will be inherited from [SearchBaseProvider].
+  /// `Note:` Multiple indexes can be connected to Elasticsearch by specifying comma-separated index names.
   final String index;
 
-  /// URL for the Elasticsearch cluster. If not defined, then value will be inherited from [SearchBaseProvider].
+  /// URL for the Elasticsearch cluster.
+  ///
+  /// If not defined, then value will be inherited from [SearchBaseProvider].
   final String url;
 
   /// Basic Auth credentials if required for authentication purposes.
@@ -471,25 +486,31 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// If not defined, then value will be inherited from [SearchBaseProvider].
   final String credentials;
 
-  /// Set custom headers to be sent with each server request as key/value pairs. If not defined then value will be inherited from [SearchBaseProvider].
+  /// Set custom headers to be sent with each server request as key/value pairs.
+  ///
+  /// If not defined then value will be inherited from [SearchBaseProvider].
   final Map<String, String> headers;
 
-  /// It allows you to customize the analytics experience when appbase.io is used as a backend. If not defined then value will be inherited from [SearchBaseProvider].
+  /// It allows you to customize the analytics experience when appbase.io is used as a backend.
+  ///
+  /// If not defined then value will be inherited from [SearchBaseProvider].
   final AppbaseSettings appbaseConfig;
 
-  /// This property represents the type of the query which is defaults to [QueryType.search], valid values are `search`, `term`, `range` & `geo`. You can read more [here](https://docs.appbase.io/docs/search/reactivesearch-api/implement#type-of-queries).
+  /// This property represents the type of the query which is defaults to [QueryType.search], valid values are [QueryType.search], [QueryType.term], [QueryType.range] & [QueryType.geo].
+  ///
+  /// You can read more [here](https://docs.appbase.io/docs/search/reactivesearch-api/implement#type-of-queries).
   final QueryType type;
 
-  /// is useful for components whose data view should reactively update when on or more dependent components change their states,
+  /// It is useful for components whose data view should reactively update when on or more dependent components change their states.
   ///
-  /// e.g. a component to display the results can depend on the search component to filter the results.
+  /// For example, a widget to display the results can depend on the search widget to filter the results.
   ///  -   **key** `string`
   ///      one of `and`, `or`, `not` defines the combining clause.
-  ///      -   **and** clause implies that the results will be filtered by matches from **all** of the associated component states.
-  ///      -   **or** clause implies that the results will be filtered by matches from **at least one** of the associated component states.
-  ///      -   **not** clause implies that the results will be filtered by an **inverse** match of the associated component states.
+  ///      -   **and** clause implies that the results will be filtered by matches from **all** of the associated widget states.
+  ///      -   **or** clause implies that the results will be filtered by matches from **at least one** of the associated widget states.
+  ///      -   **not** clause implies that the results will be filtered by an **inverse** match of the associated widget states.
   ///  -   **value** `string or Array or Object`
-  ///      -   `string` is used for specifying a single component by its `id`.
+  ///      -   `string` is used for specifying a single widget by its `id`.
   ///      -   `Array` is used for specifying multiple components by their `id`.
   ///      -   `Object` is used for nesting other key clauses.
 
@@ -507,19 +528,33 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// Here, we are specifying that the results should update whenever one of the blacklist items is not present and simultaneously any one of the city or topics matches.
   final Map<String, dynamic> react;
 
-  /// Sets the query format, can be **or** or **and**. Defaults to **or**.
+  /// Sets the query format, can be **or** or **and**.
+  ///
+  /// Defaults to **or**.
   ///
   /// -   **or** returns all the results matching **any** of the search query text's parameters. For example, searching for "bat man" with **or** will return all the results matching either "bat" or "man".
   /// -   On the other hand with **and**, only results matching both "bat" and "man" will be returned. It returns the results matching **all** of the search query text's parameters.
   final String queryFormat;
 
-  /// index field(s) to be connected to the component’s UI view.
+  /// The index field(s) to be connected to the component’s UI view.
   ///
   /// It accepts an `List<String>` in addition to `<String>`, which is useful for searching across multiple fields with or without field weights.
   ///
   /// Field weights allow weighted search for the index fields. A higher number implies a higher relevance weight for the corresponding field in the search results.
-  ///
   /// You can define the `dataField` property as a `List<Map>` of to set the field weights. The object must have the `field` and `weight` keys.
+  /// For example,
+  /// ```dart
+  /// [
+  ///   {
+  ///     'field': 'original_title',
+  ///     'weight': 1
+  ///   },
+  ///   {
+  ///     'field': 'original_title.search',
+  ///     'weight': 3
+  ///   },
+  /// ]
+  /// ```
   final dynamic dataField;
 
   /// Index field mapped to the category value.
@@ -528,18 +563,20 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// This is the selected category value. It is used for informing the search result.
   final String categoryValue;
 
-  /// set the `nested` field path that allows an array of objects to be indexed in a way that can be queried independently of each other.
+  /// Sets the `nested` field path that allows an array of objects to be indexed in a way that can be queried independently of each other.
   ///
   /// Applicable only when dataField's mapping is of `nested` type.
   final String nestedField;
 
-  /// represents the current state of the `from` value. This property is useful to implement pagination.
+  /// To define from which page to start the results, it is important to implement pagination.
   final int from;
 
-  /// current state of the `size` of results to be returned by query
+  /// Number of suggestions and results to fetch per request.
   final int size;
 
-  /// current state of the sort value
+  /// Sorts the results by either [SortType.asc], [SortType.desc] or [SortType.count] order.
+  ///
+  /// Please note that the [SortType.count] is only applicable for [QueryType.term] type of search widgets.
   final SortType sortBy;
 
   /// Represents the value for a particular [QueryType].
@@ -548,7 +585,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// You can refer to the different value formats over [here](https://docs.appbase.io/docs/search/reactivesearch-api/reference#value).
   final dynamic value;
 
-  /// aggregationField enables you to get `DISTINCT` results (useful when you are dealing with sessions, events, and logs type data).
+  /// It enables you to get `DISTINCT` results (useful when you are dealing with sessions, events, and logs type data).
   ///
   /// It utilizes [composite aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-composite-aggregation.html) which are newly introduced in ES v6 and offer vast performance benefits over a traditional terms aggregation.
   final String aggregationField;
@@ -563,10 +600,10 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// If you have sparse data or documents or items not having the value in the specified field or mapping, then this prop enables you to show that data.
   final bool includeNullValues;
 
-  // useful to include the fields from Elastissearch response
+  // It allows to define fields to be included in search results.
   final List<String> includeFields;
 
-  // useful to exclude the fields from Elastissearch response
+  // It allows to define fields to be excluded in search results.
   final List<String> excludeFields;
 
   /// Useful for showing the correct results for an incorrect search parameter by taking the fuzziness into account.
@@ -575,22 +612,21 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// Read more about it in the elastic search https://www.elastic.co/guide/en/elasticsearch/guide/current/fuzziness.html.
   final dynamic fuzziness;
 
-  /// Defaults to `false`.
-  ///
   /// If set to `true`, then you can use special characters in the search query to enable the advanced search.
   ///
-  /// Read more about it [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html).
+  /// Defaults to `false`.
+  /// You can read more about this property at [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html).
   final bool searchOperators;
 
-  /// Defaults to `false`.
+  /// To define whether highlighting should be enabled in the returned results.
   ///
-  /// whether highlighting should be enabled in the returned results.
+  /// Defaults to `false`.
   final bool highlight;
 
-  /// when highlighting is enabled, this prop allows specifying the fields which should be returned with the matching highlights.
+  /// If highlighting is enabled, this property allows specifying the fields which should be returned with the matching highlights.
   ///
-  /// When not specified, it defaults to applying highlights on the field(s) specified in the **dataField** prop.
-  /// It can be of type `String` or `List<Sting>`.
+  /// When not specified, it defaults to applying highlights on the field(s) specified in the **dataField** property.
+  /// It can be of type `String` or `List<String>`.
   final dynamic highlightField;
 
   /// It can be used to set the custom highlight settings.
@@ -598,24 +634,29 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// You can read the `Elasticsearch` docs for the highlight options at [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-highlighting.html).
   final Map customHighlight;
 
-  /// To set the histogram bar interval, applicable when [aggregations](/docs/search/reactivesearch-api/reference/#aggregations) value is set to `["histogram"]`.
+  /// To set the histogram bar interval for [QueryType.range] type of widgets, applicable when [aggregations](/docs/search/reactivesearch-api/reference/#aggregations) value is set to `["histogram"]`.
   ///
   /// Defaults to `Math.ceil((range.end - range.start) / 100) || 1`.
   final int interval;
 
-  /// It helps you to utilize the built-in aggregations for `range` type of queries directly, valid values are:
+  /// It helps you to utilize the built-in aggregations for [QueryType.range] type of widgets directly, valid values are:
   /// -   `max`: to retrieve the maximum value for a `dataField`,
   /// -   `min`: to retrieve the minimum value for a `dataField`,
   /// -   `histogram`: to retrieve the histogram aggregations for a particular `interval`
   final List<String> aggregations;
 
-  /// Defaults to `false`. When set to `true` then it also retrieves the aggregations for missing fields.
+  /// When set to `true` then it also retrieves the aggregations for missing fields.
+  ///
+  /// Defaults to `false`.
   final bool showMissing;
 
-  /// Defaults to `N/A`. It allows you to specify a custom label to show when [showMissing](/docs/search/reactivesearch-api/reference/#showmissing) is set to `true`.
+  /// It allows you to specify a custom label to show when [showMissing](/docs/search/reactivesearch-api/reference/#showmissing) is set to `true`.
+  ///
+  /// Defaults to `N/A`.
   final String missingLabel;
 
-  /// is a callback function that takes the [SearchWidget] instance as parameter and **returns** the data query to be applied to the source component, as defined in Elasticsearch Query DSL, which doesn't get leaked to other components.
+  /// It is a callback function that takes the [SearchWidget] instance as parameter and **returns** the data query to be applied to the source component, as defined in Elasticsearch Query DSL, which doesn't get leaked to other components.
+  ///
   /// In simple words, `defaultQuery` is used with data-driven components to impact their own data.
   /// It is meant to modify the default query which is used by a component to render the UI.
   ///
@@ -638,7 +679,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   ///```
   final Map Function(SearchWidget searchWidget) defaultQuery;
 
-  /// takes [SearchWidget] instance as parameter and **returns** the query to be applied to the dependent widgets by `react` prop, as defined in Elasticsearch Query DSL.
+  /// It takes [SearchWidget] instance as parameter and **returns** the query to be applied to the dependent widgets by `react` prop, as defined in Elasticsearch Query DSL.
   ///
   /// For example, the following example has two components **search-widget**(to render the suggestions) and **result-widget**(to render the results).
   /// The **result-widget** depends on the **search-widget** to update the results based on the selected suggestion.
@@ -672,9 +713,6 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// ```
   final Map Function(SearchWidget searchWidget) customQuery;
 
-  /// To define whether to execute query or not.
-  final bool execute;
-
   /// This property can be used to control (enable/disable) the synonyms behavior for a particular query.
   ///
   /// Defaults to `true`, if set to `false` then fields having `.synonyms` suffix will not affect the query.
@@ -691,21 +729,23 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// instead of [terms aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-terms-aggregation.html).
   final bool pagination;
 
-  /// Defaults to `false`.
-  ///
   /// If set to `true` than it allows you to create a complex search that includes wildcard characters, searches across multiple fields, and more.
+  ///
+  /// Defaults to `false`.
   /// Read more about it [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html).
   final bool queryString;
 
-  ///  Defaults to `false`. When enabled, it can be useful to curate search suggestions based on actual search queries that your users are making.
+  /// It can be useful to curate search suggestions based on actual search queries that your users are making.
   ///
-  /// Read more about it over [here](https://docs.appbase.io/docs/analytics/popular-suggestions).
+  /// Defaults to `false`. You can read more about it over [here](https://docs.appbase.io/docs/analytics/popular-suggestions).
   final bool enablePopularSuggestions;
 
-  /// can be used to configure the size of popular suggestions. The default value is `5`.
+  /// It can be used to configure the size of popular suggestions.
+  ///
+  /// The default size is `5`.
   final int maxPopularSuggestions;
 
-  /// Show 1 suggestion per document.
+  /// To display one suggestion per document.
   ///
   /// If set to `false` multiple suggestions may show up for the same document as the searched value might appear in multiple fields of the same document,
   /// this is true only if you have configured multiple fields in `dataField` prop. Defaults to `true`.
@@ -735,14 +775,14 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   ///  ```
   final bool showDistinctSuggestions;
 
-  /// preserve the previously loaded results data for infinite loading
+  /// It set to `true` then it preserves the previously loaded results data that can be used to persist pagination or implement infinite loading.
   final bool preserveResults;
 
   // callbacks
 
   /// Enables transformation of network request before execution.
-  /// This function will give you the request object as the param and expect an updated request in return, for execution.
   ///
+  /// This function will give you the request object as the param and expect an updated request in return, for execution.
   /// For example, we will add the `credentials` property in the request using `transformRequest`.
   ///
   /// ```dart
@@ -758,7 +798,6 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// Enables transformation of search network response before rendering them.
   ///
   /// It is an asynchronous function which will accept an Elasticsearch response object as param and is expected to return an updated response as the return value.
-  ///
   /// For example:
   /// ```dart
   /// Future (Map elasticsearchResponse) async {
@@ -786,17 +825,20 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   final TransformResponse transformResponse;
 
   /// A list of map to pre-populate results with static data.
+  ///
+  /// Data must be in form of Elasticsearch response.
   final List<Map> results;
 
   /* ---- callbacks to create the side effects while querying ----- */
 
-  /// is a callback function which accepts component's future **value** as a
+  /// It is a callback function which accepts component's future **value** as a
   /// parameter and **returns** a [Future].
-  ///It is called every-time before a component's value changes.
-  ///The promise, if and when resolved, triggers the execution of the component's query and if rejected, kills the query execution.
-  ///This method can act as a gatekeeper for query execution, since it only executes the query after the provided promise has been resolved.
   ///
-  ///  For example:
+  /// It is called every-time before a component's value changes.
+  /// The promise, if and when resolved, triggers the execution of the component's query and if rejected, kills the query execution.
+  /// This method can act as a gatekeeper for query execution, since it only executes the query after the provided promise has been resolved.
+  ///
+  /// For example:
   /// ```dart
   /// Future (value) {
   ///   // called before the value is set
@@ -816,19 +858,19 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// For example: You want to show a pop-up modal with the valid discount coupon code when a user searches for a product in a [SearchBox].
   final void Function(String next, {String prev}) onValueChange;
 
-  /// can be used to listen for the `results` changes
+  /// It can be used to listen for the `results` changes.
   final void Function(List<Map> next, {List<Map> prev}) onResults;
 
-  /// can be used to listen for the `aggregationData` property changes
+  /// It can be used to listen for the `aggregationData` property changes.
   final void Function(List<Map> next, {List<Map> prev}) onAggregationData;
 
-  /// gets triggered in case of an error while fetching results
+  /// It gets triggered in case of an error occurs while fetching results.
   final void Function(dynamic error) onError;
 
-  /// can be used to listen for the request status changes
+  /// It can be used to listen for the request status changes.
   final void Function(String next, {String prev}) onRequestStatusChange;
 
-  /// is a callback function which accepts widget's **prevQuery** and **nextQuery** as parameters.
+  /// It is a callback function which accepts widget's **prevQuery** and **nextQuery** as parameters.
   ///
   /// It is called everytime the widget's query changes.
   /// This property is handy in cases where you want to generate a side-effect whenever the widget's query would change.
@@ -874,7 +916,6 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
     this.aggregations,
     this.missingLabel,
     this.showMissing,
-    this.execute,
     this.enableSynonyms,
     this.selectAllLabel,
     this.pagination,
@@ -941,7 +982,6 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
             aggregations: aggregations,
             missingLabel: missingLabel,
             showMissing: showMissing,
-            execute: execute,
             enableSynonyms: enableSynonyms,
             selectAllLabel: selectAllLabel,
             pagination: pagination,
@@ -964,19 +1004,24 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   }
 }
 
-/// A UI widget to render a search with auto-suggestions
+/// [SearchBox] offers a performance focused searchbox UI widget to query and display results from your Elasticsearch cluster.
+///
+/// It extends the [SearchDelegate] class which means that to display the [SearchBox] UI you have to invoke the **showSearch** method with [SearchBox] as delegate.
 class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   // Properties to configure search component
 
-  /// unique identifier of the component, can be referenced in other components' `react` prop.
+  /// A unique identifier of the component, can be referenced in other widgets' `react` prop to reactively update data.
   final String id;
 
-  /// Refers to an index of the Elasticsearch cluster. If not defined, then value will be inherited from [SearchBaseProvider].
+  /// Refers to an index of the Elasticsearch cluster.
   ///
-  /// `Note:` Multiple indexes can be connected to by specifying comma-separated index names.
+  /// If not defined, then value will be inherited from [SearchBaseProvider].
+  /// `Note:` Multiple indexes can be connected to Elasticsearch by specifying comma-separated index names.
   final String index;
 
-  /// URL for the Elasticsearch cluster. If not defined, then value will be inherited from [SearchBaseProvider].
+  /// URL for the Elasticsearch cluster.
+  ///
+  /// If not defined, then value will be inherited from [SearchBaseProvider].
   final String url;
 
   /// Basic Auth credentials if required for authentication purposes.
@@ -986,24 +1031,26 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   /// If not defined, then value will be inherited from [SearchBaseProvider].
   final String credentials;
 
-  /// Set custom headers to be sent with each server request as key/value pairs. If not defined, then value will be inherited from [SearchBaseProvider].
+  /// Set custom headers to be sent with each server request as key/value pairs.
+  ///
+  /// If not defined then value will be inherited from [SearchBaseProvider].
   final Map<String, String> headers;
 
-  /// It allows you to customize the analytics experience when appbase.io is used as a backend. If not defined, then value will be inherited from [SearchBaseProvider].
+  /// It allows you to customize the analytics experience when appbase.io is used as a backend.
+  ///
+  /// If not defined then value will be inherited from [SearchBaseProvider].
   final AppbaseSettings appbaseConfig;
 
-  // RS API properties
-
-  /// is useful for components whose data view should reactively update when on or more dependent components change their states,
+  /// It is useful for components whose data view should reactively update when on or more dependent components change their states.
   ///
-  /// e.g. a component to display the results can depend on the search component to filter the results.
+  /// For example, a widget to display the results can depend on the search widget to filter the results.
   ///  -   **key** `string`
   ///      one of `and`, `or`, `not` defines the combining clause.
-  ///      -   **and** clause implies that the results will be filtered by matches from **all** of the associated component states.
-  ///      -   **or** clause implies that the results will be filtered by matches from **at least one** of the associated component states.
-  ///      -   **not** clause implies that the results will be filtered by an **inverse** match of the associated component states.
+  ///      -   **and** clause implies that the results will be filtered by matches from **all** of the associated widget states.
+  ///      -   **or** clause implies that the results will be filtered by matches from **at least one** of the associated widget states.
+  ///      -   **not** clause implies that the results will be filtered by an **inverse** match of the associated widget states.
   ///  -   **value** `string or Array or Object`
-  ///      -   `string` is used for specifying a single component by its `id`.
+  ///      -   `string` is used for specifying a single widget by its `id`.
   ///      -   `Array` is used for specifying multiple components by their `id`.
   ///      -   `Object` is used for nesting other key clauses.
 
@@ -1021,19 +1068,33 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   /// Here, we are specifying that the results should update whenever one of the blacklist items is not present and simultaneously any one of the city or topics matches.
   final Map<String, dynamic> react;
 
-  /// Sets the query format, can be **or** or **and**. Defaults to **or**.
+  /// Sets the query format, can be **or** or **and**.
+  ///
+  /// Defaults to **or**.
   ///
   /// -   **or** returns all the results matching **any** of the search query text's parameters. For example, searching for "bat man" with **or** will return all the results matching either "bat" or "man".
   /// -   On the other hand with **and**, only results matching both "bat" and "man" will be returned. It returns the results matching **all** of the search query text's parameters.
   final String queryFormat;
 
-  /// index field(s) to be connected to the component’s UI view.
+  /// The index field(s) to be connected to the component’s UI view.
   ///
   /// It accepts an `List<String>` in addition to `<String>`, which is useful for searching across multiple fields with or without field weights.
   ///
   /// Field weights allow weighted search for the index fields. A higher number implies a higher relevance weight for the corresponding field in the search results.
-  ///
   /// You can define the `dataField` property as a `List<Map>` of to set the field weights. The object must have the `field` and `weight` keys.
+  /// For example,
+  /// ```dart
+  /// [
+  ///   {
+  ///     'field': 'original_title',
+  ///     'weight': 1
+  ///   },
+  ///   {
+  ///     'field': 'original_title.search',
+  ///     'weight': 3
+  ///   },
+  /// ]
+  /// ```
   final dynamic dataField;
 
   /// Index field mapped to the category value.
@@ -1042,21 +1103,23 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   /// This is the selected category value. It is used for informing the search result.
   final String categoryValue;
 
-  /// set the `nested` field path that allows an array of objects to be indexed in a way that can be queried independently of each other.
+  /// Sets the `nested` field path that allows an array of objects to be indexed in a way that can be queried independently of each other.
   ///
   /// Applicable only when dataField's mapping is of `nested` type.
   final String nestedField;
 
-  /// represents the current state of the `from` value. This property is useful to implement pagination.
+  /// To define from which page to start the results, it is important to implement pagination.
   final int from;
 
-  /// current state of the `size` of results to be returned by query
+  /// Number of suggestions and results to fetch per request.
   final int size;
 
-  /// current state of the sort value
+  /// Sorts the results by either [SortType.asc], [SortType.desc] or [SortType.count] order.
+  ///
+  /// Please note that the [SortType.count] is only applicable for [QueryType.term] type of search widgets.
   final SortType sortBy;
 
-  /// aggregationField enables you to get `DISTINCT` results (useful when you are dealing with sessions, events, and logs type data).
+  /// It enables you to get `DISTINCT` results (useful when you are dealing with sessions, events, and logs type data).
   ///
   /// It utilizes [composite aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-composite-aggregation.html) which are newly introduced in ES v6 and offer vast performance benefits over a traditional terms aggregation.
   final String aggregationField;
@@ -1071,10 +1134,10 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   /// If you have sparse data or documents or items not having the value in the specified field or mapping, then this prop enables you to show that data.
   final bool includeNullValues;
 
-  // useful to include the fields from Elastissearch response
+  // It allows to define fields to be included in search results.
   final List<String> includeFields;
 
-  // useful to exclude the fields from Elastissearch response
+  // It allows to define fields to be excluded in search results.
   final List<String> excludeFields;
 
   /// Useful for showing the correct results for an incorrect search parameter by taking the fuzziness into account.
@@ -1083,22 +1146,21 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   /// Read more about it in the elastic search https://www.elastic.co/guide/en/elasticsearch/guide/current/fuzziness.html.
   final dynamic fuzziness;
 
-  /// Defaults to `false`.
-  ///
   /// If set to `true`, then you can use special characters in the search query to enable the advanced search.
   ///
-  /// Read more about it [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html).
+  /// Defaults to `false`.
+  /// You can read more about this property at [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html).
   final bool searchOperators;
 
-  /// Defaults to `false`.
+  /// To define whether highlighting should be enabled in the returned results.
   ///
-  /// whether highlighting should be enabled in the returned results.
+  /// Defaults to `false`.
   final bool highlight;
 
-  /// when highlighting is enabled, this prop allows specifying the fields which should be returned with the matching highlights.
+  /// If highlighting is enabled, this property allows specifying the fields which should be returned with the matching highlights.
   ///
-  /// When not specified, it defaults to applying highlights on the field(s) specified in the **dataField** prop.
-  /// It can be of type `String` or `List<Sting>`.
+  /// When not specified, it defaults to applying highlights on the field(s) specified in the **dataField** property.
+  /// It can be of type `String` or `List<String>`.
   final dynamic highlightField;
 
   /// It can be used to set the custom highlight settings.
@@ -1106,24 +1168,29 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   /// You can read the `Elasticsearch` docs for the highlight options at [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-highlighting.html).
   final Map customHighlight;
 
-  /// To set the histogram bar interval, applicable when [aggregations](/docs/search/reactivesearch-api/reference/#aggregations) value is set to `["histogram"]`.
+  /// To set the histogram bar interval for [QueryType.range] type of widgets, applicable when [aggregations](/docs/search/reactivesearch-api/reference/#aggregations) value is set to `["histogram"]`.
   ///
   /// Defaults to `Math.ceil((range.end - range.start) / 100) || 1`.
   final int interval;
 
-  /// It helps you to utilize the built-in aggregations for `range` type of queries directly, valid values are:
+  /// It helps you to utilize the built-in aggregations for [QueryType.range] type of widgets directly, valid values are:
   /// -   `max`: to retrieve the maximum value for a `dataField`,
   /// -   `min`: to retrieve the minimum value for a `dataField`,
   /// -   `histogram`: to retrieve the histogram aggregations for a particular `interval`
   final List<String> aggregations;
 
-  /// Defaults to `false`. When set to `true` then it also retrieves the aggregations for missing fields.
+  /// When set to `true` then it also retrieves the aggregations for missing fields.
+  ///
+  /// Defaults to `false`.
   final bool showMissing;
 
-  /// Defaults to `N/A`. It allows you to specify a custom label to show when [showMissing](/docs/search/reactivesearch-api/reference/#showmissing) is set to `true`.
+  /// It allows you to specify a custom label to show when [showMissing](/docs/search/reactivesearch-api/reference/#showmissing) is set to `true`.
+  ///
+  /// Defaults to `N/A`.
   final String missingLabel;
 
-  /// is a callback function that takes the [SearchWidget] instance as parameter and **returns** the data query to be applied to the source component, as defined in Elasticsearch Query DSL, which doesn't get leaked to other components.
+  /// It is a callback function that takes the [SearchWidget] instance as parameter and **returns** the data query to be applied to the source component, as defined in Elasticsearch Query DSL, which doesn't get leaked to other components.
+  ///
   /// In simple words, `defaultQuery` is used with data-driven components to impact their own data.
   /// It is meant to modify the default query which is used by a component to render the UI.
   ///
@@ -1146,7 +1213,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   ///```
   final Map Function(SearchWidget searchWidget) defaultQuery;
 
-  /// takes [SearchWidget] instance as parameter and **returns** the query to be applied to the dependent widgets by `react` prop, as defined in Elasticsearch Query DSL.
+  /// It takes [SearchWidget] instance as parameter and **returns** the query to be applied to the dependent widgets by `react` prop, as defined in Elasticsearch Query DSL.
   ///
   /// For example, the following example has two components **search-widget**(to render the suggestions) and **result-widget**(to render the results).
   /// The **result-widget** depends on the **search-widget** to update the results based on the selected suggestion.
@@ -1180,9 +1247,6 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   /// ```
   final Map Function(SearchWidget searchWidget) customQuery;
 
-  /// To define whether to execute query or not.
-  final bool execute;
-
   /// This property can be used to control (enable/disable) the synonyms behavior for a particular query.
   ///
   /// Defaults to `true`, if set to `false` then fields having `.synonyms` suffix will not affect the query.
@@ -1199,21 +1263,23 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   /// instead of [terms aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-terms-aggregation.html).
   final bool pagination;
 
-  /// Defaults to `false`.
-  ///
   /// If set to `true` than it allows you to create a complex search that includes wildcard characters, searches across multiple fields, and more.
+  ///
+  /// Defaults to `false`.
   /// Read more about it [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html).
   final bool queryString;
 
-  ///  Defaults to `false`. When enabled, it can be useful to curate search suggestions based on actual search queries that your users are making.
+  /// It can be useful to curate search suggestions based on actual search queries that your users are making.
   ///
-  /// Read more about it over [here](https://docs.appbase.io/docs/analytics/popular-suggestions).
+  /// Defaults to `false`. You can read more about it over [here](https://docs.appbase.io/docs/analytics/popular-suggestions).
   final bool enablePopularSuggestions;
 
-  /// size of the popular suggestions to display in auto suggestions
+  /// It can be used to configure the size of popular suggestions.
+  ///
+  /// The default size is `5`.
   final int maxPopularSuggestions;
 
-  /// Show 1 suggestion per document.
+  /// To display one suggestion per document.
   ///
   /// If set to `false` multiple suggestions may show up for the same document as the searched value might appear in multiple fields of the same document,
   /// this is true only if you have configured multiple fields in `dataField` prop. Defaults to `true`.
@@ -1243,14 +1309,14 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   ///  ```
   final bool showDistinctSuggestions;
 
-  /// preserve the previously loaded results data for infinite loading
+  /// It set to `true` then it preserves the previously loaded results data that can be used to persist pagination or implement infinite loading.
   final bool preserveResults;
 
   // callbacks
 
   /// Enables transformation of network request before execution.
-  /// This function will give you the request object as the param and expect an updated request in return, for execution.
   ///
+  /// This function will give you the request object as the param and expect an updated request in return, for execution.
   /// For example, we will add the `credentials` property in the request using `transformRequest`.
   ///
   /// ```dart
@@ -1266,7 +1332,6 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   /// Enables transformation of search network response before rendering them.
   ///
   /// It is an asynchronous function which will accept an Elasticsearch response object as param and is expected to return an updated response as the return value.
-  ///
   /// For example:
   /// ```dart
   /// Future (Map elasticsearchResponse) async {
@@ -1294,17 +1359,20 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   final TransformResponse transformResponse;
 
   /// A list of map to pre-populate results with static data.
+  ///
+  /// Data must be in form of Elasticsearch response.
   final List<Map> results;
 
   /* ---- callbacks to create the side effects while querying ----- */
 
-  /// is a callback function which accepts component's future **value** as a
+  /// It is a callback function which accepts component's future **value** as a
   /// parameter and **returns** a [Future].
-  ///It is called every-time before a component's value changes.
-  ///The promise, if and when resolved, triggers the execution of the component's query and if rejected, kills the query execution.
-  ///This method can act as a gatekeeper for query execution, since it only executes the query after the provided promise has been resolved.
   ///
-  ///  For example:
+  /// It is called every-time before a component's value changes.
+  /// The promise, if and when resolved, triggers the execution of the component's query and if rejected, kills the query execution.
+  /// This method can act as a gatekeeper for query execution, since it only executes the query after the provided promise has been resolved.
+  ///
+  /// For example:
   /// ```dart
   /// Future (value) {
   ///   // called before the value is set
@@ -1324,19 +1392,19 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   /// For example: You want to show a pop-up modal with the valid discount coupon code when a user searches for a product in a [SearchBox].
   final void Function(String next, {String prev}) onValueChange;
 
-  /// can be used to listen for the `results` changes
+  /// It can be used to listen for the `results` changes.
   final void Function(List<Map> next, {List<Map> prev}) onResults;
 
-  /// can be used to listen for the `aggregationData` property changes
+  /// It can be used to listen for the `aggregationData` property changes.
   final void Function(List<Map> next, {List<Map> prev}) onAggregationData;
 
-  /// gets triggered in case of an error while fetching results
+  /// It gets triggered in case of an error occurs while fetching results.
   final void Function(dynamic error) onError;
 
-  /// can be used to listen for the request status changes
+  /// It can be used to listen for the request status changes.
   final void Function(String next, {String prev}) onRequestStatusChange;
 
-  /// is a callback function which accepts widget's **prevQuery** and **nextQuery** as parameters.
+  /// It is a callback function which accepts widget's **prevQuery** and **nextQuery** as parameters.
   ///
   /// It is called everytime the widget's query changes.
   /// This property is handy in cases where you want to generate a side-effect whenever the widget's query would change.
@@ -1344,17 +1412,15 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
 
   // SearchBox specific properties
 
-  /// Defaults to `false`.
-  ///
   /// If set to `true` then users will see the top recent searches as the default suggestions.
-  /// Appbase.io recommends defining a unique id for each user to personalize the recent searches.
+  ///
+  /// Defaults to `false`. Appbase.io recommends defining a unique id for each user to personalize the recent searches.
   /// > Note: Please note that this feature only works when `recordAnalytics` is set to `true` in `appbaseConfig`.
   final bool enableRecentSearches;
 
-  /// Defaults to `true`.
-  ///
   /// This property allows you to enable the auto-fill behavior for suggestions.
-  /// It helps users to select a suggestion without applying the search which further refines the auto-suggestions i.e minimizes the number of taps or scrolls that the user has to perform before finding the result.
+  ///
+  /// Defaults to `true`. It helps users to select a suggestion without applying the search which further refines the auto-suggestions i.e minimizes the number of taps or scrolls that the user has to perform before finding the result.
   final bool showAutoFill;
 
   /// It can be used to render the custom UI for suggestion list item.
@@ -1395,7 +1461,6 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
     this.aggregations,
     this.missingLabel,
     this.showMissing,
-    this.execute,
     this.enableSynonyms,
     this.selectAllLabel,
     this.pagination,
@@ -1566,7 +1631,6 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
         aggregations: aggregations,
         missingLabel: missingLabel,
         showMissing: showMissing,
-        execute: execute,
         enableSynonyms: enableSynonyms,
         selectAllLabel: selectAllLabel,
         pagination: pagination,
