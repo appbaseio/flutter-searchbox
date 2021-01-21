@@ -28,7 +28,7 @@ $ flutter pub get
 
 ### A simple example
 
-![Basic Example](http://g.recordit.co/N0M8IOYeqT.gif)
+![Basic Example](https://raw.githubusercontent.com/appbaseio/flutter-assets/master/basic.gif)
 
 The following example renders an autosuggestion [SearchBox](`search-widget`) with one custom widget [SearchWidgetConnector](`result-widget`) to render the results. The `result-widget` watches the `search-widget` for input changes and updates its UI when the user selects a suggestion.
 
@@ -349,7 +349,7 @@ class ResultsWidget extends StatelessWidget {
 
 ### An example with a facet
 
-![Facet Example](http://g.recordit.co/2hqx7pGrdP.gif)
+![Facet Example](https://raw.githubusercontent.com/appbaseio/flutter-assets/master/advanced.gif)
 
 The following example renders one more custom widget with id `author-filter` to render a list of authors. This widget is being used by `result-widget` to filter the results data. The `author-filter` widget also reacts to the `search-widget` (check the `react` property) to update the authors list reactively whenever the search query changes.
 
@@ -884,3 +884,8 @@ class AuthorFilter extends StatelessWidget {
 }
 
 ```
+
+### Custom SearchBox UI
+
+The following example integrates the `flutter_searchbox` with `flutter_typeahead` UI to display the suggestions.
+https://github.com/appbaseio/flutter-searchbox-typeahead-example

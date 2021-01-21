@@ -11,16 +11,24 @@ class Changes {
 
 /// AppbaseSettings allows you to customize the analytics experience when appbase.io is used as a backend.
 class AppbaseSettings {
-  /// allows recording search analytics (and click analytics) when set to `true` and appbase.io is used as a backend. Defaults to `false`.
+  /// It allows recording search analytics (and click analytics) when set to `true` and appbase.io is used as a backend.
+  ///
+  /// Defaults to `false`.
   bool recordAnalytics;
 
-  /// If `false`, then appbase.io will not apply the query rules on the search requests. Defaults to `true`.
+  /// If `false`, then appbase.io will not apply the query rules on the search requests.
+  ///
+  /// Defaults to `true`.
   bool enableQueryRules;
 
-  /// It allows you to define the user id to be used to record the appbase.io analytics. Defaults to the client's IP address.
+  /// It allows you to define the user id to be used to record the appbase.io analytics.
+  ///
+  /// Defaults to the client's IP address.
   String userId;
 
-  /// It allows you to set the custom events which can be used to build your own analytics on top of appbase.io analytics. Further, these events can be used to filter the analytics stats from the appbase.io dashboard.
+  /// It allows you to set the custom events which can be used to build your own analytics on top of appbase.io analytics.
+  ///
+  /// Further, these events can be used to filter the analytics stats from the appbase.io dashboard.
   Map<String, String> customEvents;
 
   AppbaseSettings({
@@ -48,7 +56,7 @@ class AppbaseSettings {
   }
 }
 
-/// Options to configure the recent searches request
+/// Options to configure the recent searches request.
 class RecentSearchOptions {
   int size;
   int minChars;
@@ -63,7 +71,7 @@ class RecentSearchOptions {
       this.customEvents});
 }
 
-/// Allows to configure the effects of an update in a particular property
+/// Allows to configure the effects of an update in a particular property.
 class Options {
   bool triggerDefaultQuery;
   bool triggerCustomQuery;
@@ -78,7 +86,7 @@ class Options {
   }
 }
 
-/// Allows to configure the effects after executing a query
+/// Allows to configure the effects after executing a query.
 class Option {
   bool stateChanges;
   Option({stateChanges}) {
@@ -86,24 +94,24 @@ class Option {
   }
 }
 
-/// Represents a suggestion object
+/// Represents a suggestion object.
 class Suggestion {
-  /// suggestion label to display in UI
+  /// Suggestion label to display in UI.
   final String label;
 
-  /// suggestion value to perform query
+  /// Suggestion value to perform query.
   final String value;
 
-  /// represents that if a suggestion is a type of recent search
+  /// Represents that if a suggestion is a type of recent search.
   final bool isRecentSearch;
 
-  /// represents that if a suggestion is a type of popular suggestion
+  /// Represents that if a suggestion is a type of popular suggestion.
   bool isPopularSuggestion;
 
-  /// source object from Elasticsearch response
+  /// The source object from Elasticsearch response.
   final Map source;
 
-  /// click id, useful to record click analytics
+  /// Represents the click position, useful to record click analytics.
   final int clickId;
 
   Suggestion(this.label, this.value,

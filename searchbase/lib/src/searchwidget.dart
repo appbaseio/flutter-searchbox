@@ -28,22 +28,25 @@ const suggestionQueryID = 'DataSearch__suggestions';
 /// -   a widget to render the search results.
 class SearchWidget extends Base {
   // RS API properties
-  /// unique identifier of the component, can be referenced in other components' `react` prop.
+
+  /// A unique identifier of the component, can be referenced in other widgets' `react` prop to reactively update data.
   String id;
 
-  /// This property represents the type of the query which is defaults to [QueryType.search], valid values are `search`, `term`, `range` & `geo`. You can read more [here](https://docs.appbase.io/docs/search/reactivesearch-api/implement#type-of-queries).
+  /// This property represents the type of the query which is defaults to [QueryType.search], valid values are [QueryType.search], [QueryType.term], [QueryType.range] & [QueryType.geo].
+  ///
+  /// You can read more [here](https://docs.appbase.io/docs/search/reactivesearch-api/implement#type-of-queries).
   QueryType type;
 
-  /// is useful for components whose data view should reactively update when on or more dependent components change their states,
+  /// It is useful for components whose data view should reactively update when on or more dependent components change their states.
   ///
-  /// e.g. a component to display the results can depend on the search component to filter the results.
+  /// For example, a widget to display the results can depend on the search widget to filter the results.
   ///  -   **key** `string`
   ///      one of `and`, `or`, `not` defines the combining clause.
-  ///      -   **and** clause implies that the results will be filtered by matches from **all** of the associated component states.
-  ///      -   **or** clause implies that the results will be filtered by matches from **at least one** of the associated component states.
-  ///      -   **not** clause implies that the results will be filtered by an **inverse** match of the associated component states.
+  ///      -   **and** clause implies that the results will be filtered by matches from **all** of the associated widget states.
+  ///      -   **or** clause implies that the results will be filtered by matches from **at least one** of the associated widget states.
+  ///      -   **not** clause implies that the results will be filtered by an **inverse** match of the associated widget states.
   ///  -   **value** `string or Array or Object`
-  ///      -   `string` is used for specifying a single component by its `id`.
+  ///      -   `string` is used for specifying a single widget by its `id`.
   ///      -   `Array` is used for specifying multiple components by their `id`.
   ///      -   `Object` is used for nesting other key clauses.
 
@@ -61,19 +64,33 @@ class SearchWidget extends Base {
   /// Here, we are specifying that the results should update whenever one of the blacklist items is not present and simultaneously any one of the city or topics matches.
   Map<String, dynamic> react;
 
-  /// Sets the query format, can be **or** or **and**. Defaults to **or**.
+  /// Sets the query format, can be **or** or **and**.
+  ///
+  /// Defaults to **or**.
   ///
   /// -   **or** returns all the results matching **any** of the search query text's parameters. For example, searching for "bat man" with **or** will return all the results matching either "bat" or "man".
   /// -   On the other hand with **and**, only results matching both "bat" and "man" will be returned. It returns the results matching **all** of the search query text's parameters.
   String queryFormat;
 
-  /// index field(s) to be connected to the component’s UI view.
+  /// The index field(s) to be connected to the component’s UI view.
   ///
   /// It accepts an `List<String>` in addition to `<String>`, which is useful for searching across multiple fields with or without field weights.
   ///
   /// Field weights allow weighted search for the index fields. A higher number implies a higher relevance weight for the corresponding field in the search results.
-  ///
   /// You can define the `dataField` property as a `List<Map>` of to set the field weights. The object must have the `field` and `weight` keys.
+  /// For example,
+  /// ```dart
+  /// [
+  ///   {
+  ///     'field': 'original_title',
+  ///     'weight': 1
+  ///   },
+  ///   {
+  ///     'field': 'original_title.search',
+  ///     'weight': 3
+  ///   },
+  /// ]
+  /// ```
   dynamic dataField;
 
   /// Index field mapped to the category value.
@@ -82,18 +99,20 @@ class SearchWidget extends Base {
   /// This is the selected category value. It is used for informing the search result.
   String categoryValue;
 
-  /// set the `nested` field path that allows an array of objects to be indexed in a way that can be queried independently of each other.
+  /// Sets the `nested` field path that allows an array of objects to be indexed in a way that can be queried independently of each other.
   ///
   /// Applicable only when dataField's mapping is of `nested` type.
   String nestedField;
 
-  /// represents the current state of the `from` value. This property is useful to implement pagination.
+  /// To define from which page to start the results, it is important to implement pagination.
   int from;
 
-  /// current state of the `size` of results to be returned by query
+  /// Number of suggestions and results to fetch per request.
   int size;
 
-  /// current state of the sort value
+  /// Sorts the results by either [SortType.asc], [SortType.desc] or [SortType.count] order.
+  ///
+  /// Please note that the [SortType.count] is only applicable for [QueryType.term] type of search widgets.
   SortType sortBy;
 
   /// Represents the value for a particular [QueryType].
@@ -102,7 +121,7 @@ class SearchWidget extends Base {
   /// You can refer to the different value formats over [here](https://docs.appbase.io/docs/search/reactivesearch-api/reference#value).
   dynamic value;
 
-  /// aggregationField enables you to get `DISTINCT` results (useful when you are dealing with sessions, events, and logs type data).
+  /// It enables you to get `DISTINCT` results (useful when you are dealing with sessions, events, and logs type data).
   ///
   /// It utilizes [composite aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-composite-aggregation.html) which are newly introduced in ES v6 and offer vast performance benefits over a traditional terms aggregation.
   String aggregationField;
@@ -117,10 +136,10 @@ class SearchWidget extends Base {
   /// If you have sparse data or documents or items not having the value in the specified field or mapping, then this prop enables you to show that data.
   bool includeNullValues;
 
-  /// useful to include the fields from Elastissearch response
+  // It allows to define fields to be included in search results.
   List<String> includeFields;
 
-  /// useful to exclude the fields from Elastissearch response
+  // It allows to define fields to be excluded in search results.
   List<String> excludeFields;
 
   /// Useful for showing the correct results for an incorrect search parameter by taking the fuzziness into account.
@@ -129,22 +148,21 @@ class SearchWidget extends Base {
   /// Read more about it in the elastic search https://www.elastic.co/guide/en/elasticsearch/guide/current/fuzziness.html.
   dynamic fuzziness;
 
-  /// Defaults to `false`.
-  ///
   /// If set to `true`, then you can use special characters in the search query to enable the advanced search.
   ///
-  /// Read more about it [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html).
+  /// Defaults to `false`.
+  /// You can read more about this property at [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html).
   bool searchOperators;
 
-  /// Defaults to `false`.
+  /// To define whether highlighting should be enabled in the returned results.
   ///
-  /// whether highlighting should be enabled in the returned results.
+  /// Defaults to `false`.
   bool highlight;
 
-  /// when highlighting is enabled, this prop allows specifying the fields which should be returned with the matching highlights.
+  /// If highlighting is enabled, this property allows specifying the fields which should be returned with the matching highlights.
   ///
-  /// When not specified, it defaults to applying highlights on the field(s) specified in the **dataField** prop.
-  /// It can be of type `String` or `List<Sting>`.
+  /// When not specified, it defaults to applying highlights on the field(s) specified in the **dataField** property.
+  /// It can be of type `String` or `List<String>`.
   dynamic highlightField;
 
   /// It can be used to set the custom highlight settings.
@@ -152,24 +170,29 @@ class SearchWidget extends Base {
   /// You can read the `Elasticsearch` docs for the highlight options at [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-highlighting.html).
   Map customHighlight;
 
-  /// To set the histogram bar interval, applicable when [aggregations](/docs/search/reactivesearch-api/reference/#aggregations) value is set to `["histogram"]`.
+  /// To set the histogram bar interval for [QueryType.range] type of widgets, applicable when [aggregations](/docs/search/reactivesearch-api/reference/#aggregations) value is set to `["histogram"]`.
   ///
   /// Defaults to `Math.ceil((range.end - range.start) / 100) || 1`.
   int interval;
 
-  /// It helps you to utilize the built-in aggregations for `range` type of queries directly, valid values are:
+  /// It helps you to utilize the built-in aggregations for [QueryType.range] type of widgets directly, valid values are:
   /// -   `max`: to retrieve the maximum value for a `dataField`,
   /// -   `min`: to retrieve the minimum value for a `dataField`,
   /// -   `histogram`: to retrieve the histogram aggregations for a particular `interval`
   List<String> aggregations;
 
-  /// Defaults to `false`. When set to `true` then it also retrieves the aggregations for missing fields.
+  /// When set to `true` then it also retrieves the aggregations for missing fields.
+  ///
+  /// Defaults to `false`.
   bool showMissing;
 
-  /// Defaults to `N/A`. It allows you to specify a custom label to show when [showMissing](/docs/search/reactivesearch-api/reference/#showmissing) is set to `true`.
+  /// It allows you to specify a custom label to show when [showMissing](/docs/search/reactivesearch-api/reference/#showmissing) is set to `true`.
+  ///
+  /// Defaults to `N/A`.
   String missingLabel;
 
-  /// is a callback function that takes the [SearchWidget] instance as parameter and **returns** the data query to be applied to the source component, as defined in Elasticsearch Query DSL, which doesn't get leaked to other components.
+  /// It is a callback function that takes the [SearchWidget] instance as parameter and **returns** the data query to be applied to the source component, as defined in Elasticsearch Query DSL, which doesn't get leaked to other components.
+  ///
   /// In simple words, `defaultQuery` is used with data-driven components to impact their own data.
   /// It is meant to modify the default query which is used by a component to render the UI.
   ///
@@ -192,12 +215,12 @@ class SearchWidget extends Base {
   ///```
   Map Function(SearchWidget searchWidget) defaultQuery;
 
-  /// takes [SearchWidget] instance as parameter and **returns** the query to be applied to the dependent widgets by `react` prop, as defined in Elasticsearch Query DSL.
+  /// It takes [SearchWidget] instance as parameter and **returns** the query to be applied to the dependent widgets by `react` prop, as defined in Elasticsearch Query DSL.
   ///
-  /// For example, the following example has two components `search-widget`(to render the suggestions) and `result-widget`(to render the results).
-  /// The `result-widget` depends on the `search-widget` to update the results based on the selected suggestion.
-  /// The `search-widget` has the `customQuery` prop defined that will not affect the query for suggestions(that is how `customQuery` is different from `defaultQuery`)
-  /// but it'll affect the query for `result-widget` because of the `react` dependency on `search-widget`.
+  /// For example, the following example has two components **search-widget**(to render the suggestions) and **result-widget**(to render the results).
+  /// The **result-widget** depends on the **search-widget** to update the results based on the selected suggestion.
+  /// The **search-widget** has the `customQuery` prop defined that will not affect the query for suggestions(that is how `customQuery` is different from `defaultQuery`)
+  /// but it'll affect the query for **result-widget** because of the `react` dependency on **search-widget**.
   ///
   /// ```dart
   /// SearchWidgetConnector(
@@ -226,9 +249,6 @@ class SearchWidget extends Base {
   /// ```
   Map Function(SearchWidget searchWidget) customQuery;
 
-  /// To define whether to execute query or not.
-  bool execute;
-
   /// This property can be used to control (enable/disable) the synonyms behavior for a particular query.
   ///
   /// Defaults to `true`, if set to `false` then fields having `.synonyms` suffix will not affect the query.
@@ -245,21 +265,23 @@ class SearchWidget extends Base {
   /// instead of [terms aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-terms-aggregation.html).
   bool pagination;
 
-  /// Defaults to `false`.
-  ///
   /// If set to `true` than it allows you to create a complex search that includes wildcard characters, searches across multiple fields, and more.
+  ///
+  /// Defaults to `false`.
   /// Read more about it [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html).
   bool queryString;
 
-  ///  Defaults to `false`. When enabled, it can be useful to curate search suggestions based on actual search queries that your users are making.
+  /// It can be useful to curate search suggestions based on actual search queries that your users are making.
   ///
-  /// Read more about it over [here](https://docs.appbase.io/docs/analytics/popular-suggestions).
+  /// Defaults to `false`. You can read more about it over [here](https://docs.appbase.io/docs/analytics/popular-suggestions).
   bool enablePopularSuggestions;
 
-  /// can be used to configure the size of popular suggestions. The default value is `5`.
+  /// It can be used to configure the size of popular suggestions.
+  ///
+  /// The default size is `5`.
   int maxPopularSuggestions;
 
-  /// Show 1 suggestion per document.
+  /// To display one suggestion per document.
   ///
   /// If set to `false` multiple suggestions may show up for the same document as the searched value might appear in multiple fields of the same document,
   /// this is true only if you have configured multiple fields in `dataField` prop. Defaults to `true`.
@@ -289,38 +311,37 @@ class SearchWidget extends Base {
   ///  ```
   bool showDistinctSuggestions;
 
-  /// preserve the previously loaded results data for infinite loading
+  /// It set to `true` then it preserves the previously loaded results data that can be used to persist pagination or implement infinite loading.
   bool preserveResults;
 
-  /// it is an object that represents the elasticsearch query response.
+  /// It is an object that represents the elasticsearch query response.
   Results results;
 
-  // other properties
-
-  /// represents the error response returned by elasticsearch
+  /// Represents the error response returned by elasticsearch.
   dynamic error;
 
-  /// subject to track state changes and update listeners
+  /// A subject to track state changes and update listeners.
   Observable stateChanges;
 
-  /// represents the current status of the request
+  /// It represents the current status of the request.
   RequestStatus requestStatus;
 
-  /// an object that contains the aggregations data for [QueryType.term] queries
+  /// An object that contains the aggregations data for [QueryType.term] queries.
   Aggregations aggregationData;
 
-  /// a list of recent searches
+  /// A list of recent searches as suggestions.
   List<Suggestion> recentSearches;
 
   /* ---- callbacks to create the side effects while querying ----- */
 
-  /// is a callback function which accepts component's future **value** as a
+  /// It is a callback function which accepts component's future **value** as a
   /// parameter and **returns** a [Future].
-  ///It is called every-time before a component's value changes.
-  ///The promise, if and when resolved, triggers the execution of the component's query and if rejected, kills the query execution.
-  ///This method can act as a gatekeeper for query execution, since it only executes the query after the provided promise has been resolved.
   ///
-  ///  For example:
+  /// It is called every-time before a component's value changes.
+  /// The promise, if and when resolved, triggers the execution of the component's query and if rejected, kills the query execution.
+  /// This method can act as a gatekeeper for query execution, since it only executes the query after the provided promise has been resolved.
+  ///
+  /// For example:
   /// ```dart
   /// Future (value) {
   ///   // called before the value is set
@@ -340,19 +361,19 @@ class SearchWidget extends Base {
   /// For example: You want to show a pop-up modal with the valid discount coupon code when a user searches for a product in a [SearchWidget].
   final void Function(String next, {String prev}) onValueChange;
 
-  /// can be used to listen for the `results` changes
+  /// It can be used to listen for the `results` changes.
   final void Function(List<Map> next, {List<Map> prev}) onResults;
 
-  /// can be used to listen for the `aggregationData` property changes
+  /// It can be used to listen for the `aggregationData` property changes.
   final void Function(List<Map> next, {List<Map> prev}) onAggregationData;
 
-  /// gets triggered in case of an error while fetching results
+  /// It gets triggered in case of an error while fetching results.
   final void Function(dynamic error) onError;
 
-  /// can be used to listen for the request status changes
+  /// It can be used to listen for the request status changes.
   final void Function(String next, {String prev}) onRequestStatusChange;
 
-  /// is a callback function which accepts widget's **prevQuery** and **nextQuery** as parameters.
+  /// It is a callback function which accepts widget's **prevQuery** and **nextQuery** as parameters.
   ///
   /// It is called everytime the widget's query changes.
   /// This property is handy in cases where you want to generate a side-effect whenever the widget's query would change.
@@ -363,9 +384,6 @@ class SearchWidget extends Base {
 
   // Counterpart of the query
   List<Map> _query;
-
-  // mic instance
-  dynamic _micInstance;
 
   // query search ID
   String _queryId;
@@ -403,7 +421,6 @@ class SearchWidget extends Base {
     this.aggregations,
     this.missingLabel,
     this.showMissing,
-    this.execute,
     this.enableSynonyms,
     this.selectAllLabel,
     this.pagination,

@@ -51,7 +51,6 @@ List<Map<String, dynamic>> parseHits(List<Map<String, dynamic>> hits) {
 }
 
 // string | Array<string | DataField>
-
 List<String> getNormalizedField(dynamic field) {
   if (field != null) {
     // if data field is string
@@ -73,10 +72,6 @@ List<String> getNormalizedField(dynamic field) {
   }
   return [];
 }
-
-// export function isNumber(n) {
-//   return !Number.isNaN(parseFloat(n)) && Number.isFinite(n);
-// }
 
 List<int> getNormalizedWeights(dynamic field) {
   if (field is List<Map>) {

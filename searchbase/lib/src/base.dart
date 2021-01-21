@@ -6,9 +6,10 @@ import 'dart:convert';
 /// [Base] class is the abstract class for [SearchBase] and [SearchWidget] classes.
 class Base {
   // RS API properties
+
   /// Refers to an index of the Elasticsearch cluster.
   ///
-  /// `Note:` Multiple indexes can be connected to by specifying comma-separated index names.
+  /// `Note:` Multiple indexes can be connected to Elasticsearch by specifying comma-separated index names.
   String index;
 
   /// URL for the Elasticsearch cluster.
@@ -29,8 +30,8 @@ class Base {
   /* ---- callbacks to create the side effects while querying ----- */
 
   /// Enables transformation of network request before execution.
-  /// This function will give you the request object as the param and expect an updated request in return, for execution.
   ///
+  /// This function will give you the request object as the param and expect an updated request in return, for execution.
   /// For example, we will add the `credentials` property in the request using `transformRequest`.
   ///
   /// ```dart
@@ -46,7 +47,6 @@ class Base {
   /// Enables transformation of search network response before rendering them.
   ///
   /// It is an asynchronous function which will accept an Elasticsearch response object as param and is expected to return an updated response as the return value.
-  ///
   /// For example:
   /// ```dart
   /// Future (Map elasticsearchResponse) async {

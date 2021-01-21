@@ -778,6 +778,11 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// It set to `true` then it preserves the previously loaded results data that can be used to persist pagination or implement infinite loading.
   final bool preserveResults;
 
+  /// A list of map to pre-populate results with static data.
+  ///
+  /// Data must be in form of Elasticsearch response.
+  final List<Map> results;
+
   // callbacks
 
   /// Enables transformation of network request before execution.
@@ -823,11 +828,6 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   ///}
   /// ```
   final TransformResponse transformResponse;
-
-  /// A list of map to pre-populate results with static data.
-  ///
-  /// Data must be in form of Elasticsearch response.
-  final List<Map> results;
 
   /* ---- callbacks to create the side effects while querying ----- */
 

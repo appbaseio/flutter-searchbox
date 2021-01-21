@@ -3,7 +3,7 @@ import 'types.dart';
 import 'searchwidget.dart';
 import 'constants.dart';
 
-/// The [SearchBase] class holds the state for all the active [SearchWidget]s and can be used to provide the global configuration to the registered [SearchWidget]s.
+/// The [SearchBase] class holds the state for all the active [SearchWidget](s) and can be used to provide the global configuration to the registered [SearchWidget](s).
 ///
 /// It serves the following tasks:
 /// -   To `register` a [SearchWidget] by unique `id`
@@ -134,7 +134,6 @@ class SearchBase extends Base {
         aggregations: searchWidget["aggregations"],
         missingLabel: searchWidget["missingLabel"],
         showMissing: searchWidget["showMissing"],
-        execute: searchWidget["execute"],
         enableSynonyms: searchWidget["enableSynonyms"],
         selectAllLabel: searchWidget["selectAllLabel"],
         pagination: searchWidget["pagination"],
@@ -181,6 +180,7 @@ class SearchBase extends Base {
   }
 
   /// This method returns all the active widgets registered on the `SearchBase` instance.
+  ///
   /// The widgets state can be used for various purposes, for example, to display the selected filters in the UI.
   Map<String, SearchWidget> getActiveWidgets() {
     return this._searchWidgets;

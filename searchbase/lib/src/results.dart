@@ -1,20 +1,20 @@
 import 'utils.dart';
 
-/// Represents the response for [QueryType.search], [QueryType.geo] and [QueryType.range] queries
+/// Represents the response for [QueryType.search], [QueryType.geo] and [QueryType.range] type of [SearchWidget](s).
 class Results {
-  // An array of results obtained from the applied query.
+  /// An array of results obtained from the applied query.
   List<Map<String, dynamic>> data;
 
-  // Raw response returned by ES query
+  /// Raw response returned by ES query
   Map raw;
 
-  // Results parser
+  /// To parse the results.
   List<Map<String, dynamic>> Function(List<Map> results, [List<Map> sourceData])
       parseResults;
 
   Results(this.data) {}
 
-  // Total number of results found
+  /// Total number of results found.
   int get numberOfResults {
     // calculate from raw response
     if (this.raw != null && this.raw.containsKey('hits')) {
@@ -32,7 +32,7 @@ class Results {
     return 0;
   }
 
-  // Total time taken by request (in ms)
+  /// Total time taken by request (in ms).
   int get time {
     // calculate from raw response
     if (this.raw != null) {
@@ -41,7 +41,7 @@ class Results {
     return 0;
   }
 
-  // no of hidden results found
+  /// Number of hidden results found.
   int get hidden {
     if (this.raw != null &&
         this.raw['hits'] != null &&
@@ -51,7 +51,7 @@ class Results {
     return 0;
   }
 
-  // An array of promoted results obtained from the applied query.
+  /// An array of promoted results obtained from the applied query.
   List<Map> get promotedData {
     if (this.raw != null && this.raw['promoted'] is List<Map>) {
       return this.raw['promoted'];
@@ -59,17 +59,17 @@ class Results {
     return [];
   }
 
-  // no of promoted results found
+  /// Number of promoted results found.
   int get promoted {
     return this.promotedData.length;
   }
 
-  // An object of raw response as-is from elasticsearch query
+  // An object of raw response as-is from elasticsearch query.
   Map get rawData {
     return this.raw;
   }
 
-  // object of custom data applied through queryRules
+  // An object of custom data applied through Appbase query rules.
   Map get customData {
     if (this.raw != null && this.raw['customData'] == Map) {
       return this.raw['customData'];
@@ -77,6 +77,7 @@ class Results {
     return {};
   }
 
+  /// Method to set the raw response form Elasticsearch
   void setRaw(Map rawResponse) {
     // set response
     if (rawResponse != null) {
@@ -90,7 +91,7 @@ class Results {
     }
   }
 
-  // Method to set data explicitly
+  // Method to set data explicitly.
   void setData(List<Map<String, dynamic>> data) {
     // parse hits
     List<Map<String, dynamic>> filteredResults = parseHits(data);
