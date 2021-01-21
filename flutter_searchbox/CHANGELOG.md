@@ -1,3 +1,11 @@
+## [1.0.0-alpha.2] - 21-01-2021
+
+- Update example to fix hot reloading issues
+- Catch error while triggering click analytics
+- Fix suggestions parsing when `dataField` is not defined
+- Display popular suggestions as default suggestions
+- Update example to persist search query
+
 ## [1.0.0-alpha.1] - 14-01-2021.
 
 - Format docs

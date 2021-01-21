@@ -1,3 +1,9 @@
+## 1.0.0-alpha.5
+
+- Fix suggestions parsing logic if `dataField` is not defined
+- Fix `onError` type error
+- Add more properties in `Suggestion` class to differentiate between recent, popular and relevant suggestions.
+
 ## 1.0.0-alpha.4
 
 - Format docs
