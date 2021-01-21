@@ -887,5 +887,5 @@ class AuthorFilter extends StatelessWidget {
 
 ### Custom SearchBox UI
 
-The following example integrates the `flutter_searchbox` with `flutter_typeahead` UI to display the suggestions.
+The following example integrates the `flutter_searchbox` with a third party library named [flutter_typeahead](https://pub.dev/packages/flutter_typeahead) to display the suggestions as an overlay.
 https://github.com/appbaseio/flutter-searchbox-typeahead-example

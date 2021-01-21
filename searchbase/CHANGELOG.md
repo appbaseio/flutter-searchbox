@@ -1,3 +1,7 @@
+## 1.0.0-alpha.6
+
+- Format Docs
+
 ## 1.0.0-alpha.5
 
 - Fix suggestions parsing logic if `dataField` is not defined
