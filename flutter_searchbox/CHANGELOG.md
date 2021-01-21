@@ -1,3 +1,5 @@
+## [1.0.0-alpha.3] - 22-01-2021
+- Format Docs
 ## [1.0.0-alpha.2] - 21-01-2021
 
 - Update example to fix hot reloading issues

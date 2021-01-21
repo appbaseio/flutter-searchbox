@@ -129,7 +129,7 @@ packages:
       name: searchbase
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0-alpha.5"
+    version: "1.0.0-alpha.6"
   sky_engine:
     dependency: transitive
     description: flutter
