@@ -3,7 +3,7 @@ import 'constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-/// [Base] class is the abstract class for [SearchBase] and [SearchWidget] classes.
+/// [Base] class is the abstract class for [SearchBase] and [SearchController] classes.
 class Base {
   // RS API properties
 

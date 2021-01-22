@@ -28,7 +28,7 @@ class FlutterSearchBoxApp extends StatelessWidget {
     // ensure all routes have access to the store.
     return SearchBaseProvider(
       // Pass the searchbase instance to the SearchBaseProvider. Any ancestor `SearchWidgetConnector`
-      // Widgets will find and use this value as the `SearchWidget`.
+      // widgets will find and use this value as the `SearchController`.
       searchbase: searchbaseInstance,
       child: MaterialApp(
         title: "SearchBox Demo",
@@ -69,7 +69,7 @@ class HomePage extends StatelessWidget {
                         enablePopularSuggestions: true,
                         showAutoFill: true,
                         maxPopularSuggestions: 3,
-                        size: 10,
+                        size: 5,
                         dataField: [
                           {'field': 'original_title', 'weight': 1},
                           {'field': 'original_title.search', 'weight': 3}
@@ -96,8 +96,8 @@ class HomePage extends StatelessWidget {
                 size: 10,
                 triggerQueryOnInit: true,
                 preserveResults: true,
-                builder: (context, searchWidget) =>
-                    ResultsWidget(searchWidget)),
+                builder: (context, searchController) =>
+                    ResultsWidget(searchController)),
           ),
           // A custom UI widget to render a list of authors
           drawer: SearchWidgetConnector(
@@ -110,12 +110,12 @@ class HomePage extends StatelessWidget {
             react: {
               'and': ['search-widget']
             },
-            builder: (context, searchWidget) {
-              // Call searchWidget's query at first time
-              if (searchWidget.query == null) {
-                searchWidget.triggerDefaultQuery();
+            builder: (context, searchController) {
+              // Call searchController's query at first time
+              if (searchController.query == null) {
+                searchController.triggerDefaultQuery();
               }
-              return AuthorFilter(searchWidget);
+              return AuthorFilter(searchController);
             },
             // Avoid fetching query for each open/close action instead call it manually
             triggerQueryOnInit: false,

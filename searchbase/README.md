@@ -16,8 +16,8 @@ void main() {
   final index = 'gitxplore-app';
   final url = 'https://@arc-cluster-appbase-demo-6pjy6z.searchbase.io';
   final credentials = 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61';
-  // Instantiate the [SearchWidget]
-  final searchWidget = SearchWidget(
+  // Instantiate the [SearchController]
+  final searchController = SearchController(
       // Elasticsearch index name
       index,
       // Appbase URL
@@ -35,18 +35,18 @@ void main() {
   // Get the input element
   final searchElement = querySelector('#search');
 
-  // Bind the searchWidget value to input value
-  searchElement.value = searchWidget.value;
+  // Bind the searchController value to input value
+  searchElement.value = searchController.value;
 
-  // Update the search input value to searchWidget to fetch the results
+  // Update the search input value to searchController to fetch the results
   searchElement.addEventListener('input', (e) {
 	// To fetch the suggestions based on the value changes
-	searchWidget.setValue(e.target.value,
+	searchController.setValue(e.target.value,
         options: Options(triggerDefaultQuery: true));
   });
 
   // Build DOM when search results update
-  searchWidget.subscribeToStateChanges((change) {
+  searchController.subscribeToStateChanges((change) {
 		final results = change['results'].next;
 		final resultsElement = querySelector('#results');
 		resultsElement.innerHTML = '';
@@ -61,7 +61,7 @@ void main() {
  );
 
  // Fetch the default results at initial load
- searchWidget.triggerDefaultQuery();
+ searchController.triggerDefaultQuery();
 }
 ```
 
@@ -85,7 +85,7 @@ The result widget watches for changes to the search and language filter widgets 
 
 The language filter widget is also watching for changes to the search. For example, if somebody searches for `angular` then the language filter will show `javascript` as an option.
 
-> Note: This example is using the `SearchBase` class instead of the `SearchWidget`(that we used in the previous example) class because here we're using multiple widgets that can have dependencies on each other.
+> Note: This example is using the `SearchBase` class instead of the `SearchController`(that we used in the previous example) class because here we're using multiple widgets that can have dependencies on each other.
 
 ```dart
 import 'dart:html';
@@ -99,7 +99,7 @@ void main() {
   final searchbase = SearchBase(index, url, credentials,
       appbaseConfig: AppbaseSettings(recordAnalytics: true));
   // Register search widget => To render the suggestions
-  final searchWidget = searchbase.register('search-widget', {
+  final searchController = searchbase.register('search-widget', {
     'enablePopularSuggestions': true,
     'dataField': [
       'name',
@@ -150,7 +150,7 @@ void main() {
   final input = querySelector('#input');
   void handleInput(e) {
     // Set the value to fetch the suggestions
-    searchWidget.setValue(e.target.value,
+    searchController.setValue(e.target.value,
         options: Options(triggerDefaultQuery: true));
   }
 
@@ -160,7 +160,7 @@ void main() {
     // Fetch the results
     if (e.key == 'Enter') {
       e.preventDefault();
-      searchWidget.triggerCustomQuery();
+      searchController.triggerCustomQuery();
     }
   }
 
@@ -235,7 +235,7 @@ void main() {
     });
   }, ['aggregationData']);
 
-  searchWidget.subscribeToStateChanges((change) {
+  searchController.subscribeToStateChanges((change) {
     print('Track State Updates');
     print(change);
   }, ['results']);

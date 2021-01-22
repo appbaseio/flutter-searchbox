@@ -68,7 +68,7 @@ class SearchBaseProvider extends InheritedWidget {
 /// Build a Widget using the [BuildContext] and [ViewModel].
 typedef ViewModelBuilder<ViewModel> = Widget Function(
   BuildContext context,
-  SearchWidget vm,
+  SearchController vm,
 );
 
 // Can be used to access the searchbase context
@@ -95,7 +95,7 @@ class _SearchWidgetListenerState<S, ViewModel>
 
   final String id;
 
-  SearchWidget componentInstance;
+  SearchController componentInstance;
 
   final List<String> subscribeTo;
 
@@ -243,9 +243,9 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
 
   final bool showMissing;
 
-  final Map Function(SearchWidget component) defaultQuery;
+  final Map Function(SearchController component) defaultQuery;
 
-  final Map Function(SearchWidget component) customQuery;
+  final Map Function(SearchController component) customQuery;
 
   final bool execute;
 
@@ -434,7 +434,7 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
 
 /// [SearchWidgetConnector] represents a search widget that can be used to bind to different kinds of search UI widgets.
 ///
-/// It uses the [SearchWidget] class to bind any UI widget to be able to query appbase.io declaratively. Some examples of components you can bind this with:
+/// It uses the [SearchController] class to bind any UI widget to be able to query appbase.io declaratively. Some examples of components you can bind this with:
 /// -   a category filter widget,
 /// -   a search bar widget,
 /// -   a price range widget,
@@ -445,7 +445,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// Build a Widget using the [BuildContext] and [ViewModel]
   final ViewModelBuilder<ViewModel> builder;
 
-  /// This property allows to define a list of properties of [SearchWidget] class which can trigger the re-build when any changes happen.
+  /// This property allows to define a list of properties of [SearchController] class which can trigger the re-build when any changes happen.
   ///
   /// For example, if `subscribeTo` is defined as `['results']` then it'll only update the UI when results property would change.
   final List<String> subscribeTo;
@@ -655,7 +655,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// Defaults to `N/A`.
   final String missingLabel;
 
-  /// It is a callback function that takes the [SearchWidget] instance as parameter and **returns** the data query to be applied to the source component, as defined in Elasticsearch Query DSL, which doesn't get leaked to other components.
+  /// It is a callback function that takes the [SearchController] instance as parameter and **returns** the data query to be applied to the source component, as defined in Elasticsearch Query DSL, which doesn't get leaked to other components.
   ///
   /// In simple words, `defaultQuery` is used with data-driven components to impact their own data.
   /// It is meant to modify the default query which is used by a component to render the UI.
@@ -668,7 +668,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   ///  For example, in a [QueryType.term] type of component showing a list of cities, you may only want to render cities belonging to `India`.
   ///
   ///```dart
-  /// Map (SearchWidget searchWidget) => ({
+  /// Map (SearchController searchController) => ({
   ///   		'query': {
   ///   			'terms': {
   ///   				'country': ['India'],
@@ -677,9 +677,9 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   ///   	}
   ///   )
   ///```
-  final Map Function(SearchWidget searchWidget) defaultQuery;
+  final Map Function(SearchController searchController) defaultQuery;
 
-  /// It takes [SearchWidget] instance as parameter and **returns** the query to be applied to the dependent widgets by `react` prop, as defined in Elasticsearch Query DSL.
+  /// It takes [SearchController] instance as parameter and **returns** the query to be applied to the dependent widgets by `react` prop, as defined in Elasticsearch Query DSL.
   ///
   /// For example, the following example has two components **search-widget**(to render the suggestions) and **result-widget**(to render the results).
   /// The **result-widget** depends on the **search-widget** to update the results based on the selected suggestion.
@@ -690,7 +690,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// SearchWidgetConnector(
   ///   id: "search-widget",
   ///   dataField: ["original_title", "original_title.search"],
-  ///   customQuery: (SearchWidget searchWidget) => ({
+  ///   customQuery: (SearchController searchController) => ({
   ///     'timeout': '1s',
   ///      'query': {
   ///       'match_phrase_prefix': {
@@ -711,7 +711,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   ///   }
   /// )
   /// ```
-  final Map Function(SearchWidget searchWidget) customQuery;
+  final Map Function(SearchController searchController) customQuery;
 
   /// This property can be used to control (enable/disable) the synonyms behavior for a particular query.
   ///
@@ -1189,7 +1189,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   /// Defaults to `N/A`.
   final String missingLabel;
 
-  /// It is a callback function that takes the [SearchWidget] instance as parameter and **returns** the data query to be applied to the source component, as defined in Elasticsearch Query DSL, which doesn't get leaked to other components.
+  /// It is a callback function that takes the [SearchController] instance as parameter and **returns** the data query to be applied to the source component, as defined in Elasticsearch Query DSL, which doesn't get leaked to other components.
   ///
   /// In simple words, `defaultQuery` is used with data-driven components to impact their own data.
   /// It is meant to modify the default query which is used by a component to render the UI.
@@ -1202,7 +1202,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   ///  For example, in a [QueryType.term] type of component showing a list of cities, you may only want to render cities belonging to `India`.
   ///
   ///```dart
-  /// Map (SearchWidget searchWidget) => ({
+  /// Map (SearchController searchController) => ({
   ///   		'query': {
   ///   			'terms': {
   ///   				'country': ['India'],
@@ -1211,9 +1211,9 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   ///   	}
   ///   )
   ///```
-  final Map Function(SearchWidget searchWidget) defaultQuery;
+  final Map Function(SearchController searchController) defaultQuery;
 
-  /// It takes [SearchWidget] instance as parameter and **returns** the query to be applied to the dependent widgets by `react` prop, as defined in Elasticsearch Query DSL.
+  /// It takes [SearchController] instance as parameter and **returns** the query to be applied to the dependent widgets by `react` prop, as defined in Elasticsearch Query DSL.
   ///
   /// For example, the following example has two components **search-widget**(to render the suggestions) and **result-widget**(to render the results).
   /// The **result-widget** depends on the **search-widget** to update the results based on the selected suggestion.
@@ -1224,7 +1224,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   /// SearchWidgetConnector(
   ///   id: "search-widget",
   ///   dataField: ["original_title", "original_title.search"],
-  ///   customQuery: (SearchWidget searchWidget) => ({
+  ///   customQuery: (SearchController searchController) => ({
   ///     'timeout': '1s',
   ///      'query': {
   ///       'match_phrase_prefix': {
@@ -1245,7 +1245,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   ///   }
   /// )
   /// ```
-  final Map Function(SearchWidget searchWidget) customQuery;
+  final Map Function(SearchController searchController) customQuery;
 
   /// This property can be used to control (enable/disable) the synonyms behavior for a particular query.
   ///
@@ -1492,7 +1492,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
       IconButton(
           icon: Icon(Icons.clear),
           onPressed: () {
-            SearchWidget component =
+            SearchController component =
                 SearchBaseProvider.of(context).getSearchWidget(id);
             // clear value
             if (component != null) {
@@ -1520,7 +1520,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      SearchWidget component =
+      SearchController component =
           SearchBaseProvider.of(context).getSearchWidget(id);
       if (component != null && query.isNotEmpty) {
         component.setValue(query, options: Options(triggerCustomQuery: true));
@@ -1530,12 +1530,12 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
     return Container();
   }
 
-  ListView getSuggestionList(
-      BuildContext context, SearchWidget searchWidget, List<Suggestion> list) {
+  ListView getSuggestionList(BuildContext context,
+      SearchController searchController, List<Suggestion> list) {
     List<Widget> suggestionsList = list.map((suggestion) {
       void handleTap() {
         // Perform actions on suggestions tap
-        searchWidget.setValue(suggestion.value,
+        searchController.setValue(suggestion.value,
             options: Options(triggerCustomQuery: true));
         this.query = suggestion.value;
         String objectId;
@@ -1544,10 +1544,10 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
         }
         if (objectId != null &&
             suggestion.clickId != null &&
-            searchWidget.appbaseSettings?.recordAnalytics == true) {
+            searchController.appbaseSettings?.recordAnalytics == true) {
           try {
             // Record click analytics
-            searchWidget.recordClick({objectId: suggestion.clickId},
+            searchController.recordClick({objectId: suggestion.clickId},
                 isSuggestionClick: true);
           } catch (e) {
             print(e);
@@ -1650,31 +1650,32 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
         preserveResults: preserveResults,
         value: query,
         results: results,
-        builder: (context, searchWidget) {
-          if (query != searchWidget.value) {
+        builder: (context, searchController) {
+          if (query != searchController.value) {
             // To fetch the suggestions
-            searchWidget.setValue(query,
+            searchController.setValue(query,
                 options: Options(triggerDefaultQuery: true));
           }
           if (query.isEmpty) {
             if (enableRecentSearches == true) {
               // Fetch recent searches
-              searchWidget.getRecentSearches();
+              searchController.getRecentSearches();
             }
           }
           // If query is empty then render recent searches
           if (query.isEmpty &&
-              searchWidget.recentSearches?.isNotEmpty == true) {
+              searchController.recentSearches?.isNotEmpty == true) {
             return getSuggestionList(
-                context, searchWidget, searchWidget.recentSearches);
+                context, searchController, searchController.recentSearches);
           }
-          final List<Suggestion> popularSuggestions = searchWidget.suggestions
+          final List<Suggestion> popularSuggestions = searchController
+              .suggestions
               .where((suggestion) => suggestion.isPopularSuggestion)
               .toList();
           List<Suggestion> filteredSuggestions = [];
           // Only display relevant suggestions when query is not empty
           if (query.isNotEmpty) {
-            filteredSuggestions = searchWidget.suggestions
+            filteredSuggestions = searchController.suggestions
                 .where((suggestion) => !suggestion.isPopularSuggestion)
                 .toList();
             // Limit the suggestions by size
@@ -1690,14 +1691,15 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
             ];
           }
           return (popularSuggestions.isEmpty && filteredSuggestions.isEmpty)
-              ? ((query.isNotEmpty && searchWidget.requestPending == false)
+              ? ((query.isNotEmpty && searchController.requestPending == false)
                   ? Container(
                       child: Center(child: Text('No suggestions found')),
                     )
-                  : searchWidget.requestPending
+                  : searchController.requestPending
                       ? Center(child: CircularProgressIndicator())
                       : Container())
-              : getSuggestionList(context, searchWidget, filteredSuggestions);
+              : getSuggestionList(
+                  context, searchController, filteredSuggestions);
         });
   }
 }

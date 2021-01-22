@@ -1,6 +1,6 @@
 import 'utils.dart';
 
-/// Represents the response for [QueryType.search], [QueryType.geo] and [QueryType.range] type of [SearchWidget](s).
+/// Represents the response for [QueryType.search], [QueryType.geo] and [QueryType.range] type of [SearchController](s).
 class Results {
   /// An array of results obtained from the applied query.
   List<Map<String, dynamic>> data;

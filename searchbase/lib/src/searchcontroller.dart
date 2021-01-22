@@ -18,7 +18,7 @@ class _GenerateQueryResponse {
 
 const suggestionQueryID = 'DataSearch__suggestions';
 
-/// The [SearchWidget] class is a search widget that can be used to bind to different kinds of search UI widgets.
+/// The [SearchController] class can be used to bind to different kinds of search UI widgets.
 ///
 /// For example,
 /// -   a category filter widget,
@@ -26,7 +26,7 @@ const suggestionQueryID = 'DataSearch__suggestions';
 /// -   a price range widget,
 /// -   a location filter widget,
 /// -   a widget to render the search results.
-class SearchWidget extends Base {
+class SearchController extends Base {
   // RS API properties
 
   /// A unique identifier of the component, can be referenced in other widgets' `react` prop to reactively update data.
@@ -191,7 +191,7 @@ class SearchWidget extends Base {
   /// Defaults to `N/A`.
   String missingLabel;
 
-  /// It is a callback function that takes the [SearchWidget] instance as parameter and **returns** the data query to be applied to the source component, as defined in Elasticsearch Query DSL, which doesn't get leaked to other components.
+  /// It is a callback function that takes the [SearchController] instance as parameter and **returns** the data query to be applied to the source component, as defined in Elasticsearch Query DSL, which doesn't get leaked to other components.
   ///
   /// In simple words, `defaultQuery` is used with data-driven components to impact their own data.
   /// It is meant to modify the default query which is used by a component to render the UI.
@@ -204,7 +204,7 @@ class SearchWidget extends Base {
   ///  For example, in a [QueryType.term] type of component showing a list of cities, you may only want to render cities belonging to `India`.
   ///
   ///```dart
-  /// Map (SearchWidget searchWidget) => ({
+  /// Map (SearchController searchController) => ({
   ///   		'query': {
   ///   			'terms': {
   ///   				'country': ['India'],
@@ -213,9 +213,9 @@ class SearchWidget extends Base {
   ///   	}
   ///   )
   ///```
-  Map Function(SearchWidget searchWidget) defaultQuery;
+  Map Function(SearchController searchController) defaultQuery;
 
-  /// It takes [SearchWidget] instance as parameter and **returns** the query to be applied to the dependent widgets by `react` prop, as defined in Elasticsearch Query DSL.
+  /// It takes [SearchController] instance as parameter and **returns** the query to be applied to the dependent widgets by `react` prop, as defined in Elasticsearch Query DSL.
   ///
   /// For example, the following example has two components **search-widget**(to render the suggestions) and **result-widget**(to render the results).
   /// The **result-widget** depends on the **search-widget** to update the results based on the selected suggestion.
@@ -226,7 +226,7 @@ class SearchWidget extends Base {
   /// SearchWidgetConnector(
   ///   id: "search-widget",
   ///   dataField: ["original_title", "original_title.search"],
-  ///   customQuery: (SearchWidget searchWidget) => ({
+  ///   customQuery: (SearchController searchController) => ({
   ///     'timeout': '1s',
   ///      'query': {
   ///       'match_phrase_prefix': {
@@ -247,7 +247,7 @@ class SearchWidget extends Base {
   ///   }
   /// )
   /// ```
-  Map Function(SearchWidget searchWidget) customQuery;
+  Map Function(SearchController searchController) customQuery;
 
   /// This property can be used to control (enable/disable) the synonyms behavior for a particular query.
   ///
@@ -358,7 +358,7 @@ class SearchWidget extends Base {
   /// It is called every-time the widget's value changes.
   ///
   /// This property is handy in cases where you want to generate a side-effect on value selection.
-  /// For example: You want to show a pop-up modal with the valid discount coupon code when a user searches for a product in a [SearchWidget].
+  /// For example: You want to show a pop-up modal with the valid discount coupon code when a user searches for a product in a [SearchController].
   final void Function(String next, {String prev}) onValueChange;
 
   /// It can be used to listen for the `results` changes.
@@ -388,7 +388,7 @@ class SearchWidget extends Base {
   // query search ID
   String _queryId;
 
-  SearchWidget(
+  SearchController(
     String index,
     String url,
     String credentials,
@@ -642,7 +642,7 @@ class SearchWidget extends Base {
 
   /// to update `defaultQuery` property
   void setDefaultQuery(
-      Map<dynamic, dynamic> Function(SearchWidget) defaultQuery,
+      Map<dynamic, dynamic> Function(SearchController) defaultQuery,
       {Options options}) {
     final prev = this.defaultQuery;
     this.defaultQuery = defaultQuery;
@@ -650,7 +650,8 @@ class SearchWidget extends Base {
   }
 
   /// sets the `customQuery` property
-  void setCustomQuery(Map<dynamic, dynamic> Function(SearchWidget) customQuery,
+  void setCustomQuery(
+      Map<dynamic, dynamic> Function(SearchController) customQuery,
       {Options options}) {
     final prev = this.customQuery;
     this.customQuery = customQuery;
@@ -669,7 +670,7 @@ class SearchWidget extends Base {
   /// Set the `isSuggestionClick` to `true` to record suggestion click.
   /// For example,
   /// ```dart
-  /// searchWidget.recordClick({
+  /// searchController.recordClick({
   ///   'cf827a07-60a6-43ef-ab93-e1f8e1e3e1a8': 2 // [_id]: click_position
   /// }, true);
   /// ```
@@ -682,7 +683,7 @@ class SearchWidget extends Base {
   ///
   /// For example,
   /// ```dart
-  /// searchWidget.recordConversions(['cf827a07-60a6-43ef-ab93-e1f8e1e3e1a8']);
+  /// searchController.recordConversions(['cf827a07-60a6-43ef-ab93-e1f8e1e3e1a8']);
   /// ```
   Future recordConversions(List<String> objects) async {
     return this.conversion(objects, queryId: this.queryId);

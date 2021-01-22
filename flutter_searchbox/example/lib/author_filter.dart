@@ -34,9 +34,9 @@ class FilterHeader extends PreferredSize {
 }
 
 class AuthorFilter extends StatelessWidget {
-  final SearchWidget searchWidget;
+  final SearchController searchController;
 
-  AuthorFilter(this.searchWidget);
+  AuthorFilter(this.searchController);
 
   @override
   Widget build(BuildContext context) {
@@ -70,11 +70,11 @@ class AuthorFilter extends StatelessWidget {
                         ],
                       ),
                     ),
-                    body: searchWidget.requestPending
+                    body: searchController.requestPending
                         ? Center(child: CircularProgressIndicator())
                         : ListView(
-                            children:
-                                searchWidget.aggregationData.data.map((bucket) {
+                            children: searchController.aggregationData.data
+                                .map((bucket) {
                               return Container(
                                 child: Column(
                                   children: [
@@ -85,21 +85,21 @@ class AuthorFilter extends StatelessWidget {
                                       dense: true,
                                       title: new Text(
                                           "${bucket['_key']} (${bucket['_doc_count']})"),
-                                      value: (searchWidget.value == null
+                                      value: (searchController.value == null
                                               ? []
-                                              : searchWidget.value)
+                                              : searchController.value)
                                           .contains(bucket['_key']),
                                       onChanged: (bool value) {
                                         final List<String> values =
-                                            searchWidget.value == null
+                                            searchController.value == null
                                                 ? []
-                                                : searchWidget.value;
+                                                : searchController.value;
                                         if (values.contains(bucket['_key'])) {
                                           values.remove(bucket['_key']);
                                         } else {
                                           values.add(bucket['_key']);
                                         }
-                                        searchWidget.setValue(values);
+                                        searchController.setValue(values);
                                       },
                                     )
                                   ],
@@ -137,7 +137,7 @@ class AuthorFilter extends StatelessWidget {
                               ),
                             ),
                             onPressed: () {
-                              searchWidget.triggerCustomQuery();
+                              searchController.triggerCustomQuery();
                               Navigator.of(context).pop();
                             },
                           ),

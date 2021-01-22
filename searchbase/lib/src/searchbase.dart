@@ -1,14 +1,14 @@
 import 'package:searchbase/src/base.dart';
 import 'types.dart';
-import 'searchwidget.dart';
+import 'searchcontroller.dart';
 import 'constants.dart';
 
-/// The [SearchBase] class holds the state for all the active [SearchWidget](s) and can be used to provide the global configuration to the registered [SearchWidget](s).
+/// The [SearchBase] class holds the state for all the active [SearchController](s) and can be used to provide the global configuration to the registered [SearchController](s).
 ///
 /// It serves the following tasks:
-/// -   To `register` a [SearchWidget] by unique `id`
-/// -   To `unregister` a [SearchWidget] by `id`
-/// -   To retrieve the instance of the [SearchWidget] class by `id`
+/// -   To `register` a [SearchController] by unique `id`
+/// -   To `unregister` a [SearchController] by `id`
+/// -   To retrieve the instance of the [SearchController] class by `id`
 /// -   To provide an ability to watch registered widget reactively with the help of the `react` property.
 ///
 /// Note:
@@ -16,11 +16,11 @@ import 'constants.dart';
 /// 1. The `id` property is a unique identifier to each search widget.
 /// 2. The [SearchBase] class is useful when you're using multiple search widgets that depend on each other.
 /// For example, a filter widget (to display the category options) depends on the search query (search widget).
-/// If you're only using a single widget then [SearchWidget] class should work well.
+/// If you're only using a single widget then [SearchController] class should work well.
 class SearchBase extends Base {
   /* ------ Private properties only for the internal use ----------- */
   // active widgets
-  Map<String, SearchWidget> _searchWidgets;
+  Map<String, SearchController> _searchWidgets;
 
   SearchBase(String index, String url, String credentials,
       {AppbaseSettings appbaseConfig,
@@ -39,7 +39,7 @@ class SearchBase extends Base {
 
   /// This method can be used to register a search widget with a unique `id`.
   ///
-  /// It returns the instance of the [SearchWidget] class.
+  /// It returns the instance of the [SearchController] class.
   /// The following example registers a widget with the second param as a Map.
   /// ```dart
   /// final searchBase = SearchBase(
@@ -54,7 +54,7 @@ class SearchBase extends Base {
   /// });
   /// ```
   ///
-  /// The following example registers a [SearchWidget] with second param as an instance of [SearchWidget] class.
+  /// The following example registers a [SearchController] with second param as an instance of [SearchController] class.
   ///
   /// ```dart
   /// final searchBase = SearchBase(
@@ -63,7 +63,7 @@ class SearchBase extends Base {
   ///   'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61'
   /// );
   ///
-  /// final searchWidget = SearchWidget(
+  /// final searchController = SearchController(
   ///   'gitxplore-app',
   ///   'https://@arc-cluster-appbase-demo-6pjy6z.searchbase.io',
   ///   'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61',
@@ -72,13 +72,13 @@ class SearchBase extends Base {
   ///   value: ''
   /// );
   ///
-  /// searchBase.register('search-widget', searchWidget);
+  /// searchBase.register('search-widget', searchController);
   ///
   /// ```
   ///
   /// Additionally, you can override the global configurations by defining it for a particular widget. For example, to register a widget with a different `index` name.
   ///
-  SearchWidget register(String widgetId, dynamic searchWidget) {
+  SearchController register(String widgetId, dynamic searchController) {
     if (widgetId == "") {
       throw (ErrorMessages[InvalidIndex]);
     }
@@ -86,75 +86,78 @@ class SearchBase extends Base {
       // return existing instance
       return this._searchWidgets[widgetId];
     }
-    SearchWidget componentInstance;
-    if (searchWidget != null && searchWidget is Map) {
+    SearchController componentInstance;
+    if (searchController != null && searchController is Map) {
       // create instance from object with all the options
-      componentInstance = SearchWidget(
-        searchWidget["index"] != null ? searchWidget["index"] : this.index,
-        searchWidget["url"] != null ? searchWidget["url"] : this.url,
-        searchWidget["credentials"] != null
-            ? searchWidget["credentials"]
+      componentInstance = SearchController(
+        searchController["index"] != null
+            ? searchController["index"]
+            : this.index,
+        searchController["url"] != null ? searchController["url"] : this.url,
+        searchController["credentials"] != null
+            ? searchController["credentials"]
             : this.credentials,
         widgetId,
-        headers: searchWidget["headers"] is Map<String, String>
-            ? searchWidget["headers"]
+        headers: searchController["headers"] is Map<String, String>
+            ? searchController["headers"]
             : this.headers,
-        transformRequest: searchWidget["transformRequest"] is TransformRequest
-            ? searchWidget["transformRequest"]
-            : this.transformRequest,
+        transformRequest:
+            searchController["transformRequest"] is TransformRequest
+                ? searchController["transformRequest"]
+                : this.transformRequest,
         transformResponse:
-            searchWidget["transformResponse"] is TransformResponse
-                ? searchWidget["transformResponse"]
+            searchController["transformResponse"] is TransformResponse
+                ? searchController["transformResponse"]
                 : this.transformResponse,
-        appbaseConfig: searchWidget["appbaseConfig"] is AppbaseSettings
-            ? searchWidget["appbaseConfig"]
+        appbaseConfig: searchController["appbaseConfig"] is AppbaseSettings
+            ? searchController["appbaseConfig"]
             : this.appbaseConfig,
-        type: searchWidget["type"],
-        dataField: searchWidget["dataField"],
-        react: searchWidget["react"],
-        queryFormat: searchWidget[" queryFormat"],
-        categoryField: searchWidget["categoryField"],
-        categoryValue: searchWidget["categoryValue"],
-        nestedField: searchWidget["nestedField"],
-        from: searchWidget["from"],
-        size: searchWidget["size"],
-        sortBy: searchWidget["sortBy"],
-        aggregationField: searchWidget["aggregationField"],
-        after: searchWidget["after"],
-        includeNullValues: searchWidget["includeNullValues"],
-        includeFields: searchWidget["includeFields"],
-        excludeFields: searchWidget["excludeFields"],
-        results: searchWidget["results"],
-        fuzziness: searchWidget["fuzziness"],
-        searchOperators: searchWidget["searchOperators"],
-        highlight: searchWidget["highlight"],
-        highlightField: searchWidget["highlightField"],
-        customHighlight: searchWidget["customHighlight"],
-        interval: searchWidget["interval"],
-        aggregations: searchWidget["aggregations"],
-        missingLabel: searchWidget["missingLabel"],
-        showMissing: searchWidget["showMissing"],
-        enableSynonyms: searchWidget["enableSynonyms"],
-        selectAllLabel: searchWidget["selectAllLabel"],
-        pagination: searchWidget["pagination"],
-        queryString: searchWidget["queryString"],
-        defaultQuery: searchWidget["defaultQuery"],
-        customQuery: searchWidget["customQuery"],
-        beforeValueChange: searchWidget["beforeValueChange"],
-        onValueChange: searchWidget["onValueChange"],
-        onResults: searchWidget["onResults"],
-        onAggregationData: searchWidget["onAggregationData"],
-        onError: searchWidget["onError"],
-        onRequestStatusChange: searchWidget["onRequestStatusChange"],
-        onQueryChange: searchWidget["onQueryChange"],
-        enablePopularSuggestions: searchWidget["enablePopularSuggestions"],
-        maxPopularSuggestions: searchWidget["maxPopularSuggestions"],
-        showDistinctSuggestions: searchWidget["showDistinctSuggestions"],
-        preserveResults: searchWidget["preserveResults"],
-        value: searchWidget["value"],
+        type: searchController["type"],
+        dataField: searchController["dataField"],
+        react: searchController["react"],
+        queryFormat: searchController[" queryFormat"],
+        categoryField: searchController["categoryField"],
+        categoryValue: searchController["categoryValue"],
+        nestedField: searchController["nestedField"],
+        from: searchController["from"],
+        size: searchController["size"],
+        sortBy: searchController["sortBy"],
+        aggregationField: searchController["aggregationField"],
+        after: searchController["after"],
+        includeNullValues: searchController["includeNullValues"],
+        includeFields: searchController["includeFields"],
+        excludeFields: searchController["excludeFields"],
+        results: searchController["results"],
+        fuzziness: searchController["fuzziness"],
+        searchOperators: searchController["searchOperators"],
+        highlight: searchController["highlight"],
+        highlightField: searchController["highlightField"],
+        customHighlight: searchController["customHighlight"],
+        interval: searchController["interval"],
+        aggregations: searchController["aggregations"],
+        missingLabel: searchController["missingLabel"],
+        showMissing: searchController["showMissing"],
+        enableSynonyms: searchController["enableSynonyms"],
+        selectAllLabel: searchController["selectAllLabel"],
+        pagination: searchController["pagination"],
+        queryString: searchController["queryString"],
+        defaultQuery: searchController["defaultQuery"],
+        customQuery: searchController["customQuery"],
+        beforeValueChange: searchController["beforeValueChange"],
+        onValueChange: searchController["onValueChange"],
+        onResults: searchController["onResults"],
+        onAggregationData: searchController["onAggregationData"],
+        onError: searchController["onError"],
+        onRequestStatusChange: searchController["onRequestStatusChange"],
+        onQueryChange: searchController["onQueryChange"],
+        enablePopularSuggestions: searchController["enablePopularSuggestions"],
+        maxPopularSuggestions: searchController["maxPopularSuggestions"],
+        showDistinctSuggestions: searchController["showDistinctSuggestions"],
+        preserveResults: searchController["preserveResults"],
+        value: searchController["value"],
       );
-    } else if (searchWidget is SearchWidget) {
-      componentInstance = searchWidget;
+    } else if (searchController is SearchController) {
+      componentInstance = searchController;
       // set the id property on instance
       componentInstance.id = widgetId;
     }
@@ -165,7 +168,7 @@ class SearchBase extends Base {
     return componentInstance;
   }
 
-  /// This method is useful to unregister a [SearchWidget] by `id`.
+  /// This method is useful to unregister a [SearchController] by `id`.
   ///
   /// It is a good practice to unregister (remove) an unmounted/unused widget to avoid any side-effects.
   void unregister(String widgetId) {
@@ -174,15 +177,15 @@ class SearchBase extends Base {
     }
   }
 
-  /// This method can be used to retrieve the instance of the [SearchWidget] class for a particular widget by `id`.
-  SearchWidget getSearchWidget(String widgetId) {
+  /// This method can be used to retrieve the instance of the [SearchController] class for a particular widget by `id`.
+  SearchController getSearchWidget(String widgetId) {
     return this._searchWidgets[widgetId];
   }
 
   /// This method returns all the active widgets registered on the `SearchBase` instance.
   ///
   /// The widgets state can be used for various purposes, for example, to display the selected filters in the UI.
-  Map<String, SearchWidget> getActiveWidgets() {
+  Map<String, SearchController> getActiveWidgets() {
     return this._searchWidgets;
   }
 }

@@ -16,7 +16,7 @@ void main() {
   final searchbase = SearchBase(index, url, credentials,
       appbaseConfig: AppbaseSettings(recordAnalytics: true));
   // Register search widget => To render the suggestions
-  final searchWidget = searchbase.register('search-widget', {
+  final searchController = searchbase.register('search-widget', {
     'enablePopularSuggestions': true,
     'dataField': [
       'name',
@@ -67,7 +67,7 @@ void main() {
   final input = querySelector('#input');
   void handleInput(e) {
     // Set the value to fetch the suggestions
-    searchWidget.setValue(e.target.value,
+    searchController.setValue(e.target.value,
         options: Options(triggerDefaultQuery: true));
   }
 
@@ -77,7 +77,7 @@ void main() {
     // Fetch the results
     if (e.key == 'Enter') {
       e.preventDefault();
-      searchWidget.triggerCustomQuery();
+      searchController.triggerCustomQuery();
     }
   }
 
@@ -149,9 +149,9 @@ void main() {
     });
   }, ['aggregationData']);
 
-  searchWidget.subscribeToStateChanges((change) {
+  searchController.subscribeToStateChanges((change) {
     print('Track State Updates');
     print("Search Suggestions");
-    window.console.log(searchWidget.suggestions);
+    window.console.log(searchController.suggestions);
   }, ['results']);
 }

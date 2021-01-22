@@ -1,6 +1,6 @@
 import 'utils.dart';
 
-/// Represents the elasticsearch aggregations response for [QueryType.term] type of [SearchWidget](s).
+/// Represents the elasticsearch aggregations response for [QueryType.term] type of [SearchController](s).
 class Aggregations {
   /// An array of composite aggregations obtained from the applied aggs in options.
   List<Map> data;
