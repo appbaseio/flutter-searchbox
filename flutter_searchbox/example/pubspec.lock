@@ -75,7 +75,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.0.0-alpha.3"
+    version: "1.0.0-alpha.4"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -140,10 +140,10 @@ packages:
   searchbase:
     dependency: "direct main"
     description:
-      path: "../../searchbase"
-      relative: true
-    source: path
-    version: "1.0.0-alpha.6"
+      name: searchbase
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0-alpha.7"
   sky_engine:
     dependency: transitive
     description: flutter

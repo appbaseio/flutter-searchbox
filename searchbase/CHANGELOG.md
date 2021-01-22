@@ -1,3 +1,7 @@
+## 1.0.0-alpha.7
+
+BREAKING: Rename SearchWidget class to SearchController
+
 ## 1.0.0-alpha.6
 
 - Format Docs

@@ -1,6 +1,6 @@
 ## SearchBase
 
-[searchbase](https://github.com/appbaseio/searchbox/tree/master/packages/searchbase) is a lightweight and platform agnostic library that provides scaffolding to create search experiences powered by Elasticsearch.
+[searchbase](https://github.com/appbaseio/flutter-searchbox/tree/master/searchbase) is a lightweight and platform agnostic library that provides scaffolding to create search experiences powered by Elasticsearch.
 
 ## Example
 

@@ -1,5 +1,11 @@
+## [1.0.0-alpha.4] - 22-01-2021
+
+- Update searchbase that introduces a breaking change to rename SearchWidget class to SearchController class
+
 ## [1.0.0-alpha.3] - 22-01-2021
+
 - Format Docs
+
 ## [1.0.0-alpha.2] - 21-01-2021
 
 - Update example to fix hot reloading issues
