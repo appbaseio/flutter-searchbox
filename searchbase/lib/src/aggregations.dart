@@ -37,8 +37,13 @@ class Aggregations {
   }
 
   /// Method to set data explicitly.
-  void setData(String aggField, List<Map> data) {
+  void setData(String aggField, List<Map> data, {bool append}) {
     // parse aggregation buckets
-    this.data = parseCompAggToHits(aggField, data);
+    List<Map> parsedData = parseCompAggToHits(aggField, data);
+    if (append == true) {
+      this.data += parsedData;
+    } else {
+      this.data = parsedData;
+    }
   }
 }

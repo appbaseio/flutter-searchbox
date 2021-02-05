@@ -662,6 +662,7 @@ class SearchController extends Base {
   void setAfter(Map after, {Options options}) {
     final prev = this.after;
     this.after = after;
+    this.aggregationData.setAfterKey(after);
     this._applyOptions(options, 'after', prev, after);
   }
 
@@ -822,7 +823,8 @@ class SearchController extends Base {
             if (rawResults['aggregations'] != null) {
               componentInstance._handleAggregationResponse(
                   rawResults['aggregations'],
-                  options: new Options(stateChanges: options?.stateChanges));
+                  options: new Options(stateChanges: options?.stateChanges),
+                  append: false);
             }
           }
         });
@@ -1211,7 +1213,8 @@ class SearchController extends Base {
     return Future<Map>.value(requestOptions);
   }
 
-  _handleAggregationResponse(Map aggsResponse, {Options options}) {
+  _handleAggregationResponse(Map aggsResponse,
+      {Options options, bool append = true}) {
     aggregationField = this.aggregationField;
     if ((aggregationField == null || aggregationField == "") &&
         this.dataField is String) {
@@ -1225,7 +1228,8 @@ class SearchController extends Base {
         final mapped = (aggsResponse[aggregationField]['buckets'] as List)
             .map((model) => Map.from(model));
         final data = mapped.toList();
-        this.aggregationData.setData(aggregationField, data);
+        this.aggregationData.setData(aggregationField, data,
+            append: this.preserveResults && append);
       }
       this._applyOptions(new Options(stateChanges: options?.stateChanges),
           'aggregationData', prev, this.aggregationData);
