@@ -1,3 +1,7 @@
+## 1.0.0-alpha.9
+
+- Fix type error when `preserveResults` is not defined
+
 ## 1.0.0-alpha.8
 
 - Add support to paginate aggregations

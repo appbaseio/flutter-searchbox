@@ -1229,7 +1229,7 @@ class SearchController extends Base {
             .map((model) => Map.from(model));
         final data = mapped.toList();
         this.aggregationData.setData(aggregationField, data,
-            append: this.preserveResults && append);
+            append: this.preserveResults == true && append);
       }
       this._applyOptions(new Options(stateChanges: options?.stateChanges),
           'aggregationData', prev, this.aggregationData);

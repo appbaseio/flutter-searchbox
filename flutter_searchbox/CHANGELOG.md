@@ -1,5 +1,11 @@
+## [1.0.0-alpha.6] - 17-02-2021
+
+- Update searchbase
+
 ## [1.0.0-alpha.5] - 05-02-2021
+
 - Add support to implement pagination with aggregations
+
 ## [1.0.0-alpha.4] - 22-01-2021
 
 - Update searchbase that introduces a breaking change to rename SearchWidget class to SearchController class
