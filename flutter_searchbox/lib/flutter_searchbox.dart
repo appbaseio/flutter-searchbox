@@ -1677,7 +1677,8 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
           if (query.isEmpty) {
             if (enableRecentSearches == true) {
               // Fetch recent searches
-              searchController.getRecentSearches();
+              searchController.getRecentSearches(
+                  options: Options(stateChanges: false));
             }
           }
           // If query is empty then render recent searches
