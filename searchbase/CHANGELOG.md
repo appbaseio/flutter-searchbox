@@ -1,3 +1,11 @@
+## 1.0.1
+
+- Fix docs
+
+## 1.0.0
+
+- Add `aggregationSize` property to define size of aggregations
+
 ## 1.0.0-alpha.9
 
 - Fix type error when `preserveResults` is not defined

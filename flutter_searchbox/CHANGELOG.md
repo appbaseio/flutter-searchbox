@@ -1,3 +1,8 @@
+## [1.0.0] - 19-02-2021
+
+- Add `aggregationSize` property to define size of aggregations
+- Fix an issue with multiple API calls to recent searches when query is empty
+
 ## [1.0.0-alpha.6] - 17-02-2021
 
 - Update searchbase
