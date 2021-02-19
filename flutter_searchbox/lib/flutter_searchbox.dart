@@ -217,6 +217,8 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
 
   final String aggregationField;
 
+  final int aggregationSize;
+
   final Map after;
 
   final bool includeNullValues;
@@ -328,6 +330,7 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
     this.size,
     this.sortBy,
     this.aggregationField,
+    this.aggregationSize,
     this.after,
     this.includeNullValues,
     this.includeFields,
@@ -390,6 +393,7 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
           'size': size,
           'sortBy': sortBy,
           'aggregationField': aggregationField,
+          'aggregationSize': aggregationSize,
           'after': after,
           'includeNullValues': includeNullValues,
           'includeFields': includeFields,
@@ -589,6 +593,11 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   ///
   /// It utilizes [composite aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-composite-aggregation.html) which are newly introduced in ES v6 and offer vast performance benefits over a traditional terms aggregation.
   final String aggregationField;
+
+  /// To set the number of buckets to be returned by aggregations.
+  ///
+  /// > Note: This is a new feature and only available for appbase versions >= 7.41.0.
+  final int aggregationSize;
 
   /// This property can be used to implement the pagination for `aggregations`.
   ///
@@ -903,6 +912,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
     this.size,
     this.sortBy,
     this.aggregationField,
+    this.aggregationSize,
     this.after,
     this.includeNullValues,
     this.includeFields,
@@ -969,6 +979,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
             size: size,
             sortBy: sortBy,
             aggregationField: aggregationField,
+            aggregationSize: aggregationSize,
             after: after,
             includeNullValues: includeNullValues,
             includeFields: includeFields,
@@ -1123,6 +1134,11 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   ///
   /// It utilizes [composite aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-composite-aggregation.html) which are newly introduced in ES v6 and offer vast performance benefits over a traditional terms aggregation.
   final String aggregationField;
+
+  /// To set the number of buckets to be returned by aggregations.
+  ///
+  /// > Note: This is a new feature and only available for appbase versions >= 7.41.0.
+  final int aggregationSize;
 
   /// This property can be used to implement the pagination for `aggregations`.
   ///
@@ -1448,6 +1464,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
     this.size,
     this.sortBy,
     this.aggregationField,
+    this.aggregationSize,
     this.after,
     this.includeNullValues,
     this.includeFields,
@@ -1618,6 +1635,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
         size: size,
         sortBy: sortBy,
         aggregationField: aggregationField,
+        aggregationSize: aggregationSize,
         after: after,
         includeNullValues: includeNullValues,
         includeFields: includeFields,

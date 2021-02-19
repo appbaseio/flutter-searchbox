@@ -126,6 +126,11 @@ class SearchController extends Base {
   /// It utilizes [composite aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-composite-aggregation.html) which are newly introduced in ES v6 and offer vast performance benefits over a traditional terms aggregation.
   String aggregationField;
 
+  /// To set the number of buckets to be returned by aggregations.
+  ///
+  /// > Note: This is a new feature and only available for appbase versions >= 7.41.0.
+  final int aggregationSize;
+
   /// This property can be used to implement the pagination for `aggregations`.
   ///
   /// We use the [composite aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-composite-aggregation.html) of `Elasticsearch` to execute the aggregations' query,
@@ -408,6 +413,7 @@ class SearchController extends Base {
     this.size,
     this.sortBy,
     this.aggregationField,
+    this.aggregationSize,
     this.after,
     this.includeNullValues,
     this.includeFields,
@@ -528,6 +534,7 @@ class SearchController extends Base {
       'fieldWeights': getNormalizedWeights(this.dataField),
       'includeNullValues': includeNullValues,
       'aggregationField': aggregationField,
+      'aggregationSize': aggregationSize,
       'categoryField': categoryField,
       'missingLabel': missingLabel,
       'showMissing': showMissing,

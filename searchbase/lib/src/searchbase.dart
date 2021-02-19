@@ -123,6 +123,7 @@ class SearchBase extends Base {
         size: searchController["size"],
         sortBy: searchController["sortBy"],
         aggregationField: searchController["aggregationField"],
+        aggregationSize: searchController["aggregationSize"],
         after: searchController["after"],
         includeNullValues: searchController["includeNullValues"],
         includeFields: searchController["includeFields"],
