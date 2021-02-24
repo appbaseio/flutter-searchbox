@@ -106,10 +106,10 @@ void main() {
                         <p>""";
 
     resultElement.setInnerHtml("${resultStats}${items.join('')}",
-        validator: new NodeValidatorBuilder.common()
+        validator: NodeValidatorBuilder.common()
           ..allowHtml5()
           ..allowElement('img',
-              attributes: ['src'], uriPolicy: new DefaultUriPolicy()));
+              attributes: ['src'], uriPolicy: DefaultUriPolicy()));
   }, ['results']);
 
   // Fetch initial filter options

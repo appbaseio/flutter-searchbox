@@ -1,3 +1,7 @@
+## [1.1.0] - 25-02-2021
+
+- Add support for voice search in `SearchBox` widget
+
 ## [1.0.0] - 19-02-2021
 
 - Add `aggregationSize` property to define size of aggregations

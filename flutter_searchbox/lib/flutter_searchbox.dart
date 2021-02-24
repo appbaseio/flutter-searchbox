@@ -1,9 +1,12 @@
 library flutter_searchbox;
 
+import 'dart:async';
 import 'package:searchbase/searchbase.dart';
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:speech_to_text/speech_to_text_provider.dart' as stp;
+import 'package:speech_to_text/speech_recognition_event.dart' as ste;
 
 /// If the SearchBaseProvider.of method fails, this error will be thrown.
 ///
@@ -434,6 +437,115 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
         shouldListenForChanges: shouldListenForChanges,
         destroyOnDispose: destroyOnDispose,
       );
+}
+
+class _MicButtonState extends State<_MicButton>
+    with SingleTickerProviderStateMixin {
+  final stp.SpeechToTextProvider speechToTextInstance;
+  AnimationController _animationController;
+  Animation _colorTween;
+  StreamSubscription<ste.SpeechRecognitionEvent> _subscription;
+
+  bool _isListening = false;
+  bool _isSpeechAvailable = false;
+  bool _isSubscribed = false;
+
+  final void Function(String out) onMicResults;
+
+  _MicButtonState(this.speechToTextInstance, {this.onMicResults});
+
+  @override
+  void initState() {
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 40));
+    _colorTween = ColorTween(begin: Colors.blue[50], end: Colors.blue[400])
+        .animate(_animationController);
+    _subscription = speechToTextInstance.stream.listen((recognitionEvent) {
+      if (recognitionEvent.isListening != _isListening) {
+        setState(() {
+          _isListening = recognitionEvent.isListening;
+        });
+        if (recognitionEvent.isListening) {
+          changeColors();
+        }
+      }
+      if (recognitionEvent.eventType ==
+          ste.SpeechRecognitionEventType.finalRecognitionEvent) {
+        onMicResults(recognitionEvent.recognitionResult.recognizedWords);
+      }
+    }, cancelOnError: true);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    _subscription.cancel();
+    super.dispose();
+  }
+
+  Future changeColors() async {
+    while (true) {
+      await new Future.delayed(const Duration(milliseconds: 60), () {
+        if (mounted) {
+          if (_animationController.status == AnimationStatus.completed) {
+            _animationController.reverse();
+          } else {
+            _animationController.forward();
+          }
+        }
+      });
+    }
+  }
+
+  void start() async {
+    bool isSpeechAvailable = _isSpeechAvailable;
+    if (!isSpeechAvailable) {
+      isSpeechAvailable = await speechToTextInstance.initialize();
+      setState(() {
+        _isSpeechAvailable = isSpeechAvailable;
+        _isSubscribed = true;
+      });
+    }
+    if (isSpeechAvailable) {
+      speechToTextInstance.listen(
+        partialResults: false,
+        listenFor: Duration(seconds: 3),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+        icon: _isListening
+            ? AnimatedBuilder(
+                animation: _colorTween,
+                builder: (context, child) => Icon(
+                  Icons.mic,
+                  color: _colorTween.value,
+                ),
+              )
+            : Icon(_isSpeechAvailable || !_isSubscribed
+                ? Icons.mic
+                : Icons.mic_off),
+        onPressed: () async {
+          if (!_isListening) {
+            start();
+          }
+        });
+  }
+}
+
+class _MicButton extends StatefulWidget {
+  final void Function(String out) onMicResults;
+  final stp.SpeechToTextProvider speechToTextInstance;
+
+  _MicButton(this.speechToTextInstance, {this.onMicResults});
+
+  @override
+  _MicButtonState createState() =>
+      _MicButtonState(speechToTextInstance, onMicResults: this.onMicResults);
 }
 
 /// [SearchWidgetConnector] represents a search widget that can be used to bind to different kinds of search UI widgets.
@@ -1443,6 +1555,27 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   final Widget Function(Suggestion suggestion, Function handleTap)
       buildSuggestionItem;
 
+  /// This property allows to enable the voice search.
+  ///
+  /// Flutter searchbox uses the [speech_to_text](https://pub.dev/packages/speech_to_text) library to integrate the voice search.
+  /// [speech_to_text](https://pub.dev/packages/speech_to_text) recommends to create a global instance of the `SpeechToTextProvider` class so we allow to pass an existing/new instance to [SearchBox] widget.
+  /// For example,
+  /// ```
+  /// import 'package:speech_to_text/speech_to_text.dart' as stt;
+  /// import 'package:speech_to_text/speech_to_text_provider.dart' as stp;
+  ///
+  /// // Create the instance at top of your application.
+  /// final stp.SpeechToTextProvider speechToTextInstance =
+  /// stp.SpeechToTextProvider(stt.SpeechToText());
+  ///
+  /// // Pass it like other properties
+  /// SearchBox(
+  ///   speechToTextInstance: speechToTextInstance
+  /// )
+  ///
+  /// ```
+  final stp.SpeechToTextProvider speechToTextInstance;
+
   SearchBox({
     Key key,
     @required this.id,
@@ -1501,11 +1634,31 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
     this.showAutoFill = false,
     // to customize ui
     this.buildSuggestionItem,
+    // voice search
+    this.speechToTextInstance,
   }) : assert(id != null);
 
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
+      speechToTextInstance != null
+          ? _MicButton(speechToTextInstance, onMicResults: (String output) {
+              if (output != "") {
+                SearchController component =
+                    SearchBaseProvider.of(context).getSearchWidget(id);
+                // clear value
+                if (component != null) {
+                  component.setValue(output,
+                      options: Options(
+                          triggerCustomQuery: true,
+                          triggerDefaultQuery: true,
+                          stateChanges: false));
+                  query = output;
+                  close(context, null);
+                }
+              }
+            })
+          : Container(),
       IconButton(
           icon: Icon(Icons.clear),
           onPressed: () {
@@ -1518,7 +1671,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
                       triggerCustomQuery: true, triggerDefaultQuery: true));
             }
             query = '';
-          })
+          }),
     ];
   }
 
