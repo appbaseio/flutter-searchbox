@@ -15,7 +15,7 @@ class FlutterSearchBoxApp extends StatelessWidget {
   // to preserve state on hot reloading
   final searchbaseInstance = SearchBase(
       'good-books-ds',
-      'https://arc-cluster-appbase-demo-6pjy6z.searchbase.io',
+      'https://appbase-demo-ansible-abxiydt-arc.searchbase.io',
       'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61',
       appbaseConfig: AppbaseSettings(
           recordAnalytics: true,

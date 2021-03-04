@@ -10,7 +10,7 @@ class DefaultUriPolicy implements UriPolicy {
 
 void main() {
   final index = 'gitxplore-app';
-  final url = 'https://@arc-cluster-appbase-demo-6pjy6z.searchbase.io';
+  final url = 'https://@appbase-demo-ansible-abxiydt-arc.searchbase.io';
   final credentials = 'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61';
 
   final searchbase = SearchBase(index, url, credentials,
