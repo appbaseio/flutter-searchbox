@@ -38,7 +38,7 @@ We have baked some amazing features in libraries which helps getting insights fr
 | [Search/Click Analytics](https://docs.appbase.io/docs/analytics/Overview/)                                                     | Search analytics allows you to keep track of the users' search activities which helps you to improve your search experience based on the analytics extracted by Appbase.io. |
 | [Feature Results](https://docs.appbase.io/docs/search/Rules/)                                                                  | Promote and hide your results for search queries.                                                                                                                           |
 | Customization                                                                                                                  | Support custom UI components in order to maintain a consistentency with existing design system.                                                                             |
-                                                          |
+                                                          
 
 ### Contributing
 
