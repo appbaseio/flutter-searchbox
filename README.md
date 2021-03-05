@@ -1,6 +1,6 @@
 ## Searchbox
 
-Searchbox is a lightweight and performance focused search UI component library to query and display results from your ElasticSearch index using declarative props. It's available for React, Vue, React Native and Flutter.
+Searchbox is a lightweight and performance focused search UI component library to query and display results from your ElasticSearch index using declarative props. It's available for React, Vue, React Native and Flutter. This repo contains the Flutter variant of the library. If you're looking for other variants, you can go [here](https://github.com/appbaseio/searchbox).
 
 <p align="center">
   <a href="https://github.com/appbaseio/searchbase/tree/master/packages/searchbox" style="padding: 10px; display: inline;"><img  width="30%" src="https://docs.appbase.io/images/Searchbox_JS@1x.png" alt="searchbox" title="searchbox" /></a>
@@ -18,11 +18,12 @@ Searchbox is a lightweight and performance focused search UI component library t
 
 | Library                                                                                    | Install                                            | Demo                                                                                                                                      | Docs                                                                                   |
 | ------------------------------------------------------------------------------------------ | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| [Flutter Searchbox](https://docs.appbase.io/docs/reactivesearch/flutter-searchbox/quickstart/)     | [Installation](https://docs.appbase.io/docs/reactivesearch/flutter-searchbox/quickstart/#installation)                   | [Basic](https://codesandbox.io/s/github/appbaseio/searchbase/tree/master/packages/flutter-searchbox/quickstart/#a-simple-example)                           | [Quick Start](https://docs.appbase.io/docs/reactivesearch/flutter-searchbox/quickstart/)   |
 | [React Searchbox](https://docs.appbase.io/docs/reactivesearch/react-searchbox/quickstart/) | `npm i @appbaseio/react-searchbox`                 | [Basic](https://codesandbox.io/s/github/appbaseio/searchbase/tree/master/packages/react-searchbox/examples/basic)                         | [Quick Start](https://docs.appbase.io/docs/reactivesearch/react-searchbox/quickstart/) |
 | [Searchbox](https://docs.appbase.io/docs/reactivesearch/searchbox/Quickstart/)             | `npm i @appbaseio/searchbox @appbaseio/searchbase` | [Searchbar with Style](https://codesandbox.io/s/github/appbaseio/searchbase/tree/master/packages/searchbox/examples/searchbar-with-style) | [Quick Start](https://docs.appbase.io/docs/reactivesearch/searchbox/Quickstart/)       |
 | [Vue Searchbox](https://docs.appbase.io/docs/reactivesearch/vue-searchbox/quickstart/)     | `npm i @appbaseio/vue-searchbox`                   | [Basic](https://codesandbox.io/s/github/appbaseio/searchbase/tree/master/packages/vue-searchbox/examples/basic)                           | [Quick Start](https://docs.appbase.io/docs/reactivesearch/vue-searchbox/quickstart/)   |
 | [React Native Searchbox](https://docs.appbase.io/docs/reactivesearch/react-native-searchbox/quickstart/)     | `npm i @appbaseio/react-native-searchbox`                   | [Basic](https://docs.appbase.io/docs/reactivesearch/react-native-searchbox/quickstart/#a-simple-example)                           | [Quick Start](https://docs.appbase.io/docs/reactivesearch/react-native-searchbox/quickstart/)   |
-| [Flutter Searchbox](https://docs.appbase.io/docs/reactivesearch/flutter-searchbox/quickstart/)     | [Installation](https://docs.appbase.io/docs/reactivesearch/flutter-searchbox/quickstart/#installation)                   | [Basic](https://codesandbox.io/s/github/appbaseio/searchbase/tree/master/packages/flutter-searchbox/quickstart/#a-simple-example)                           | [Quick Start](https://docs.appbase.io/docs/reactivesearch/flutter-searchbox/quickstart/)   |
+
 
 ### Features
 
