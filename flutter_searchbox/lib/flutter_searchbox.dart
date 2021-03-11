@@ -553,6 +553,8 @@ class _MicButtonState extends State<_MicButton> {
   MicOptions defaultMicOptions = MicOptions(
       listenFor: Duration(seconds: 30),
       pauseFor: Duration(seconds: 3),
+      localeId: null,
+      partialResults: true,
       micIcon: Icon(Icons.mic),
       micIconDenied: Icon(Icons.mic_off),
       micIconOff: Container(
