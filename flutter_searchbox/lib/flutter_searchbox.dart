@@ -8,6 +8,53 @@ import 'package:flutter/widgets.dart';
 import 'package:speech_to_text/speech_to_text_provider.dart' as stp;
 import 'package:speech_to_text/speech_recognition_event.dart' as ste;
 
+// [MicOptions] class allows to define custom configuration for mic
+class MicOptions {
+  /// [listenFor] sets the maximum duration that it will listen for, after that it automatically stops the listen for you.
+  ///
+  /// The default is 30 seonds.
+  Duration listenFor;
+
+  /// [pauseFor] sets the maximum duration of a pause in speech with no words detected, after that it automatically stops the listen for you.
+  ///
+  /// The default value is 3 seconds.
+  Duration pauseFor;
+
+  /// The maximum number of allowed words in speech. Mic would automatically stop once it would reach the maximum word limit.
+  ///
+  /// The default value is set to 12.
+  int maximumWordsLimit;
+
+  /// Allows to custom the micIcon at the right side.
+  Widget micIcon;
+
+  /// To use a custom mic icon if the permission is denied.
+  Widget micIconDenied;
+
+  /// To use a custom mic icon when mic is in listening state.
+  Widget micIconOn;
+
+  /// Customize mic icon when speech recognition failed or user didn't speak.
+  Widget micIconOff;
+
+  ///[partialResults] if true the listen reports results as they are recognized, when false only final results are reported. Defaults to true.
+  bool partialResults;
+
+  /// [localeId] is an optional locale that can be used to listen in a language other than the current system default. See [locales] to find the list of supported languages for listening
+  String localeId;
+
+  MicOptions(
+      {this.listenFor,
+      this.pauseFor,
+      this.maximumWordsLimit,
+      this.micIcon,
+      this.micIconDenied,
+      this.micIconOff,
+      this.micIconOn,
+      this.partialResults,
+      this.localeId});
+}
+
 /// If the SearchBaseProvider.of method fails, this error will be thrown.
 ///
 /// Often, when the `of` method fails, it is difficult to understand why since
@@ -439,63 +486,204 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
       );
 }
 
-class _MicButtonState extends State<_MicButton>
+class _MicButtonListeningState extends State<_MicButtonListening>
     with SingleTickerProviderStateMixin {
-  final stp.SpeechToTextProvider speechToTextInstance;
+  _MicButtonListeningState();
+
   AnimationController _animationController;
-  Animation _colorTween;
-  StreamSubscription<ste.SpeechRecognitionEvent> _subscription;
-
-  bool _isListening = false;
-  bool _isSpeechAvailable = false;
-  bool _isSubscribed = false;
-
-  final void Function(String out) onMicResults;
-
-  _MicButtonState(this.speechToTextInstance, {this.onMicResults});
+  Animation _animation;
 
   @override
   void initState() {
     _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 40));
-    _colorTween = ColorTween(begin: Colors.blue[50], end: Colors.blue[400])
-        .animate(_animationController);
-    _subscription = speechToTextInstance.stream.listen((recognitionEvent) {
-      if (recognitionEvent.isListening != _isListening) {
-        setState(() {
-          _isListening = recognitionEvent.isListening;
-        });
-        if (recognitionEvent.isListening) {
-          changeColors();
-        }
-      }
-      if (recognitionEvent.eventType ==
-          ste.SpeechRecognitionEventType.finalRecognitionEvent) {
-        onMicResults(recognitionEvent.recognitionResult.recognizedWords);
-      }
-    }, cancelOnError: true);
+        AnimationController(vsync: this, duration: Duration(seconds: 2));
+    _animationController.repeat(reverse: true);
+    _animation = Tween(begin: 2.0, end: 15.0).animate(_animationController)
+      ..addListener(() {
+        setState(() {});
+      });
     super.initState();
   }
 
   @override
   void dispose() {
     _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 70,
+      height: 70,
+      child: Icon(
+        Icons.mic,
+        color: Colors.white,
+      ),
+      decoration:
+          BoxDecoration(shape: BoxShape.circle, color: Colors.blue, boxShadow: [
+        BoxShadow(
+            color: Colors.lightBlue,
+            blurRadius: _animation.value,
+            spreadRadius: _animation.value)
+      ]),
+    );
+  }
+}
+
+class _MicButtonListening extends StatefulWidget {
+  _MicButtonListening();
+  @override
+  _MicButtonListeningState createState() => _MicButtonListeningState();
+}
+
+class _MicButtonState extends State<_MicButton> {
+  final stp.SpeechToTextProvider speechToTextInstance;
+  final void Function() onStart;
+  final MicOptions micOptions;
+  final void Function(String out) onMicResults;
+
+  StreamSubscription<ste.SpeechRecognitionEvent> _subscription;
+
+  bool _isListening = false;
+  bool _isDialogActive = false;
+  bool _isSpeechAvailable = false;
+  bool _isSubscribed = false;
+  String _recognizedText = "";
+  MicOptions defaultMicOptions = MicOptions(
+      listenFor: Duration(seconds: 30),
+      pauseFor: Duration(seconds: 3),
+      micIcon: Icon(Icons.mic),
+      micIconDenied: Icon(Icons.mic_off),
+      micIconOff: Container(
+        width: 70,
+        height: 70,
+        child: Icon(Icons.mic, color: Colors.white),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.blue,
+        ),
+      ),
+      micIconOn: _MicButtonListening(),
+      maximumWordsLimit: 12);
+
+  BuildContext dialogContext;
+  void Function(void Function() fn) setStateDialog;
+
+  _MicButtonState(this.speechToTextInstance,
+      {this.onMicResults, this.onStart, this.micOptions});
+
+  @override
+  void initState() {
+    _subscription = speechToTextInstance.stream.listen((recognitionEvent) {
+      if (recognitionEvent.isListening != _isListening) {
+        setState(() {
+          _isListening = recognitionEvent.isListening;
+        });
+        if (recognitionEvent.isListening) {
+          _showMyDialog();
+        }
+        if (setStateDialog != null) {
+          setStateDialog(() {});
+        }
+      }
+      if (recognitionEvent.eventType ==
+          ste.SpeechRecognitionEventType.partialRecognitionEvent) {
+        MicOptions micOptions = getNormalizedMicOptions();
+        // Allow maximum 12 words
+        if (recognitionEvent.isListening &&
+            _recognizedText.split(' ').length > micOptions.maximumWordsLimit) {
+          stop();
+        } else {
+          _recognizedText = recognitionEvent.recognitionResult.recognizedWords;
+        }
+        if (setStateDialog != null) {
+          setStateDialog(() {});
+        }
+      }
+      if (recognitionEvent.eventType ==
+          ste.SpeechRecognitionEventType.finalRecognitionEvent) {
+        _recognizedText = recognitionEvent.recognitionResult.recognizedWords;
+
+        if (setStateDialog != null) {
+          setStateDialog(() {});
+        }
+        Future.delayed(Duration(milliseconds: 200)).then((value) {
+          if (dialogContext != null) {
+            // close the dialog box
+            Navigator.of(dialogContext).pop();
+            // call mic results
+            onMicResults(_recognizedText);
+          }
+        });
+      }
+    }, cancelOnError: true);
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
     _subscription.cancel();
     super.dispose();
   }
 
-  Future changeColors() async {
-    while (true) {
-      await new Future.delayed(const Duration(milliseconds: 60), () {
-        if (mounted) {
-          if (_animationController.status == AnimationStatus.completed) {
-            _animationController.reverse();
-          } else {
-            _animationController.forward();
-          }
-        }
-      });
+  Future<void> _showMyDialog() async {
+    if (_isDialogActive) {
+      return null;
     }
+    _recognizedText = "";
+    _isDialogActive = true;
+    TextStyle textStyle = new TextStyle(
+      fontSize: 18.0,
+      height: 2,
+      fontWeight: FontWeight.w400,
+    );
+    MicOptions micOptions = getNormalizedMicOptions();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            dialogContext = context;
+            setStateDialog = setState;
+            return AlertDialog(
+              content: IntrinsicHeight(
+                child: Column(children: [
+                  Container(
+                      height: 120.0,
+                      child: _isListening
+                          ? micOptions.micIconOn
+                          : GestureDetector(
+                              onTap: start,
+                              child: micOptions.micIconOff,
+                            )),
+                  Container(
+                    height: 110,
+                    child: _isListening
+                        ? _recognizedText != ""
+                            ? Text(_recognizedText,
+                                style: textStyle, textAlign: TextAlign.center)
+                            : Text('Listening',
+                                style: textStyle, textAlign: TextAlign.center)
+                        : _recognizedText == ""
+                            ? Text('Did not hear. Try Again',
+                                style: textStyle, textAlign: TextAlign.center)
+                            : Text(_recognizedText,
+                                style: textStyle, textAlign: TextAlign.center),
+                  )
+                ]),
+              ),
+            );
+          },
+        );
+      },
+    ).then((val) {
+      _isDialogActive = false;
+      dialogContext = null;
+      setStateDialog = null;
+    });
   }
 
   void start() async {
@@ -508,29 +696,64 @@ class _MicButtonState extends State<_MicButton>
       });
     }
     if (isSpeechAvailable) {
+      MicOptions micOptions = getNormalizedMicOptions();
       speechToTextInstance.listen(
-        partialResults: false,
-        listenFor: Duration(seconds: 3),
+        listenFor: micOptions.listenFor,
+        pauseFor: micOptions.pauseFor,
+        localeId: micOptions.localeId,
+        partialResults: micOptions.partialResults,
       );
     }
   }
 
+  void stop() async {
+    speechToTextInstance.stop();
+  }
+
+  MicOptions getNormalizedMicOptions() {
+    MicOptions finalMicOptions = defaultMicOptions;
+    if (micOptions != null) {
+      if (micOptions.listenFor != null) {
+        finalMicOptions.listenFor = micOptions.listenFor;
+      }
+      if (micOptions.pauseFor != null) {
+        finalMicOptions.pauseFor = micOptions.pauseFor;
+      }
+      if (micOptions.maximumWordsLimit != null) {
+        finalMicOptions.maximumWordsLimit = micOptions.maximumWordsLimit;
+      }
+      if (micOptions.micIcon != null) {
+        finalMicOptions.micIcon = micOptions.micIcon;
+      }
+      if (micOptions.micIconDenied != null) {
+        finalMicOptions.micIconDenied = micOptions.micIconDenied;
+      }
+      if (micOptions.micIconOn != null) {
+        finalMicOptions.micIconOn = micOptions.micIconOn;
+      }
+      if (micOptions.micIconOff != null) {
+        finalMicOptions.micIconOff = micOptions.micIconOff;
+      }
+      if (micOptions.localeId != null) {
+        finalMicOptions.localeId = micOptions.localeId;
+      }
+      if (micOptions.partialResults != null) {
+        finalMicOptions.partialResults = micOptions.partialResults;
+      }
+    }
+    return finalMicOptions;
+  }
+
   @override
   Widget build(BuildContext context) {
+    MicOptions micOptions = getNormalizedMicOptions();
     return IconButton(
-        icon: _isListening
-            ? AnimatedBuilder(
-                animation: _colorTween,
-                builder: (context, child) => Icon(
-                  Icons.mic,
-                  color: _colorTween.value,
-                ),
-              )
-            : Icon(_isSpeechAvailable || !_isSubscribed
-                ? Icons.mic
-                : Icons.mic_off),
+        icon: _isListening || _isSpeechAvailable || !_isSubscribed
+            ? micOptions.micIcon
+            : micOptions.micIconDenied,
         onPressed: () async {
           if (!_isListening) {
+            onStart();
             start();
           }
         });
@@ -539,13 +762,18 @@ class _MicButtonState extends State<_MicButton>
 
 class _MicButton extends StatefulWidget {
   final void Function(String out) onMicResults;
+  final void Function() onStart;
   final stp.SpeechToTextProvider speechToTextInstance;
+  final MicOptions micOptions;
 
-  _MicButton(this.speechToTextInstance, {this.onMicResults});
+  _MicButton(this.speechToTextInstance,
+      {this.onMicResults, this.onStart, this.micOptions});
 
   @override
-  _MicButtonState createState() =>
-      _MicButtonState(speechToTextInstance, onMicResults: this.onMicResults);
+  _MicButtonState createState() => _MicButtonState(speechToTextInstance,
+      onMicResults: this.onMicResults,
+      onStart: this.onStart,
+      micOptions: this.micOptions);
 }
 
 /// [SearchWidgetConnector] represents a search widget that can be used to bind to different kinds of search UI widgets.
@@ -1576,73 +1804,90 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   /// ```
   final stp.SpeechToTextProvider speechToTextInstance;
 
-  SearchBox({
-    Key key,
-    @required this.id,
-    // properties to configure search component
-    this.credentials,
-    this.index,
-    this.url,
-    this.appbaseConfig,
-    this.transformRequest,
-    this.transformResponse,
-    this.headers,
-    this.react,
-    this.queryFormat,
-    this.dataField,
-    this.categoryField,
-    this.categoryValue,
-    this.nestedField,
-    this.from,
-    this.size,
-    this.sortBy,
-    this.aggregationField,
-    this.aggregationSize,
-    this.after,
-    this.includeNullValues,
-    this.includeFields,
-    this.excludeFields,
-    this.fuzziness,
-    this.searchOperators,
-    this.highlight,
-    this.highlightField,
-    this.customHighlight,
-    this.interval,
-    this.aggregations,
-    this.missingLabel,
-    this.showMissing,
-    this.enableSynonyms,
-    this.selectAllLabel,
-    this.pagination,
-    this.queryString,
-    this.defaultQuery,
-    this.customQuery,
-    this.beforeValueChange,
-    this.onValueChange,
-    this.onResults,
-    this.onAggregationData,
-    this.onError,
-    this.onRequestStatusChange,
-    this.onQueryChange,
-    this.enablePopularSuggestions,
-    this.maxPopularSuggestions,
-    this.showDistinctSuggestions = true,
-    this.preserveResults,
-    this.results,
-    // searchbox specific properties
-    this.enableRecentSearches = false,
-    this.showAutoFill = false,
-    // to customize ui
-    this.buildSuggestionItem,
-    // voice search
-    this.speechToTextInstance,
-  }) : assert(id != null);
+  /// To customize the mic settings if voice search is enabled
+  final MicOptions micOptions;
+
+  /// [customActions] allows to define the additional actions at the right of search bar.
+  ///
+  /// For an example,
+  /// - a custom mic icon to handle voice search,
+  /// - a search icon to perform search action etc.
+  List<Widget> customActions;
+
+  SearchBox(
+      {Key key,
+      @required this.id,
+      // properties to configure search component
+      this.credentials,
+      this.index,
+      this.url,
+      this.appbaseConfig,
+      this.transformRequest,
+      this.transformResponse,
+      this.headers,
+      this.react,
+      this.queryFormat,
+      this.dataField,
+      this.categoryField,
+      this.categoryValue,
+      this.nestedField,
+      this.from,
+      this.size,
+      this.sortBy,
+      this.aggregationField,
+      this.aggregationSize,
+      this.after,
+      this.includeNullValues,
+      this.includeFields,
+      this.excludeFields,
+      this.fuzziness,
+      this.searchOperators,
+      this.highlight,
+      this.highlightField,
+      this.customHighlight,
+      this.interval,
+      this.aggregations,
+      this.missingLabel,
+      this.showMissing,
+      this.enableSynonyms,
+      this.selectAllLabel,
+      this.pagination,
+      this.queryString,
+      this.defaultQuery,
+      this.customQuery,
+      this.beforeValueChange,
+      this.onValueChange,
+      this.onResults,
+      this.onAggregationData,
+      this.onError,
+      this.onRequestStatusChange,
+      this.onQueryChange,
+      this.enablePopularSuggestions,
+      this.maxPopularSuggestions,
+      this.showDistinctSuggestions = true,
+      this.preserveResults,
+      this.results,
+      // searchbox specific properties
+      this.enableRecentSearches = false,
+      this.showAutoFill = false,
+      // to customize ui
+      this.buildSuggestionItem,
+      // voice search
+      this.speechToTextInstance,
+      this.micOptions,
+      // custom actions
+      this.customActions})
+      : assert(id != null);
 
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
+      ...customActions != null ? customActions : [],
       speechToTextInstance != null
-          ? _MicButton(speechToTextInstance, onMicResults: (String output) {
+          ? _MicButton(speechToTextInstance, micOptions: micOptions,
+              onStart: () {
+              query = "";
+            }, onMicResults: (String output) {
               if (output != "") {
                 SearchController component =
                     SearchBaseProvider.of(context).getSearchWidget(id);
@@ -1654,7 +1899,10 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
                           triggerDefaultQuery: true,
                           stateChanges: false));
                   query = output;
-                  close(context, null);
+
+                  Future.delayed(Duration(milliseconds: 700)).then((value) {
+                    close(context, null);
+                  });
                 }
               }
             })
