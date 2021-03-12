@@ -1,3 +1,7 @@
+## [1.2.0] - 13-03-2021
+
+- Add support to customize voice search experience
+
 ## [1.1.0] - 25-02-2021
 
 - Add support for voice search in `SearchBox` widget
