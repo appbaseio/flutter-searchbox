@@ -7,22 +7,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:speech_to_text/speech_to_text_provider.dart' as stp;
 import 'package:speech_to_text/speech_recognition_event.dart' as ste;
+import 'dart:io' show Platform;
 
 // [MicOptions] class allows to define custom configuration for mic
 class MicOptions {
   /// [listenFor] sets the maximum duration that it will listen for, after that it automatically stops the listen for you.
   ///
-  /// The default is 30 seonds.
+  /// The default is 30 seonds. It should be in a range of `5s` to `30s`.
   Duration listenFor;
 
   /// [pauseFor] sets the maximum duration of a pause in speech with no words detected, after that it automatically stops the listen for you.
   ///
-  /// The default value is 3 seconds.
+  /// The default value is 3 seconds for ios and 5 seconds for android. It should be in a range of `3s` to `30s` and must be less than [listenFor] property.
   Duration pauseFor;
 
-  /// The maximum number of allowed words in speech. Mic would automatically stop once it would reach the maximum word limit.
+  /// The maximum number of allowed words in speech. Mic would automatically stop once it hit the maximum word limit.
   ///
-  /// The default value is set to 12.
+  /// The default value is set to 12. It should be in a range of `1` to `30` words.
   int maximumWordsLimit;
 
   /// Allows to custom the micIcon at the right side.
@@ -552,7 +553,7 @@ class _MicButtonState extends State<_MicButton> {
   String _recognizedText = "";
   MicOptions defaultMicOptions = MicOptions(
       listenFor: Duration(seconds: 30),
-      pauseFor: Duration(seconds: 3),
+      pauseFor: Duration(seconds: Platform.isAndroid ? 5 : 3),
       localeId: null,
       partialResults: true,
       micIcon: Icon(Icons.mic),
@@ -573,7 +574,32 @@ class _MicButtonState extends State<_MicButton> {
   void Function(void Function() fn) setStateDialog;
 
   _MicButtonState(this.speechToTextInstance,
-      {this.onMicResults, this.onStart, this.micOptions});
+      {this.onMicResults, this.onStart, this.micOptions}) {
+    if (micOptions != null) {
+      if (micOptions.listenFor != null) {
+        // listenFor must be in range between between 5s to 30s
+        assert(micOptions.listenFor.compareTo(Duration(seconds: 30)) < 0,
+            "listenFor can not be greater than 30s");
+        assert(micOptions.listenFor.compareTo(Duration(seconds: 3)) > 0,
+            "listenFor can not be less than 3s");
+      }
+      MicOptions normalizedOptions = getNormalizedMicOptions();
+      if (micOptions.pauseFor != null) {
+        assert(micOptions.pauseFor.compareTo(Duration(milliseconds: 100)) > 0,
+            "pauseFor can not be less than 100ms");
+        assert(
+            micOptions.pauseFor.compareTo(normalizedOptions.listenFor) < 0,
+            "pauseFor can not be greater than listen for:" +
+                normalizedOptions.listenFor.toString());
+      }
+      if (micOptions.maximumWordsLimit != null) {
+        assert(micOptions.maximumWordsLimit > 1,
+            "maximumWordsLimit can not be less than 1");
+        assert(micOptions.maximumWordsLimit < 30,
+            "maximumWordsLimit can not be greater than 30");
+      }
+    }
+  }
 
   @override
   void initState() {
