@@ -28,7 +28,10 @@ $ flutter pub get
 
 ### A simple example
 
-![Basic Example](https://raw.githubusercontent.com/appbaseio/flutter-assets/master/basic.gif)
+<p float="left" style="margin-top: 50px">
+  <img alt="Basic Example" src="https://raw.githubusercontent.com/appbaseio/flutter-assets/master/basic.gif" width="250" />
+  <img alt="Voice search" src="https://raw.githubusercontent.com/appbaseio/flutter-assets/master/voicesearch.gif" style="margin-left: 50px" width="250" /> 
+</p>
 
 The following example renders an autosuggestion [SearchBox](`search-widget`) with one custom widget [SearchWidgetConnector](`result-widget`) to render the results. The `result-widget` watches the `search-widget` for input changes and updates its UI when the user selects a suggestion.
 
