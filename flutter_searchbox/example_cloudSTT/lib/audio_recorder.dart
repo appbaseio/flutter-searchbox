@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:file/local.dart';
 import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:searchbase/searchbase.dart';
 import 'audio_converter.dart';
 import 'package:flutter_searchbox/flutter_searchbox.dart';
 
@@ -24,7 +25,7 @@ class RecorderState extends State<Recorder> {
   Recording _current;
   RecordingStatus _currentStatus = RecordingStatus.Unset;
 
-  Map<dynamic, dynamic> searchWidgetState;
+  SearchController searchInstance;
 
   @override
   void initState() {
@@ -39,7 +40,8 @@ class RecorderState extends State<Recorder> {
 
   @override
   Widget build(BuildContext context) {
-    searchWidgetState = SearchBaseProvider.of(context).getActiveWidgets();
+    searchInstance =
+        SearchBaseProvider.of(context).getSearchWidget('search-widget');
     return new IconButton(
       icon: Icon(Icons.mic),
       onPressed: () async {
@@ -100,8 +102,8 @@ class RecorderState extends State<Recorder> {
           _currentStatus = current.status;
         });
       } else {
-        Scaffold.of(context).showSnackBar(
-            new SnackBar(content: new Text("You must accept permissions")));
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("You must accept permissions")));
       }
     } catch (e) {
       print(e);
@@ -111,7 +113,7 @@ class RecorderState extends State<Recorder> {
   _start() async {
     try {
       widget.setOverlay(false, '');
-      widget.setOverlay(true, 'listening...');
+      widget.setOverlay(true, 'Listening...');
       await _recorder.start();
       var recording = await _recorder.current(channel: 0);
       setState(() {
@@ -168,7 +170,7 @@ class RecorderState extends State<Recorder> {
     var result = await _recorder.stop();
     if (mounted) {
       widget.setOverlay(false, '');
-      widget.setOverlay(true, 'processing...');
+      widget.setOverlay(true, 'Processing...');
       await setState(() {
         _current = result;
         _currentStatus = _current.status;
@@ -184,24 +186,17 @@ class RecorderState extends State<Recorder> {
           responseString.length > 0
               ? responseString
               : "Didn't hear anything, try again!");
-      const tick = const Duration(milliseconds: 50);
-      var count = 0;
-      new Timer.periodic(tick, (Timer t) {
-        count += 1;
-        if (count > 30) {
-          if (responseString.length > 0) {
-            searchWidgetState['search-widget'].setValue(response.results
-                .map((e) => e.alternatives.first.transcript)
-                .join('\n'));
-            searchWidgetState['search-widget'].triggerCustomQuery();
-            Navigator.pop(context);
-          }
+      await Future.delayed(Duration(seconds: 2));
+      if (responseString.length > 0) {
+        searchInstance.setValue(response.results
+            .map((e) => e.alternatives.first.transcript)
+            .join('\n'));
+        searchInstance.triggerCustomQuery();
+        Navigator.pop(context);
+      }
 
-          widget.setOverlay(false, '');
-          audioConverter.deleteFile();
-          t.cancel();
-        }
-      });
+      widget.setOverlay(false, '');
+      audioConverter.deleteFile();
     }
   }
 }
