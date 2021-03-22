@@ -43,14 +43,14 @@ class AuthorFilter extends StatelessWidget {
     return Container(
       width: 350,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 105, 0, 0),
+        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 9),
         child: Column(
           children: [
-            Container(
+            Expanded(
+              flex: 1,
               child: Align(
                 alignment: Alignment.center,
                 child: Container(
-                  height: 750,
                   color: Colors.white,
                   child: Scaffold(
                     appBar: FilterHeader(
