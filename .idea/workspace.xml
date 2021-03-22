@@ -20,8 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="34c9ccbf-07ea-4b03-9cd2-1141743da1ff" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example_cloudSTT/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/example_cloudSTT/android/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_searchbox/example_cloudSTT/lib/audio_converter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/example_cloudSTT/lib/audio_converter.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example_cloudSTT/lib/audio_recorder.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/example_cloudSTT/lib/audio_recorder.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,36 +114,36 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="273" y="244" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1440.900@0.0.1440.900" timestamp="1615798761082" />
-    <state x="100" y="100" width="1240" height="700" key="AVDManager" timestamp="1615477826970">
-      <screen x="0" y="25" width="1440" height="809" />
+    <state x="100" y="100" width="1240" height="700" key="AVDManager" timestamp="1616395831695">
+      <screen x="0" y="25" width="1440" height="805" />
     </state>
     <state x="100" y="100" width="1240" height="700" key="AVDManager/0.0.1440.900@0.0.1440.900" timestamp="1615477213179" />
-    <state x="100" y="100" width="1240" height="700" key="AVDManager/0.25.1440.805@0.25.1440.805" timestamp="1615475845738" />
+    <state x="100" y="100" width="1240" height="700" key="AVDManager/0.25.1440.805@0.25.1440.805" timestamp="1616395831695" />
     <state x="100" y="100" width="1240" height="700" key="AVDManager/0.25.1440.809@0.25.1440.809" timestamp="1615477826970" />
     <state x="100" y="100" width="847" height="700" key="DiffContextDialog" timestamp="1616393087988">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="100" y="100" width="847" height="700" key="DiffContextDialog/0.0.1440.900@0.0.1440.900" timestamp="1616393087988" />
-    <state width="1005" height="151" key="GridCell.Tab.0.bottom" timestamp="1616392638250">
+    <state width="1398" height="151" key="GridCell.Tab.0.bottom" timestamp="1616396327918">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1005" height="151" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1616392638250" />
-    <state width="1005" height="151" key="GridCell.Tab.0.center" timestamp="1616392638249">
+    <state width="1398" height="151" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1616396327918" />
+    <state width="1398" height="151" key="GridCell.Tab.0.center" timestamp="1616396327916">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1005" height="151" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1616392638249" />
-    <state width="1005" height="151" key="GridCell.Tab.0.left" timestamp="1616392638249">
+    <state width="1398" height="151" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1616396327916" />
+    <state width="1398" height="151" key="GridCell.Tab.0.left" timestamp="1616396327915">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1005" height="151" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1616392638249" />
-    <state width="1005" height="151" key="GridCell.Tab.0.right" timestamp="1616392638250">
+    <state width="1398" height="151" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1616396327915" />
+    <state width="1398" height="151" key="GridCell.Tab.0.right" timestamp="1616396327917">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1005" height="151" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1616392638250" />
-    <state x="444" y="174" key="RollbackChangesDialog" timestamp="1616393070958">
+    <state width="1398" height="151" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1616396327917" />
+    <state x="444" y="174" key="RollbackChangesDialog" timestamp="1616395196457">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="444" y="174" key="RollbackChangesDialog/0.0.1440.900@0.0.1440.900" timestamp="1616393070958" />
+    <state x="444" y="174" key="RollbackChangesDialog/0.0.1440.900@0.0.1440.900" timestamp="1616395196457" />
     <state x="221" y="86" key="SettingsEditor" timestamp="1615472659430">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
