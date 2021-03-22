@@ -505,9 +505,10 @@ class ResultsWidget extends StatelessWidget {
           child: ListView.builder(
             itemBuilder: (context, index) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                var offset =
-                    (searchController.from != null ? searchController.from : 0) +
-                        searchController.size;
+                var offset = (searchController.from != null
+                        ? searchController.from
+                        : 0) +
+                    searchController.size;
                 if (index == offset - 1) {
                   if (searchController.results.numberOfResults > offset) {
                     // Load next set of results
@@ -679,9 +680,10 @@ class ResultsWidget extends StatelessWidget {
                               title: Center(
                                 child: RichText(
                                   text: TextSpan(
-                                    text: searchController.results.data.length > 0
-                                        ? "No more results"
-                                        : 'No results found',
+                                    text:
+                                        searchController.results.data.length > 0
+                                            ? "No more results"
+                                            : 'No results found',
                                     style: TextStyle(
                                         color: Colors.black54,
                                         fontSize: 20,
@@ -741,14 +743,14 @@ class AuthorFilter extends StatelessWidget {
     return Container(
       width: 350,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 105, 0, 0),
+        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 9),
         child: Column(
           children: [
-            Container(
+            Expanded(
+              flex: 1,
               child: Align(
                 alignment: Alignment.center,
                 child: Container(
-                  height: 750,
                   color: Colors.white,
                   child: Scaffold(
                     appBar: FilterHeader(
@@ -771,8 +773,8 @@ class AuthorFilter extends StatelessWidget {
                     body: searchController.requestPending
                         ? Center(child: CircularProgressIndicator())
                         : ListView(
-                            children:
-                                searchController.aggregationData.data.map((bucket) {
+                            children: searchController.aggregationData.data
+                                .map((bucket) {
                               return Container(
                                 child: Column(
                                   children: [
@@ -893,7 +895,6 @@ class AuthorFilter extends StatelessWidget {
     );
   }
 }
-
 ```
 
 ### Custom SearchBox UI
