@@ -40,22 +40,17 @@ class AuthorFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isAndroid = Theme.of(context).platform == TargetPlatform.android;
     return Container(
       width: 350,
       child: Padding(
-        padding: isAndroid
-            ? const EdgeInsets.fromLTRB(0, 80, 0, 0)
-            : const EdgeInsets.fromLTRB(0, 105, 0, 0),
+        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 9),
         child: Column(
           children: [
-            Container(
+            Expanded(
+              flex: 1,
               child: Align(
                 alignment: Alignment.center,
                 child: Container(
-                  height: isAndroid
-                      ? MediaQuery.of(context).size.height / 1.282
-                      : MediaQuery.of(context).size.height / 1.24,
                   color: Colors.white,
                   child: Scaffold(
                     appBar: FilterHeader(
