@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:searchbase/searchbase.dart';
 
+// This widget shows the results list
 class StarDisplay extends StatelessWidget {
   final int value;
   const StarDisplay({Key key, this.value = 0})

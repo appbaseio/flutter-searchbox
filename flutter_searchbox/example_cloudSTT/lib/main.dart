@@ -52,17 +52,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  OverlayState overlayState;
+  OverlayState overlayStack;
   OverlayEntry overlayEntry;
 
+  // To display or hide the overlay that shows the mic icon & the display text
   setOverlay(bool status, String value, BuildContext context) async {
     if (status) {
-      overlayState = Overlay.of(context);
+      // To find the closest enclosing overlay for the BuildContext
+      overlayStack = Overlay.of(context);
+      // Creating an entry for the overlay that can contain the mic_overlay widget
+      // value contains the text to be displayed by the mic_overlay widget
       overlayEntry =
           OverlayEntry(builder: (context) => MicOverlay(value: value));
-      overlayState.insert(overlayEntry);
+      // To insert overlayEntry into the overlay stack
+      overlayStack.insert(overlayEntry);
     } else {
       if (overlayEntry != null) {
+        // To remove the overlayEntry from the overlay stack
         overlayEntry.remove();
         overlayEntry = null;
       }
@@ -88,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                     context: context,
                     // SearchBox widget from flutter searchbox
                     delegate: SearchBox(
-                        // A unique identifier that can be used by other widgetss to reactively update data
+                        // A unique identifier that can be used by other widgets to reactively update data
                         id: 'search-widget',
                         enableRecentSearches: true,
                         enablePopularSuggestions: true,
@@ -100,6 +106,7 @@ class _HomePageState extends State<HomePage> {
                           {'field': 'original_title.search', 'weight': 3}
                         ],
                         customActions: [
+                          // passing the Recorder as a custom action to the SearchBox widget
                           Recorder(
                             setOverlay: (bool status, String value) {
                               setOverlay(status, value, context);

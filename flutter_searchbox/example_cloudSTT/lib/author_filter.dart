@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:searchbase/searchbase.dart';
 
+// This widget provides the filter for aggregation based on the Author's name
 class FilterHeader extends PreferredSize {
   final double height;
   final Widget child;

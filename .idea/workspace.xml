@@ -8,6 +8,11 @@
       </path>
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:example" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
       </path>
       <path>
@@ -20,9 +25,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="34c9ccbf-07ea-4b03-9cd2-1141743da1ff" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example_cloudSTT/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/example_cloudSTT/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example_cloudSTT/lib/audio_converter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/example_cloudSTT/lib/audio_converter.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +60,7 @@
     <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/flutter_searchbox" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
@@ -124,22 +128,22 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="100" y="100" width="847" height="700" key="DiffContextDialog/0.0.1440.900@0.0.1440.900" timestamp="1616393087988" />
-    <state width="1398" height="151" key="GridCell.Tab.0.bottom" timestamp="1616396327918">
+    <state width="1398" height="151" key="GridCell.Tab.0.bottom" timestamp="1616406576148">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="151" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1616396327918" />
-    <state width="1398" height="151" key="GridCell.Tab.0.center" timestamp="1616396327916">
+    <state width="1398" height="151" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1616406576148" />
+    <state width="1398" height="151" key="GridCell.Tab.0.center" timestamp="1616406576147">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="151" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1616396327916" />
-    <state width="1398" height="151" key="GridCell.Tab.0.left" timestamp="1616396327915">
+    <state width="1398" height="151" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1616406576147" />
+    <state width="1398" height="151" key="GridCell.Tab.0.left" timestamp="1616406576147">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="151" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1616396327915" />
-    <state width="1398" height="151" key="GridCell.Tab.0.right" timestamp="1616396327917">
+    <state width="1398" height="151" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1616406576147" />
+    <state width="1398" height="151" key="GridCell.Tab.0.right" timestamp="1616406576148">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="151" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1616396327917" />
+    <state width="1398" height="151" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1616406576148" />
     <state x="444" y="174" key="RollbackChangesDialog" timestamp="1616395196457">
       <screen x="0" y="0" width="1440" height="900" />
     </state>

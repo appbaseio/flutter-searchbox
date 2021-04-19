@@ -9,6 +9,7 @@ import 'package:flutter_searchbox/flutter_searchbox.dart';
 
 typedef void SetOverlay(bool status, String value);
 
+// This widget performs the audio recordings for the user's voice input
 class Recorder extends StatefulWidget {
   final LocalFileSystem localFileSystem;
   final SetOverlay setOverlay;
@@ -22,8 +23,8 @@ class Recorder extends StatefulWidget {
 
 class RecorderState extends State<Recorder> {
   FlutterAudioRecorder _recorder;
-  Recording _current;
-  RecordingStatus _currentStatus = RecordingStatus.Unset;
+  Recording _recordingInstance;
+  RecordingStatus _recordingStatus = RecordingStatus.Unset;
 
   SearchController searchInstance;
 
@@ -34,18 +35,16 @@ class RecorderState extends State<Recorder> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // to retrieve the instance of SearchController for 'search-widget' component
     searchInstance =
         SearchBaseProvider.of(context).getSearchWidget('search-widget');
     return new IconButton(
       icon: Icon(Icons.mic),
+
+      // to call specific functions according to the current recording status
       onPressed: () async {
-        switch (_currentStatus) {
+        switch (_recordingStatus) {
           case RecordingStatus.Initialized:
             {
               _start();
@@ -77,31 +76,39 @@ class RecorderState extends State<Recorder> {
     );
   }
 
+  // called when the widget is created
   _init() async {
     try {
       if (await FlutterAudioRecorder.hasPermissions) {
         String customPath = '/flutter_audio_recorder_';
         var appDocDirectory;
+
+        // to check the platform for setting up the directory path
         bool isAndroid = Theme.of(context).platform == TargetPlatform.android;
         if (!isAndroid) {
           appDocDirectory = await getApplicationDocumentsDirectory();
         } else {
           appDocDirectory = await getExternalStorageDirectory();
         }
+        // setting up unique path
         customPath = appDocDirectory.path +
             customPath +
             DateTime.now().millisecondsSinceEpoch.toString();
 
+        // creating an instance of the FlutterAudioRecorder and  setting up the format for the audio file
         _recorder =
             FlutterAudioRecorder(customPath, audioFormat: AudioFormat.WAV);
 
+        // initialising the recorder and setting up the recording channel
         await _recorder.initialized;
-        var current = await _recorder.current(channel: 0);
+        var currentRecordingInstance = await _recorder.current(channel: 0);
+
         setState(() {
-          _current = current;
-          _currentStatus = current.status;
+          _recordingInstance = currentRecordingInstance;
+          _recordingStatus = currentRecordingInstance.status;
         });
       } else {
+        // message to display in case permissions not found
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("You must accept permissions")));
       }
@@ -110,21 +117,25 @@ class RecorderState extends State<Recorder> {
     }
   }
 
+  // called to start the recording
   _start() async {
     try {
       widget.setOverlay(false, '');
       widget.setOverlay(true, 'Listening...');
+      // starting the recorder and setting up the recording channel
       await _recorder.start();
-      var recording = await _recorder.current(channel: 0);
+      var recordingInstance = await _recorder.current(channel: 0);
       setState(() {
-        _current = recording;
+        _recordingInstance = recordingInstance;
       });
 
+      // defining the time interval to periodically check the recording meter
       const tick = const Duration(milliseconds: 50);
       var count = 0;
       var pauseDuration = 0;
-      bool speaking = false;
-      bool trigger = false;
+      bool triggerRequest = false;
+
+      // setting the max time of recording to 5 secs
       new Timer.periodic(tick, (Timer t) async {
         count += 1;
 
@@ -133,31 +144,30 @@ class RecorderState extends State<Recorder> {
           t.cancel();
         }
 
-        var current = await _recorder.current(channel: 0);
+        var currentRecordingInstance = await _recorder.current(channel: 0);
 
-        if (current.metering.isMeteringEnabled) {
-          if (current.metering.peakPower > -7) {
-            speaking = true;
+        // to check the user is speaking or not
+        if (currentRecordingInstance.metering.isMeteringEnabled) {
+          // condition to check if the user is speaking
+          if (currentRecordingInstance.metering.peakPower > -7) {
             pauseDuration = 0;
-            trigger = false;
+            triggerRequest = true;
           } else {
-            if (speaking) {
-              trigger = true;
-            }
-            if (pauseDuration > 8 && trigger) {
+            // condition to check the current pause time to trigger the _stop() function
+            if (pauseDuration > 8 && triggerRequest) {
               _stop();
               t.cancel();
-              trigger = false;
+              triggerRequest = false;
             }
-            speaking = false;
             pauseDuration += 1;
           }
         }
 
         if (mounted) {
+          // to set the recording instance and status when the widgets mounts
           setState(() {
-            _current = current;
-            _currentStatus = _current.status;
+            _recordingInstance = currentRecordingInstance;
+            _recordingStatus = _recordingInstance.status;
           });
         }
       });
@@ -166,36 +176,44 @@ class RecorderState extends State<Recorder> {
     }
   }
 
+  // called to stop the recording
   _stop() async {
     var result = await _recorder.stop();
     if (mounted) {
       widget.setOverlay(false, '');
       widget.setOverlay(true, 'Processing...');
       await setState(() {
-        _current = result;
-        _currentStatus = _current.status;
+        _recordingInstance = result;
+        _recordingStatus = _recordingInstance.status;
       });
+
+      // creating an instance of AudioConverter and passing the path to the constructor for the audio file
       var audioConverter = new AudioConverter(path: result.path);
+      // calling the convertSTT function on the audioConverter instance to send the audio file to the google server and to get the response back
       var response = await audioConverter.convertSTT();
+      // formatting the response to get the input text
       var responseString = response.results
           .map((e) => e.alternatives.first.transcript)
           .join('\n');
       widget.setOverlay(false, '');
+
+      // displaying the transformed text
       widget.setOverlay(
           true,
           responseString.length > 0
               ? responseString
               : "Didn't hear anything, try again!");
       await Future.delayed(Duration(seconds: 2));
+
+      // setting the value of the search instance and triggering the custom query
       if (responseString.length > 0) {
-        searchInstance.setValue(response.results
-            .map((e) => e.alternatives.first.transcript)
-            .join('\n'));
+        searchInstance.setValue(responseString);
         searchInstance.triggerCustomQuery();
         Navigator.pop(context);
       }
-
+      // hiding the overlay
       widget.setOverlay(false, '');
+      // to delete the already processed audio file
       audioConverter.deleteFile();
     }
   }

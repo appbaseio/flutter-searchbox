@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+// This widget is used to display the mic icon with the animation, audio recording & conversion status
+// and transformed output text back from the Google STT server
 class MicOverlay extends StatefulWidget {
   final String value;
   const MicOverlay({Key key, this.value = ''})
@@ -17,6 +19,7 @@ class _MicOverlayState extends State<MicOverlay>
   AnimationController _animationController;
   Animation _animation;
 
+  // initialising the _animationController and setting up the animation for the recording icon
   @override
   void initState() {
     _animationController =
@@ -29,6 +32,7 @@ class _MicOverlayState extends State<MicOverlay>
     super.initState();
   }
 
+  // disposing the animation controller when this widget gets disposed
   @override
   void dispose() {
     _animationController.dispose();
@@ -37,6 +41,7 @@ class _MicOverlayState extends State<MicOverlay>
 
   @override
   Widget build(BuildContext context) {
+    // checking the size of the current media to set the overlay size accordingly
     _width = MediaQuery.of(context).size.width;
     _height = MediaQuery.of(context).size.height;
     return Container(
@@ -54,6 +59,7 @@ class _MicOverlayState extends State<MicOverlay>
           elevation: 4.0,
           child: Column(
             children: [
+              // to display the icon
               Expanded(
                 flex: 4,
                 child: Container(
@@ -75,6 +81,7 @@ class _MicOverlayState extends State<MicOverlay>
                   ),
                 ),
               ),
+              // to display the text
               Expanded(
                 flex: 3,
                 child: Container(
