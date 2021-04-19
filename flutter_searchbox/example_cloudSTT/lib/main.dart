@@ -56,14 +56,15 @@ class _HomePageState extends State<HomePage> {
   OverlayEntry overlayEntry;
 
   // To display or hide the overlay that shows the mic icon & the display text
-  setOverlay(bool status, String value, BuildContext context) async {
-    if (status) {
+  setOverlay(
+      bool overlayVisibility, String displayText, BuildContext context) async {
+    if (overlayVisibility) {
       // To find the closest enclosing overlay for the BuildContext
       overlayStack = Overlay.of(context);
       // Creating an entry for the overlay that can contain the mic_overlay widget
       // value contains the text to be displayed by the mic_overlay widget
       overlayEntry =
-          OverlayEntry(builder: (context) => MicOverlay(value: value));
+          OverlayEntry(builder: (context) => MicOverlay(value: displayText));
       // To insert overlayEntry into the overlay stack
       overlayStack.insert(overlayEntry);
     } else {
@@ -108,8 +109,10 @@ class _HomePageState extends State<HomePage> {
                         customActions: [
                           // passing the Recorder as a custom action to the SearchBox widget
                           Recorder(
-                            setOverlay: (bool status, String value) {
-                              setOverlay(status, value, context);
+                            setOverlay:
+                                (bool overlayVisibility, String displayText) {
+                              setOverlay(
+                                  overlayVisibility, displayText, context);
                             },
                           ),
                         ]),
