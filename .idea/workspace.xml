@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="3" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d735d611-8975-4e0d-a5e1-12563b2311bc" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/example/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/lib/flutter_searchbox.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/lib/flutter_searchbox.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchbase/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/.dart_tool/package_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchbase/.packages" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/.packages" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchbase/lib/src/searchbase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/lib/src/searchbase.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchbase/lib/src/searchcontroller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/lib/src/searchcontroller.dart" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1qTPmaQIeQ8Vrcjmf3sCQ5abja6" />
+  <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="sortByType" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="io.flutter.reload.alreadyRun" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/flutter_searchbox" />
+    <property name="settings.editor.selected.configurable" value="dart.settings" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/flutter_searchbox" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
+      <option name="filePath" value="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/lib/main.dart" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d735d611-8975-4e0d-a5e1-12563b2311bc" name="Default Changelist" comment="" />
+      <created>1617100766926</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1617100766926</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="184" y="109" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1619070488139">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="184" y="109" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1619070488139" />
+    <state x="457" y="244" key="#com.intellij.ide.util.TreeFileChooserDialog" timestamp="1619070481701">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="457" y="244" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1440.900@0.0.1440.900" timestamp="1619070481701" />
+    <state width="1003" height="170" key="GridCell.Tab.0.bottom" timestamp="1619175903448">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1003" height="170" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1619175903448" />
+    <state width="1003" height="170" key="GridCell.Tab.0.center" timestamp="1619175903441">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1003" height="170" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1619175903441" />
+    <state width="1003" height="170" key="GridCell.Tab.0.left" timestamp="1619175903439">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1003" height="170" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1619175903439" />
+    <state width="1003" height="170" key="GridCell.Tab.0.right" timestamp="1619175903443">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1003" height="170" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1619175903443" />
+    <state x="400" y="174" key="RollbackChangesDialog" timestamp="1617106066184">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="400" y="174" key="RollbackChangesDialog/0.0.1440.900@0.0.1440.900" timestamp="1617106066184" />
+    <state x="221" y="86" key="SettingsEditor" timestamp="1617100918241">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="221" y="86" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1617100918241" />
+    <state x="193" y="104" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1619095492008">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="193" y="104" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1440.900@0.0.1440.900" timestamp="1619095492008" />
+    <state x="223" y="205" width="860" height="518" key="find.popup" timestamp="1619174305992">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="223" y="205" width="860" height="518" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1619174305992" />
+    <state x="379" y="242" key="git4idea.merge.GitPullDialog" timestamp="1619069011516">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="379" y="242" key="git4idea.merge.GitPullDialog/0.0.1440.900@0.0.1440.900" timestamp="1619069011516" />
+  </component>
+</project>

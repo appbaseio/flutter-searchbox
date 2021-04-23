@@ -141,10 +141,10 @@ class SearchController extends Base {
   /// If you have sparse data or documents or items not having the value in the specified field or mapping, then this prop enables you to show that data.
   bool includeNullValues;
 
-  // It allows to define fields to be included in search results.
+  /// It allows to define fields to be included in search results.
   List<String> includeFields;
 
-  // It allows to define fields to be excluded in search results.
+  /// It allows to define fields to be excluded in search results.
   List<String> excludeFields;
 
   /// Useful for showing the correct results for an incorrect search parameter by taking the fuzziness into account.
@@ -337,6 +337,12 @@ class SearchController extends Base {
   /// A list of recent searches as suggestions.
   List<Suggestion> recentSearches;
 
+  /// A string defining a field's name, used to return the distinct value documents.
+  String distinctField;
+
+  /// This property allows specifying additional options to the distinctField property.
+  Map distinctFieldConfig;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   /// It is a callback function which accepts component's future **value** as a
@@ -446,6 +452,8 @@ class SearchController extends Base {
     this.showDistinctSuggestions,
     this.preserveResults,
     this.value,
+    this.distinctField,
+    this.distinctFieldConfig,
     List<Map> results,
   }) : super(index, url, credentials,
             appbaseConfig: appbaseConfig,
@@ -550,7 +558,9 @@ class SearchController extends Base {
       'enableSynonyms': enableSynonyms,
       'selectAllLabel': selectAllLabel,
       'pagination': pagination,
-      'queryString': queryString
+      'queryString': queryString,
+      'distinctField': distinctField,
+      'distinctFieldConfig': distinctFieldConfig,
     };
     query.removeWhere((key, value) => key == null || value == null);
     return query;

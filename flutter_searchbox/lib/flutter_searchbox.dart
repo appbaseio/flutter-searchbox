@@ -328,6 +328,10 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
 
   final List<Map> results;
 
+  final String distinctField;
+
+  final Map distinctFieldConfig;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   final Future Function(String value) beforeValueChange;
@@ -415,6 +419,8 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
     this.preserveResults,
     this.value,
     this.results,
+    this.distinctField,
+    this.distinctFieldConfig,
   })  : assert(searchbase != null),
         assert(builder != null),
         assert(id != null),
@@ -478,6 +484,8 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
           'showDistinctSuggestions': showDistinctSuggestions,
           'preserveResults': preserveResults,
           'value': value,
+          'distinctField': distinctField,
+          'distinctFieldConfig': distinctFieldConfig,
         },
         builder: builder,
         subscribeTo: subscribeTo,
@@ -1160,6 +1168,12 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// Data must be in form of Elasticsearch response.
   final List<Map> results;
 
+  /// A string defining a field's name, used to return the distinct value documents.
+  final String distinctField;
+
+  /// This property allows specifying additional options to the distinctField property.
+  final Map distinctFieldConfig;
+
   // callbacks
 
   /// Enables transformation of network request before execution.
@@ -1313,6 +1327,8 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
     this.preserveResults,
     this.value,
     this.results,
+    this.distinctField,
+    this.distinctFieldConfig,
   })  : assert(builder != null),
         assert(id != null),
         super(key: key);
@@ -1321,65 +1337,68 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   Widget build(BuildContext context) {
     return _SearchBaseConnector(
         child: (searchbase) => _SearchWidgetListener(
-            id: id,
-            searchbase: searchbase,
-            builder: builder,
-            subscribeTo: subscribeTo,
-            triggerQueryOnInit: triggerQueryOnInit,
-            shouldListenForChanges: shouldListenForChanges,
-            destroyOnDispose: destroyOnDispose,
-            // properties to configure search component
-            credentials: credentials,
-            index: index,
-            url: url,
-            appbaseConfig: appbaseConfig,
-            transformRequest: transformRequest,
-            transformResponse: transformResponse,
-            headers: headers,
-            type: type,
-            react: react,
-            queryFormat: queryFormat,
-            dataField: dataField,
-            categoryField: categoryField,
-            categoryValue: categoryValue,
-            nestedField: nestedField,
-            from: from,
-            size: size,
-            sortBy: sortBy,
-            aggregationField: aggregationField,
-            aggregationSize: aggregationSize,
-            after: after,
-            includeNullValues: includeNullValues,
-            includeFields: includeFields,
-            excludeFields: excludeFields,
-            fuzziness: fuzziness,
-            searchOperators: searchOperators,
-            highlight: highlight,
-            highlightField: highlightField,
-            customHighlight: customHighlight,
-            interval: interval,
-            aggregations: aggregations,
-            missingLabel: missingLabel,
-            showMissing: showMissing,
-            enableSynonyms: enableSynonyms,
-            selectAllLabel: selectAllLabel,
-            pagination: pagination,
-            queryString: queryString,
-            defaultQuery: defaultQuery,
-            customQuery: customQuery,
-            beforeValueChange: beforeValueChange,
-            onValueChange: onValueChange,
-            onResults: onResults,
-            onAggregationData: onAggregationData,
-            onError: onError,
-            onRequestStatusChange: onRequestStatusChange,
-            onQueryChange: onQueryChange,
-            enablePopularSuggestions: enablePopularSuggestions,
-            maxPopularSuggestions: maxPopularSuggestions,
-            showDistinctSuggestions: showDistinctSuggestions,
-            preserveResults: preserveResults,
-            value: value,
-            results: results));
+              id: id,
+              searchbase: searchbase,
+              builder: builder,
+              subscribeTo: subscribeTo,
+              triggerQueryOnInit: triggerQueryOnInit,
+              shouldListenForChanges: shouldListenForChanges,
+              destroyOnDispose: destroyOnDispose,
+              // properties to configure search component
+              credentials: credentials,
+              index: index,
+              url: url,
+              appbaseConfig: appbaseConfig,
+              transformRequest: transformRequest,
+              transformResponse: transformResponse,
+              headers: headers,
+              type: type,
+              react: react,
+              queryFormat: queryFormat,
+              dataField: dataField,
+              categoryField: categoryField,
+              categoryValue: categoryValue,
+              nestedField: nestedField,
+              from: from,
+              size: size,
+              sortBy: sortBy,
+              aggregationField: aggregationField,
+              aggregationSize: aggregationSize,
+              after: after,
+              includeNullValues: includeNullValues,
+              includeFields: includeFields,
+              excludeFields: excludeFields,
+              fuzziness: fuzziness,
+              searchOperators: searchOperators,
+              highlight: highlight,
+              highlightField: highlightField,
+              customHighlight: customHighlight,
+              interval: interval,
+              aggregations: aggregations,
+              missingLabel: missingLabel,
+              showMissing: showMissing,
+              enableSynonyms: enableSynonyms,
+              selectAllLabel: selectAllLabel,
+              pagination: pagination,
+              queryString: queryString,
+              defaultQuery: defaultQuery,
+              customQuery: customQuery,
+              beforeValueChange: beforeValueChange,
+              onValueChange: onValueChange,
+              onResults: onResults,
+              onAggregationData: onAggregationData,
+              onError: onError,
+              onRequestStatusChange: onRequestStatusChange,
+              onQueryChange: onQueryChange,
+              enablePopularSuggestions: enablePopularSuggestions,
+              maxPopularSuggestions: maxPopularSuggestions,
+              showDistinctSuggestions: showDistinctSuggestions,
+              preserveResults: preserveResults,
+              value: value,
+              results: results,
+              distinctField: distinctField,
+              distinctFieldConfig: distinctFieldConfig,
+            ));
   }
 }
 
@@ -1747,6 +1766,12 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
   /// Data must be in form of Elasticsearch response.
   final List<Map> results;
 
+  /// A string defining a field's name, used to return the distinct value documents.
+  final String distinctField;
+
+  /// This property allows specifying additional options to the distinctField property.
+  final Map distinctFieldConfig;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   /// It is a callback function which accepts component's future **value** as a
@@ -1895,6 +1920,8 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
       this.showDistinctSuggestions = true,
       this.preserveResults,
       this.results,
+      this.distinctField,
+      this.distinctFieldConfig,
       // searchbox specific properties
       this.enableRecentSearches = false,
       this.showAutoFill = false,
@@ -1909,6 +1936,12 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
 
   @override
   List<Widget> buildActions(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (this.aggregationField != null) {
+        debugPrint(
+            'Warning(SearchBox): The `aggregationField` prop has been marked as deprecated, please use the `distinctField` prop instead.');
+      }
+    });
     return [
       ...customActions != null ? customActions : [],
       speechToTextInstance != null
@@ -2097,6 +2130,8 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String> {
         preserveResults: preserveResults,
         value: query,
         results: results,
+        distinctField: distinctField,
+        distinctFieldConfig: distinctFieldConfig,
         builder: (context, searchController) {
           if (query != searchController.value) {
             // To fetch the suggestions
