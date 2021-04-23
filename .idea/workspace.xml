@@ -23,13 +23,74 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d735d611-8975-4e0d-a5e1-12563b2311bc" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_searchbox/lib/flutter_searchbox.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/lib/flutter_searchbox.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_searchbox/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/.metadata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/android/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/android/app/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/android/app/src/debug/AndroidManifest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/android/app/src/main/AndroidManifest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/android/app/src/main/kotlin/com/example/example/MainActivity.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/android/app/src/main/res/drawable/launch_background.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/android/app/src/main/res/mipmap-hdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/android/app/src/main/res/mipmap-mdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/android/app/src/main/res/values/styles.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/android/app/src/profile/AndroidManifest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/android/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/android/gradle.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/android/settings.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/android/settings_aar.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Flutter/AppFrameworkInfo.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Flutter/Debug.xcconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Flutter/Release.xcconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Podfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Podfile.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner.xcodeproj/project.xcworkspace/contents.xcworkspacedata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner.xcworkspace/contents.xcworkspacedata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/AppDelegate.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Base.lproj/LaunchScreen.storyboard" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Base.lproj/Main.storyboard" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Info.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/ios/Runner/Runner-Bridging-Header.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/lib/main.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/lib/results.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/pubspec.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/pubspec.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example-with-distinct-field-prop/test/widget_test.dart" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_searchbox/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchbase/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/.dart_tool/package_config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchbase/.packages" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/.packages" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchbase/lib/src/searchbase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/lib/src/searchbase.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/searchbase/lib/src/searchcontroller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/lib/src/searchcontroller.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -102,22 +163,22 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="457" y="244" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1440.900@0.0.1440.900" timestamp="1619070481701" />
-    <state width="1003" height="170" key="GridCell.Tab.0.bottom" timestamp="1619175903448">
+    <state width="1003" height="282" key="GridCell.Tab.0.bottom" timestamp="1619177331655">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1003" height="170" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1619175903448" />
-    <state width="1003" height="170" key="GridCell.Tab.0.center" timestamp="1619175903441">
+    <state width="1003" height="282" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1619177331655" />
+    <state width="1003" height="282" key="GridCell.Tab.0.center" timestamp="1619177331653">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1003" height="170" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1619175903441" />
-    <state width="1003" height="170" key="GridCell.Tab.0.left" timestamp="1619175903439">
+    <state width="1003" height="282" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1619177331653" />
+    <state width="1003" height="282" key="GridCell.Tab.0.left" timestamp="1619177331650">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1003" height="170" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1619175903439" />
-    <state width="1003" height="170" key="GridCell.Tab.0.right" timestamp="1619175903443">
+    <state width="1003" height="282" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1619177331650" />
+    <state width="1003" height="282" key="GridCell.Tab.0.right" timestamp="1619177331654">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1003" height="170" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1619175903443" />
+    <state width="1003" height="282" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1619177331654" />
     <state x="400" y="174" key="RollbackChangesDialog" timestamp="1617106066184">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -138,5 +199,9 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="379" y="242" key="git4idea.merge.GitPullDialog/0.0.1440.900@0.0.1440.900" timestamp="1619069011516" />
+    <state x="252" y="346" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1619177360187">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="252" y="346" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.0.1440.900@0.0.1440.900" timestamp="1619177360187" />
   </component>
 </project>

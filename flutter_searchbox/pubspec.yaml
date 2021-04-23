@@ -11,8 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_feather_icons: ^1.0.3
-  searchbase:
-    path: ./../searchbase
+  searchbase: ^1.0.1
   speech_to_text: ^3.1.0
   provider: ^4.3.2+3
 

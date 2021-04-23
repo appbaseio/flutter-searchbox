@@ -1113,7 +1113,6 @@ class SearchController extends Base {
       'body': jsonEncode(requestBody),
       'headers': {...this.headers}
     };
-
     try {
       final finalRequestOptions =
           await this._handleTransformRequest(requestOptions);
