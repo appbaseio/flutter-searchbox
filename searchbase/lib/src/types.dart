@@ -14,28 +14,28 @@ class AppbaseSettings {
   /// It allows recording search analytics (and click analytics) when set to `true` and appbase.io is used as a backend.
   ///
   /// Defaults to `false`.
-  bool recordAnalytics;
+  bool? recordAnalytics;
 
   /// If `false`, then appbase.io will not apply the query rules on the search requests.
   ///
   /// Defaults to `true`.
-  bool enableQueryRules;
+  bool? enableQueryRules;
 
   /// It allows you to define the user id to be used to record the appbase.io analytics.
   ///
   /// Defaults to the client's IP address.
-  String userId;
+  String? userId;
 
   /// It allows you to set the custom events which can be used to build your own analytics on top of appbase.io analytics.
   ///
   /// Further, these events can be used to filter the analytics stats from the appbase.io dashboard.
-  Map<String, String> customEvents;
+  Map<String, String>? customEvents;
 
   AppbaseSettings({
-    bool this.recordAnalytics,
-    bool this.enableQueryRules,
-    String this.userId,
-    Map<String, String> this.customEvents,
+    bool? this.recordAnalytics,
+    bool? this.enableQueryRules,
+    String? this.userId,
+    Map<String, String>? this.customEvents,
   }) {}
 
   Map<String, dynamic> toJSON() {
@@ -58,11 +58,11 @@ class AppbaseSettings {
 
 /// Options to configure the recent searches request.
 class RecentSearchOptions {
-  int size;
-  int minChars;
-  String from;
-  String to;
-  Map<String, String> customEvents;
+  int? size;
+  int? minChars;
+  String? from;
+  String? to;
+  Map<String, String>? customEvents;
   RecentSearchOptions(
       {this.size = 5,
       this.minChars = 3,
@@ -73,11 +73,13 @@ class RecentSearchOptions {
 
 /// Allows to configure the effects of an update in a particular property.
 class Options {
-  bool triggerDefaultQuery;
-  bool triggerCustomQuery;
-  bool stateChanges;
+  bool? triggerDefaultQuery;
+  bool? triggerCustomQuery;
+  bool? stateChanges;
   Options(
-      {this.triggerDefaultQuery, bool triggerCustomQuery, bool stateChanges}) {
+      {this.triggerDefaultQuery,
+      bool? triggerCustomQuery,
+      bool? stateChanges}) {
     this.triggerDefaultQuery =
         triggerDefaultQuery != null ? triggerDefaultQuery : false;
     this.triggerCustomQuery =
@@ -88,7 +90,7 @@ class Options {
 
 /// Allows to configure the effects after executing a query.
 class Option {
-  bool stateChanges;
+  bool? stateChanges;
   Option({stateChanges}) {
     this.stateChanges = stateChanges != null ? stateChanges : true;
   }
@@ -109,10 +111,10 @@ class Suggestion {
   bool isPopularSuggestion;
 
   /// The source object from Elasticsearch response.
-  final Map source;
+  final Map? source;
 
   /// Represents the click position, useful to record click analytics.
-  final int clickId;
+  final int? clickId;
 
   Suggestion(this.label, this.value,
       {this.isRecentSearch = false,
@@ -120,6 +122,6 @@ class Suggestion {
       this.clickId,
       this.isPopularSuggestion = false}) {
     this.isPopularSuggestion =
-        this.source != null && this.source['_popular_suggestion'] == true;
+        this.source != null && this.source!['_popular_suggestion'] == true;
   }
 }

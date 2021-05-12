@@ -20,13 +20,13 @@ import 'constants.dart';
 class SearchBase extends Base {
   /* ------ Private properties only for the internal use ----------- */
   // active widgets
-  Map<String, SearchController> _searchWidgets;
+  late Map<String, SearchController> _searchWidgets;
 
   SearchBase(String index, String url, String credentials,
-      {AppbaseSettings appbaseConfig,
-      TransformRequest transformRequest,
-      TransformResponse transformResponse,
-      Map<String, String> headers})
+      {AppbaseSettings? appbaseConfig,
+      TransformRequest? transformRequest,
+      TransformResponse? transformResponse,
+      Map<String, String>? headers})
       : super(index, url, credentials,
             appbaseConfig: appbaseConfig,
             transformRequest: transformRequest,
@@ -84,9 +84,9 @@ class SearchBase extends Base {
     }
     if (this._searchWidgets.containsKey(widgetId)) {
       // return existing instance
-      return this._searchWidgets[widgetId];
+      return this._searchWidgets[widgetId]!;
     }
-    SearchController componentInstance;
+    SearchController? componentInstance;
     if (searchController != null && searchController is Map) {
       // create instance from object with all the options
       componentInstance = SearchController(
@@ -163,7 +163,7 @@ class SearchBase extends Base {
       componentInstance.id = widgetId;
     }
     // register component
-    this._searchWidgets[widgetId] = componentInstance;
+    this._searchWidgets[widgetId] = componentInstance!;
     // set the search base instance as parent
     componentInstance.setParent(this);
     return componentInstance;
@@ -179,7 +179,7 @@ class SearchBase extends Base {
   }
 
   /// This method can be used to retrieve the instance of the [SearchController] class for a particular widget by `id`.
-  SearchController getSearchWidget(String widgetId) {
+  SearchController? getSearchWidget(String widgetId) {
     return this._searchWidgets[widgetId];
   }
 

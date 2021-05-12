@@ -6,10 +6,10 @@ class Results {
   List<Map<String, dynamic>> data;
 
   /// Raw response returned by ES query
-  Map raw;
+  Map? raw;
 
   /// To parse the results.
-  List<Map<String, dynamic>> Function(List<Map> results, [List<Map> sourceData])
+  List<Map<String, dynamic>> Function(List<Map> results, [List<Map>? sourceData])?
       parseResults;
 
   Results(this.data) {}
@@ -17,15 +17,15 @@ class Results {
   /// Total number of results found.
   int get numberOfResults {
     // calculate from raw response
-    if (this.raw != null && this.raw.containsKey('hits')) {
+    if (this.raw != null && this.raw!.containsKey('hits')) {
       if (this.raw != null &&
-          this.raw['hits'] != null &&
-          this.raw['hits']['total'] != null) {
-        if (this.raw['hits']['total'] is Map) {
-          return this.raw['hits']['total']['value'];
+          this.raw!['hits'] != null &&
+          this.raw!['hits']['total'] != null) {
+        if (this.raw!['hits']['total'] is Map) {
+          return this.raw!['hits']['total']['value'];
         }
-        if (this.raw['hits']['total'] is int) {
-          return this.raw['hits']['total'];
+        if (this.raw!['hits']['total'] is int) {
+          return this.raw!['hits']['total'];
         }
       }
     }
@@ -36,7 +36,7 @@ class Results {
   int get time {
     // calculate from raw response
     if (this.raw != null) {
-      return this.raw['took'];
+      return this.raw!['took'];
     }
     return 0;
   }
@@ -44,17 +44,17 @@ class Results {
   /// Number of hidden results found.
   int get hidden {
     if (this.raw != null &&
-        this.raw['hits'] != null &&
-        this.raw['hits']['hidden'] is int) {
-      return this.raw['hits']['hidden'];
+        this.raw!['hits'] != null &&
+        this.raw!['hits']['hidden'] is int) {
+      return this.raw!['hits']['hidden'];
     }
     return 0;
   }
 
   /// An array of promoted results obtained from the applied query.
   List<Map> get promotedData {
-    if (this.raw != null && this.raw['promoted'] is List<Map>) {
-      return this.raw['promoted'];
+    if (this.raw != null && this.raw!['promoted'] is List<Map>) {
+      return this.raw!['promoted'];
     }
     return [];
   }
@@ -65,25 +65,25 @@ class Results {
   }
 
   // An object of raw response as-is from elasticsearch query.
-  Map get rawData {
+  Map? get rawData {
     return this.raw;
   }
 
   // An object of custom data applied through Appbase query rules.
-  Map get customData {
-    if (this.raw != null && this.raw['customData'] == Map) {
-      return this.raw['customData'];
+  Map? get customData {
+    if (this.raw != null && this.raw!['customData'] == Map) {
+      return this.raw!['customData'];
     }
     return {};
   }
 
   /// Method to set the raw response form Elasticsearch
-  void setRaw(Map rawResponse) {
+  void setRaw(Map? rawResponse) {
     // set response
     if (rawResponse != null) {
       this.raw = rawResponse;
-      if (this.raw['hits'] != null && this.raw['hits']['hits'] is List) {
-        final mapped = (this.raw['hits']['hits'] as List)
+      if (this.raw!['hits'] != null && this.raw!['hits']['hits'] is List) {
+        final mapped = (this.raw!['hits']['hits'] as List)
             .map((model) => Map<String, dynamic>.from(model));
         data = mapped.toList();
         this.setData(data);
@@ -97,7 +97,7 @@ class Results {
     List<Map<String, dynamic>> filteredResults = parseHits(data);
     // filter results & remove duplicates if any
     if (this.promotedData.length != 0) {
-      final List<String> ids = this.promotedData.map((item) => item["_id"]);
+      final List<String> ids = this.promotedData.map((item) => item["_id"]) as List<String>;
       if (ids.length != 0) {
         filteredResults.where((item) {
           // remove duplicate results
@@ -111,14 +111,14 @@ class Results {
       filteredResults = [
         ...this
             .promotedData
-            .map((dataItem) => ({...dataItem, "_promoted": true})),
+            .map((dataItem) => ({...dataItem as Map<String, dynamic>, "_promoted": true})),
         ...filteredResults
       ];
     }
 
     // set data
     if (this.parseResults != null) {
-      this.data = this.parseResults(filteredResults, data);
+      this.data = this.parseResults!(filteredResults, data);
     } else {
       this.data = filteredResults;
     }
