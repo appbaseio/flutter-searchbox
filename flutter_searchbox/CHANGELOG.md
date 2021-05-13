@@ -1,3 +1,7 @@
+## [2.0.0-nullsafety] - 13-05-2021
+
+- Add support for null safety
+
 ## [1.2.0] - 13-03-2021
 
 - Add support to customize voice search experience

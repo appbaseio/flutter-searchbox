@@ -27,7 +27,7 @@ class FlutterSearchBoxApp extends StatelessWidget {
   final stp.SpeechToTextProvider speechToTextInstance =
       stp.SpeechToTextProvider(stt.SpeechToText());
 
-  FlutterSearchBoxApp({Key key}) : super(key: key);
+  FlutterSearchBoxApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class FlutterSearchBoxApp extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
-  final stp.SpeechToTextProvider speechToTextInstance;
+  final stp.SpeechToTextProvider? speechToTextInstance;
 
   HomePage({this.speechToTextInstance});
   // This widget is the root of your application.
@@ -88,7 +88,7 @@ class HomePage extends StatelessWidget {
                           speechToTextInstance: speechToTextInstance),
                       // Initialize query to persist suggestions for active search
                       query: SearchBaseProvider?.of(context)
-                          ?.getSearchWidget('search-widget')
+                          .getSearchWidget('search-widget')
                           ?.value
                           ?.toString(),
                     );
@@ -117,7 +117,7 @@ class HomePage extends StatelessWidget {
             dataField: "authors.keyword",
             size: 10,
             // Initialize with default value
-            value: List<String>(),
+            value: [],
             react: {
               'and': ['search-widget']
             },
