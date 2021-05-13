@@ -877,7 +877,7 @@ class SearchController extends Base {
   /// -   `customQuery`
   ///
   subscribeToStateChanges(
-      SubscriptionFunction fn, List<String> propertiesToSubscribe) {
+      SubscriptionFunction fn, List<String>? propertiesToSubscribe) {
     this.stateChanges.subscribe(fn, propertiesToSubscribe);
   }
 
