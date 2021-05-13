@@ -5,7 +5,8 @@ class FilterHeader extends PreferredSize {
   final double height;
   final Widget child;
 
-  FilterHeader({@required this.child, this.height = kToolbarHeight});
+  FilterHeader({required this.child, this.height = kToolbarHeight})
+      : super(child: child, preferredSize: Size.fromHeight(height));
 
   @override
   Size get preferredSize => Size.fromHeight(height);
@@ -73,7 +74,7 @@ class AuthorFilter extends StatelessWidget {
                     body: searchController.requestPending
                         ? Center(child: CircularProgressIndicator())
                         : ListView(
-                            children: searchController.aggregationData.data
+                            children: searchController.aggregationData!.data!
                                 .map((bucket) {
                               return Container(
                                 child: Column(
@@ -89,8 +90,8 @@ class AuthorFilter extends StatelessWidget {
                                               ? []
                                               : searchController.value)
                                           .contains(bucket['_key']),
-                                      onChanged: (bool value) {
-                                        final List<String> values =
+                                      onChanged: (bool? value) {
+                                        final List values =
                                             searchController.value == null
                                                 ? []
                                                 : searchController.value;
@@ -124,10 +125,18 @@ class AuthorFilter extends StatelessWidget {
                       children: [
                         Expanded(
                           flex: 6,
-                          child: RaisedButton(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10.0, vertical: 23.0),
-                            color: Colors.black,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              onPrimary: Colors.black87,
+                              primary: Colors.black,
+                              minimumSize: Size(88, 36),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10.0, vertical: 23.0),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(2)),
+                              ),
+                            ),
                             child: Text(
                               'Apply',
                               style: TextStyle(
@@ -159,10 +168,18 @@ class AuthorFilter extends StatelessWidget {
                         ),
                         Expanded(
                           flex: 6,
-                          child: RaisedButton(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10.0, vertical: 23.0),
-                            color: Colors.black,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              onPrimary: Colors.black87,
+                              primary: Colors.black,
+                              minimumSize: Size(88, 36),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10.0, vertical: 23.0),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(2)),
+                              ),
+                            ),
                             child: Text(
                               'Close',
                               style: TextStyle(
