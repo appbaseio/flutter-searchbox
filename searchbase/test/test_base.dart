@@ -32,6 +32,6 @@ void main() {
   test('Base: set headers', () {
     var base = Base("test", "http://localhost:8000", "a:b");
     base.setHeaders({"custom-header": "test"});
-    expect(base.headers['custom-header'], equals('test'));
+    expect(base.headers!['custom-header'], equals('test'));
   });
 }

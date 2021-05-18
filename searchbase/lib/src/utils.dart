@@ -93,9 +93,9 @@ List<int> getNormalizedWeights(dynamic field) {
   return [];
 }
 
-List<String> flatReactProp(Map reactProp, String componentID) {
+List<String> flatReactProp(Map? reactProp, String componentID) {
   List<String> flattenReact = [];
-  flatReact(Map react) {
+  flatReact(Map? react) {
     if (react != null && react.values.length != 0) {
       react.values.forEach((reactValue) {
         if (reactValue is String) {
@@ -142,20 +142,20 @@ dynamic extractSuggestion(dynamic val) {
  * @param {boolean} showDistinctSuggestions When set to true will only return 1 suggestion per document
  */
 List<Suggestion> getSuggestions(
-    List<String> fields, List<Map> suggestions, String value,
-    [bool showDistinctSuggestions = true]) {
+    List<String?> fields, List<Map> suggestions, String? value,
+    [bool? showDistinctSuggestions = true]) {
   List<Suggestion> suggestionsList = [];
   List<String> labelsList = [];
   bool skipWordMatch =
       false; //  Use to skip the word match logic, important for synonym
-  final String currentValue = value;
-  bool populateSuggestionsList(val, Map parsedSource, Map source) {
+  final String? currentValue = value;
+  bool populateSuggestionsList(val, Map parsedSource, Map? source) {
     // check if the suggestion includes the current value
     // and not already included in other suggestions
     final bool isWordMatch = skipWordMatch
         ? skipWordMatch
         : val is String
-            ? currentValue
+            ? currentValue!
                 .trim()
                 .split(' ')
                 .any((term) => val.toLowerCase().contains(term))
@@ -163,7 +163,7 @@ List<Suggestion> getSuggestions(
     // promoted results should always include in suggestions even there is no match
     if (val is String &&
         ((isWordMatch && !labelsList.contains(val)) ||
-            source['_promoted'] == true)) {
+            source!['_promoted'] == true)) {
       labelsList = [...labelsList, val];
       suggestionsList = [
         ...suggestionsList,
@@ -176,12 +176,12 @@ List<Suggestion> getSuggestions(
     return false;
   }
 
-  parseField(dynamic parsedSource, String field, {Map source}) {
+  parseField(dynamic parsedSource, String? field, {Map? source}) {
     if (source == null) {
       source = parsedSource;
     }
     if (parsedSource is Map) {
-      final List<String> fieldNodes = field.split('.');
+      final List<String> fieldNodes = field!.split('.');
       final label = parsedSource[fieldNodes[0]];
       if (label != null) {
         if (fieldNodes.length > 1) {
@@ -243,7 +243,7 @@ List<Suggestion> getSuggestions(
   return withSuggestionClickIds(suggestionsList);
 }
 
-List<Map> parseCompAggToHits(String aggFieldName, List<Map> buckets) {
+List<Map> parseCompAggToHits(String? aggFieldName, List<Map> buckets) {
   return buckets.map((Map bucket) {
     return {
       '_doc_count': bucket['doc_count'],

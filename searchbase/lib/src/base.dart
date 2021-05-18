@@ -10,22 +10,22 @@ class Base {
   /// Refers to an index of the Elasticsearch cluster.
   ///
   /// `Note:` Multiple indexes can be connected to Elasticsearch by specifying comma-separated index names.
-  String index;
+  late String index;
 
   /// URL for the Elasticsearch cluster.
-  String url;
+  late String url;
 
   /// Basic Auth credentials if required for authentication purposes.
   ///
   /// It should be a string of the format `username:password`. If you are using an appbase.io cluster, you will find credentials under the `Security > API credentials` section of the appbase.io dashboard.
   /// If you are not using an appbase.io cluster, credentials may not be necessary - although having open access to your Elasticsearch cluster is not recommended.
-  String credentials;
+  late String credentials;
 
   /// Set custom headers to be sent with each server request as key/value pairs.
-  Map<String, String> headers;
+  Map<String, String>? headers;
 
   /// It allows you to customize the analytics experience when appbase.io is used as a backend.
-  AppbaseSettings appbaseConfig;
+  AppbaseSettings? appbaseConfig;
 
   /* ---- callbacks to create the side effects while querying ----- */
 
@@ -42,7 +42,7 @@ class Base {
   ///      })
   ///  }
   /// ```
-  TransformRequest transformRequest;
+  TransformRequest? transformRequest;
 
   /// Enables transformation of search network response before rendering them.
   ///
@@ -71,25 +71,25 @@ class Base {
   ///	});
   ///}
   /// ```
-  TransformResponse transformResponse;
+  TransformResponse? transformResponse;
 
   /* ------ Private properties only for the internal use ----------- */
 
   // query search ID
-  String _queryId;
+  String? _queryId;
 
   Base(String index, String url, String credentials,
-      {AppbaseSettings this.appbaseConfig,
-      TransformRequest this.transformRequest,
-      TransformResponse this.transformResponse,
-      Map<String, String> headers}) {
-    if (index == null || index == "") {
+      {AppbaseSettings? this.appbaseConfig,
+      TransformRequest? this.transformRequest,
+      TransformResponse? this.transformResponse,
+      Map<String, String>? headers}) {
+    if (index == "") {
       throw (ErrorMessages[InvalidIndex]);
     }
-    if (url == null || url == "") {
+    if (url == "") {
       throw (ErrorMessages[InvalidURL]);
     }
-    if (credentials == null || credentials == "") {
+    if (credentials == "") {
       throw (ErrorMessages[InvalidCredentials]);
     }
     this.index = index;
@@ -110,7 +110,7 @@ class Base {
 
   /// To to set the custom headers
   void setHeaders(Map<String, String> headers) {
-    this.headers = {...this.headers, ...headers};
+    this.headers = {...this.headers!, ...headers};
   }
 
   /// To set the query ID
@@ -119,19 +119,19 @@ class Base {
   }
 
   /// To get the query ID
-  String get queryId {
+  String? get queryId {
     return this._queryId;
   }
 
   /// use this methods to record a search click event
   Future click(Map<String, int> objects,
-      {bool isSuggestionClick = false, String queryId}) async {
-    String queryID = queryId;
+      {bool isSuggestionClick = false, String? queryId}) async {
+    String? queryID = queryId;
     if (queryId == null || queryId == "") {
       queryID = this.queryId;
     }
     if (this.appbaseConfig != null &&
-        this.appbaseConfig.recordAnalytics == true &&
+        this.appbaseConfig!.recordAnalytics == true &&
         queryID != null &&
         queryID != "") {
       try {
@@ -142,7 +142,7 @@ class Base {
         };
         final String url = "${this.url}/${this..index}/_analytics/click";
         final res = await http.put(
-          url,
+          Uri.parse(url),
           headers: this.headers,
           body: jsonEncode(requestBody),
         );
@@ -155,13 +155,13 @@ class Base {
   }
 
   /// use this methods to record a search conversion
-  Future conversion(List<String> objects, {String queryId}) async {
-    String queryID = queryId;
+  Future conversion(List<String> objects, {String? queryId}) async {
+    String? queryID = queryId;
     if (queryId == null || queryId == "") {
       queryID = this.queryId;
     }
     if (this.appbaseConfig != null &&
-        this.appbaseConfig.recordAnalytics == true &&
+        this.appbaseConfig!.recordAnalytics == true &&
         queryID != null &&
         queryID != "") {
       try {
@@ -171,7 +171,7 @@ class Base {
         };
         final String url = "${this.url}/${this..index}/_analytics/conversion";
         final res = await http.put(
-          url,
+          Uri.parse(url),
           headers: this.headers,
           body: jsonEncode(requestBody),
         );

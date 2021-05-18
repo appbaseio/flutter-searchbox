@@ -3,6 +3,7 @@ import 'package:searchbase/searchbase.dart';
 
 class DefaultUriPolicy implements UriPolicy {
   DefaultUriPolicy();
+  @override
   bool allowsUri(String uri) {
     return true;
   }
@@ -33,7 +34,7 @@ void main() {
     'type': QueryType.term,
     'dataField': 'language.keyword',
     'react': {'and': 'search-widget'},
-    'value': List<String>()
+    'value': []
   });
 
 // Register result widget with react dependency on search and filter widget => To render the results
@@ -42,10 +43,12 @@ void main() {
     'react': {
       'and': ['search-widget', 'language-filter']
     },
+    'defaultQuery': (SearchController controller) =>
+        ({'track_total_hits': true})
   });
 
   // Render results
-  querySelector('#output').innerHtml = """
+  querySelector('#output').innerHtml = '''
     <div id="root">
       <h2 class="text-center">Searchbase Demo with Facet</h2>
       <div id="autocomplete" class="autocomplete">
@@ -63,7 +66,7 @@ void main() {
         </div>
       </div>
     </div>
-  """;
+  ''';
   final input = querySelector('#input');
   void handleInput(e) {
     // Set the value to fetch the suggestions
@@ -101,9 +104,9 @@ void main() {
       </div>
     </div>""";
     });
-    final resultStats = """<p class="results-stats">
+    final resultStats = '''<p class="results-stats">
                           Showing ${results.numberOfResults} in ${results.time}ms
-                        <p>""";
+                        <p>''';
 
     resultElement.setInnerHtml("${resultStats}${items.join('')}",
         validator: NodeValidatorBuilder.common()
@@ -127,8 +130,7 @@ void main() {
         checkbox.setAttribute('value', i['_key']);
         checkbox.id = i['_key'];
         checkbox.addEventListener('click', (event) {
-          final List<String> values =
-              filterWidget.value != null ? filterWidget.value : [];
+          final List values = filterWidget.value ?? [];
           if (values.contains(i['_key'])) {
             values.remove(i['_key']);
           } else {
@@ -151,7 +153,7 @@ void main() {
 
   searchController.subscribeToStateChanges((change) {
     print('Track State Updates');
-    print("Search Suggestions");
+    print('Search Suggestions');
     window.console.log(searchController.suggestions);
   }, ['results']);
 }

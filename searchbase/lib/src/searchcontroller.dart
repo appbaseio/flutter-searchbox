@@ -35,7 +35,7 @@ class SearchController extends Base {
   /// This property represents the type of the query which is defaults to [QueryType.search], valid values are [QueryType.search], [QueryType.term], [QueryType.range] & [QueryType.geo].
   ///
   /// You can read more [here](https://docs.appbase.io/docs/search/reactivesearch-api/implement#type-of-queries).
-  QueryType type;
+  QueryType? type;
 
   /// It is useful for components whose data view should reactively update when on or more dependent components change their states.
   ///
@@ -62,7 +62,7 @@ class SearchController extends Base {
   /// ```
 
   /// Here, we are specifying that the results should update whenever one of the blacklist items is not present and simultaneously any one of the city or topics matches.
-  Map<String, dynamic> react;
+  Map<String, dynamic>? react;
 
   /// Sets the query format, can be **or** or **and**.
   ///
@@ -70,7 +70,7 @@ class SearchController extends Base {
   ///
   /// -   **or** returns all the results matching **any** of the search query text's parameters. For example, searching for "bat man" with **or** will return all the results matching either "bat" or "man".
   /// -   On the other hand with **and**, only results matching both "bat" and "man" will be returned. It returns the results matching **all** of the search query text's parameters.
-  String queryFormat;
+  String? queryFormat;
 
   /// The index field(s) to be connected to the component’s UI view.
   ///
@@ -94,26 +94,26 @@ class SearchController extends Base {
   dynamic dataField;
 
   /// Index field mapped to the category value.
-  String categoryField;
+  String? categoryField;
 
   /// This is the selected category value. It is used for informing the search result.
-  String categoryValue;
+  String? categoryValue;
 
   /// Sets the `nested` field path that allows an array of objects to be indexed in a way that can be queried independently of each other.
   ///
   /// Applicable only when dataField's mapping is of `nested` type.
-  String nestedField;
+  String? nestedField;
 
   /// To define from which page to start the results, it is important to implement pagination.
-  int from;
+  int? from;
 
   /// Number of suggestions and results to fetch per request.
-  int size;
+  int? size;
 
   /// Sorts the results by either [SortType.asc], [SortType.desc] or [SortType.count] order.
   ///
   /// Please note that the [SortType.count] is only applicable for [QueryType.term] type of search widgets.
-  SortType sortBy;
+  SortType? sortBy;
 
   /// Represents the value for a particular [QueryType].
   ///
@@ -124,28 +124,28 @@ class SearchController extends Base {
   /// It enables you to get `DISTINCT` results (useful when you are dealing with sessions, events, and logs type data).
   ///
   /// It utilizes [composite aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-composite-aggregation.html) which are newly introduced in ES v6 and offer vast performance benefits over a traditional terms aggregation.
-  String aggregationField;
+  String? aggregationField;
 
   /// To set the number of buckets to be returned by aggregations.
   ///
   /// > Note: This is a new feature and only available for appbase versions >= 7.41.0.
-  final int aggregationSize;
+  final int? aggregationSize;
 
   /// This property can be used to implement the pagination for `aggregations`.
   ///
   /// We use the [composite aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-composite-aggregation.html) of `Elasticsearch` to execute the aggregations' query,
   /// the response of composite aggregations includes a key named `after_key` which can be used to fetch the next set of aggregations for the same query.
   /// You can read more about the pagination for composite aggregations at [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-composite-aggregation.html#_pagination).
-  Map after;
+  Map? after;
 
   /// If you have sparse data or documents or items not having the value in the specified field or mapping, then this prop enables you to show that data.
-  bool includeNullValues;
+  bool? includeNullValues;
 
-  /// It allows to define fields to be included in search results.
-  List<String> includeFields;
+  // It allows to define fields to be included in search results.
+  List<String>? includeFields;
 
-  /// It allows to define fields to be excluded in search results.
-  List<String> excludeFields;
+  // It allows to define fields to be excluded in search results.
+  List<String>? excludeFields;
 
   /// Useful for showing the correct results for an incorrect search parameter by taking the fuzziness into account.
   ///
@@ -157,12 +157,12 @@ class SearchController extends Base {
   ///
   /// Defaults to `false`.
   /// You can read more about this property at [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html).
-  bool searchOperators;
+  bool? searchOperators;
 
   /// To define whether highlighting should be enabled in the returned results.
   ///
   /// Defaults to `false`.
-  bool highlight;
+  bool? highlight;
 
   /// If highlighting is enabled, this property allows specifying the fields which should be returned with the matching highlights.
   ///
@@ -173,28 +173,28 @@ class SearchController extends Base {
   /// It can be used to set the custom highlight settings.
   ///
   /// You can read the `Elasticsearch` docs for the highlight options at [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-highlighting.html).
-  Map customHighlight;
+  Map? customHighlight;
 
   /// To set the histogram bar interval for [QueryType.range] type of widgets, applicable when [aggregations](/docs/search/reactivesearch-api/reference/#aggregations) value is set to `["histogram"]`.
   ///
   /// Defaults to `Math.ceil((range.end - range.start) / 100) || 1`.
-  int interval;
+  int? interval;
 
   /// It helps you to utilize the built-in aggregations for [QueryType.range] type of widgets directly, valid values are:
   /// -   `max`: to retrieve the maximum value for a `dataField`,
   /// -   `min`: to retrieve the minimum value for a `dataField`,
   /// -   `histogram`: to retrieve the histogram aggregations for a particular `interval`
-  List<String> aggregations;
+  List<String>? aggregations;
 
   /// When set to `true` then it also retrieves the aggregations for missing fields.
   ///
   /// Defaults to `false`.
-  bool showMissing;
+  bool? showMissing;
 
   /// It allows you to specify a custom label to show when [showMissing](/docs/search/reactivesearch-api/reference/#showmissing) is set to `true`.
   ///
   /// Defaults to `N/A`.
-  String missingLabel;
+  String? missingLabel;
 
   /// It is a callback function that takes the [SearchController] instance as parameter and **returns** the data query to be applied to the source component, as defined in Elasticsearch Query DSL, which doesn't get leaked to other components.
   ///
@@ -218,7 +218,7 @@ class SearchController extends Base {
   ///   	}
   ///   )
   ///```
-  Map Function(SearchController searchController) defaultQuery;
+  Map Function(SearchController searchController)? defaultQuery;
 
   /// It takes [SearchController] instance as parameter and **returns** the query to be applied to the dependent widgets by `react` prop, as defined in Elasticsearch Query DSL.
   ///
@@ -252,39 +252,39 @@ class SearchController extends Base {
   ///   }
   /// )
   /// ```
-  Map Function(SearchController searchController) customQuery;
+  Map Function(SearchController searchController)? customQuery;
 
   /// This property can be used to control (enable/disable) the synonyms behavior for a particular query.
   ///
   /// Defaults to `true`, if set to `false` then fields having `.synonyms` suffix will not affect the query.
-  bool enableSynonyms;
+  bool? enableSynonyms;
 
   /// This property allows you to add a new property in the list with a particular value in such a way that
   /// when selected i.e `value` is similar/contains to that label(`selectAllLabel`) then [QueryType.term] query will make sure that
   /// the `field` exists in the `results`.
-  String selectAllLabel;
+  String? selectAllLabel;
 
   /// This property allows you to implement the `pagination` for [QueryType.term] type of queries.
   ///
   /// If `pagination` is set to `true` then appbase will use the [composite aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-composite-aggregation.html) of Elasticsearch
   /// instead of [terms aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-terms-aggregation.html).
-  bool pagination;
+  bool? pagination;
 
   /// If set to `true` than it allows you to create a complex search that includes wildcard characters, searches across multiple fields, and more.
   ///
   /// Defaults to `false`.
   /// Read more about it [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html).
-  bool queryString;
+  bool? queryString;
 
   /// It can be useful to curate search suggestions based on actual search queries that your users are making.
   ///
   /// Defaults to `false`. You can read more about it over [here](https://docs.appbase.io/docs/analytics/popular-suggestions).
-  bool enablePopularSuggestions;
+  bool? enablePopularSuggestions;
 
   /// It can be used to configure the size of popular suggestions.
   ///
   /// The default size is `5`.
-  int maxPopularSuggestions;
+  int? maxPopularSuggestions;
 
   /// To display one suggestion per document.
   ///
@@ -314,28 +314,28 @@ class SearchController extends Base {
   ///  Warn
   ///  Washington
   ///  ```
-  bool showDistinctSuggestions;
+  bool? showDistinctSuggestions;
 
   /// It set to `true` then it preserves the previously loaded results data that can be used to persist pagination or implement infinite loading.
-  bool preserveResults;
+  bool? preserveResults;
 
   /// It is an object that represents the elasticsearch query response.
-  Results results;
+  Results? results;
 
   /// Represents the error response returned by elasticsearch.
   dynamic error;
 
   /// A subject to track state changes and update listeners.
-  Observable stateChanges;
+  late Observable stateChanges;
 
   /// It represents the current status of the request.
-  RequestStatus requestStatus;
+  RequestStatus? requestStatus;
 
   /// An object that contains the aggregations data for [QueryType.term] queries.
-  Aggregations aggregationData;
+  Aggregations? aggregationData;
 
   /// A list of recent searches as suggestions.
-  List<Suggestion> recentSearches;
+  List<Suggestion>? recentSearches;
 
   /// A string defining a field's name, used to return the distinct value documents.
   String distinctField;
@@ -362,7 +362,7 @@ class SearchController extends Base {
   ///   // or Future.error()
   /// }
   /// ```
-  final Future Function(String value) beforeValueChange;
+  final Future Function(String? value)? beforeValueChange;
 
   /* ------------- change events -------------------------------- */
 
@@ -370,44 +370,44 @@ class SearchController extends Base {
   ///
   /// This property is handy in cases where you want to generate a side-effect on value selection.
   /// For example: You want to show a pop-up modal with the valid discount coupon code when a user searches for a product in a [SearchController].
-  final void Function(String next, {String prev}) onValueChange;
+  final void Function(String? next, {String? prev})? onValueChange;
 
   /// It can be used to listen for the `results` changes.
-  final void Function(List<Map> next, {List<Map> prev}) onResults;
+  final void Function(List<Map>? next, {List<Map>? prev})? onResults;
 
   /// It can be used to listen for the `aggregationData` property changes.
-  final void Function(List<Map> next, {List<Map> prev}) onAggregationData;
+  final void Function(List<Map>? next, {List<Map>? prev})? onAggregationData;
 
   /// It gets triggered in case of an error while fetching results.
-  final void Function(dynamic error) onError;
+  final void Function(dynamic error)? onError;
 
   /// It can be used to listen for the request status changes.
-  final void Function(String next, {String prev}) onRequestStatusChange;
+  final void Function(String? next, {String? prev})? onRequestStatusChange;
 
   /// It is a callback function which accepts widget's **prevQuery** and **nextQuery** as parameters.
   ///
   /// It is called everytime the widget's query changes.
   /// This property is handy in cases where you want to generate a side-effect whenever the widget's query would change.
-  final void Function(Map next, {Map prev}) onQueryChange;
+  final void Function(Map? /*?*/ next, {Map? prev})? onQueryChange;
 
   /* ------ Private properties only for the internal use ----------- */
-  SearchBase _parent;
+  SearchBase? _parent;
 
   // Counterpart of the query
-  List<Map> _query;
+  List<Map>? _query;
 
   // query search ID
-  String _queryId;
+  String? _queryId;
 
   SearchController(
     String index,
     String url,
     String credentials,
     String this.id, {
-    AppbaseSettings appbaseConfig,
-    TransformRequest transformRequest,
-    TransformResponse transformResponse,
-    Map<String, String> headers,
+    AppbaseSettings? appbaseConfig,
+    TransformRequest? transformRequest,
+    TransformResponse? transformResponse,
+    Map<String, String>? headers,
     this.type,
     this.react,
     this.queryFormat,
@@ -454,7 +454,7 @@ class SearchController extends Base {
     this.value,
     this.distinctField,
     this.distinctFieldConfig,
-    List<Map> results,
+    List<Map>? results,
   }) : super(index, url, credentials,
             appbaseConfig: appbaseConfig,
             transformRequest: transformRequest,
@@ -474,7 +474,8 @@ class SearchController extends Base {
     // Initialize the state changes observable
     this.stateChanges = new Observable();
 
-    this.results = new Results(results != null ? results : []);
+    this.results = new Results(
+        results != null ? results as List<Map<String, dynamic>> : []);
 
     this.aggregationData = new Aggregations(data: []);
 
@@ -486,7 +487,7 @@ class SearchController extends Base {
   }
 
   /// returns the last query executed by the widget
-  List<Map> get query {
+  List<Map>? get query {
     return this._query;
   }
 
@@ -496,7 +497,7 @@ class SearchController extends Base {
   }
 
   /// represnts the current appbase settings
-  AppbaseSettings get appbaseSettings {
+  AppbaseSettings? get appbaseSettings {
     return this.appbaseConfig;
   }
 
@@ -507,19 +508,16 @@ class SearchController extends Base {
       return [];
     }
     List<String> fields = getNormalizedField(this.dataField);
-    if (fields.length == 0 &&
-        this.results.data != null &&
-        this.results.data.length > 0 &&
-        this.results.data[0] != null) {
+    if (fields.length == 0 && this.results!.data.length > 0) {
       // Extract fields from _source
-      fields = this.results.data[0].keys.toList();
+      fields = this.results!.data[0].keys.toList();
     }
     if (this.enablePopularSuggestions == true) {
       // extract suggestions from popular suggestion fields too
       fields = [...fields, ...popularSuggestionFields];
     }
     return getSuggestions(
-        fields, this.results.data, this.value, this.showDistinctSuggestions);
+        fields, this.results!.data, this.value, this.showDistinctSuggestions);
   }
 
   /// to get the raw query based on the current state
@@ -549,8 +547,8 @@ class SearchController extends Base {
       'nestedField': nestedField,
       'interval': interval,
       'customHighlight': customHighlight,
-      'customQuery': customQuery != null ? customQuery(this) : null,
-      'defaultQuery': defaultQuery != null ? defaultQuery(this) : null,
+      'customQuery': customQuery != null ? customQuery!(this) : null,
+      'defaultQuery': defaultQuery != null ? defaultQuery!(this) : null,
       'value': value,
       'categoryValue': categoryValue,
       'after': after,
@@ -569,12 +567,12 @@ class SearchController extends Base {
   /// represents the query id to track Appbase analytics
   String get queryId {
     // Get query ID from parent(searchbase) if exist
-    if (this._parent != null && this._parent.queryId != "") {
-      return this._parent.queryId;
+    if (this._parent != null && this._parent!.queryId != "") {
+      return this._parent!.queryId!;
     }
     // For single components just return the queryId from the component
     if (this._queryId != "") {
-      return this._queryId;
+      return this._queryId!;
     }
     return '';
   }
@@ -582,14 +580,14 @@ class SearchController extends Base {
   /* -------- Public methods -------- */
 
   /// can be used to set the `dataField` property
-  void setDataField(dynamic dataField, {Options options}) {
+  void setDataField(dynamic dataField, {Options? options}) {
     final prev = this.dataField;
     this.dataField = dataField;
     this._applyOptions(options, 'dataField', prev, dataField);
   }
 
   /// can be used to set the `value` property
-  void setValue(dynamic value, {Options options}) async {
+  void setValue(dynamic value, {Options? options}) async {
     void performUpdate() {
       final prev = this.value;
       this.value = value;
@@ -598,7 +596,7 @@ class SearchController extends Base {
 
     if (this.beforeValueChange != null) {
       try {
-        await beforeValueChange(value);
+        await beforeValueChange!(value);
         performUpdate();
       } catch (e) {
         print(e);
@@ -609,49 +607,49 @@ class SearchController extends Base {
   }
 
   /// sets the `size` property
-  void setSize(int size, {Options options}) {
+  void setSize(int size, {Options? options}) {
     final prev = this.size;
     this.size = size;
     this._applyOptions(options, 'size', prev, this.size);
   }
 
   /// sets the `from` property that is helpful to implement pagination
-  void setFrom(int from, {Options options}) {
+  void setFrom(int from, {Options? options}) {
     final prev = this.from;
     this.from = from;
     this._applyOptions(options, 'from', prev, this.from);
   }
 
   /// sets the `fuzziness` property
-  void setFuzziness(dynamic fuzziness, {Options options}) {
+  void setFuzziness(dynamic fuzziness, {Options? options}) {
     final prev = this.fuzziness;
     this.fuzziness = fuzziness;
     this._applyOptions(options, 'fuzziness', prev, this.fuzziness);
   }
 
   /// can be used to set the `includeFields` property
-  void setIncludeFields(List<String> includeFields, {Options options}) {
+  void setIncludeFields(List<String> includeFields, {Options? options}) {
     final prev = this.includeFields;
     this.includeFields = includeFields;
     this._applyOptions(options, 'includeFields', prev, includeFields);
   }
 
   /// can be used to set the `excludeFields` property
-  void setExcludeFields(List<String> excludeFields, {Options options}) {
+  void setExcludeFields(List<String> excludeFields, {Options? options}) {
     final prev = this.excludeFields;
     this.excludeFields = excludeFields;
     this._applyOptions(options, 'excludeFields', prev, excludeFields);
   }
 
   /// to set `soryBy` property
-  void setSortBy(SortType sortBy, {Options options}) {
+  void setSortBy(SortType sortBy, {Options? options}) {
     final prev = this.sortBy;
     this.sortBy = sortBy;
     this._applyOptions(options, 'sortBy', prev, sortBy);
   }
 
   /// to update `react` property
-  void setReact(Map<String, dynamic> react, {Options options}) {
+  void setReact(Map<String, dynamic> react, {Options? options}) {
     final prev = this.react;
     this.react = react;
     this._applyOptions(options, 'react', prev, react);
@@ -660,7 +658,7 @@ class SearchController extends Base {
   /// to update `defaultQuery` property
   void setDefaultQuery(
       Map<dynamic, dynamic> Function(SearchController) defaultQuery,
-      {Options options}) {
+      {Options? options}) {
     final prev = this.defaultQuery;
     this.defaultQuery = defaultQuery;
     this._applyOptions(options, 'defaultQuery', prev, defaultQuery);
@@ -669,17 +667,17 @@ class SearchController extends Base {
   /// sets the `customQuery` property
   void setCustomQuery(
       Map<dynamic, dynamic> Function(SearchController) customQuery,
-      {Options options}) {
+      {Options? options}) {
     final prev = this.customQuery;
     this.customQuery = customQuery;
     this._applyOptions(options, 'customQuery', prev, customQuery);
   }
 
   /// can be used to set the `after` property, which is useful while implementing pagination with [QueryType.term] type of widgets
-  void setAfter(Map after, {Options options}) {
+  void setAfter(Map? after, {Options? options}) {
     final prev = this.after;
     this.after = after;
-    this.aggregationData.setAfterKey(after);
+    this.aggregationData!.setAfterKey(after);
     this._applyOptions(options, 'after', prev, after);
   }
 
@@ -711,7 +709,7 @@ class SearchController extends Base {
   /// For examples,
   /// - to display the `suggestions` or `results` for a [QueryType.search] type of widget,
   /// - to display the filter options(`aggregations`) for a [QueryType.term] type of widget
-  Future triggerDefaultQuery({Option options}) async {
+  Future triggerDefaultQuery({Option? options}) async {
     // To prevent duplicate queries
     if (isEqual(this._query, this.componentQuery)) {
       return Future<bool>.value(true);
@@ -724,10 +722,9 @@ class SearchController extends Base {
         'settings': this.appbaseSettings?.toJSON()
       }, false);
       final prev = this.results;
-      final Map rawResults =
-          results != null && results[this.id] is Map ? results[this.id] : {};
+      final Map? rawResults = results[this.id] is Map ? results[this.id] : {};
       void afterResponse() {
-        if (rawResults['aggregations'] != null) {
+        if (rawResults!['aggregations'] != null) {
           this._handleAggregationResponse(rawResults['aggregations'],
               options: new Options(stateChanges: options?.stateChanges));
         }
@@ -740,30 +737,27 @@ class SearchController extends Base {
           this.enablePopularSuggestions == true) {
         final rawPopularSuggestions =
             await this._fetchRequest(this._getSuggestionsQuery(), true);
-        if (rawPopularSuggestions != null) {
-          final popularSuggestionsData =
-              rawPopularSuggestions[suggestionQueryID];
-          // Merge popular suggestions as the top suggestions
-          if (popularSuggestionsData != null &&
-              popularSuggestionsData['hits'] != null &&
-              popularSuggestionsData['hits']['hits'] != null &&
-              rawResults != null &&
-              rawResults['hits'] != null &&
-              rawResults['hits']['hits'] != null) {
-            rawResults['hits']['hits'] = [
-              ...rawResults['hits']['hits'],
-              ...(popularSuggestionsData['hits']['hits'] as List)
-                  .map((hit) => ({
-                        ...hit,
-                        // Set the popular suggestion tag for suggestion hits
-                        '_popular_suggestion': true
-                      }))
-                  .toList(),
-            ];
-          }
-          this._appendResults(rawResults);
-          afterResponse();
+        final popularSuggestionsData = rawPopularSuggestions[suggestionQueryID];
+        // Merge popular suggestions as the top suggestions
+        if (popularSuggestionsData != null &&
+            popularSuggestionsData['hits'] != null &&
+            popularSuggestionsData['hits']['hits'] != null &&
+            rawResults != null &&
+            rawResults['hits'] != null &&
+            rawResults['hits']['hits'] != null) {
+          rawResults['hits']['hits'] = [
+            ...rawResults['hits']['hits'],
+            ...(popularSuggestionsData['hits']['hits'] as List)
+                .map((hit) => ({
+                      ...hit,
+                      // Set the popular suggestion tag for suggestion hits
+                      '_popular_suggestion': true
+                    }))
+                .toList(),
+          ];
         }
+        this._appendResults(rawResults);
+        afterResponse();
       } else {
         this._appendResults(rawResults);
         afterResponse();
@@ -775,7 +769,7 @@ class SearchController extends Base {
   }
 
   /// can be used to execute queries for the dependent/watcher components.
-  Future triggerCustomQuery({Option options}) async {
+  Future triggerCustomQuery({Option? options}) async {
     // Generate query again after resetting changes
     final generatedQuery = this._generateQuery();
     if (generatedQuery.requestBody.length != 0) {
@@ -784,7 +778,7 @@ class SearchController extends Base {
       }
       // set the request loading to true for all the requests
       generatedQuery.orderOfQueries.forEach((id) {
-        final componentInstance = this._parent.getSearchWidget(id);
+        final componentInstance = this._parent!.getSearchWidget(id);
         if (componentInstance != null) {
           // Reset `from` and `after` values
           componentInstance.setFrom(0,
@@ -812,7 +806,7 @@ class SearchController extends Base {
         }, false);
         // Update the state for components
         finalGeneratedQuery.orderOfQueries.forEach((id) {
-          final componentInstance = this._parent.getSearchWidget(id);
+          final componentInstance = this._parent!.getSearchWidget(id);
           if (componentInstance != null) {
             componentInstance._setRequestStatus(RequestStatus.INACTIVE,
                 options: options);
@@ -825,11 +819,10 @@ class SearchController extends Base {
             // Update the results
             final prev = componentInstance.results;
             // Collect results from the response for a particular component
-            Map rawResults =
-                results != null && results[id] != null ? results[id] : {};
+            Map rawResults = results[id] != null ? results[id] : {};
             // Set results
             if (rawResults['hits'] != null) {
-              componentInstance.results.setRaw(rawResults);
+              componentInstance.results!.setRaw(rawResults);
               componentInstance._applyOptions(
                   Options(stateChanges: options?.stateChanges),
                   'results',
@@ -894,7 +887,7 @@ class SearchController extends Base {
   /// -   `customQuery`
   ///
   subscribeToStateChanges(
-      SubscriptionFunction fn, List<String> propertiesToSubscribe) {
+      SubscriptionFunction fn, List<String>? propertiesToSubscribe) {
     this.stateChanges.subscribe(fn, propertiesToSubscribe);
   }
 
@@ -904,9 +897,9 @@ class SearchController extends Base {
   }
 
   /// to empty results
-  void clearResults({Options options}) {
+  void clearResults({Options? options}) {
     final prev = this.results;
-    this.results.setRaw({
+    this.results!.setRaw({
       'hits': {'hits': []}
     });
     this._applyOptions(Options(stateChanges: options?.stateChanges), 'results',
@@ -915,12 +908,12 @@ class SearchController extends Base {
 
   /// to get recent searches
   Future<List<Suggestion>> getRecentSearches(
-      {RecentSearchOptions queryOptions, Options options}) async {
+      {RecentSearchOptions? queryOptions, Options? options}) async {
     String queryString = '';
     if (queryOptions == null) {
       queryOptions = RecentSearchOptions();
     }
-    void addParam(String key, String value) {
+    void addParam(String key, String? value) {
       if (queryString != "") {
         queryString += "&${key}=${value}";
       } else {
@@ -928,8 +921,8 @@ class SearchController extends Base {
       }
     }
 
-    if (this.appbaseSettings != null && this.appbaseSettings.userId != null) {
-      addParam('user_id', this.appbaseSettings.userId);
+    if (this.appbaseSettings != null && this.appbaseSettings!.userId != null) {
+      addParam('user_id', this.appbaseSettings!.userId);
     }
     if (queryOptions.size != null) {
       addParam('size', queryOptions.size.toString());
@@ -944,14 +937,14 @@ class SearchController extends Base {
       addParam('to', queryOptions.to);
     }
     if (queryOptions.customEvents != null) {
-      queryOptions.customEvents.keys.forEach((key) {
-        addParam(key, queryOptions.customEvents[key]);
+      queryOptions.customEvents!.keys.forEach((key) {
+        addParam(key, queryOptions!.customEvents![key]);
       });
     }
     final String url =
         "${this.url}/_analytics/${this.index}/recent-searches?${queryString}";
     try {
-      final res = await http.get(url, headers: this.headers);
+      final res = await http.get(Uri.parse(url), headers: this.headers);
       if (res.statusCode >= 500) {
         return Future.error(res);
       }
@@ -978,30 +971,30 @@ class SearchController extends Base {
   }
 
   /* -------- Private methods only for the internal use -------- */
-  _appendResults(Map rawResults) {
+  _appendResults(Map? rawResults) {
     if (this.preserveResults != null &&
         rawResults != null &&
         rawResults['hits'] != null &&
         rawResults['hits']['hits'] is List &&
-        this.results.rawData != null &&
-        this.results.rawData['hits'] != null &&
-        this.results.rawData['hits']['hits'] is List) {
-      this.results.setRaw({
+        this.results!.rawData != null &&
+        this.results!.rawData!['hits'] != null &&
+        this.results!.rawData!['hits']['hits'] is List) {
+      this.results!.setRaw({
         ...rawResults,
         'hits': {
           ...rawResults['hits'],
           'hits': [
-            ...this.results.rawData['hits']['hits'],
+            ...this.results!.rawData!['hits']['hits'],
             ...rawResults['hits']['hits']
           ]
         }
       });
     } else {
-      this.results.setRaw(rawResults);
+      this.results!.setRaw(rawResults);
     }
   }
 
-  Future _handleError(dynamic err, {Option options}) {
+  Future _handleError(dynamic err, {Option? options}) {
     this._setError(err,
         options: new Options(stateChanges: options?.stateChanges));
     print(err);
@@ -1075,25 +1068,25 @@ class SearchController extends Base {
   }
 
   // Method to apply the changed based on set options
-  void _applyOptions(Options options, String key, prevValue, nextValue) {
+  void _applyOptions(Options? options, String key, prevValue, nextValue) {
     // Trigger events
     if (key == 'query' && this.onQueryChange != null) {
-      this.onQueryChange(nextValue, prev: prevValue);
+      this.onQueryChange!(nextValue, prev: prevValue);
     }
     if (key == 'value' && this.onValueChange != null) {
-      this.onValueChange(nextValue, prev: prevValue);
+      this.onValueChange!(nextValue, prev: prevValue);
     }
     if (key == 'error' && this.onError != null) {
-      this.onError(nextValue);
+      this.onError!(nextValue);
     }
     if (key == 'results' && this.onResults != null) {
-      this.onResults(nextValue, prev: prevValue);
+      this.onResults!(nextValue, prev: prevValue);
     }
     if (key == 'aggregationData' && this.onAggregationData != null) {
-      this.onAggregationData(nextValue, prev: prevValue);
+      this.onAggregationData!(nextValue, prev: prevValue);
     }
     if (key == 'requestStatus' && this.onRequestStatusChange != null) {
-      this.onRequestStatusChange(nextValue, prev: prevValue);
+      this.onRequestStatusChange!(nextValue, prev: prevValue);
     }
     if (options?.triggerDefaultQuery == true) {
       this.triggerDefaultQuery();
@@ -1101,7 +1094,7 @@ class SearchController extends Base {
     if (options?.triggerCustomQuery == true) {
       this.triggerCustomQuery();
     }
-    if (options == null || options.stateChanges) {
+    if (options == null || options.stateChanges!) {
       this.stateChanges.next({key: new Changes(prevValue, nextValue)}, key);
     }
   }
@@ -1111,7 +1104,7 @@ class SearchController extends Base {
     // remove undefined properties from request body
     final requestOptions = {
       'body': jsonEncode(requestBody),
-      'headers': {...this.headers}
+      'headers': {...?this.headers}
     };
     try {
       final finalRequestOptions =
@@ -1123,21 +1116,19 @@ class SearchController extends Base {
           isPopularSuggestionsAPI ? '.suggestions' : this.index;
       final String url = "${this.url}/$index/$suffix";
       final http.Response res = await http.post(
-        url,
+        Uri.parse(url),
         headers: finalRequestOptions['headers'],
         body: finalRequestOptions['body'],
       );
       final responseHeaders = res.headers;
       // check if search component is present
-      if (responseHeaders != null) {
-        final queryID = responseHeaders['x-search-id'];
-        if (queryID != null && queryID != '') {
-          // if parent exists then set the queryID to parent
-          if (this._parent != null) {
-            this._parent.setQueryID(queryID);
-          } else {
-            this.setQueryID(queryID);
-          }
+      final queryID = responseHeaders['x-search-id'];
+      if (queryID != null && queryID != '') {
+        // if parent exists then set the queryID to parent
+        if (this._parent != null) {
+          this._parent!.setQueryID(queryID);
+        } else {
+          this.setQueryID(queryID);
         }
       }
       if (res.statusCode >= 500) {
@@ -1148,7 +1139,7 @@ class SearchController extends Base {
       }
       final data = jsonDecode(res.body);
       final transformedData = await this._handleTransformResponse(data);
-      if (transformedData != null && transformedData.containsKey('error')) {
+      if (transformedData.containsKey('error')) {
         return Future.error(transformedData);
       }
       return Future.value({
@@ -1172,7 +1163,7 @@ class SearchController extends Base {
      * 4. Update results and trigger events => Call 'setResults' or 'setAggregations' based on the results
      */
     if (this._parent != null) {
-      final components = this._parent.getActiveWidgets();
+      final components = this._parent!.getActiveWidgets();
       final List<String> watcherComponents = [];
       // Find all the  watcher components
       components.keys.forEach((id) {
@@ -1187,7 +1178,7 @@ class SearchController extends Base {
       final Map<String, Map> requestQuery = {};
       // Generate the request body for watchers
       watcherComponents.forEach((watcherId) {
-        final component = this._parent.getSearchWidget(watcherId);
+        final component = this._parent!.getSearchWidget(watcherId);
         if (component != null) {
           requestQuery[watcherId] = component.componentQuery;
           // collect queries for all components defined in the `react` property
@@ -1196,7 +1187,7 @@ class SearchController extends Base {
           flattenReact.forEach((id) {
             // only add if not present
             if (requestQuery[id] == null) {
-              final dependentComponent = this._parent.getSearchWidget(id);
+              final dependentComponent = this._parent!.getSearchWidget(id);
               if (dependentComponent != null &&
                   dependentComponent.value != null) {
                 // Set the execute to `false` for dependent components
@@ -1215,22 +1206,23 @@ class SearchController extends Base {
     return _GenerateQueryResponse([], []);
   }
 
-  Future<Map> _handleTransformResponse(Map res) {
+  Future<Map> _handleTransformResponse(Map? res) {
     if (this.transformResponse != null) {
-      return this.transformResponse(res);
+      return this.transformResponse!(res) as Future<Map<dynamic, dynamic>>;
     }
     return Future.value(res);
   }
 
   Future<Map> _handleTransformRequest(Map requestOptions) {
     if (this.transformRequest != null) {
-      return this.transformRequest(requestOptions);
+      return this.transformRequest!(requestOptions)
+          as Future<Map<dynamic, dynamic>>;
     }
     return Future<Map>.value(requestOptions);
   }
 
   _handleAggregationResponse(Map aggsResponse,
-      {Options options, bool append = true}) {
+      {Options? options, bool append = true}) {
     aggregationField = this.aggregationField;
     if ((aggregationField == null || aggregationField == "") &&
         this.dataField is String) {
@@ -1238,13 +1230,13 @@ class SearchController extends Base {
     }
     final prev = this.aggregationData;
     if (aggsResponse[aggregationField] != null) {
-      this.aggregationData.setRaw(aggsResponse[aggregationField]);
+      this.aggregationData!.setRaw(aggsResponse[aggregationField]);
       if (aggsResponse[aggregationField] != null &&
           aggsResponse[aggregationField]['buckets'] is List) {
         final mapped = (aggsResponse[aggregationField]['buckets'] as List)
             .map((model) => Map.from(model));
         final data = mapped.toList();
-        this.aggregationData.setData(aggregationField, data,
+        this.aggregationData!.setData(aggregationField, data,
             append: this.preserveResults == true && append);
       }
       this._applyOptions(new Options(stateChanges: options?.stateChanges),
@@ -1252,7 +1244,7 @@ class SearchController extends Base {
     }
   }
 
-  _setError(dynamic error, {Options options}) {
+  _setError(dynamic error, {Options? options}) {
     this._setRequestStatus(RequestStatus.ERROR,
         options: Option(stateChanges: options?.stateChanges));
     final prev = this.error;
@@ -1260,7 +1252,7 @@ class SearchController extends Base {
     this._applyOptions(options, 'error', prev, this.error);
   }
 
-  _setRequestStatus(RequestStatus requestStatus, {Option options}) {
+  _setRequestStatus(RequestStatus requestStatus, {Option? options}) {
     final prev = this.requestStatus;
     this.requestStatus = requestStatus;
     this._applyOptions(Options(stateChanges: options?.stateChanges),
@@ -1268,14 +1260,14 @@ class SearchController extends Base {
   }
 
   // Method to set the default query value
-  void _updateQuery({List<Map> query}) {
-    List<Map> prevQuery;
-    prevQuery = this._query != null ? [...this._query] : this._query;
+  void _updateQuery({List<Map>? query}) {
+    List<Map>? prevQuery;
+    prevQuery = this._query != null ? [...this._query!] : this._query;
     final finalQuery = [this.componentQuery];
     final flattenReact = flatReactProp(this.react, this.id);
     flattenReact.forEach((id) {
       // only add if not present
-      final watcherComponent = this._parent.getSearchWidget(id);
+      final watcherComponent = this._parent!.getSearchWidget(id);
       if (watcherComponent != null && watcherComponent.value != null) {
         // Set the execute to `false` for watcher components
         final watcherQuery = watcherComponent.componentQuery;

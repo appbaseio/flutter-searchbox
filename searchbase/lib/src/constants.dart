@@ -25,8 +25,8 @@ enum RequestStatus {
 /// Represents the type of the query which is defaults to [QueryType.search], valid values are `search`, `term`, `range` & `geo`. You can read more [here](https://docs.appbase.io/docs/search/reactivesearch-api/implement#type-of-queries).
 enum QueryType { search, term, geo, range }
 
-extension QueryTypeExtension on QueryType {
-  String get value {
+extension QueryTypeExtension on QueryType? {
+  String? get value {
     switch (this) {
       case QueryType.search:
         return 'search';
@@ -48,8 +48,8 @@ enum SortType {
   count,
 }
 
-extension SortTypeExtension on SortType {
-  String get value {
+extension SortTypeExtension on SortType? {
+  String? get value {
     switch (this) {
       case SortType.asc:
         return 'asc';
