@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:feat" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="446a84c1-317f-46ca-9f65-8517afbf204b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/latest-flutter-searchbox.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/.metadata" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/android/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/android/app/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/android/app/src/debug/AndroidManifest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/android/app/src/main/kotlin/com/example/example/MainActivity.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/android/app/src/main/res/drawable/launch_background.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/android/app/src/main/res/mipmap-hdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/android/app/src/main/res/mipmap-mdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/android/app/src/main/res/values/styles.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/android/app/src/profile/AndroidManifest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/android/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/android/gradle.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/android/settings.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/android/settings_aar.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Flutter/AppFrameworkInfo.plist" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Flutter/Debug.xcconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Flutter/Release.xcconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Podfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Podfile.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner.xcodeproj/project.xcworkspace/contents.xcworkspacedata" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner.xcworkspace/contents.xcworkspacedata" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/AppDelegate.swift" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Base.lproj/LaunchScreen.storyboard" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Base.lproj/Main.storyboard" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Info.plist" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/ios/Runner/Runner-Bridging-Header.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/lib/main.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/lib/results.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/pubspec.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/pubspec.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/test/widget_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/example/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/lib/flutter_searchbox.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/lib/flutter_searchbox.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchbase/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/.dart_tool/package_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchbase/.packages" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/.packages" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchbase/example/basic/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/example/basic/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchbase/lib/src/searchbase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/lib/src/searchbase.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchbase/lib/src/searchcontroller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/lib/src/searchcontroller.dart" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1sktfxVgomcFSuyiwlPHd8fs2GF" />
+  <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="sortByType" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="io.flutter.reload.alreadyRun" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/flutter_searchbox" />
+    <property name="settings.editor.selected.configurable" value="dart.settings" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/flutter_searchbox" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
+      <option name="filePath" value="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/lib/main.dart" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="446a84c1-317f-46ca-9f65-8517afbf204b" name="Default Changelist" comment="" />
+      <created>1621428521520</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1621428521520</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="0" y="174" key="#Console" timestamp="1621444614839">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="0" y="174" key="#Console/0.0.1440.900@0.0.1440.900" timestamp="1621444614839" />
+    <state x="184" y="109" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1621430732118">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="184" y="109" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1621430732118" />
+    <state x="457" y="244" key="#com.intellij.ide.util.TreeFileChooserDialog" timestamp="1621430728469">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="457" y="244" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1440.900@0.0.1440.900" timestamp="1621430728469" />
+    <state x="264" y="201" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1621437401521">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="264" y="201" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900@0.0.1440.900" timestamp="1621437401521" />
+    <state x="100" y="100" width="853" height="700" key="DiffContextDialog" timestamp="1621444783896">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="100" y="100" width="853" height="700" key="DiffContextDialog/0.0.1440.900@0.0.1440.900" timestamp="1621444783896" />
+    <state width="1011" height="137" key="GridCell.Tab.0.bottom" timestamp="1621519778414">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1011" height="137" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1621519778414" />
+    <state width="1011" height="137" key="GridCell.Tab.0.center" timestamp="1621519778413">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1011" height="137" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1621519778413" />
+    <state width="1011" height="137" key="GridCell.Tab.0.left" timestamp="1621519778411">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1011" height="137" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1621519778411" />
+    <state width="1011" height="137" key="GridCell.Tab.0.right" timestamp="1621519778414">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1011" height="137" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1621519778414" />
+    <state x="200" y="156" key="RollbackChangesDialog" timestamp="1621437458804">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="200" y="156" key="RollbackChangesDialog/0.0.1440.900@0.0.1440.900" timestamp="1621437458804" />
+    <state x="221" y="86" key="SettingsEditor" timestamp="1621428829550">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="221" y="86" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1621428829550" />
+    <state x="219" y="205" width="1065" height="490" key="find.popup" timestamp="1621437715092">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="219" y="205" width="1065" height="490" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1621437715092" />
+  </component>
+</project>

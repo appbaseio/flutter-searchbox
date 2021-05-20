@@ -337,6 +337,12 @@ class SearchController extends Base {
   /// A list of recent searches as suggestions.
   List<Suggestion>? recentSearches;
 
+  /// A string defining a field's name, used to return the distinct value documents.
+  String? distinctField;
+
+  /// This property allows specifying additional options to the distinctField property.
+  Map? distinctFieldConfig;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   /// It is a callback function which accepts component's future **value** as a
@@ -445,6 +451,8 @@ class SearchController extends Base {
     this.maxPopularSuggestions,
     this.showDistinctSuggestions,
     this.preserveResults,
+    this.distinctField,
+    this.distinctFieldConfig,
     this.value,
     List<Map>? results,
   }) : super(index, url, credentials,
@@ -548,7 +556,9 @@ class SearchController extends Base {
       'enableSynonyms': enableSynonyms,
       'selectAllLabel': selectAllLabel,
       'pagination': pagination,
-      'queryString': queryString
+      'queryString': queryString,
+      'distinctField': distinctField,
+      'distinctFieldConfig': distinctFieldConfig,
     };
     query.removeWhere((key, value) => key == null || value == null);
     return query;
@@ -1096,7 +1106,6 @@ class SearchController extends Base {
       'body': jsonEncode(requestBody),
       'headers': {...?this.headers}
     };
-
     try {
       final finalRequestOptions =
           await this._handleTransformRequest(requestOptions);
