@@ -3,8 +3,6 @@ import 'package:searchbase/searchbase.dart';
 import 'package:flutter_searchbox/flutter_searchbox.dart';
 import 'results.dart';
 import 'author_filter.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'package:speech_to_text/speech_to_text_provider.dart' as stp;
 
 void main() {
   runApp(FlutterSearchBoxApp());
@@ -22,11 +20,6 @@ class FlutterSearchBoxApp extends StatelessWidget {
           // Use unique user id to personalize the recent searches
           userId: 'jon@appbase.io'));
 
-  // Create an instance of speech to text provider at top level of your application
-  // It is only required to integrate voice search.
-  final stp.SpeechToTextProvider speechToTextInstance =
-      stp.SpeechToTextProvider(stt.SpeechToText());
-
   FlutterSearchBoxApp({Key? key}) : super(key: key);
 
   @override
@@ -43,16 +36,14 @@ class FlutterSearchBoxApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: HomePage(speechToTextInstance: speechToTextInstance),
+        home: HomePage(),
       ),
     );
   }
 }
 
 class HomePage extends StatelessWidget {
-  final stp.SpeechToTextProvider? speechToTextInstance;
-
-  HomePage({this.speechToTextInstance});
+  HomePage();
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -73,19 +64,18 @@ class HomePage extends StatelessWidget {
                       context: context,
                       // SearchBox widget from flutter searchbox
                       delegate: SearchBox(
-                          // A unique identifier that can be used by other widgetss to reactively update data
-                          id: 'search-widget',
-                          enableRecentSearches: true,
-                          enablePopularSuggestions: true,
-                          showAutoFill: true,
-                          maxPopularSuggestions: 3,
-                          size: 5,
-                          dataField: [
-                            {'field': 'original_title', 'weight': 1},
-                            {'field': 'original_title.search', 'weight': 3}
-                          ],
-                          // pass the speech to text instance to enable voice search
-                          speechToTextInstance: speechToTextInstance),
+                        // A unique identifier that can be used by other widgetss to reactively update data
+                        id: 'search-widget',
+                        enableRecentSearches: true,
+                        enablePopularSuggestions: true,
+                        showAutoFill: true,
+                        maxPopularSuggestions: 3,
+                        size: 5,
+                        dataField: [
+                          {'field': 'original_title', 'weight': 1},
+                          {'field': 'original_title.search', 'weight': 3}
+                        ],
+                      ),
                       // Initialize query to persist suggestions for active search
                       query: SearchBaseProvider?.of(context)
                           .getSearchWidget('search-widget')

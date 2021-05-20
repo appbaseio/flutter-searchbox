@@ -5,9 +5,6 @@ import 'package:searchbase/searchbase.dart';
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:speech_to_text/speech_to_text_provider.dart' as stp;
-import 'package:speech_to_text/speech_recognition_event.dart' as ste;
-import 'dart:io' show Platform;
 
 // [MicOptions] class allows to define custom configuration for mic
 class MicOptions {
@@ -528,271 +525,270 @@ class _MicButtonListening extends StatefulWidget {
   _MicButtonListeningState createState() => _MicButtonListeningState();
 }
 
-class _MicButtonState extends State<_MicButton> {
-  final stp.SpeechToTextProvider? speechToTextInstance;
-  final void Function()? onStart;
-  final MicOptions? micOptions;
-  final void Function(String out)? onMicResults;
+// class _MicButtonState extends State<_MicButton> {
+//   final void Function()? onStart;
+//   final MicOptions? micOptions;
+//   final void Function(String out)? onMicResults;
 
-  late StreamSubscription<ste.SpeechRecognitionEvent> _subscription;
+//   late StreamSubscription<ste.SpeechRecognitionEvent> _subscription;
 
-  bool? _isListening = false;
-  bool _isDialogActive = false;
-  bool _isSpeechAvailable = false;
-  bool _isSubscribed = false;
-  String _recognizedText = "";
-  MicOptions defaultMicOptions = MicOptions(
-      listenFor: Duration(seconds: 30),
-      pauseFor: Duration(seconds: Platform.isAndroid ? 5 : 3),
-      localeId: null,
-      partialResults: true,
-      micIcon: Icon(Icons.mic),
-      micIconDenied: Icon(Icons.mic_off),
-      micIconOff: Container(
-        width: 70,
-        height: 70,
-        child: Icon(Icons.mic, color: Colors.white),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.blue,
-        ),
-      ),
-      micIconOn: _MicButtonListening(),
-      maximumWordsLimit: 12);
+//   bool? _isListening = false;
+//   bool _isDialogActive = false;
+//   bool _isSpeechAvailable = false;
+//   bool _isSubscribed = false;
+//   String _recognizedText = "";
+//   MicOptions defaultMicOptions = MicOptions(
+//       listenFor: Duration(seconds: 30),
+//       pauseFor: Duration(seconds: Platform.isAndroid ? 5 : 3),
+//       localeId: null,
+//       partialResults: true,
+//       micIcon: Icon(Icons.mic),
+//       micIconDenied: Icon(Icons.mic_off),
+//       micIconOff: Container(
+//         width: 70,
+//         height: 70,
+//         child: Icon(Icons.mic, color: Colors.white),
+//         decoration: BoxDecoration(
+//           shape: BoxShape.circle,
+//           color: Colors.blue,
+//         ),
+//       ),
+//       micIconOn: _MicButtonListening(),
+//       maximumWordsLimit: 12);
 
-  BuildContext? dialogContext;
-  void Function(void Function() fn)? setStateDialog;
+//   BuildContext? dialogContext;
+//   void Function(void Function() fn)? setStateDialog;
 
-  _MicButtonState(this.speechToTextInstance,
-      {this.onMicResults, this.onStart, this.micOptions}) {
-    if (micOptions != null) {
-      if (micOptions!.listenFor != null) {
-        // listenFor must be in range between between 5s to 30s
-        assert(micOptions!.listenFor!.compareTo(Duration(seconds: 30)) < 0,
-            "listenFor can not be greater than 30s");
-        assert(micOptions!.listenFor!.compareTo(Duration(seconds: 3)) > 0,
-            "listenFor can not be less than 3s");
-      }
-      MicOptions normalizedOptions = getNormalizedMicOptions();
-      if (micOptions!.pauseFor != null) {
-        assert(micOptions!.pauseFor!.compareTo(Duration(milliseconds: 100)) > 0,
-            "pauseFor can not be less than 100ms");
-        assert(
-            micOptions!.pauseFor!.compareTo(normalizedOptions.listenFor!) < 0,
-            "pauseFor can not be greater than listen for:" +
-                normalizedOptions.listenFor.toString());
-      }
-      if (micOptions!.maximumWordsLimit != null) {
-        assert(micOptions!.maximumWordsLimit! > 1,
-            "maximumWordsLimit can not be less than 1");
-        assert(micOptions!.maximumWordsLimit! < 30,
-            "maximumWordsLimit can not be greater than 30");
-      }
-    }
-  }
+//   _MicButtonState(this.speechToTextInstance,
+//       {this.onMicResults, this.onStart, this.micOptions}) {
+//     if (micOptions != null) {
+//       if (micOptions!.listenFor != null) {
+//         // listenFor must be in range between between 5s to 30s
+//         assert(micOptions!.listenFor!.compareTo(Duration(seconds: 30)) < 0,
+//             "listenFor can not be greater than 30s");
+//         assert(micOptions!.listenFor!.compareTo(Duration(seconds: 3)) > 0,
+//             "listenFor can not be less than 3s");
+//       }
+//       MicOptions normalizedOptions = getNormalizedMicOptions();
+//       if (micOptions!.pauseFor != null) {
+//         assert(micOptions!.pauseFor!.compareTo(Duration(milliseconds: 100)) > 0,
+//             "pauseFor can not be less than 100ms");
+//         assert(
+//             micOptions!.pauseFor!.compareTo(normalizedOptions.listenFor!) < 0,
+//             "pauseFor can not be greater than listen for:" +
+//                 normalizedOptions.listenFor.toString());
+//       }
+//       if (micOptions!.maximumWordsLimit != null) {
+//         assert(micOptions!.maximumWordsLimit! > 1,
+//             "maximumWordsLimit can not be less than 1");
+//         assert(micOptions!.maximumWordsLimit! < 30,
+//             "maximumWordsLimit can not be greater than 30");
+//       }
+//     }
+//   }
 
-  @override
-  void initState() {
-    _subscription = speechToTextInstance!.stream.listen((recognitionEvent) {
-      if (recognitionEvent.isListening != _isListening) {
-        setState(() {
-          _isListening = recognitionEvent.isListening;
-        });
-        if (recognitionEvent.isListening!) {
-          _showMyDialog();
-        }
-        if (setStateDialog != null) {
-          setStateDialog!(() {});
-        }
-      }
-      if (recognitionEvent.eventType ==
-          ste.SpeechRecognitionEventType.partialRecognitionEvent) {
-        MicOptions micOptions = getNormalizedMicOptions();
-        // Allow maximum 12 words
-        if (recognitionEvent.isListening! &&
-            _recognizedText.split(' ').length > micOptions.maximumWordsLimit!) {
-          stop();
-        } else {
-          _recognizedText = recognitionEvent.recognitionResult!.recognizedWords;
-        }
-        if (setStateDialog != null) {
-          setStateDialog!(() {});
-        }
-      }
-      if (recognitionEvent.eventType ==
-          ste.SpeechRecognitionEventType.finalRecognitionEvent) {
-        _recognizedText = recognitionEvent.recognitionResult!.recognizedWords;
+//   @override
+//   void initState() {
+//     _subscription = speechToTextInstance!.stream.listen((recognitionEvent) {
+//       if (recognitionEvent.isListening != _isListening) {
+//         setState(() {
+//           _isListening = recognitionEvent.isListening;
+//         });
+//         if (recognitionEvent.isListening!) {
+//           _showMyDialog();
+//         }
+//         if (setStateDialog != null) {
+//           setStateDialog!(() {});
+//         }
+//       }
+//       if (recognitionEvent.eventType ==
+//           ste.SpeechRecognitionEventType.partialRecognitionEvent) {
+//         MicOptions micOptions = getNormalizedMicOptions();
+//         // Allow maximum 12 words
+//         if (recognitionEvent.isListening! &&
+//             _recognizedText.split(' ').length > micOptions.maximumWordsLimit!) {
+//           stop();
+//         } else {
+//           _recognizedText = recognitionEvent.recognitionResult!.recognizedWords;
+//         }
+//         if (setStateDialog != null) {
+//           setStateDialog!(() {});
+//         }
+//       }
+//       if (recognitionEvent.eventType ==
+//           ste.SpeechRecognitionEventType.finalRecognitionEvent) {
+//         _recognizedText = recognitionEvent.recognitionResult!.recognizedWords;
 
-        if (setStateDialog != null) {
-          setStateDialog!(() {});
-        }
-        Future.delayed(Duration(milliseconds: 200)).then((value) {
-          if (dialogContext != null) {
-            // close the dialog box
-            Navigator.of(dialogContext!).pop();
-            // call mic results
-            onMicResults!(_recognizedText);
-          }
-        });
-      }
-    }, cancelOnError: true);
+//         if (setStateDialog != null) {
+//           setStateDialog!(() {});
+//         }
+//         Future.delayed(Duration(milliseconds: 200)).then((value) {
+//           if (dialogContext != null) {
+//             // close the dialog box
+//             Navigator.of(dialogContext!).pop();
+//             // call mic results
+//             onMicResults!(_recognizedText);
+//           }
+//         });
+//       }
+//     }, cancelOnError: true);
 
-    super.initState();
-  }
+//     super.initState();
+//   }
 
-  @override
-  void dispose() {
-    _subscription.cancel();
-    super.dispose();
-  }
+//   @override
+//   void dispose() {
+//     _subscription.cancel();
+//     super.dispose();
+//   }
 
-  Future<void> _showMyDialog() async {
-    if (_isDialogActive) {
-      return null;
-    }
-    _recognizedText = "";
-    _isDialogActive = true;
-    TextStyle textStyle = new TextStyle(
-      fontSize: 18.0,
-      height: 2,
-      fontWeight: FontWeight.w400,
-    );
-    MicOptions micOptions = getNormalizedMicOptions();
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            dialogContext = context;
-            setStateDialog = setState;
-            return AlertDialog(
-              content: IntrinsicHeight(
-                child: Column(children: [
-                  Container(
-                      height: 120.0,
-                      child: _isListening!
-                          ? micOptions.micIconOn
-                          : GestureDetector(
-                              onTap: start,
-                              child: micOptions.micIconOff,
-                            )),
-                  Container(
-                    height: 110,
-                    child: _isListening!
-                        ? _recognizedText != ""
-                            ? Text(_recognizedText,
-                                style: textStyle, textAlign: TextAlign.center)
-                            : Text('Listening',
-                                style: textStyle, textAlign: TextAlign.center)
-                        : _recognizedText == ""
-                            ? Text('Did not hear. Try Again',
-                                style: textStyle, textAlign: TextAlign.center)
-                            : Text(_recognizedText,
-                                style: textStyle, textAlign: TextAlign.center),
-                  )
-                ]),
-              ),
-            );
-          },
-        );
-      },
-    ).then((val) {
-      _isDialogActive = false;
-      dialogContext = null;
-      setStateDialog = null;
-    });
-  }
+//   Future<void> _showMyDialog() async {
+//     if (_isDialogActive) {
+//       return null;
+//     }
+//     _recognizedText = "";
+//     _isDialogActive = true;
+//     TextStyle textStyle = new TextStyle(
+//       fontSize: 18.0,
+//       height: 2,
+//       fontWeight: FontWeight.w400,
+//     );
+//     MicOptions micOptions = getNormalizedMicOptions();
+//     return showDialog<void>(
+//       context: context,
+//       barrierDismissible: true,
+//       builder: (BuildContext context) {
+//         return StatefulBuilder(
+//           builder: (context, setState) {
+//             dialogContext = context;
+//             setStateDialog = setState;
+//             return AlertDialog(
+//               content: IntrinsicHeight(
+//                 child: Column(children: [
+//                   Container(
+//                       height: 120.0,
+//                       child: _isListening!
+//                           ? micOptions.micIconOn
+//                           : GestureDetector(
+//                               onTap: start,
+//                               child: micOptions.micIconOff,
+//                             )),
+//                   Container(
+//                     height: 110,
+//                     child: _isListening!
+//                         ? _recognizedText != ""
+//                             ? Text(_recognizedText,
+//                                 style: textStyle, textAlign: TextAlign.center)
+//                             : Text('Listening',
+//                                 style: textStyle, textAlign: TextAlign.center)
+//                         : _recognizedText == ""
+//                             ? Text('Did not hear. Try Again',
+//                                 style: textStyle, textAlign: TextAlign.center)
+//                             : Text(_recognizedText,
+//                                 style: textStyle, textAlign: TextAlign.center),
+//                   )
+//                 ]),
+//               ),
+//             );
+//           },
+//         );
+//       },
+//     ).then((val) {
+//       _isDialogActive = false;
+//       dialogContext = null;
+//       setStateDialog = null;
+//     });
+//   }
 
-  void start() async {
-    bool isSpeechAvailable = _isSpeechAvailable;
-    if (!isSpeechAvailable) {
-      isSpeechAvailable = await speechToTextInstance!.initialize();
-      setState(() {
-        _isSpeechAvailable = isSpeechAvailable;
-        _isSubscribed = true;
-      });
-    }
-    if (isSpeechAvailable) {
-      MicOptions micOptions = getNormalizedMicOptions();
-      speechToTextInstance!.listen(
-        listenFor: micOptions.listenFor,
-        pauseFor: micOptions.pauseFor,
-        localeId: micOptions.localeId,
-        partialResults: micOptions.partialResults!,
-      );
-    }
-  }
+//   void start() async {
+//     bool isSpeechAvailable = _isSpeechAvailable;
+//     if (!isSpeechAvailable) {
+//       isSpeechAvailable = await speechToTextInstance!.initialize();
+//       setState(() {
+//         _isSpeechAvailable = isSpeechAvailable;
+//         _isSubscribed = true;
+//       });
+//     }
+//     if (isSpeechAvailable) {
+//       MicOptions micOptions = getNormalizedMicOptions();
+//       speechToTextInstance!.listen(
+//         listenFor: micOptions.listenFor,
+//         pauseFor: micOptions.pauseFor,
+//         localeId: micOptions.localeId,
+//         partialResults: micOptions.partialResults!,
+//       );
+//     }
+//   }
 
-  void stop() async {
-    speechToTextInstance!.stop();
-  }
+//   void stop() async {
+//     speechToTextInstance!.stop();
+//   }
 
-  MicOptions getNormalizedMicOptions() {
-    MicOptions finalMicOptions = defaultMicOptions;
-    if (micOptions != null) {
-      if (micOptions!.listenFor != null) {
-        finalMicOptions.listenFor = micOptions!.listenFor;
-      }
-      if (micOptions!.pauseFor != null) {
-        finalMicOptions.pauseFor = micOptions!.pauseFor;
-      }
-      if (micOptions!.maximumWordsLimit != null) {
-        finalMicOptions.maximumWordsLimit = micOptions!.maximumWordsLimit;
-      }
-      if (micOptions!.micIcon != null) {
-        finalMicOptions.micIcon = micOptions!.micIcon;
-      }
-      if (micOptions!.micIconDenied != null) {
-        finalMicOptions.micIconDenied = micOptions!.micIconDenied;
-      }
-      if (micOptions!.micIconOn != null) {
-        finalMicOptions.micIconOn = micOptions!.micIconOn;
-      }
-      if (micOptions!.micIconOff != null) {
-        finalMicOptions.micIconOff = micOptions!.micIconOff;
-      }
-      if (micOptions!.localeId != null) {
-        finalMicOptions.localeId = micOptions!.localeId;
-      }
-      if (micOptions!.partialResults != null) {
-        finalMicOptions.partialResults = micOptions!.partialResults;
-      }
-    }
-    return finalMicOptions;
-  }
+//   MicOptions getNormalizedMicOptions() {
+//     MicOptions finalMicOptions = defaultMicOptions;
+//     if (micOptions != null) {
+//       if (micOptions!.listenFor != null) {
+//         finalMicOptions.listenFor = micOptions!.listenFor;
+//       }
+//       if (micOptions!.pauseFor != null) {
+//         finalMicOptions.pauseFor = micOptions!.pauseFor;
+//       }
+//       if (micOptions!.maximumWordsLimit != null) {
+//         finalMicOptions.maximumWordsLimit = micOptions!.maximumWordsLimit;
+//       }
+//       if (micOptions!.micIcon != null) {
+//         finalMicOptions.micIcon = micOptions!.micIcon;
+//       }
+//       if (micOptions!.micIconDenied != null) {
+//         finalMicOptions.micIconDenied = micOptions!.micIconDenied;
+//       }
+//       if (micOptions!.micIconOn != null) {
+//         finalMicOptions.micIconOn = micOptions!.micIconOn;
+//       }
+//       if (micOptions!.micIconOff != null) {
+//         finalMicOptions.micIconOff = micOptions!.micIconOff;
+//       }
+//       if (micOptions!.localeId != null) {
+//         finalMicOptions.localeId = micOptions!.localeId;
+//       }
+//       if (micOptions!.partialResults != null) {
+//         finalMicOptions.partialResults = micOptions!.partialResults;
+//       }
+//     }
+//     return finalMicOptions;
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    MicOptions micOptions = getNormalizedMicOptions();
-    return IconButton(
-        icon: _isListening! || _isSpeechAvailable || !_isSubscribed
-            ? micOptions.micIcon!
-            : micOptions.micIconDenied!,
-        onPressed: () async {
-          if (!_isListening!) {
-            onStart!();
-            start();
-          }
-        });
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     MicOptions micOptions = getNormalizedMicOptions();
+//     return IconButton(
+//         icon: _isListening! || _isSpeechAvailable || !_isSubscribed
+//             ? micOptions.micIcon!
+//             : micOptions.micIconDenied!,
+//         onPressed: () async {
+//           if (!_isListening!) {
+//             onStart!();
+//             start();
+//           }
+//         });
+//   }
+// }
 
-class _MicButton extends StatefulWidget {
-  final void Function(String out)? onMicResults;
-  final void Function()? onStart;
-  final stp.SpeechToTextProvider? speechToTextInstance;
-  final MicOptions? micOptions;
+// class _MicButton extends StatefulWidget {
+//   final void Function(String out)? onMicResults;
+//   final void Function()? onStart;
+//   final stp.SpeechToTextProvider? speechToTextInstance;
+//   final MicOptions? micOptions;
 
-  _MicButton(this.speechToTextInstance,
-      {this.onMicResults, this.onStart, this.micOptions});
+//   _MicButton(this.speechToTextInstance,
+//       {this.onMicResults, this.onStart, this.micOptions});
 
-  @override
-  _MicButtonState createState() => _MicButtonState(speechToTextInstance,
-      onMicResults: this.onMicResults,
-      onStart: this.onStart,
-      micOptions: this.micOptions);
-}
+//   @override
+//   _MicButtonState createState() => _MicButtonState(speechToTextInstance,
+//       onMicResults: this.onMicResults,
+//       onStart: this.onStart,
+//       micOptions: this.micOptions);
+// }
 
 /// [SearchWidgetConnector] represents a search widget that can be used to bind to different kinds of search UI widgets.
 ///
@@ -1818,7 +1814,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
   /// )
   ///
   /// ```
-  final stp.SpeechToTextProvider? speechToTextInstance;
+  // final stp.SpeechToTextProvider? speechToTextInstance;
 
   /// To customize the mic settings if voice search is enabled
   final MicOptions? micOptions;
@@ -1889,7 +1885,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
       // to customize ui
       this.buildSuggestionItem,
       // voice search
-      this.speechToTextInstance,
+      // this.speechToTextInstance,
       this.micOptions,
       // custom actions
       this.customActions});
@@ -1898,30 +1894,30 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
   List<Widget> buildActions(BuildContext context) {
     return [
       ...customActions != null ? customActions! : [],
-      speechToTextInstance != null
-          ? _MicButton(speechToTextInstance, micOptions: micOptions,
-              onStart: () {
-              query = "";
-            }, onMicResults: (String output) {
-              if (output != "") {
-                SearchController? component =
-                    SearchBaseProvider.of(context).getSearchWidget(id);
-                // clear value
-                if (component != null) {
-                  component.setValue(output,
-                      options: Options(
-                          triggerCustomQuery: true,
-                          triggerDefaultQuery: true,
-                          stateChanges: false));
-                  query = output;
+      // speechToTextInstance != null
+      //     ? _MicButton(speechToTextInstance, micOptions: micOptions,
+      //         onStart: () {
+      //         query = "";
+      //       }, onMicResults: (String output) {
+      //         if (output != "") {
+      //           SearchController? component =
+      //               SearchBaseProvider.of(context).getSearchWidget(id);
+      //           // clear value
+      //           if (component != null) {
+      //             component.setValue(output,
+      //                 options: Options(
+      //                     triggerCustomQuery: true,
+      //                     triggerDefaultQuery: true,
+      //                     stateChanges: false));
+      //             query = output;
 
-                  Future.delayed(Duration(milliseconds: 700)).then((value) {
-                    close(context, null);
-                  });
-                }
-              }
-            })
-          : Container(),
+      //             Future.delayed(Duration(milliseconds: 700)).then((value) {
+      //               close(context, null);
+      //             });
+      //           }
+      //         }
+      //       })
+      //     : Container(),
       IconButton(
           icon: Icon(Icons.clear),
           onPressed: () {
