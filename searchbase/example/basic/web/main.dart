@@ -48,7 +48,7 @@ void main() {
   });
 
   // Render results
-  querySelector('#output').innerHtml = '''
+  querySelector('#output')!.innerHtml = '''
     <div id="root">
       <h2 class="text-center">Searchbase Demo with Facet</h2>
       <div id="autocomplete" class="autocomplete">
@@ -74,7 +74,7 @@ void main() {
         options: Options(triggerDefaultQuery: true));
   }
 
-  input.addEventListener('input', handleInput);
+  input!.addEventListener('input', handleInput);
 
   void handleKeyPress(e) {
     // Fetch the results
@@ -91,7 +91,7 @@ void main() {
   resultWidget.triggerDefaultQuery();
 
   resultWidget.subscribeToStateChanges((change) {
-    final results = change['results'].next;
+    final results = change['results']!.next;
     final items = results.data?.map((i) {
       return """
     <div id=${i['_id']} class="result-set">
@@ -107,8 +107,7 @@ void main() {
     final resultStats = '''<p class="results-stats">
                           Showing ${results.numberOfResults} in ${results.time}ms
                         <p>''';
-
-    resultElement.setInnerHtml("${resultStats}${items.join('')}",
+    resultElement!.setInnerHtml("$resultStats${items.join('')}",
         validator: NodeValidatorBuilder.common()
           ..allowHtml5()
           ..allowElement('img',
@@ -119,9 +118,9 @@ void main() {
   filterWidget.triggerDefaultQuery();
 
   filterWidget.subscribeToStateChanges((change) {
-    final aggregations = change['aggregationData'].next;
+    final aggregations = change['aggregationData']!.next;
     final container = document.getElementById('language-filter');
-    container.setInnerHtml('');
+    container!.setInnerHtml('');
     aggregations.data.forEach((i) {
       if (i['_key'] != null) {
         final checkbox = document.createElement('input');
