@@ -152,9 +152,9 @@ packages:
   searchbase:
     dependency: "direct main"
     description:
-      name: searchbase
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../searchbase"
+      relative: true
+    source: path
     version: "2.0.1"
   sky_engine:
     dependency: transitive

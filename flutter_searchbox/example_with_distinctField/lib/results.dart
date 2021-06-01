@@ -29,6 +29,9 @@ class ResultsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var books;
+    // iterating through the inner_hits object, to filter out the other books by the same author(s)
+    // that doesn't match the parent book title and storing the result list in the otherBooks map with parent
+    // book id as key and result list (books) as value
     searchController.results?.rawData?['hits']['hits'].forEach((hit) => {
           books = [],
           hit['inner_hits']?['other_books']?['hits']?['hits']

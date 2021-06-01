@@ -337,11 +337,34 @@ class SearchController extends Base {
   /// A list of recent searches as suggestions.
   List<Suggestion>? recentSearches;
 
-  /// A string defining a field's name, used to return the distinct value documents.
-  String? distinctField;
+  /// String [optional] This prop returns only the distinct value documents for the specified field.
+  /// It is equivalent to the DISTINCT clause in SQL. It internally uses the collapse feature of Elasticsearch.
+  /// You can read more about it over here - https://www.elastic.co/guide/en/elasticsearch/reference/current/collapse-search-results.html
+  final String? distinctField;
 
-  /// This property allows specifying additional options to the distinctField property.
-  Map? distinctFieldConfig;
+  /// Object [optional] This prop allows specifying additional options to the distinctField prop.
+  /// Using the allowed DSL, one can specify how to return K distinct values (default value of K=1),
+  /// sort them by a specific order, or return a second level of distinct values.
+  /// distinctFieldConfig object corresponds to the inner_hits key's DSL.
+  /// You can read more about it over here - https://www.elastic.co/guide/en/elasticsearch/reference/current/collapse-search-results.html
+  ///
+  /// For example,
+  /// ```dart
+  /// SearchBox(
+  ///   ...
+  ///   distinctField: 'authors.keyword',
+  ///   distinctFieldConfig: {
+  ///     'inner_hits': {
+  ///       'name': 'other_books',
+  ///       'size': 5,
+  ///       'sort': [
+  ///         {'timestamp': 'asc'}
+  ///       ],
+  ///     },
+  ///   'max_concurrent_group_searches': 4, },
+  /// )
+  /// ```
+  final Map? distinctFieldConfig;
 
   /* ---- callbacks to create the side effects while querying ----- */
 

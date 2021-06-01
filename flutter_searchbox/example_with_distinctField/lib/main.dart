@@ -69,17 +69,6 @@ class HomePage extends StatelessWidget {
                         {'field': 'original_title', 'weight': 1},
                         {'field': 'original_title.search', 'weight': 3}
                       ],
-                      distinctField: 'authors.keyword',
-                      distinctFieldConfig: {
-                        'inner_hits': {
-                          'name': 'other_books',
-                          'size': 2,
-                          'sort': [
-                            {'timestamp': 'asc'}
-                          ],
-                        },
-                        'max_concurrent_group_searches': 4,
-                      },
                     ),
                     // Initialize query to persist suggestions for active search
                     query: SearchBaseProvider?.of(context)
