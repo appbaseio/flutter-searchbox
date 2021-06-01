@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/latest-flutter-searchbox.iml" filepath="$PROJECT_DIR$/.idea/latest-flutter-searchbox.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/flutter-searchbox.iml" filepath="$PROJECT_DIR$/.idea/flutter-searchbox.iml" />
     </modules>
   </component>
 </project>

@@ -25,10 +25,15 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="446a84c1-317f-46ca-9f65-8517afbf204b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_searchbox/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/pubspec.yaml" afterDir="false" />
+    <list default="true" id="a5a0e42b-7342-47d1-abb1-ad4de2868fad" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/example/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchbase/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/.dart_tool/package_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchbase/.packages" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/.packages" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchbase/example/basic/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/example/basic/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchbase/example/basic/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/example/basic/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchbase/example/basic/web/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/example/basic/web/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchbase/example/basic/web/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/example/basic/web/main.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +43,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="1sktfxVgomcFSuyiwlPHd8fs2GF" />
+  <component name="ProjectId" id="1sf1Rf2QJ6WfOOr8Xtx3d2AtRi5" />
   <component name="ProjectViewState">
     <option name="autoscrollToSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -51,18 +56,12 @@
     <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/flutter_searchbox" />
     <property name="settings.editor.selected.configurable" value="dart.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/flutter_searchbox" />
-    </key>
-  </component>
   <component name="RunManager">
     <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
-      <option name="filePath" value="$PROJECT_DIR$/flutter_searchbox/example_with_distinctField/lib/main.dart" />
+      <option name="filePath" value="$PROJECT_DIR$/searchbase/example/basic/web/main.dart" />
       <method v="2" />
     </configuration>
   </component>
@@ -71,11 +70,11 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="446a84c1-317f-46ca-9f65-8517afbf204b" name="Default Changelist" comment="" />
-      <created>1621428521520</created>
+      <changelist id="a5a0e42b-7342-47d1-abb1-ad4de2868fad" name="Default Changelist" comment="" />
+      <created>1621248822546</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1621428521520</updated>
+      <updated>1621248822546</updated>
     </task>
     <servers />
   </component>
@@ -89,60 +88,39 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="0" y="174" key="#Console" timestamp="1621444614839">
+    <state x="184" y="109" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1621250821984">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="0" y="174" key="#Console/0.0.1440.900@0.0.1440.900" timestamp="1621444614839" />
-    <state x="184" y="109" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1622552056504">
+    <state x="184" y="109" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1621250821984" />
+    <state x="457" y="244" key="#com.intellij.ide.util.TreeFileChooserDialog" timestamp="1621250817872">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="184" y="109" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1622552056504" />
-    <state x="457" y="244" key="#com.intellij.ide.util.TreeFileChooserDialog" timestamp="1621430728469">
+    <state x="457" y="244" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1440.900@0.0.1440.900" timestamp="1621250817872" />
+    <state width="1398" height="245" key="GridCell.Tab.0.bottom" timestamp="1621262354899">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="457" y="244" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1440.900@0.0.1440.900" timestamp="1621430728469" />
-    <state x="264" y="201" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1621437401521">
+    <state width="1398" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1621262354899" />
+    <state width="1398" height="245" key="GridCell.Tab.0.center" timestamp="1621262354898">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="264" y="201" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900@0.0.1440.900" timestamp="1621437401521" />
-    <state x="100" y="100" width="853" height="700" key="DiffContextDialog" timestamp="1621444783896">
+    <state width="1398" height="245" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1621262354898" />
+    <state width="1398" height="245" key="GridCell.Tab.0.left" timestamp="1621262354897">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="100" y="100" width="853" height="700" key="DiffContextDialog/0.0.1440.900@0.0.1440.900" timestamp="1621444783896" />
-    <state width="993" height="243" key="GridCell.Tab.0.bottom" timestamp="1622556283619">
+    <state width="1398" height="245" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1621262354897" />
+    <state width="1398" height="245" key="GridCell.Tab.0.right" timestamp="1621262354898">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="993" height="243" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1622556283619" />
-    <state width="1011" height="137" key="GridCell.Tab.0.bottom/0.25.1440.805@0.25.1440.805" timestamp="1621523300018" />
-    <state width="993" height="243" key="GridCell.Tab.0.center" timestamp="1622556283617">
+    <state width="1398" height="245" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1621262354898" />
+    <state x="221" y="86" key="SettingsEditor" timestamp="1621248895734">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="993" height="243" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1622556283617" />
-    <state width="1011" height="137" key="GridCell.Tab.0.center/0.25.1440.805@0.25.1440.805" timestamp="1621523300018" />
-    <state width="993" height="243" key="GridCell.Tab.0.left" timestamp="1622556283615">
+    <state x="221" y="86" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1621248895734" />
+    <state x="211" y="205" width="827" height="490" key="find.popup" timestamp="1621257335096">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="993" height="243" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1622556283615" />
-    <state width="1011" height="137" key="GridCell.Tab.0.left/0.25.1440.805@0.25.1440.805" timestamp="1621523300017" />
-    <state width="993" height="243" key="GridCell.Tab.0.right" timestamp="1622556283618">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state width="993" height="243" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1622556283618" />
-    <state width="1011" height="137" key="GridCell.Tab.0.right/0.25.1440.805@0.25.1440.805" timestamp="1621523300018" />
-    <state x="200" y="156" key="RollbackChangesDialog" timestamp="1621437458804">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="200" y="156" key="RollbackChangesDialog/0.0.1440.900@0.0.1440.900" timestamp="1621437458804" />
-    <state x="221" y="86" key="SettingsEditor" timestamp="1621428829550">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="221" y="86" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1621428829550" />
-    <state x="219" y="205" width="1065" height="490" key="find.popup" timestamp="1622554448769">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="219" y="205" width="1065" height="490" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1622554448769" />
+    <state x="211" y="205" width="827" height="490" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1621257335096" />
   </component>
 </project>
