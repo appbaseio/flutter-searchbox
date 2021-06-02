@@ -74,6 +74,7 @@ class HomePage extends StatelessWidget {
                         {'field': 'original_title', 'weight': 1},
                         {'field': 'original_title.search', 'weight': 3}
                       ],
+                      // explicitly specify the index to query against for this component
                       index: 'good-books-clone',
                     ),
                     // Initialize query to persist suggestions for active search

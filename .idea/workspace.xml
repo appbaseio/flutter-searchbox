@@ -26,9 +26,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a5a0e42b-7342-47d1-abb1-ad4de2868fad" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example_with_index_prop/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_index_prop/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_searchbox/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example_with_index_prop/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_index_prop/lib/main.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
