@@ -9,6 +9,9 @@
       <excludeFolder url="file://$MODULE_DIR$/flutter_searchbox/example/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/flutter_searchbox/example/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/flutter_searchbox/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_searchbox/example_with_index_prop/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_searchbox/example_with_index_prop/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/flutter_searchbox/example_with_index_prop/build" />
       <excludeFolder url="file://$MODULE_DIR$/searchbase/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/searchbase/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/searchbase/build" />

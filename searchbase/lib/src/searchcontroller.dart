@@ -548,7 +548,8 @@ class SearchController extends Base {
       'enableSynonyms': enableSynonyms,
       'selectAllLabel': selectAllLabel,
       'pagination': pagination,
-      'queryString': queryString
+      'queryString': queryString,
+      'index': this.index
     };
     query.removeWhere((key, value) => key == null || value == null);
     return query;
@@ -565,6 +566,17 @@ class SearchController extends Base {
       return this._queryId!;
     }
     return '';
+  }
+
+  /// to get the search index for the request url
+  String _getSearchIndex(bool isPopularSuggestionsAPI) {
+    var index = this.index;
+    if (isPopularSuggestionsAPI) {
+      index = '.suggestions';
+    } else if (this._parent?.index != null) {
+      index = this._parent!.index;
+    }
+    return index;
   }
 
   /* -------- Public methods -------- */
@@ -932,7 +944,7 @@ class SearchController extends Base {
       });
     }
     final String url =
-        "${this.url}/_analytics/${this.index}/recent-searches?${queryString}";
+        "${this.url}/_analytics/${this._getSearchIndex(false)}/recent-searches?${queryString}";
     try {
       final res = await http.get(Uri.parse(url), headers: this.headers);
       if (res.statusCode >= 500) {
@@ -1096,16 +1108,14 @@ class SearchController extends Base {
       'body': jsonEncode(requestBody),
       'headers': {...?this.headers}
     };
-
     try {
       final finalRequestOptions =
           await this._handleTransformRequest(requestOptions);
       // set timestamp in request
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       String suffix = '_reactivesearch.v3';
-      final String index =
-          isPopularSuggestionsAPI ? '.suggestions' : this.index;
-      final String url = "${this.url}/$index/$suffix";
+      final String url =
+          "${this.url}/${this._getSearchIndex(isPopularSuggestionsAPI)}/$suffix";
       final http.Response res = await http.post(
         Uri.parse(url),
         headers: finalRequestOptions['headers'],
