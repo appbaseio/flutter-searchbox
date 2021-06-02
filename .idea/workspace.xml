@@ -26,16 +26,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a5a0e42b-7342-47d1-abb1-ad4de2868fad" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/flutter-searchbox.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/flutter-searchbox.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_searchbox/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example_with_index_prop/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/example_with_index_prop/pubspec.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_searchbox/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchbase/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/.dart_tool/package_config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchbase/.packages" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/.packages" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchbase/lib/src/searchcontroller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/lib/src/searchcontroller.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
