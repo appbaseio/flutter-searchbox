@@ -337,6 +337,35 @@ class SearchController extends Base {
   /// A list of recent searches as suggestions.
   List<Suggestion>? recentSearches;
 
+  /// This prop returns only the distinct value documents for the specified field.
+  /// It is equivalent to the DISTINCT clause in SQL. It internally uses the collapse feature of Elasticsearch.
+  /// You can read more about it over here - https://www.elastic.co/guide/en/elasticsearch/reference/current/collapse-search-results.html
+  final String? distinctField;
+
+  /// This prop allows specifying additional options to the distinctField prop.
+  /// Using the allowed DSL, one can specify how to return K distinct values (default value of K=1),
+  /// sort them by a specific order, or return a second level of distinct values.
+  /// distinctFieldConfig object corresponds to the inner_hits key's DSL.
+  /// You can read more about it over here - https://www.elastic.co/guide/en/elasticsearch/reference/current/collapse-search-results.html
+  ///
+  /// For example,
+  /// ```dart
+  /// SearchBox(
+  ///   ...
+  ///   distinctField: 'authors.keyword',
+  ///   distinctFieldConfig: {
+  ///     'inner_hits': {
+  ///       'name': 'other_books',
+  ///       'size': 5,
+  ///       'sort': [
+  ///         {'timestamp': 'asc'}
+  ///       ],
+  ///     },
+  ///   'max_concurrent_group_searches': 4, },
+  /// )
+  /// ```
+  final Map? distinctFieldConfig;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   /// It is a callback function which accepts component's future **value** as a
@@ -445,6 +474,8 @@ class SearchController extends Base {
     this.maxPopularSuggestions,
     this.showDistinctSuggestions,
     this.preserveResults,
+    this.distinctField,
+    this.distinctFieldConfig,
     this.value,
     List<Map>? results,
   }) : super(index, url, credentials,
@@ -548,7 +579,9 @@ class SearchController extends Base {
       'enableSynonyms': enableSynonyms,
       'selectAllLabel': selectAllLabel,
       'pagination': pagination,
-      'queryString': queryString
+      'queryString': queryString,
+      'distinctField': distinctField,
+      'distinctFieldConfig': distinctFieldConfig,
     };
     query.removeWhere((key, value) => key == null || value == null);
     return query;
@@ -1096,7 +1129,6 @@ class SearchController extends Base {
       'body': jsonEncode(requestBody),
       'headers': {...?this.headers}
     };
-
     try {
       final finalRequestOptions =
           await this._handleTransformRequest(requestOptions);
