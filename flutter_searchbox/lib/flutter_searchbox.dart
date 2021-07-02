@@ -1782,7 +1782,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
   /// You can read more about it over here - https://www.elastic.co/guide/en/elasticsearch/reference/current/collapse-search-results.html
   final String? distinctField;
 
-  /// Object [optional] This prop allows specifying additional options to the distinctField prop.
+  /// This prop allows specifying additional options to the distinctField prop.
   /// Using the allowed DSL, one can specify how to return K distinct values (default value of K=1),
   /// sort them by a specific order, or return a second level of distinct values.
   /// distinctFieldConfig object corresponds to the inner_hits key's DSL.
