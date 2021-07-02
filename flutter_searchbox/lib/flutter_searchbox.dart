@@ -1204,7 +1204,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// ```
   final TransformResponse? transformResponse;
 
-  /// String [optional] This prop returns only the distinct value documents for the specified field.
+  /// This prop returns only the distinct value documents for the specified field.
   /// It is equivalent to the DISTINCT clause in SQL. It internally uses the collapse feature of Elasticsearch.
   /// You can read more about it over here - https://www.elastic.co/guide/en/elasticsearch/reference/current/collapse-search-results.html
   final String? distinctField;
