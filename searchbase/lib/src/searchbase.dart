@@ -156,6 +156,8 @@ class SearchBase extends Base {
         showDistinctSuggestions: searchController["showDistinctSuggestions"],
         preserveResults: searchController["preserveResults"],
         value: searchController["value"],
+        distinctField: searchController["distinctField"],
+        distinctFieldConfig: searchController["distinctFieldConfig"],
       );
     } else if (searchController is SearchController) {
       componentInstance = searchController;

@@ -94,7 +94,7 @@ class SearchBaseProvider extends InheritedWidget {
     Key? key,
     required SearchBase searchbase,
     required Widget child,
-  })   : _searchbase = searchbase,
+  })  : _searchbase = searchbase,
         super(key: key, child: child);
 
   static SearchBase of(BuildContext context, {bool listen = true}) {
@@ -323,6 +323,10 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
 
   final List<Map>? results;
 
+  final String? distinctField;
+
+  final Map? distinctFieldConfig;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   final Future Function(String value)? beforeValueChange;
@@ -408,6 +412,8 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
     this.preserveResults,
     this.value,
     this.results,
+    this.distinctField,
+    this.distinctFieldConfig,
   }) : super(key: key);
 
   @override
@@ -468,6 +474,8 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
           'showDistinctSuggestions': showDistinctSuggestions,
           'preserveResults': preserveResults,
           'value': value,
+          'distinctField': distinctField,
+          'distinctFieldConfig': distinctFieldConfig,
         },
         builder: builder,
         subscribeTo: subscribeTo,
@@ -1196,6 +1204,35 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// ```
   final TransformResponse? transformResponse;
 
+  /// This prop returns only the distinct value documents for the specified field.
+  /// It is equivalent to the DISTINCT clause in SQL. It internally uses the collapse feature of Elasticsearch.
+  /// You can read more about it over here - https://www.elastic.co/guide/en/elasticsearch/reference/current/collapse-search-results.html
+  final String? distinctField;
+
+  /// This prop allows specifying additional options to the distinctField prop.
+  /// Using the allowed DSL, one can specify how to return K distinct values (default value of K=1),
+  /// sort them by a specific order, or return a second level of distinct values.
+  /// distinctFieldConfig object corresponds to the inner_hits key's DSL.
+  /// You can read more about it over here - https://www.elastic.co/guide/en/elasticsearch/reference/current/collapse-search-results.html
+  ///
+  /// For example,
+  /// ```dart
+  /// SearchBox(
+  ///   ...
+  ///   distinctField: 'authors.keyword',
+  ///   distinctFieldConfig: {
+  ///     'inner_hits': {
+  ///       'name': 'other_books',
+  ///       'size': 5,
+  ///       'sort': [
+  ///         {'timestamp': 'asc'}
+  ///       ],
+  ///     },
+  ///   'max_concurrent_group_searches': 4, },
+  /// )
+  /// ```
+  final Map? distinctFieldConfig;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   /// It is a callback function which accepts component's future **value** as a
@@ -1303,71 +1340,76 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
     this.preserveResults,
     this.value,
     this.results,
+    this.distinctField,
+    this.distinctFieldConfig,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return _SearchBaseConnector(
         child: (searchbase) => _SearchWidgetListener(
-            id: id,
-            searchbase: searchbase,
-            builder: builder,
-            subscribeTo: subscribeTo,
-            triggerQueryOnInit: triggerQueryOnInit,
-            shouldListenForChanges: shouldListenForChanges,
-            destroyOnDispose: destroyOnDispose,
-            // properties to configure search component
-            credentials: credentials,
-            index: index,
-            url: url,
-            appbaseConfig: appbaseConfig,
-            transformRequest: transformRequest,
-            transformResponse: transformResponse,
-            headers: headers,
-            type: type,
-            react: react,
-            queryFormat: queryFormat,
-            dataField: dataField,
-            categoryField: categoryField,
-            categoryValue: categoryValue,
-            nestedField: nestedField,
-            from: from,
-            size: size,
-            sortBy: sortBy,
-            aggregationField: aggregationField,
-            aggregationSize: aggregationSize,
-            after: after,
-            includeNullValues: includeNullValues,
-            includeFields: includeFields,
-            excludeFields: excludeFields,
-            fuzziness: fuzziness,
-            searchOperators: searchOperators,
-            highlight: highlight,
-            highlightField: highlightField,
-            customHighlight: customHighlight,
-            interval: interval,
-            aggregations: aggregations,
-            missingLabel: missingLabel,
-            showMissing: showMissing,
-            enableSynonyms: enableSynonyms,
-            selectAllLabel: selectAllLabel,
-            pagination: pagination,
-            queryString: queryString,
-            defaultQuery: defaultQuery,
-            customQuery: customQuery,
-            beforeValueChange: beforeValueChange,
-            onValueChange: onValueChange,
-            onResults: onResults,
-            onAggregationData: onAggregationData,
-            onError: onError,
-            onRequestStatusChange: onRequestStatusChange,
-            onQueryChange: onQueryChange,
-            enablePopularSuggestions: enablePopularSuggestions,
-            maxPopularSuggestions: maxPopularSuggestions,
-            showDistinctSuggestions: showDistinctSuggestions,
-            preserveResults: preserveResults,
-            value: value,
-            results: results));
+              id: id,
+              searchbase: searchbase,
+              builder: builder,
+              subscribeTo: subscribeTo,
+              triggerQueryOnInit: triggerQueryOnInit,
+              shouldListenForChanges: shouldListenForChanges,
+              destroyOnDispose: destroyOnDispose,
+              // properties to configure search component
+              credentials: credentials,
+              index: index,
+              url: url,
+              appbaseConfig: appbaseConfig,
+              transformRequest: transformRequest,
+              transformResponse: transformResponse,
+              headers: headers,
+              type: type,
+              react: react,
+              queryFormat: queryFormat,
+              dataField: dataField,
+              categoryField: categoryField,
+              categoryValue: categoryValue,
+              nestedField: nestedField,
+              from: from,
+              size: size,
+              sortBy: sortBy,
+              aggregationField: aggregationField,
+              aggregationSize: aggregationSize,
+              after: after,
+              includeNullValues: includeNullValues,
+              includeFields: includeFields,
+              excludeFields: excludeFields,
+              fuzziness: fuzziness,
+              searchOperators: searchOperators,
+              highlight: highlight,
+              highlightField: highlightField,
+              customHighlight: customHighlight,
+              interval: interval,
+              aggregations: aggregations,
+              missingLabel: missingLabel,
+              showMissing: showMissing,
+              enableSynonyms: enableSynonyms,
+              selectAllLabel: selectAllLabel,
+              pagination: pagination,
+              queryString: queryString,
+              defaultQuery: defaultQuery,
+              customQuery: customQuery,
+              beforeValueChange: beforeValueChange,
+              onValueChange: onValueChange,
+              onResults: onResults,
+              onAggregationData: onAggregationData,
+              onError: onError,
+              onRequestStatusChange: onRequestStatusChange,
+              onQueryChange: onQueryChange,
+              enablePopularSuggestions: enablePopularSuggestions,
+              maxPopularSuggestions: maxPopularSuggestions,
+              showDistinctSuggestions: showDistinctSuggestions,
+              preserveResults: preserveResults,
+              value: value,
+              results: results,
+              distinctField: distinctField,
+              distinctFieldConfig: distinctFieldConfig,
+            ));
   }
 }
 
@@ -1735,6 +1777,35 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
   /// Data must be in form of Elasticsearch response.
   final List<Map>? results;
 
+  /// This prop returns only the distinct value documents for the specified field.
+  /// It is equivalent to the DISTINCT clause in SQL. It internally uses the collapse feature of Elasticsearch.
+  /// You can read more about it over here - https://www.elastic.co/guide/en/elasticsearch/reference/current/collapse-search-results.html
+  final String? distinctField;
+
+  /// This prop allows specifying additional options to the distinctField prop.
+  /// Using the allowed DSL, one can specify how to return K distinct values (default value of K=1),
+  /// sort them by a specific order, or return a second level of distinct values.
+  /// distinctFieldConfig object corresponds to the inner_hits key's DSL.
+  /// You can read more about it over here - https://www.elastic.co/guide/en/elasticsearch/reference/current/collapse-search-results.html
+  ///
+  /// For example,
+  /// ```dart
+  /// SearchBox(
+  ///   ...
+  ///   distinctField: 'authors.keyword',
+  ///   distinctFieldConfig: {
+  ///     'inner_hits': {
+  ///       'name': 'other_books',
+  ///       'size': 5,
+  ///       'sort': [
+  ///         {'timestamp': 'asc'}
+  ///       ],
+  ///     },
+  ///   'max_concurrent_group_searches': 4, },
+  /// )
+  /// ```
+  final Map? distinctFieldConfig;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   /// It is a callback function which accepts component's future **value** as a
@@ -1882,6 +1953,8 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
       this.maxPopularSuggestions,
       this.showDistinctSuggestions = true,
       this.preserveResults,
+      this.distinctField,
+      this.distinctFieldConfig,
       this.results,
       // searchbox specific properties
       this.enableRecentSearches = false,
@@ -1896,6 +1969,12 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
 
   @override
   List<Widget> buildActions(BuildContext context) {
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      if (this.aggregationField != null) {
+        debugPrint(
+            'Warning(SearchBox): The `aggregationField` prop has been marked as deprecated, please use the `distinctField` prop instead.');
+      }
+    });
     return [
       ...customActions != null ? customActions! : [],
       speechToTextInstance != null
@@ -2084,6 +2163,8 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
         preserveResults: preserveResults,
         value: query,
         results: results,
+        distinctField: distinctField,
+        distinctFieldConfig: distinctFieldConfig,
         builder: (context, searchController) {
           if (query != searchController.value) {
             // To fetch the suggestions
