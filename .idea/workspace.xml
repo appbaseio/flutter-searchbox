@@ -26,14 +26,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a5a0e42b-7342-47d1-abb1-ad4de2868fad" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/flutter_searchbox/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_searchbox/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_searchbox/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchbase/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/.dart_tool/package_config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchbase/.packages" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/.packages" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchbase/example/basic/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/example/basic/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchbase/example/basic/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/example/basic/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchbase/example/basic/web/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/example/basic/web/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchbase/example/basic/web/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/searchbase/example/basic/web/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,12 +49,18 @@
     <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/flutter_searchbox" />
     <property name="settings.editor.selected.configurable" value="dart.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/flutter_searchbox" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
-      <option name="filePath" value="$PROJECT_DIR$/searchbase/example/basic/web/main.dart" />
+      <option name="filePath" value="$PROJECT_DIR$/flutter_searchbox/example_with_index_prop/lib/main.dart" />
       <method v="2" />
     </configuration>
   </component>
@@ -88,32 +87,33 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="184" y="109" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1621250821984">
+    <state x="184" y="109" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1622560897979">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="184" y="109" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1621250821984" />
-    <state x="457" y="244" key="#com.intellij.ide.util.TreeFileChooserDialog" timestamp="1621250817872">
+    <state x="184" y="109" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1622560897979" />
+    <state x="457" y="244" key="#com.intellij.ide.util.TreeFileChooserDialog" timestamp="1622560891907">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="457" y="244" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1440.900@0.0.1440.900" timestamp="1621250817872" />
-    <state width="1398" height="245" key="GridCell.Tab.0.bottom" timestamp="1621262354899">
+    <state x="457" y="244" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1440.900@0.0.1440.900" timestamp="1622560891907" />
+    <state width="1000" height="200" key="GridCell.Tab.0.bottom" timestamp="1622628325265">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1621262354899" />
-    <state width="1398" height="245" key="GridCell.Tab.0.center" timestamp="1621262354898">
+    <state width="1000" height="200" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1622628325265" />
+    <state width="1000" height="200" key="GridCell.Tab.0.center" timestamp="1622628325264">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="245" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1621262354898" />
-    <state width="1398" height="245" key="GridCell.Tab.0.left" timestamp="1621262354897">
+    <state width="1000" height="200" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1622628325264" />
+    <state width="1000" height="200" key="GridCell.Tab.0.left" timestamp="1622628325262">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="245" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1621262354897" />
-    <state width="1398" height="245" key="GridCell.Tab.0.right" timestamp="1621262354898">
+    <state width="1000" height="200" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1622628325262" />
+    <state width="1000" height="200" key="GridCell.Tab.0.right" timestamp="1622628325265">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="245" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1621262354898" />
+    <state width="1000" height="200" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1622628325265" />
     <state x="221" y="86" key="SettingsEditor" timestamp="1621248895734">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
