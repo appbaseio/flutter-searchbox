@@ -1,3 +1,8 @@
+## [2.0.1-nullsafety] - 20-07-2021
+
+- Add support for `index` property in search widget connector
+- Remove `dataField` validation (required)
+
 ## [2.0.0-nullsafety] - 13-05-2021
 
 - Add support for null safety
