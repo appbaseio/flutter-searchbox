@@ -486,13 +486,9 @@ class SearchController extends Base {
     if (id == "") {
       throw (ErrorMessages[InvalidComponentId]);
     }
-    // dataField is required for components other then search
-    if (type != null && type != QueryType.search) {
-      if (dataField == null) {
-        throw (ErrorMessages[InvalidDataField]);
-      } else if (dataField is List<String>) {
-        throw (ErrorMessages[DataFieldAsArray]);
-      }
+    // dataField can't be an array for queries other than search
+    if (type != null && type != QueryType.search && dataField is List<String>) {
+      throw (ErrorMessages[DataFieldAsArray]);
     }
     // Initialize the state changes observable
     this.stateChanges = new Observable();
