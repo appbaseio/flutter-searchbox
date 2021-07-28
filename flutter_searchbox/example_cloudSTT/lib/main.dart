@@ -107,7 +107,7 @@ class _HomePageState extends State<HomePage> {
                           {'field': 'original_title.search', 'weight': 3}
                         ],
                         customActions: [
-                          // passing the Recorder as a custom action to the SearchBox widget
+                          // using the custom action(mic icon) to handle voice search
                           Recorder(
                             setOverlay:
                                 (bool overlayVisibility, String displayText) {
