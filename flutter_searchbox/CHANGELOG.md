@@ -1,3 +1,7 @@
+## [2.2.0-nullsafety] - 19-08-2021
+
+- Add support for `clearOnQueryChange` property
+
 ## [2.0.1-nullsafety] - 20-07-2021
 
 - Add support for `index` property in search widget connector

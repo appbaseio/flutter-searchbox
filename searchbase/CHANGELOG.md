@@ -1,3 +1,7 @@
+## 2.2.0
+
+- Add support for `clearOnQueryChange` property
+
 ## 2.1.0
 
 - Add support for `index` property in search controller
