@@ -316,6 +316,11 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
 
   // preserve the data for infinite loading
   final bool? preserveResults;
+
+  /// When set to `true`, the dependent controller's (which is set via react prop) value would get cleared whenever the query changes.
+  ///
+  /// The default value is `false`
+  final bool clearOnQueryChange;
   // callbacks
   final TransformRequest? transformRequest;
 
@@ -410,6 +415,7 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
     this.maxPopularSuggestions,
     this.showDistinctSuggestions,
     this.preserveResults,
+    this.clearOnQueryChange = false,
     this.value,
     this.results,
     this.distinctField,
@@ -473,6 +479,7 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
           'maxPopularSuggestions': maxPopularSuggestions,
           'showDistinctSuggestions': showDistinctSuggestions,
           'preserveResults': preserveResults,
+          'clearOnQueryChange': clearOnQueryChange,
           'value': value,
           'distinctField': distinctField,
           'distinctFieldConfig': distinctFieldConfig,
@@ -1153,6 +1160,11 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// It set to `true` then it preserves the previously loaded results data that can be used to persist pagination or implement infinite loading.
   final bool? preserveResults;
 
+  /// When set to `true`, the controller's value would get cleared whenever the query of a watcher controller(which is set via react prop) changes.
+  ///
+  /// The default value is `false`
+  final bool clearOnQueryChange;
+
   /// A list of map to pre-populate results with static data.
   ///
   /// Data must be in form of Elasticsearch response.
@@ -1338,6 +1350,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
     this.maxPopularSuggestions,
     this.showDistinctSuggestions,
     this.preserveResults,
+    this.clearOnQueryChange = false,
     this.value,
     this.results,
     this.distinctField,
@@ -1405,6 +1418,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
               maxPopularSuggestions: maxPopularSuggestions,
               showDistinctSuggestions: showDistinctSuggestions,
               preserveResults: preserveResults,
+              clearOnQueryChange: clearOnQueryChange,
               value: value,
               results: results,
               distinctField: distinctField,
@@ -1726,6 +1740,11 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
   /// It set to `true` then it preserves the previously loaded results data that can be used to persist pagination or implement infinite loading.
   final bool? /*?*/ preserveResults;
 
+  /// When set to `true`, the dependent controller's (which is set via react prop) value would get cleared whenever the query changes.
+  ///
+  /// The default value is `false`
+  final bool clearOnQueryChange;
+
   // callbacks
 
   /// Enables transformation of network request before execution.
@@ -1953,6 +1972,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
       this.maxPopularSuggestions,
       this.showDistinctSuggestions = true,
       this.preserveResults,
+      this.clearOnQueryChange = true,
       this.distinctField,
       this.distinctFieldConfig,
       this.results,
@@ -2161,6 +2181,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
         maxPopularSuggestions: maxPopularSuggestions,
         showDistinctSuggestions: showDistinctSuggestions,
         preserveResults: preserveResults,
+        clearOnQueryChange: clearOnQueryChange,
         value: query,
         results: results,
         distinctField: distinctField,

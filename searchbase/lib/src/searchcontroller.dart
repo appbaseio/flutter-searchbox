@@ -325,6 +325,11 @@ class SearchController extends Base {
   /// Represents the error response returned by elasticsearch.
   dynamic error;
 
+  /// When set to `true`, the dependent controller's (which is set via react prop) value would get cleared whenever the query changes.
+  ///
+  /// The default value is `false`
+  bool clearOnQueryChange;
+
   /// A subject to track state changes and update listeners.
   late Observable stateChanges;
 
@@ -477,6 +482,7 @@ class SearchController extends Base {
     this.distinctField,
     this.distinctFieldConfig,
     this.value,
+    this.clearOnQueryChange = false,
     List<Map>? results,
   }) : super(index, url, credentials,
             appbaseConfig: appbaseConfig,
@@ -841,12 +847,17 @@ class SearchController extends Base {
           if (componentInstance != null) {
             componentInstance._setRequestStatus(RequestStatus.INACTIVE,
                 options: options);
-            // Reset value for dependent components
-            componentInstance.setValue(null,
-                options: new Options(
-                    triggerDefaultQuery: false,
-                    triggerCustomQuery: false,
-                    stateChanges: true));
+
+            // Reset value for dependent components after fist query is made
+            // We wait for first query to not clear filters applied by URL params
+            if (this.clearOnQueryChange && this._query != null) {
+              componentInstance.setValue(null,
+                  options: new Options(
+                      triggerDefaultQuery: false,
+                      triggerCustomQuery: false,
+                      stateChanges: true));
+            }
+
             // Update the results
             final prev = componentInstance.results;
             // Collect results from the response for a particular component

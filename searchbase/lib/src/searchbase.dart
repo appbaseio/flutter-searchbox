@@ -155,6 +155,7 @@ class SearchBase extends Base {
         maxPopularSuggestions: searchController["maxPopularSuggestions"],
         showDistinctSuggestions: searchController["showDistinctSuggestions"],
         preserveResults: searchController["preserveResults"],
+        clearOnQueryChange: searchController["clearOnQueryChange"],
         value: searchController["value"],
         distinctField: searchController["distinctField"],
         distinctFieldConfig: searchController["distinctFieldConfig"],
