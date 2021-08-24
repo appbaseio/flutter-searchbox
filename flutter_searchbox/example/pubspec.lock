@@ -75,14 +75,9 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.2.0-nullsafety"
+    version: "2.2.0-without-speech"
   flutter_test:
     dependency: "direct dev"
-    description: flutter
-    source: sdk
-    version: "0.0.0"
-  flutter_web_plugins:
-    dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
@@ -100,20 +95,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
-  js:
-    dependency: transitive
-    description:
-      name: js
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.6.3"
-  json_annotation:
-    dependency: transitive
-    description:
-      name: json_annotation
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.1"
   matcher:
     dependency: transitive
     description:
@@ -149,13 +130,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.11.0"
-  plugin_platform_interface:
-    dependency: transitive
-    description:
-      name: plugin_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   provider:
     dependency: transitive
     description:
@@ -182,20 +156,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.1"
-  speech_to_text:
-    dependency: transitive
-    description:
-      name: speech_to_text
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.1.1-nullsafety"
-  speech_to_text_platform_interface:
-    dependency: transitive
-    description:
-      name: speech_to_text_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0-nullsafety"
   stack_trace:
     dependency: transitive
     description:

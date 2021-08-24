@@ -39,8 +39,6 @@ The following example renders an autosuggestion [SearchBox](`search-widget`) wit
 import 'package:flutter/material.dart';
 import 'package:searchbase/searchbase.dart';
 import 'package:flutter_searchbox/flutter_searchbox.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'package:speech_to_text/speech_to_text_provider.dart' as stp;
 
 void main() {
   runApp(FlutterSearchBoxApp());
@@ -57,10 +55,6 @@ class FlutterSearchBoxApp extends StatelessWidget {
           recordAnalytics: true,
           // Use unique user id to personalize the recent searches
           userId: 'jon@appbase.io'));
-  // Create an instance of speech to text provider at top level of your application
-  // It is only required to integrate voice search.
-  final stp.SpeechToTextProvider speechToTextInstance =
-      stp.SpeechToTextProvider(stt.SpeechToText());
 
   FlutterSearchBoxApp({Key key}) : super(key: key);
 
@@ -116,8 +110,6 @@ class HomePage extends StatelessWidget {
                           {'field': 'original_title', 'weight': 1},
                           {'field': 'original_title.search', 'weight': 3}
                         ],
-                        // pass the speech to text instance to enable voice search
-                        speechToTextInstance: speechToTextInstance,
                       ));
                 }),
           ],
