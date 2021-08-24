@@ -1,3 +1,7 @@
+## [2.2.0-without-speech] - 24-08-2021
+
+- Remove speech to text
+
 ## [2.2.0-nullsafety] - 19-08-2021
 
 - Add support for `clearOnQueryChange` property
