@@ -1,3 +1,7 @@
+## [2.2.1-nullsafety] - 9-09-2021
+
+- Update provider package
+
 ## [2.2.0-nullsafety] - 19-08-2021
 
 - Add support for `clearOnQueryChange` property
