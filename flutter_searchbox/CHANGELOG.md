@@ -1,3 +1,7 @@
+## [2.2.1-without-speech] - 09-09-2021
+
+- Update provider package
+
 ## [2.2.0-without-speech] - 24-08-2021
 
 - Remove speech to text
