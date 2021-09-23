@@ -188,14 +188,14 @@ packages:
       name: speech_to_text
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.1-nullsafety"
+    version: "5.1.1"
   speech_to_text_platform_interface:
     dependency: transitive
     description:
       name: speech_to_text_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0-nullsafety"
+    version: "2.0.1"
   stack_trace:
     dependency: transitive
     description:
