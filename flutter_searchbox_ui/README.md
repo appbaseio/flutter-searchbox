@@ -159,30 +159,32 @@ class HomePage extends StatelessWidget {
                   child: Container(
                 child: Center(
                   key: const Key("key1"),
-                  child: RangeInput(
+                  child:   child: RangeInput(
                     key: const Key("key2"),
                     id: 'range',
-                    title: "Range",
-                    rangeLabel: "until",
+                    title: "Range L",
+                    rangeLabel: "to",
                     dataField: 'original_publication_year',
                     range: const RangeType(
-                        start: 3000, end: ['other', 1990, 2000, 2010]),
+                        start: 3000, end: ['other', 1990, 2000, 2010],),
+                    defaultValue: const DefaultValue(start: 1980, end: 2060),
                     rangeLabels: RangeLabelsType(
                       start: (value) {
-                        return '# $value €';
+                        return value == 'other' ? 'Custom Other' : 'yr $value';
                       },
                       end: (value) {
-                        return '# $value €';
+                        return value == 'other' ? 'Custom Other' : 'yr $value';
                       },
                     ),
                     validateRange: (start, end) {
+                      print('custom validate');
                       if (start < end) {
                         return true;
                       }
                       return false;
                     },
                     errorMessage: (start, end) {
-                      return 'Starting value: $start seems greater than Ending Value: $end';
+                      return 'Custom error $start > $end';
                     },
                   ),
                 ),

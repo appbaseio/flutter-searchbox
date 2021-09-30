@@ -494,39 +494,104 @@ class RangeInput extends StatefulWidget {
   final void Function(Map next, {Map prev})? onQueryChange;
 
   // title of the component to be shown in the UI.
+  //
+  /// For example,
+  /// ```dart
+  /// RangeInput(
+  ///   ...
+  ///   id="range-input",
+  ///   title: 'Range Input',
+  /// )
+
   final String title;
 
-  // Functionlabel to show between range values, eg: '-', 'until', 'to', etc.
+  // Label to show between range values, eg: '-', 'until', 'to', etc.
+  //
+  /// For example,
+  /// ```dart
+  /// RangeInput(
+  ///   ...
+  ///   id="range-input",
+  ///   rangeLabel: "until",
+  /// )
+  /// ```
   final String rangeLabel;
 
-  // Object an object with start and end keys and corresponding numeric values denoting the minimum and maximum possible slider values.
-  // RangeType(
-  //    "start": List|number;
-  //    "end": List|number;
-  // )
+  // The range values to choose for minimum/ maximum selection
+  //
+  /// For example,
+  /// ```dart
+  /// RangeInput(
+  ///   ...
+  ///   id="range-input",
+  ///   range: const RangeType(
+  ///     start: 3000,
+  ///     end: ['other', 1990, 2000, 2010],
+  ///    ),
+  /// )
+  /// ```
   final RangeType range;
 
-  // Object [optional] selects a initial range values using start and end key values from one of the data elements.
-  // {
-  //    "start": number;
-  //    "end": number;
-  // }
+  // Used for default range selection.
+  //
+  /// For example,
+  /// ```dart
+  /// RangeInput(
+  ///   ...
+  ///   id="range-input",
+  ///   defaultValue: DefaultValue(start: 1980, end: 2000),
+  /// )
+  /// ```
   final DefaultValue? defaultValue;
 
-  // To render custom labels in dropdown
+  // To render custom labels
   //
-  // Object an object with start and end keys and corresponding functions to render values labels inside dropdown menu.
-  //
-  // RangeLabelsType(
-  //    "start": (num value) => String;
-  //    "end": (num value) => String;
-  // )
+  /// For example,
+  /// ```dart
+  /// RangeInput(
+  ///   ...
+  ///   id="range-input",
+  ///   rangeLabels: RangeLabelsType(
+  ///      start: (value) {
+  ///        return 'year $value ';
+  ///      },
+  ///      end: (value) {
+  ///        return 'year $value ';
+  ///      },
+  ///    ),
+  /// )
+  /// ```
   final RangeLabelsType? rangeLabels;
 
   // To custom validate the range values
+  //
+  /// For example,
+  /// ```dart
+  /// RangeInput(
+  ///   ...
+  ///   id="range-input",
+  ///   validateRange: (start, end) {
+  ///      if (start < end) {
+  ///        return true;
+  ///      }
+  ///        return false;
+  ///    },
+  /// )
+  /// ```
   final bool Function(dynamic start, dynamic end)? validateRange;
 
   // To customize the error message
+  //
+  /// For example,
+  /// ```dart
+  /// RangeInput(
+  ///   ...
+  ///   id="range-input",
+  ///   errorMessage: (start, end) {
+  ///      return '$start value is less than $end value';
+  ///     },
+  /// )
+  /// ```
   final String Function(dynamic start, dynamic end)? errorMessage;
 
   const RangeInput({
@@ -735,6 +800,8 @@ class _RangeInputInnerState extends State<RangeInputInner> {
   Map<String, dynamic> dropdownValues = {
     "startValue": "",
     "endValue": "",
+    "defaultStartValue": "",
+    "defaultEndValue": "",
   };
   bool showError = false;
   String errorMessage() {
@@ -753,24 +820,32 @@ class _RangeInputInnerState extends State<RangeInputInner> {
   @override
   void initState() {
     super.initState();
+
     setState(() {
       if (widget.searchController.value != null) {
-        dropdownValues['startValue'] = widget.searchController.value['start'];
-        dropdownValues['endValue'] = widget.searchController.value['end'];
+        dropdownValues['startValue'] =
+            widget.searchController.value['start'] ?? "";
+        dropdownValues['endValue'] = widget.searchController.value['end'] ?? "";
       } else {
         dropdownValues['startValue'] = (widget.defaultValue != null &&
                 isNumeric(widget.defaultValue?.start)
             ? widget.defaultValue?.start
             : widget.range.start is List
-                ? widget.range.start[1]
+                ? (widget.range.start[0] == 'other'
+                    ? widget.range.start[1]
+                    : widget.range.start[0])
                 : widget.range.start);
         dropdownValues['endValue'] =
             (widget.defaultValue != null && isNumeric(widget.defaultValue?.end)
                 ? widget.defaultValue?.end
                 : widget.range.end is List
-                    ? widget.range.end[1]
+                    ? (widget.range.end[0] == 'other'
+                        ? widget.range.end[1]
+                        : widget.range.end[0])
                     : widget.range.end);
       }
+      dropdownValues['defaultStartValue'] = dropdownValues['startValue'];
+      dropdownValues['defaultEndValue'] = dropdownValues['endValue'];
     });
   }
 
@@ -789,6 +864,9 @@ class _RangeInputInnerState extends State<RangeInputInner> {
         } else {
           isValid = true;
         }
+      } else if (!(dropdownValues['startValue'].toString() == "" &&
+          dropdownValues['endValue'].toString() == "")) {
+        isValid = true;
       } else {
         isValid = false;
       }
@@ -802,7 +880,7 @@ class _RangeInputInnerState extends State<RangeInputInner> {
         }
       });
     } catch (e, stacktrace) {
-      print('Error in validateRange: $e \n $stacktrace');
+      // print('$e');
     }
   }
 
@@ -837,6 +915,7 @@ class _RangeInputInnerState extends State<RangeInputInner> {
                   Dropdown(
                     rangeItem: widget.range.start,
                     value: dropdownValues['startValue'],
+                    defaultValue: dropdownValues['defaultStartValue'],
                     onChangeHandler: (value) =>
                         handleValueChange('startValue', value),
                     hintLabel: "Min. Value",
@@ -859,6 +938,7 @@ class _RangeInputInnerState extends State<RangeInputInner> {
                   Dropdown(
                     rangeItem: widget.range.end,
                     value: dropdownValues['endValue'],
+                    defaultValue: dropdownValues['defaultEndValue'],
                     onChangeHandler: (value) =>
                         handleValueChange('endValue', value),
                     hintLabel: "Max. Value",
@@ -887,6 +967,7 @@ class _RangeInputInnerState extends State<RangeInputInner> {
 }
 
 class Dropdown extends StatefulWidget {
+  final dynamic defaultValue;
   final dynamic value;
   final dynamic rangeItem;
   final Function onChangeHandler;
@@ -901,7 +982,8 @@ class Dropdown extends StatefulWidget {
       required this.onChangeHandler,
       required this.hintLabel,
       required this.showError,
-      required this.renderLabel})
+      required this.renderLabel,
+      required this.defaultValue})
       : super(key: key);
 
   @override
@@ -925,14 +1007,16 @@ class _DropdownState extends State<Dropdown> {
   }
 
   initDropdownValue() {
-    if (_isRangeItemList) {
-      return isNumeric(widget.value)
-          ? widget.value
-          : (widget.rangeItem[0] == 'other'
-              ? widget.rangeItem[1]
-              : widget.rangeItem[0]);
-    } else {
-      _controller.text = widget.value.toString();
+    try {
+      if (_isRangeItemList) {
+        return widget.defaultValue;
+      } else {
+        _controller.text = widget.defaultValue.toString();
+        _value = _controller.text;
+        return _controller.text;
+      }
+    } catch (error, stack) {
+      // print('$error');
     }
   }
 
@@ -943,11 +1027,31 @@ class _DropdownState extends State<Dropdown> {
       _isRangeItemList = true;
     }
     setState(() {
-      _value = initDropdownValue();
+      if (!isNumeric(widget.defaultValue) ||
+          (_isRangeItemList &&
+              !widget.rangeItem.contains(widget.defaultValue))) {
+        _showTextField = true;
+        _value =
+            widget.defaultValue != null ? widget.defaultValue.toString() : "";
+      } else {
+        _value = initDropdownValue();
+      }
+      _controller.text = isNumeric(_value) ? renderLabel(_value) : "";
+    });
+
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus && _showTextField) {
+        widget.onChangeHandler(_controller.text);
+        _controller.text = renderLabel(_value);
+      } else {
+        _controller.text = _isRangeItemList && !_showTextField ? "" : _value;
+      }
     });
 
     _controller.addListener(() {
-      widget.onChangeHandler(_controller.text);
+      if (_focusNode.hasFocus) {
+        _value = _controller.text;
+      }
     });
   }
 
@@ -963,15 +1067,17 @@ class _DropdownState extends State<Dropdown> {
   handleValueChange(value) {
     if (value == 'other') {
       setState(() {
-        _value = value;
+        _value = "";
         _showTextField = true;
       });
+
+      _focusNode.requestFocus();
     } else {
       setState(() {
         _value = value;
         _showTextField = false;
       });
-      widget.onChangeHandler(value);
+      widget.onChangeHandler(_value);
     }
   }
 
@@ -980,10 +1086,12 @@ class _DropdownState extends State<Dropdown> {
     setState(() {
       if (_isRangeItemList == true) {
         _showTextField = false;
+      } else {
+        _showTextField = true;
       }
       _value = _isRangeItemList ? initDropdownValue() : "";
     });
-    widget.onChangeHandler(_isRangeItemList ? initDropdownValue() : "");
+    _focusNode.requestFocus();
   }
 
   renderWidget() {
@@ -995,14 +1103,13 @@ class _DropdownState extends State<Dropdown> {
         ),
         focusNode: _focusNode,
         controller: _controller,
-        keyboardType: TextInputType.number,
         decoration: InputDecoration(
           border: const OutlineInputBorder(
             borderSide: BorderSide.none,
           ),
           contentPadding:
               const EdgeInsets.only(left: 8.0, bottom: 8.0, top: 8.0),
-          suffixIcon: _controller.text != ""
+          suffixIcon: _value != ""
               ? IconButton(
                   icon: const Icon(Icons.clear),
                   onPressed: closeTextField,
