@@ -1,5 +1,5 @@
 name: flutter_searchbox_ui
-description: Flutter Searchbox UI provides built components to perform different type of search queries.
+description: Flutter Searchbox UI provides ui widgets to perform different type of search queries. As the name suggests, it provides UI widgets for Elasticseasrch.
 version: 1.0.0-alpha
 homepage: https://github.com/appbaseio/flutter-searchbox
 
