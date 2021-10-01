@@ -1,3 +1,7 @@
+## [1.0.2-alpha] - 30-09-2021.
+
+- Simplified RangeInput Example.
+- Fix `Readme` for example.
 ## [1.0.1-alpha] - 30-09-2021.
 
 - Fix `RangeInput` widget for bugs.

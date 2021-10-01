@@ -1,6 +1,6 @@
 ## Flutter SearchBox UI
 
-[flutter_searchbox_ui](https://github.com/appbaseio/flutter-searchbox/tree/master/flutter_searchbox_ui) provides React UI components for Elasticsearch,  UI widgets with different types of search queries. As the name suggests, it provides  UI widgets for Elasticsearch and Appbase.io.
+[flutter_searchbox_ui](https://github.com/appbaseio/flutter-searchbox/tree/master/flutter_searchbox_ui) provides UI widgets for Elasticsearch and Appbase.io, with the ability to make different types of queries.
 
 Currently, We support `range_input` 
 
@@ -16,7 +16,7 @@ Add this to your package's `pubspec.yaml` file:
 dependencies:
   flutter_searchbox: ^2.0.1-nullsafety
   searchbase: ^2.1.0
-  flutter_searchbox_ui: 1.0.0
+  flutter_searchbox_ui: 1.0.2-alpha
 ```
 
 2. Install it
@@ -32,7 +32,7 @@ $ flutter pub get
 ### An example with RangeInput
 
 <p float="left" style="margin-top: 50px">
-  <img alt="Basic Example" src="https://user-images.githubusercontent.com/57627350/135332703-00b4632a-75fc-49c6-9165-c57e164f1b9e.gif" width="250" />
+  <img alt="Basic Example" src="https://user-images.githubusercontent.com/57627350/135604730-f63508d6-fd67-4bcc-8066-463624984b56.gif" width="250" />
 </p>
 
 The following example renders a `RangeInput` ui widget from the `flutter_searchbox_ui` library with id `range-filter` to render a range input selector,. This widget is being used by `result-widget` to filter the results data based on the range of `original_publication_year` of books, selected in `range-filter`(check the `react` property).
@@ -45,7 +45,6 @@ import 'package:flutter_searchbox/flutter_searchbox.dart';
 import 'package:flutter_searchbox_ui/flutter_searchbox_ui.dart';
 
 import 'results.dart';
-
 
 void main() {
   runApp(FlutterSearchBoxUIApp());
@@ -63,7 +62,6 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
           // Use unique user id to personalize the recent searches
           userId: 'jon@appbase.io'));
 
-  
   FlutterSearchBoxUIApp({Key? key}) : super(key: key);
 
   @override
@@ -80,14 +78,14 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home:const  HomePage(),
+        home: const HomePage(),
       ),
     );
   }
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}): super(key: key);
+  const HomePage({Key? key}) : super(key: key);
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -97,39 +95,9 @@ class HomePage extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Scaffold(
+       home: Scaffold(
           appBar: AppBar(
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    // Invoke the Search Delegate to display search UI with autosuggestions
-                    showSearch(
-                      context: context,
-                      // SearchBox widget from flutter searchbox
-                      delegate: SearchBox(
-                          // A unique identifier that can be used by other widgetss to reactively update data
-                          id: 'search-widget',
-                          enableRecentSearches: true,
-                          enablePopularSuggestions: true,
-                          showAutoFill: true,
-                          maxPopularSuggestions: 3,
-                          size: 5,
-                          dataField: [
-                            {'field': 'original_title', 'weight': 1},
-                            {'field': 'original_title.search', 'weight': 3}
-                          ],
-                          // pass the speech to text instance to enable voice search
-                          ),
-                      // Initialize query to persist suggestions for active search
-                      query: SearchBaseProvider?.of(context)
-                          .getSearchWidget('search-widget')
-                          ?.value
-                          ?.toString(),
-                    );
-                  }),
-            ],
-            title: Text('SearchBox Demo'),
+            title: Text('RangeInput Demo'),
           ),
           body: Center(
             // A custom UI widget to render a list of results
@@ -137,7 +105,9 @@ class HomePage extends StatelessWidget {
                 id: 'result-widget',
                 dataField: 'original_title',
                 react: const {
-                  'and': ['search-widget', 'range'],
+                  'and': [
+                    'range-selector',
+                  ],
                 },
                 size: 10,
                 triggerQueryOnInit: true,
@@ -150,7 +120,7 @@ class HomePage extends StatelessWidget {
             data: Theme.of(context).copyWith(
               // Set the transparency here
               canvasColor: Colors.white.withOpacity(
-                  .6), //or any other color you want. e.g Colors.blue.withOpacity(0.5)
+                  .8), //or any other color you want. e.g Colors.blue.withOpacity(0.5)
             ),
             child: Container(
               color: Colors.transparent,
@@ -158,16 +128,16 @@ class HomePage extends StatelessWidget {
               child: Drawer(
                   child: Container(
                 child: Center(
-                  key: const Key("key1"),
-                  child:   child: RangeInput(
-                    key: const Key("key2"),
-                    id: 'range',
-                    title: "Range L",
+                  child: RangeInput(
+                    id: 'range-selector',
+                    title: "Publication Year",
                     rangeLabel: "to",
                     dataField: 'original_publication_year',
-                    range: const RangeType(
-                        start: 3000, end: ['other', 1990, 2000, 2010],),
-                    defaultValue: const DefaultValue(start: 1980, end: 2060),
+                    range: RangeType(
+                      start: 3000,
+                      end: ['other', 1990, 2000, 2010],
+                    ),
+                    defaultValue: DefaultValue(start: 1980, end: 2060),
                     rangeLabels: RangeLabelsType(
                       start: (value) {
                         return value == 'other' ? 'Custom Other' : 'yr $value';
@@ -196,7 +166,6 @@ class HomePage extends StatelessWidget {
 }
 
 ```
-
 ___results.dart___
 ```dart
 import 'package:flutter/material.dart';

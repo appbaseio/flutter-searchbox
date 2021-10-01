@@ -54,39 +54,9 @@ class HomePage extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Scaffold(
+       home: Scaffold(
           appBar: AppBar(
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    // Invoke the Search Delegate to display search UI with autosuggestions
-                    showSearch(
-                      context: context,
-                      // SearchBox widget from flutter searchbox
-                      delegate: SearchBox(
-                        // A unique identifier that can be used by other widgetss to reactively update data
-                        id: 'search-widget',
-                        enableRecentSearches: true,
-                        enablePopularSuggestions: true,
-                        showAutoFill: true,
-                        maxPopularSuggestions: 3,
-                        size: 5,
-                        dataField: [
-                          {'field': 'original_title', 'weight': 1},
-                          {'field': 'original_title.search', 'weight': 3}
-                        ],
-                        // pass the speech to text instance to enable voice search
-                      ),
-                      // Initialize query to persist suggestions for active search
-                      query: SearchBaseProvider?.of(context)
-                          .getSearchWidget('search-widget')
-                          ?.value
-                          ?.toString(),
-                    );
-                  }),
-            ],
-            title: Text('SearchBox Demo'),
+            title: Text('RangeInput Demo'),
           ),
           body: Center(
             // A custom UI widget to render a list of results
@@ -94,7 +64,9 @@ class HomePage extends StatelessWidget {
                 id: 'result-widget',
                 dataField: 'original_title',
                 react: const {
-                  'and': ['search-widget', 'range'],
+                  'and': [
+                    'range-selector',
+                  ],
                 },
                 size: 10,
                 triggerQueryOnInit: true,
@@ -115,16 +87,16 @@ class HomePage extends StatelessWidget {
               child: Drawer(
                   child: Container(
                 child: Center(
-                  key: const Key("key1"),
                   child: RangeInput(
-                    key: const Key("key2"),
-                    id: 'range',
-                    title: "Range L",
+                    id: 'range-selector',
+                    title: "Publication Year",
                     rangeLabel: "to",
                     dataField: 'original_publication_year',
-                    range: const RangeType(
-                        start: 3000, end: ['other', 1990, 2000, 2010],),
-                    defaultValue: const DefaultValue(start: 1980, end: 2060),
+                    range: RangeType(
+                      start: 3000,
+                      end: ['other', 1990, 2000, 2010],
+                    ),
+                    defaultValue: DefaultValue(start: 1980, end: 2060),
                     rangeLabels: RangeLabelsType(
                       start: (value) {
                         return value == 'other' ? 'Custom Other' : 'yr $value';
