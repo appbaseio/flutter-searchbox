@@ -112,21 +112,21 @@ class HomePage extends StatelessWidget {
                     dataField: 'original_publication_year',
                     range: const RangeType(
                       start: 1900,
-                      end: ['other', 1990, 2000, 2010, 'no limit'],
+                      end: ['other', 1990, 2000, 2010, 'no_limit'],
                     ),
                     defaultValue: const DefaultValue(start: 1980, end: 2000),
                     rangeLabels: RangeLabelsType(
                       start: (value) {
                         return value == 'other'
                             ? 'Custom Other'
-                            : (value == 'no limit'
+                            : (value == 'no_limit'
                                 ? 'No Limits custom'
                                 : 'yr $value');
                       },
                       end: (value) {
                         return value == 'other'
                             ? 'Custom Other'
-                            : (value == 'no limit'
+                            : (value == 'no_limit'
                                 ? 'No Limits custom'
                                 : 'yr $value');
                       },

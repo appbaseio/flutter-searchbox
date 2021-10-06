@@ -950,7 +950,7 @@ class _RangeInputInnerState extends State<RangeInputInner> {
           dropdownValues['startValue'] =
               widget.searchController.value['start'] ?? "";
           dropdownValues['endValue'] = widget.searchController.value['end'] ??
-              (widget.range.end[widget.range.end.length - 1] == 'no limit'
+              (widget.range.end[widget.range.end.length - 1] == 'no_limit'
                   ? widget.range.end[widget.range.end.length - 1]
                   : "");
         } else {
@@ -969,7 +969,7 @@ class _RangeInputInnerState extends State<RangeInputInner> {
                   ? (widget.range.end[0] == 'other'
                       ? widget.range.end[1]
                       : (widget.range.end[widget.range.end.length - 1] ==
-                              'no limit'
+                              'no_limit'
                           ? widget.range.end[widget.range.end.length - 1]
                           : widget.range.end[0]))
                   : widget.range.end);
@@ -1182,8 +1182,8 @@ class _DropdownState extends State<Dropdown> {
       _focusNode.addListener(() {
         if (!_focusNode.hasFocus && _showTextField) {
           if (_controller.text.isEmpty && _isRangeItemList) {
-            if (widget.rangeItem.contains('no limit')) {
-              _value = 'no limit';
+            if (widget.rangeItem.contains('no_limit')) {
+              _value = 'no_limit';
             } else {
               _value = isNumeric(widget.rangeItem[0])
                   ? widget.rangeItem[0]
@@ -1240,8 +1240,8 @@ class _DropdownState extends State<Dropdown> {
     _controller.text = "";
     setState(() {
       if (_isRangeItemList == true) {
-        if (widget.rangeItem.contains('no limit')) {
-          _value = 'no limit';
+        if (widget.rangeItem.contains('no_limit')) {
+          _value = 'no_limit';
         } else {
           _value = isNumeric(widget.rangeItem[0])
               ? widget.rangeItem[0]
