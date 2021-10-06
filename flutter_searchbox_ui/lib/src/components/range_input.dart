@@ -493,29 +493,48 @@ class RangeInput extends StatefulWidget {
   /// This property is handy in cases where you want to generate a side-effect whenever the widget's query would change.
   final void Function(Map next, {Map prev})? onQueryChange;
 
-  // title of the component to be shown in the UI.
+  // Render a custom title widget.
   //
   /// For example,
   /// ```dart
   /// RangeInput(
   ///   ...
   ///   id="range-input",
-  ///   title: 'Range Input',
+  ///   buildTitle: () {
+  ///     return const Text(
+  ///       "Custom Title Widget",
+  ///        style: TextStyle(
+  ///          fontWeight: FontWeight.bold,
+  ///          fontSize: 16.0,
+  ///          color: Colors.amber,
+  ///        ),
+  ///      );
+  ///    },
   /// )
 
-  final String title;
+  final Widget Function()? buildTitle;
 
-  // Label to show between range values, eg: '-', 'until', 'to', etc.
+  // Render a custom widget to display Label between range values.
+  // like: '-', 'until', 'to', etc.
   //
   /// For example,
   /// ```dart
   /// RangeInput(
   ///   ...
   ///   id="range-input",
-  ///   rangeLabel: "until",
+  ///   buildRangeLabel: () {
+  ///     return const Text(
+  ///       "Custom Title Widget",
+  ///        style: TextStyle(
+  ///          fontWeight: FontWeight.bold,
+  ///          fontSize: 16.0,
+  ///          color: Colors.blue,
+  ///        ),
+  ///      );
+  ///    },
   /// )
   /// ```
-  final String rangeLabel;
+  final Widget Function()? buildRangeLabel;
 
   // The range values to choose for minimum/ maximum selection
   //
@@ -563,7 +582,7 @@ class RangeInput extends StatefulWidget {
   /// ```
   final RangeLabelsType? rangeLabels;
 
-  // To custom validate the range values
+  // To custom validate the range values.
   //
   /// For example,
   /// ```dart
@@ -580,19 +599,82 @@ class RangeInput extends StatefulWidget {
   /// ```
   final bool Function(dynamic start, dynamic end)? validateRange;
 
-  // To customize the error message
+  // To render a custom widget to display the error message.
   //
   /// For example,
   /// ```dart
   /// RangeInput(
   ///   ...
   ///   id="range-input",
-  ///   errorMessage: (start, end) {
-  ///      return '$start value is less than $end value';
-  ///     },
+  ///   buildErrorMessage: (start, end) {
+  ///     return const Text(
+  ///       'Custom error $start > $end',
+  ///        style: TextStyle(
+  ///          color: Colors.yellowAccent,
+  ///          fontSize: 20.0,
+  ///        ),
+  ///      );
+  ///    },
   /// )
   /// ```
-  final String Function(dynamic start, dynamic end)? errorMessage;
+  final Widget Function(dynamic start, dynamic end)? buildErrorMessage;
+
+  // To custom style the input field
+  //
+  /// For example,
+  /// ```dart
+  /// RangeInput(
+  ///   ...
+  ///   id="range-input",
+  ///   inputStyle: TextStyle(
+  ///          color: Colors.deepPurple,
+  ///          fontSize: 18,
+  ///          height: 1,
+  ///        ),
+  /// )
+  /// ```
+  final TextStyle? inputStyle;
+
+  // To custom style the Dropdown
+  //
+  /// For example,
+  /// ```dart
+  /// RangeInput(
+  ///   ...
+  ///   id="range-input",
+  ///   dropdownStyle: TextStyle(
+  ///          color: Colors.deepPurple,
+  ///          fontSize: 18,
+  ///          height: 1,
+  ///        ),
+  /// )
+  /// ```
+  final TextStyle? dropdownStyle;
+
+  // To custom render the Container.
+  //
+  //  Container is wrapper around TextField/ Dropdown, that helps to customize height, border, etc.
+  /// For example,
+  /// ```dart
+  /// RangeInput(
+  ///   ...
+  ///   id="range-input",
+  ///   customContainer: (showError, childWidget) {
+  ///     return Container(
+  ///       padding: const EdgeInsets.all(8.0),
+  ///       height: 50,
+  ///       decoration: BoxDecoration(
+  ///         border: Border.all(
+  ///           color: showError ? Colors.red : Colors.grey,
+  ///           width: 1.5,
+  ///         ),
+  ///         borderRadius: BorderRadius.circular(3),
+  ///       ),
+  ///       child: childWidget,
+  ///      );
+  ///     },
+  /// ```
+  final Container Function(bool showError, Widget childWidget)? customContainer;
 
   const RangeInput({
     Key? key,
@@ -655,13 +737,16 @@ class RangeInput extends StatefulWidget {
     this.results,
     this.distinctField,
     this.distinctFieldConfig,
-    this.title = "",
-    this.rangeLabel = '-',
+    this.buildTitle,
+    this.buildRangeLabel,
     required this.range,
     this.defaultValue,
     this.rangeLabels,
     this.validateRange,
-    this.errorMessage,
+    this.buildErrorMessage,
+    this.inputStyle,
+    this.dropdownStyle,
+    this.customContainer,
   }) : super(key: key);
 
   @override
@@ -687,6 +772,34 @@ class _RangeInputState extends State<RangeInput> {
     }
   }
 
+  buildTitleWidget() {
+    if (widget.buildTitle != null) {
+      return widget.buildTitle!();
+    } else {
+      return const Text(
+        "Range Input",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20.0,
+        ),
+      );
+    }
+  }
+
+  buildRangeLabelWidget() {
+    if (widget.buildRangeLabel != null) {
+      return widget.buildRangeLabel!();
+    } else {
+      return const Text(
+        "-",
+        style: TextStyle(
+          fontSize: 22,
+          color: Colors.grey,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SearchWidgetConnector(
@@ -694,8 +807,8 @@ class _RangeInputState extends State<RangeInput> {
       builder: (context, searchController) {
         return RangeInputInner(
           searchController: searchController,
-          title: widget.title,
-          rangeLabel: widget.rangeLabel,
+          title: buildTitleWidget(),
+          rangeLabel: buildRangeLabelWidget(),
           range: widget.range,
           defaultValue:
               widget.defaultValue is DefaultValue ? widget.defaultValue : null,
@@ -703,7 +816,10 @@ class _RangeInputState extends State<RangeInput> {
               widget.rangeLabels is RangeLabelsType ? widget.rangeLabels : null,
           validateRange:
               widget.validateRange is Function ? widget.validateRange : null,
-          errorMessage: widget.errorMessage,
+          buildErrorMessage: widget.buildErrorMessage,
+          inputStyle: widget.inputStyle,
+          dropdownStyle: widget.dropdownStyle,
+          customContainer: widget.customContainer,
         );
       },
       subscribeTo: widget.subscribeTo,
@@ -771,13 +887,16 @@ class _RangeInputState extends State<RangeInput> {
 }
 
 class RangeInputInner extends StatefulWidget {
-  final String title;
-  final String rangeLabel;
+  final Widget title;
+  final Widget rangeLabel;
   final RangeType range;
   final DefaultValue? defaultValue;
   final bool Function(num start, num end)? validateRange;
-  final String Function(dynamic start, dynamic end)? errorMessage;
+  final Widget Function(dynamic start, dynamic end)? buildErrorMessage;
   final RangeLabelsType? rangeLabels;
+  final TextStyle? inputStyle;
+  final TextStyle? dropdownStyle;
+  final Container Function(bool showError, Widget childWidget)? customContainer;
 
   final SearchController searchController;
   const RangeInputInner({
@@ -789,7 +908,10 @@ class RangeInputInner extends StatefulWidget {
     required this.defaultValue,
     this.rangeLabels,
     this.validateRange,
-    this.errorMessage,
+    this.buildErrorMessage,
+    this.inputStyle,
+    this.dropdownStyle,
+    this.customContainer,
   }) : super(key: key);
 
   @override
@@ -804,15 +926,17 @@ class _RangeInputInnerState extends State<RangeInputInner> {
     "defaultEndValue": "",
   };
   bool showError = false;
-  String errorMessage() {
-    if (widget.errorMessage != null) {
-      return widget.errorMessage!(
+  Widget buildErrorMessage() {
+    if (widget.buildErrorMessage != null) {
+      return widget.buildErrorMessage!(
         dropdownValues['startValue'],
         dropdownValues['endValue'],
       );
     }
-
-    return "Choose a lower minimum or higher maximum value";
+    return const Text(
+      'Choose a lower minimum or higher maximum value"',
+      style: TextStyle(fontSize: 20.0, color: Colors.red),
+    );
   }
 
   _RangeInputInnerState();
@@ -820,33 +944,47 @@ class _RangeInputInnerState extends State<RangeInputInner> {
   @override
   void initState() {
     super.initState();
-
-    setState(() {
-      if (widget.searchController.value != null) {
-        dropdownValues['startValue'] =
-            widget.searchController.value['start'] ?? "";
-        dropdownValues['endValue'] = widget.searchController.value['end'] ?? "";
-      } else {
-        dropdownValues['startValue'] = (widget.defaultValue != null &&
-                isNumeric(widget.defaultValue?.start)
-            ? widget.defaultValue?.start
-            : widget.range.start is List
-                ? (widget.range.start[0] == 'other'
-                    ? widget.range.start[1]
-                    : widget.range.start[0])
-                : widget.range.start);
-        dropdownValues['endValue'] =
-            (widget.defaultValue != null && isNumeric(widget.defaultValue?.end)
-                ? widget.defaultValue?.end
-                : widget.range.end is List
-                    ? (widget.range.end[0] == 'other'
-                        ? widget.range.end[1]
-                        : widget.range.end[0])
-                    : widget.range.end);
-      }
-      dropdownValues['defaultStartValue'] = dropdownValues['startValue'];
-      dropdownValues['defaultEndValue'] = dropdownValues['endValue'];
-    });
+    try {
+      setState(() {
+        if (widget.searchController.value != null) {
+          dropdownValues['startValue'] =
+              widget.searchController.value['start'] ?? "";
+          dropdownValues['endValue'] = widget.searchController.value['end'] ??
+              (widget.range.end[widget.range.end.length - 1] == 'no limit'
+                  ? widget.range.end[widget.range.end.length - 1]
+                  : "");
+        } else {
+          dropdownValues['startValue'] = (widget.defaultValue != null &&
+                  isNumeric(widget.defaultValue?.start)
+              ? widget.defaultValue?.start
+              : widget.range.start is List
+                  ? (widget.range.start[0] == 'other'
+                      ? widget.range.start[1]
+                      : widget.range.start[0])
+                  : widget.range.start);
+          dropdownValues['endValue'] = (widget.defaultValue != null &&
+                  isNumeric(widget.defaultValue?.end)
+              ? widget.defaultValue?.end
+              : widget.range.end is List
+                  ? (widget.range.end[0] == 'other'
+                      ? widget.range.end[1]
+                      : (widget.range.end[widget.range.end.length - 1] ==
+                              'no limit'
+                          ? widget.range.end[widget.range.end.length - 1]
+                          : widget.range.end[0]))
+                  : widget.range.end);
+        }
+        dropdownValues['defaultStartValue'] = dropdownValues['startValue'];
+        dropdownValues['defaultEndValue'] = dropdownValues['endValue'];
+      });
+      WidgetsBinding.instance!.addPostFrameCallback((_) =>
+          widget.searchController.setValue({
+            'start': dropdownValues['startValue'],
+            'end': dropdownValues['endValue']
+          }, options: Options(triggerCustomQuery: true)));
+    } catch (e, stack) {
+      // print('$e $stack');
+    }
   }
 
   validateRange() {
@@ -899,15 +1037,7 @@ class _RangeInputInnerState extends State<RangeInputInner> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Text(
-                widget.title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.0,
-                ),
-              ),
-            ),
+                padding: const EdgeInsets.only(left: 8.0), child: widget.title),
             Container(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -924,15 +1054,12 @@ class _RangeInputInnerState extends State<RangeInputInner> {
                             widget.rangeLabels is RangeLabelsType)
                         ? widget.rangeLabels!.start
                         : null,
+                    inputStyle: widget.inputStyle,
+                    dropdownStyle: widget.dropdownStyle,
+                    customContainer: widget.customContainer,
                   ),
                   Container(
-                    child: Text(
-                      widget.rangeLabel,
-                      style: const TextStyle(
-                        fontSize: 22,
-                        color: Colors.grey,
-                      ),
-                    ),
+                    child: widget.rangeLabel,
                     margin: const EdgeInsets.fromLTRB(6.0, 0, 6.0, 0),
                   ),
                   Dropdown(
@@ -947,6 +1074,9 @@ class _RangeInputInnerState extends State<RangeInputInner> {
                             widget.rangeLabels is RangeLabelsType)
                         ? widget.rangeLabels!.end
                         : null,
+                    inputStyle: widget.inputStyle,
+                    dropdownStyle: widget.dropdownStyle,
+                    customContainer: widget.customContainer,
                   ),
                 ],
               ),
@@ -955,10 +1085,7 @@ class _RangeInputInnerState extends State<RangeInputInner> {
               offstage: !showError,
               child: Container(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: Text(
-                  errorMessage(),
-                  style: const TextStyle(fontSize: 20.0, color: Colors.red),
-                ),
+                child: buildErrorMessage(),
               ),
             )
           ],
@@ -974,24 +1101,30 @@ class Dropdown extends StatefulWidget {
   final String hintLabel;
   final bool showError;
   final dynamic renderLabel;
+  final TextStyle? inputStyle;
+  final TextStyle? dropdownStyle;
+  final Container Function(bool showError, Widget childWidget)? customContainer;
 
-  const Dropdown(
-      {Key? key,
-      required this.rangeItem,
-      required this.value,
-      required this.onChangeHandler,
-      required this.hintLabel,
-      required this.showError,
-      required this.renderLabel,
-      required this.defaultValue})
-      : super(key: key);
+  const Dropdown({
+    Key? key,
+    required this.rangeItem,
+    required this.value,
+    required this.onChangeHandler,
+    required this.hintLabel,
+    required this.showError,
+    required this.renderLabel,
+    required this.defaultValue,
+    this.inputStyle,
+    this.dropdownStyle,
+    this.customContainer,
+  }) : super(key: key);
 
   @override
   _DropdownState createState() => _DropdownState();
 }
 
 class _DropdownState extends State<Dropdown> {
-  late dynamic _value;
+  dynamic _value;
   bool _showTextField = false;
   bool _isRangeItemList = false;
 
@@ -999,16 +1132,20 @@ class _DropdownState extends State<Dropdown> {
   final _focusNode = FocusNode();
 
   renderLabel(dynamic value) {
-    if (widget.renderLabel != null && isNumeric(value)) {
+    if (widget.renderLabel != null && value != "") {
       return widget.renderLabel(value);
     }
-
-    return value;
+    return value.toString();
   }
 
   initDropdownValue() {
     try {
       if (_isRangeItemList) {
+        if (!widget.rangeItem.contains(widget.defaultValue)) {
+          return isNumeric(widget.rangeItem[0])
+              ? widget.rangeItem[0]
+              : widget.rangeItem[1];
+        }
         return widget.defaultValue;
       } else {
         _controller.text = widget.defaultValue.toString();
@@ -1016,43 +1153,61 @@ class _DropdownState extends State<Dropdown> {
         return _controller.text;
       }
     } catch (error, stack) {
-      // print('$error');
+      // print('$error $stack');
     }
   }
 
   @override
   void initState() {
-    super.initState();
-    if (widget.rangeItem is List) {
-      _isRangeItemList = true;
-    }
-    setState(() {
-      if (!isNumeric(widget.defaultValue) ||
-          (_isRangeItemList &&
-              !widget.rangeItem.contains(widget.defaultValue))) {
+    try {
+      super.initState();
+      if (widget.rangeItem is List) {
+        _isRangeItemList = true;
+      } else {
         _showTextField = true;
-        _value =
-            widget.defaultValue != null ? widget.defaultValue.toString() : "";
-      } else {
-        _value = initDropdownValue();
       }
-      _controller.text = isNumeric(_value) ? renderLabel(_value) : "";
-    });
+      setState(() {
+        if ((!isNumeric(widget.defaultValue) && !_isRangeItemList) ||
+            (_isRangeItemList &&
+                !widget.rangeItem.contains(widget.defaultValue))) {
+          _showTextField = true;
+          _value =
+              widget.defaultValue != null ? widget.defaultValue.toString() : "";
+        } else {
+          _value = initDropdownValue();
+        }
+        _controller.text = isNumeric(_value) ? renderLabel(_value) : "";
+      });
 
-    _focusNode.addListener(() {
-      if (!_focusNode.hasFocus && _showTextField) {
-        widget.onChangeHandler(_controller.text);
-        _controller.text = renderLabel(_value);
-      } else {
-        _controller.text = _isRangeItemList && !_showTextField ? "" : _value;
-      }
-    });
+      _focusNode.addListener(() {
+        if (!_focusNode.hasFocus && _showTextField) {
+          if (_controller.text.isEmpty && _isRangeItemList) {
+            if (widget.rangeItem.contains('no limit')) {
+              _value = 'no limit';
+            } else {
+              _value = isNumeric(widget.rangeItem[0])
+                  ? widget.rangeItem[0]
+                  : widget.rangeItem[1];
+            }
+            handleValueChange(_value);
+            _showTextField = false;
+            return;
+          }
+          widget.onChangeHandler(_controller.text);
+          _controller.text = renderLabel(_value);
+        } else {
+          _controller.text = _isRangeItemList && !_showTextField ? "" : _value;
+        }
+      });
 
-    _controller.addListener(() {
-      if (_focusNode.hasFocus) {
-        _value = _controller.text;
-      }
-    });
+      _controller.addListener(() {
+        if (_focusNode.hasFocus) {
+          _value = _controller.text;
+        }
+      });
+    } catch (e, stack) {
+      // print('$e $stack');
+    }
   }
 
   @override
@@ -1085,22 +1240,31 @@ class _DropdownState extends State<Dropdown> {
     _controller.text = "";
     setState(() {
       if (_isRangeItemList == true) {
+        if (widget.rangeItem.contains('no limit')) {
+          _value = 'no limit';
+        } else {
+          _value = isNumeric(widget.rangeItem[0])
+              ? widget.rangeItem[0]
+              : widget.rangeItem[1];
+        }
+        handleValueChange(_value);
         _showTextField = false;
       } else {
         _showTextField = true;
+        _value = "";
+        _focusNode.requestFocus();
       }
-      _value = _isRangeItemList ? initDropdownValue() : "";
     });
-    _focusNode.requestFocus();
   }
 
   renderWidget() {
     if (_showTextField || !_isRangeItemList) {
       return TextField(
-        style: const TextStyle(
-          fontSize: 22,
-          height: 1,
-        ),
+        style: widget.inputStyle ??
+            const TextStyle(
+              fontSize: 22,
+              height: 1,
+            ),
         focusNode: _focusNode,
         controller: _controller,
         decoration: InputDecoration(
@@ -1125,15 +1289,16 @@ class _DropdownState extends State<Dropdown> {
         iconSize: 36,
         isExpanded: true,
         underline: const SizedBox(),
-        style: const TextStyle(
-          color: Colors.black,
-          fontSize: 22,
-          height: 1,
-        ),
+        style: widget.dropdownStyle ??
+            const TextStyle(
+              color: Colors.black,
+              fontSize: 22,
+              height: 1,
+            ),
         items: widget.rangeItem.map<DropdownMenuItem<Object>>((value) {
           return DropdownMenuItem(
             value: value,
-            child: Text(renderLabel(value.toString())),
+            child: Text(renderLabel(value)),
           );
         }).toList(),
         onChanged: (value) => handleValueChange(value),
@@ -1142,22 +1307,29 @@ class _DropdownState extends State<Dropdown> {
     }
   }
 
+  renderContainer() {
+    if (widget.customContainer != null) {
+      return widget.customContainer!(widget.showError, renderWidget());
+    }
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      height: 70,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: !!widget.showError ? Colors.red : Colors.grey,
+          width: 1.5,
+        ),
+        borderRadius: BorderRadius.circular(3),
+      ),
+      child: renderWidget(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      flex: 1, // 60% of space => (6/(6 + 4))
-      child: Container(
-        padding: const EdgeInsets.all(8.0),
-        height: 70,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: !!widget.showError ? Colors.red : Colors.grey,
-            width: 1.5,
-          ),
-          borderRadius: BorderRadius.circular(3),
-        ),
-        child: renderWidget(),
-      ),
+      flex: 1,
+      child: renderContainer(),
     );
   }
 }

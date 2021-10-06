@@ -1,3 +1,9 @@
+## [1.0.3-alpha] - 06-10-2021.
+
+- Allows custom stlyes to be set.
+- Fixes broken ui when clearing dropdown.
+- Triggers query with default values.
+- Supports unbounded upper limit via `no limit` dropdown option.
 ## [1.0.2-alpha] - 30-09-2021.
 
 - Simplified RangeInput Example.
