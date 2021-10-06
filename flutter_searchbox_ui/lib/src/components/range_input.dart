@@ -544,8 +544,40 @@ class RangeInput extends StatefulWidget {
   ///   ...
   ///   id="range-input",
   ///   range: const RangeType(
-  ///     start: 3000,
-  ///     end: ['other', 1990, 2000, 2010],
+  ///     start: 1990,
+  ///     end: 2012,
+  ///    ),
+  /// )
+  /// ```
+  ///
+  /// It is possible to pass range values(start/ end) as a `number` or an `List/ array` of numbers.
+  /// Passing range as a `number` renders an input box, else a dropdown is displayed incase of `List/ array` of numbers.
+  ///
+  /// For example,
+  /// ```dart
+  /// RangeInput(
+  ///   ...
+  ///   id="range-input",
+  ///   range: const RangeType(
+  ///     start: 1980,
+  ///     end:   [1990, 2000, 2010],
+  ///    ),
+  /// )
+  /// ```
+  ///
+  /// Moreover, you can pass the first element of the `List/ array` as `other`,
+  /// which when selected from the dropdown, opens up an input field to enter custom values.
+  ///
+  /// Passing the last element of the `List/ array` as 'no_limit' sets an unbounded upper limit.
+  ///
+  /// For example,
+  /// ```dart
+  /// RangeInput(
+  ///   ...
+  ///   id="range-input",
+  ///   range: const RangeType(
+  ///     start: 1990,
+  ///     end:   ['other', 1990, 2000, 2010, 'no_limit'],
   ///    ),
   /// )
   /// ```
@@ -1313,7 +1345,7 @@ class _DropdownState extends State<Dropdown> {
     }
     return Container(
       padding: const EdgeInsets.all(8.0),
-      height: 70,
+      height: 50,
       decoration: BoxDecoration(
         border: Border.all(
           color: !!widget.showError ? Colors.red : Colors.grey,
