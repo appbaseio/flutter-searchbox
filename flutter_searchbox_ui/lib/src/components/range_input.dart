@@ -1303,8 +1303,7 @@ class _DropdownState extends State<Dropdown> {
           border: const OutlineInputBorder(
             borderSide: BorderSide.none,
           ),
-          contentPadding:
-              const EdgeInsets.only(left: 8.0, bottom: 8.0, top: 8.0),
+          contentPadding: EdgeInsets.zero,
           suffixIcon: _value != ""
               ? IconButton(
                   icon: const Icon(Icons.clear),
@@ -1344,7 +1343,7 @@ class _DropdownState extends State<Dropdown> {
       return widget.customContainer!(widget.showError, renderWidget());
     }
     return Container(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(left: 6.0, right: 1.0),
       height: 50,
       decoration: BoxDecoration(
         border: Border.all(
