@@ -16,7 +16,7 @@ Add this to your package's `pubspec.yaml` file:
 dependencies:
   flutter_searchbox: ^2.0.1-nullsafety
   searchbase: ^2.1.0
-  flutter_searchbox_ui: 1.0.4-alpha
+  flutter_searchbox_ui: 1.0.5-alpha
 ```
 
 2. Install it

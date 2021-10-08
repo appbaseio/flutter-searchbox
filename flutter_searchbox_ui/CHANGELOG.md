@@ -1,8 +1,12 @@
+## [1.0.5-alpha] - 08-10-2021.
+
+- Refined logic for default value and query firing.
 ## [1.0.4-alpha] - 07-10-2021.
 
 - Adds detailed defs for `range` parameter.
 - Refactors example to display `RangeInput` on the HomePage.
 - Changes `no limit` to `no_limit`, for unbounded upper bound.
+- updated example with all arguments usage
 ## [1.0.3-alpha] - 06-10-2021.
 
 - Allows custom stlyes to be set.

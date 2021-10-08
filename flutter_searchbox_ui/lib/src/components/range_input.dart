@@ -966,7 +966,7 @@ class _RangeInputInnerState extends State<RangeInputInner> {
       );
     }
     return const Text(
-      'Choose a lower minimum or higher maximum value"',
+      'Choose a lower minimum or higher maximum value',
       style: TextStyle(fontSize: 20.0, color: Colors.red),
     );
   }
@@ -989,31 +989,40 @@ class _RangeInputInnerState extends State<RangeInputInner> {
           dropdownValues['startValue'] = (widget.defaultValue != null &&
                   isNumeric(widget.defaultValue?.start)
               ? widget.defaultValue?.start
-              : widget.range.start is List
-                  ? (widget.range.start[0] == 'other'
-                      ? widget.range.start[1]
-                      : widget.range.start[0])
-                  : widget.range.start);
+              : (widget.range.start is List
+                  ? (widget.range.start[widget.range.start.length - 1] ==
+                          'no_limit'
+                      ? widget.range.start[widget.range.start.length - 1]
+                      : widget.range.start[0] == 'other'
+                          ? widget.range.start[1]
+                          : widget.range.start[0])
+                  : widget.range.start));
           dropdownValues['endValue'] = (widget.defaultValue != null &&
                   isNumeric(widget.defaultValue?.end)
               ? widget.defaultValue?.end
-              : widget.range.end is List
-                  ? (widget.range.end[0] == 'other'
-                      ? widget.range.end[1]
-                      : (widget.range.end[widget.range.end.length - 1] ==
-                              'no_limit'
-                          ? widget.range.end[widget.range.end.length - 1]
-                          : widget.range.end[0]))
-                  : widget.range.end);
+              : (widget.range.end is List
+                  ? (widget.range.end[widget.range.end.length - 1] == 'no_limit'
+                      ? widget.range.end[widget.range.end.length - 1]
+                      : widget.range.end[0] == 'other'
+                          ? widget.range.end[1]
+                          : widget.range.end[0])
+                  : widget.range.end));
         }
         dropdownValues['defaultStartValue'] = dropdownValues['startValue'];
         dropdownValues['defaultEndValue'] = dropdownValues['endValue'];
       });
-      WidgetsBinding.instance!.addPostFrameCallback((_) =>
-          widget.searchController.setValue({
-            'start': dropdownValues['startValue'],
-            'end': dropdownValues['endValue']
-          }, options: Options(triggerCustomQuery: true)));
+      Map<String, dynamic> valueObj = {};
+      if (dropdownValues['startValue'] != null &&
+          dropdownValues['startValue'] != "no_limit") {
+        valueObj["start"] = dropdownValues['startValue'];
+      }
+      if (dropdownValues['endValue'] != null &&
+          dropdownValues['endValue'] != "no_limit") {
+        valueObj["end"] = dropdownValues['endValue'];
+      }
+      WidgetsBinding.instance!.addPostFrameCallback((_) => widget
+          .searchController
+          .setValue(valueObj, options: Options(triggerCustomQuery: true)));
     } catch (e, stack) {
       // print('$e $stack');
     }
@@ -1043,10 +1052,16 @@ class _RangeInputInnerState extends State<RangeInputInner> {
 
       setState(() {
         showError = !isValid;
+        Map<String, dynamic> valueObj = {};
+        if (startValue != null && startValue != "no_limit") {
+          valueObj["start"] = startValue;
+        }
+        if (endValue != null && endValue != "no_limit") {
+          valueObj["end"] = endValue;
+        }
         if (isValid) {
-          widget.searchController.setValue(
-              {'start': startValue, 'end': endValue},
-              options: Options(triggerCustomQuery: true));
+          widget.searchController
+              .setValue(valueObj, options: Options(triggerCustomQuery: true));
         }
       });
     } catch (e, stacktrace) {
