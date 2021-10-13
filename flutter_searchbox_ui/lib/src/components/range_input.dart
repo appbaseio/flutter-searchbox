@@ -708,6 +708,42 @@ class RangeInput extends StatefulWidget {
   /// ```
   final Container Function(bool showError, Widget childWidget)? customContainer;
 
+  // To custom render the textfield closeIcon.
+  //
+  /// For example,
+  /// ```dart
+  /// RangeInput(
+  ///   ...
+  ///   id="range-input",
+  ///   closeIcon: () {
+  ///     return const Text(
+  ///       "X",
+  ///       style: TextStyle(
+  ///         fontWeight: FontWeight.bold,
+  ///         fontSize: 16.0,
+  ///         color: Colors.red,
+  ///       ),
+  ///      );
+  ///     },
+  /// ```
+  final Widget Function()? closeIcon;
+
+  // To custom render the Dropdown icon.
+  //
+  /// For example,
+  /// ```dart
+  /// RangeInput(
+  ///   ...
+  ///   id="range-input",
+  ///   closeIcon: (showError) {
+  ///     return Icon(
+  ///       Icons.arrow_drop_down,
+  ///       color: showError ? Colors.red : Colors.black,
+  ///     );
+  ///    },
+  /// ```
+  final Widget Function(bool showError)? dropdownIcon;
+
   const RangeInput({
     Key? key,
     required this.id,
@@ -779,6 +815,8 @@ class RangeInput extends StatefulWidget {
     this.inputStyle,
     this.dropdownStyle,
     this.customContainer,
+    this.closeIcon,
+    this.dropdownIcon,
   }) : super(key: key);
 
   @override
@@ -852,6 +890,8 @@ class _RangeInputState extends State<RangeInput> {
           inputStyle: widget.inputStyle,
           dropdownStyle: widget.dropdownStyle,
           customContainer: widget.customContainer,
+          closeIcon: widget.closeIcon,
+          dropdownIcon: widget.dropdownIcon,
         );
       },
       subscribeTo: widget.subscribeTo,
@@ -929,7 +969,8 @@ class RangeInputInner extends StatefulWidget {
   final TextStyle? inputStyle;
   final TextStyle? dropdownStyle;
   final Container Function(bool showError, Widget childWidget)? customContainer;
-
+  final Widget Function()? closeIcon;
+  final Widget Function(bool showError)? dropdownIcon;
   final SearchController searchController;
   const RangeInputInner({
     Key? key,
@@ -944,6 +985,8 @@ class RangeInputInner extends StatefulWidget {
     this.inputStyle,
     this.dropdownStyle,
     this.customContainer,
+    this.closeIcon,
+    this.dropdownIcon,
   }) : super(key: key);
 
   @override
@@ -1104,6 +1147,8 @@ class _RangeInputInnerState extends State<RangeInputInner> {
                     inputStyle: widget.inputStyle,
                     dropdownStyle: widget.dropdownStyle,
                     customContainer: widget.customContainer,
+                    closeIcon: widget.closeIcon,
+                    dropdownIcon: widget.dropdownIcon,
                   ),
                   Container(
                     child: widget.rangeLabel,
@@ -1124,6 +1169,8 @@ class _RangeInputInnerState extends State<RangeInputInner> {
                     inputStyle: widget.inputStyle,
                     dropdownStyle: widget.dropdownStyle,
                     customContainer: widget.customContainer,
+                    closeIcon: widget.closeIcon,
+                    dropdownIcon: widget.dropdownIcon,
                   ),
                 ],
               ),
@@ -1151,6 +1198,8 @@ class Dropdown extends StatefulWidget {
   final TextStyle? inputStyle;
   final TextStyle? dropdownStyle;
   final Container Function(bool showError, Widget childWidget)? customContainer;
+  final Widget Function()? closeIcon;
+  final Widget Function(bool showError)? dropdownIcon;
 
   const Dropdown({
     Key? key,
@@ -1164,6 +1213,8 @@ class Dropdown extends StatefulWidget {
     this.inputStyle,
     this.dropdownStyle,
     this.customContainer,
+    this.closeIcon,
+    this.dropdownIcon,
   }) : super(key: key);
 
   @override
@@ -1304,6 +1355,20 @@ class _DropdownState extends State<Dropdown> {
     });
   }
 
+  renderCloseIcon() {
+    if (widget.closeIcon != null) {
+      return widget.closeIcon!();
+    }
+    return const Icon(Icons.clear);
+  }
+
+  renderDropdownIcon() {
+    if (widget.dropdownIcon != null) {
+      return widget.dropdownIcon!(widget.showError);
+    }
+    return const Icon(Icons.arrow_drop_down);
+  }
+
   renderWidget() {
     if (_showTextField || !_isRangeItemList) {
       return TextField(
@@ -1321,7 +1386,7 @@ class _DropdownState extends State<Dropdown> {
           contentPadding: EdgeInsets.zero,
           suffixIcon: _value != ""
               ? IconButton(
-                  icon: const Icon(Icons.clear),
+                  icon: renderCloseIcon(),
                   onPressed: closeTextField,
                 )
               : null,
@@ -1331,7 +1396,7 @@ class _DropdownState extends State<Dropdown> {
       return DropdownButton(
         hint: Text(widget.hintLabel),
         dropdownColor: Colors.white,
-        icon: const Icon(Icons.arrow_drop_down),
+        icon: renderDropdownIcon(),
         iconSize: 36,
         isExpanded: true,
         underline: const SizedBox(),

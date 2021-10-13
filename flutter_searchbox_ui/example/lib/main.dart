@@ -118,6 +118,22 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
                   child: childWidget,
                 );
               },
+              closeIcon: () {
+                return const Text(
+                  "X",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                    color: Colors.blueAccent,
+                  ),
+                );
+              },
+              dropdownIcon: (showError) {
+                return Icon(
+                  Icons.arrow_drop_down,
+                  color: showError ? Colors.red : Colors.black,
+                );
+              },
             ),
             toolbarHeight: 120,
             backgroundColor: Colors.white.withOpacity(.9),

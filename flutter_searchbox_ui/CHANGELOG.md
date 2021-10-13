@@ -1,3 +1,8 @@
+## [1.0.6-alpha] - 13-10-2021.
+
+Define new props.
+- closeIcon => To customize close icon in input box.
+- dropdownIcon=> To customize dropdown icon.
 ## [1.0.5-alpha] - 08-10-2021.
 
 - Refined logic for default value and query firing.
