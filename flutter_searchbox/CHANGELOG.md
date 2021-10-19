@@ -1,3 +1,7 @@
+## [2.3.0-without-speech] - 19-10-2021
+
+- Update provider package
+
 ## [2.2.1-without-speech] - 09-09-2021
 
 - Update provider package
