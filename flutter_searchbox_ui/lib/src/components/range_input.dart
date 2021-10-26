@@ -22,21 +22,16 @@ class RangeLabelsType {
   RangeLabelsType({required this.start, required this.end});
 }
 
-// It creates a range input selector, to perform [QueryType.range] query.
-//
-// Examples Uses:
-//    - filtering products from a price range in an e-commerce shopping experience.
-//    - filtering flights from a range of departure and arrival times.
+/// It creates a range input selector, to perform [QueryType.range] query.
+///
+/// Examples Uses:
+///   - filtering products from a price range in an e-commerce shopping experience.
+///   - filtering flights from a range of departure and arrival times.
 class RangeInput extends StatefulWidget {
   /// This property allows to define a list of properties of [SearchController] class which can trigger the re-build when any changes happen.
   ///
   /// For example, if `subscribeTo` is defined as `['results']` then it'll only update the UI when results property would change.
   final List<String>? subscribeTo;
-
-  /// It can be used to prevent the default query execution at the time of initial build.
-  ///
-  /// Defaults to `true`.
-  final bool? triggerQueryOnInit;
 
   /// It can be used to prevent state updates.
   ///
@@ -748,7 +743,6 @@ class RangeInput extends StatefulWidget {
     Key? key,
     required this.id,
     this.subscribeTo,
-    this.triggerQueryOnInit,
     this.shouldListenForChanges,
     this.destroyOnDispose,
     // properties to configure search component
@@ -896,7 +890,7 @@ class _RangeInputState extends State<RangeInput> {
       },
       subscribeTo: widget.subscribeTo,
       // Avoid fetching query for each open/close action instead call it manually
-      triggerQueryOnInit: widget.triggerQueryOnInit,
+      triggerQueryOnInit: false,
       shouldListenForChanges: widget.shouldListenForChanges,
       destroyOnDispose: widget.destroyOnDispose,
       index: widget.index,
