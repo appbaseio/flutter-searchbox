@@ -608,6 +608,8 @@ class _ReactiveGoogleMapState extends State<ReactiveGoogleMap> {
 /// Example uses:
 /// - showing a map of user checkins by city and topics for powering discovery based experiences.
 /// - displaying restaurants filtered by a nearby distance query on a map.
+///
+/// Follow the installation steps mentioned at [here](https://pub.dev/packages/google_maps_flutter).
 class ReactiveGoogleMap extends StatefulWidget {
   /// This property allows to define a list of properties of [SearchController] class which can trigger the re-build when any changes happen.
   ///

@@ -1,3 +1,7 @@
+## [1.0.8-alpha] - 26-10-2021.
+
+- Update docs
+
 ## [1.0.7-alpha] - 26-10-2021.
 
 - Add support for `ReactiveGoogleMap` component
