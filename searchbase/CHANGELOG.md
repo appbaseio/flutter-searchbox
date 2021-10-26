@@ -1,3 +1,8 @@
+## 2.2.1
+
+- Fix `aggregationField` is same as `dataField` issue
+- Export `results.dart`
+
 ## 2.2.0
 
 - Add support for `clearOnQueryChange` property

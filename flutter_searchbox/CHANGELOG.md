@@ -1,3 +1,7 @@
+## [2.2.2-nullsafety] - 26-10-2021
+
+- Update searchbase
+
 ## [2.2.1-nullsafety] - 9-09-2021
 
 - Update provider package

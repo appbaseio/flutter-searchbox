@@ -93,24 +93,19 @@ packages:
   flutter_searchbox:
     dependency: "direct main"
     description:
-      path: "../../flutter_searchbox"
-      relative: true
-    source: path
-    version: "2.2.1-nullsafety"
+      name: flutter_searchbox
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.3.0-without-speech"
   flutter_searchbox_ui:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "1.0.6-alpha"
+    version: "1.0.7-alpha"
   flutter_test:
     dependency: "direct dev"
-    description: flutter
-    source: sdk
-    version: "0.0.0"
-  flutter_web_plugins:
-    dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
@@ -149,20 +144,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
-  js:
-    dependency: transitive
-    description:
-      name: js
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.6.3"
-  json_annotation:
-    dependency: transitive
-    description:
-      name: json_annotation
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.1.0"
   lints:
     dependency: transitive
     description:
@@ -222,10 +203,10 @@ packages:
   searchbase:
     dependency: "direct main"
     description:
-      path: "../../searchbase"
-      relative: true
-    source: path
-    version: "2.2.0"
+      name: searchbase
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -238,20 +219,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.1"
-  speech_to_text:
-    dependency: transitive
-    description:
-      name: speech_to_text
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.1.1"
-  speech_to_text_platform_interface:
-    dependency: transitive
-    description:
-      name: speech_to_text_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1"
   stack_trace:
     dependency: transitive
     description:
