@@ -16,7 +16,7 @@ Add this to your package's `pubspec.yaml` file:
 dependencies:
   flutter_searchbox: ^2.0.1-nullsafety
   searchbase: ^2.1.0
-  flutter_searchbox_ui: 1.0.9-alpha
+  flutter_searchbox_ui: 1.0.10-alpha
 ```
 
 2. Install it
@@ -34,8 +34,7 @@ $ flutter pub get
 ### ReactiveGoogleMap example with RangeInput
 
 <p float="left" style="margin-top: 50px">
-  <img alt="Basic Example" src="https://raw.githubusercontent.com/appbaseio/flutter-assets/master/basic.gif" width="250" />
-  <img alt="Flutter SearchBox UI" src="https://raw.githubusercontent.com/appbaseio/flutter-assets/master/map.gif" style="margin-left: 50px" width="250" /> 
+  <img alt="Basic Example" src="https://raw.githubusercontent.com/appbaseio/flutter-assets/master/map.gif" width="250" />
 </p>
 
 The following example renders a `RangeInput` ui widget from the `flutter_searchbox_ui` library with id `range-filter` to render a range input selector,. This widget is being used by `map-widget` to filter the earthquakes markers data based on the range of `magnitude` of earthquakes, selected in `range-filter`(check the `react` property).
