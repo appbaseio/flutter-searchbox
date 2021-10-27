@@ -31,13 +31,14 @@ $ flutter pub get
 
 ## Basic usage
 
-### An example with RangeInput
+### ReactiveGoogleMap example with RangeInput
 
 <p float="left" style="margin-top: 50px">
-  <img alt="Basic Example" src="https://user-images.githubusercontent.com/57627350/135604730-f63508d6-fd67-4bcc-8066-463624984b56.gif" width="250" />
+  <img alt="Basic Example" src="https://raw.githubusercontent.com/appbaseio/flutter-assets/master/basic.gif" width="250" />
+  <img alt="Flutter SearchBox UI" src="https://raw.githubusercontent.com/appbaseio/flutter-assets/master/map.gif" style="margin-left: 50px" width="250" /> 
 </p>
 
-The following example renders a `RangeInput` ui widget from the `flutter_searchbox_ui` library with id `range-filter` to render a range input selector,. This widget is being used by `result-widget` to filter the results data based on the range of `original_publication_year` of books, selected in `range-filter`(check the `react` property).
+The following example renders a `RangeInput` ui widget from the `flutter_searchbox_ui` library with id `range-filter` to render a range input selector,. This widget is being used by `map-widget` to filter the earthquakes markers data based on the range of `magnitude` of earthquakes, selected in `range-filter`(check the `react` property).
 
 ```dart
 import 'package:flutter/material.dart';
@@ -221,9 +222,9 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
             backgroundColor: Colors.white.withOpacity(.9),
           ),
           body: Center(
-            // A custom UI widget to render a list of results
+            // A custom UI widget to render earthquakes markers
             child: ReactiveGoogleMap(
-              id: 'result-widget',
+              id: 'map-widget',
               // To update markers when magnitude gets changed
               react: const {
                 "and": "range-selector",

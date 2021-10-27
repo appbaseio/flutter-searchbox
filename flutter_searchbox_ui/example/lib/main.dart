@@ -179,9 +179,9 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
             backgroundColor: Colors.white.withOpacity(.9),
           ),
           body: Center(
-            // A custom UI widget to render a list of results
+            // A custom UI widget to render earthquakes markers
             child: ReactiveGoogleMap(
-              id: 'result-widget',
+              id: 'map-widget',
               // To update markers when magnitude gets changed
               react: const {
                 "and": "range-selector",
