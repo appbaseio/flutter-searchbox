@@ -221,7 +221,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
               triggerQueryOnInit: true,
               // To update markers when map bounds change
               searchAsMove: true,
-              // Use a default query to use Elasticsearch `geohash_grid` query.
+              // [Optipnal] Use a default query to use Elasticsearch `geohash_grid` query.
               defaultQuery: (SearchController controller) {
                 return {
                   "aggregations": {
@@ -241,7 +241,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
                   }
                 };
               },
-              // Calculate markers from aggregation data
+              // [Optipnal] Calculate markers from aggregation data
               calculateMarkers: (SearchController controller) {
                 List<Place> places = [];
                 for (var bucket
