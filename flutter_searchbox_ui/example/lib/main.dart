@@ -9,7 +9,6 @@ import 'package:flutter_searchbox_ui/flutter_searchbox_ui.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:dart_geohash/dart_geohash.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
-import 'results.dart';
 
 void main() {
   runApp(FlutterSearchBoxUIApp());
@@ -80,6 +79,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
         ),
         home: Scaffold(
           appBar: AppBar(
+            // A filter to update earthquakes by magnitude
             title: RangeInput(
               id: 'range-selector',
               buildTitle: () {
@@ -195,13 +195,14 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
               showMarkerClusters: true,
               // Build cluster marker
               // Here we are displaying the [Marker] icon and text based on the number of items present in a cluster.
-              buildClusterMarker: (Cluster cluster) async {
+              buildClusterMarker: (Cluster<Place> cluster) async {
                 return Marker(
                   markerId: MarkerId(cluster.getId()),
                   position: cluster.location,
                   icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
-                      text:
-                          cluster.isMultiple ? cluster.count.toString() : null),
+                      text: cluster.isMultiple
+                          ? cluster.count.toString()
+                          : cluster.items.first.source?["magnitude"]),
                 );
               },
               // To build marker when `showMarkerClusters` is set to `false`
@@ -225,21 +226,37 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
                 return {
                   "aggregations": {
                     "location": {
-                      "geohash_grid": {"field": "location", "precision": 3}
-                    }
+                      "geohash_grid": {"field": "location", "precision": 3},
+                      "aggs": {
+                        "top_earthquakes": {
+                          "top_hits": {
+                            "_source": {
+                              "includes": ["magnitude"]
+                            },
+                            "size": 1
+                          }
+                        }
+                      }
+                    },
                   }
                 };
               },
               // Calculate markers from aggregation data
               calculateMarkers: (SearchController controller) {
                 List<Place> places = [];
-                for (var bucket in controller.aggregationData?.data ?? []) {
+                for (var bucket
+                    in controller.aggregationData?.raw?["buckets"] ?? []) {
                   try {
-                    var locationDecode = GeoHash(bucket["_key"]);
-                    places.add(Place(
-                        id: bucket["_key"],
-                        position: LatLng(locationDecode.latitude(),
-                            locationDecode.longitude())));
+                    var locationDecode = GeoHash(bucket["key"]);
+                    var source = bucket["top_earthquakes"]?["hits"]?["hits"]?[0]
+                        ?["_source"];
+                    places.add(
+                      Place(
+                          id: bucket["key"],
+                          position: LatLng(locationDecode.latitude(),
+                              locationDecode.longitude()),
+                          source: source),
+                    );
                   } catch (e) {}
                 }
                 return places;

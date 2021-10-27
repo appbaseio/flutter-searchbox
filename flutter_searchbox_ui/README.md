@@ -16,7 +16,7 @@ Add this to your package's `pubspec.yaml` file:
 dependencies:
   flutter_searchbox: ^2.0.1-nullsafety
   searchbase: ^2.1.0
-  flutter_searchbox_ui: 1.0.7-alpha
+  flutter_searchbox_ui: 1.0.9-alpha
 ```
 
 2. Install it
@@ -26,6 +26,8 @@ You can install packages from the command line:
 ```bash
 $ flutter pub get
 ```
+
+3. To use [ReactiveGoogleMap] please follow the installation guide mentioned at [here](https://pub.dev/packages/google_maps_flutter).
 
 ## Basic usage
 
