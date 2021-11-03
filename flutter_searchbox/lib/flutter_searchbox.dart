@@ -285,7 +285,7 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
 
   /* ---- callbacks to create the side effects while querying ----- */
 
-  final Future Function(String value)? beforeValueChange;
+  final Future Function(dynamic value)? beforeValueChange;
 
   /* ------------- change events -------------------------------- */
 
@@ -898,7 +898,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   ///   // or Future.error()
   /// }
   /// ```
-  final Future Function(String value)? beforeValueChange;
+  final Future Function(dynamic value)? beforeValueChange;
 
   /* ------------- change events -------------------------------- */
 
@@ -1478,7 +1478,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
   ///   // or Future.error()
   /// }
   /// ```
-  final Future Function(String value)? beforeValueChange;
+  final Future Function(dynamic value)? beforeValueChange;
 
   /* ------------- change events -------------------------------- */
 

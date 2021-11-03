@@ -2,7 +2,7 @@
 
 [flutter_searchbox_ui](https://github.com/appbaseio/flutter-searchbox/tree/master/flutter_searchbox_ui) provides UI widgets for Elasticsearch and Appbase.io, with the ability to make different types of queries.
 
-Currently, We support `range_input` 
+Currently, We support [RangeInput] and [ReactiveGoogleMap] components
 
 ## Installation
 
@@ -14,9 +14,9 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_searchbox: ^2.0.1-nullsafety
-  searchbase: ^2.1.0
-  flutter_searchbox_ui: 1.0.6-alpha
+  flutter_searchbox: ^2.2.3-nullsafety
+  searchbase: ^2.2.2
+  flutter_searchbox_ui: 1.0.11-alpha
 ```
 
 2. Install it
@@ -27,23 +27,30 @@ You can install packages from the command line:
 $ flutter pub get
 ```
 
+3. To use [ReactiveGoogleMap] please follow the installation guide mentioned at [here](https://pub.dev/packages/google_maps_flutter).
+
 ## Basic usage
 
-### An example with RangeInput
+### ReactiveGoogleMap example with RangeInput
 
 <p float="left" style="margin-top: 50px">
-  <img alt="Basic Example" src="https://user-images.githubusercontent.com/57627350/135604730-f63508d6-fd67-4bcc-8066-463624984b56.gif" width="250" />
+  <img alt="Basic Example" src="https://raw.githubusercontent.com/appbaseio/flutter-assets/master/map.gif" width="250" />
 </p>
 
-The following example renders a `RangeInput` ui widget from the `flutter_searchbox_ui` library with id `range-filter` to render a range input selector,. This widget is being used by `result-widget` to filter the results data based on the range of `original_publication_year` of books, selected in `range-filter`(check the `react` property).
-
+The following example renders a `RangeInput` ui widget from the `flutter_searchbox_ui` library with id `range-filter` to render a range input selector,. This widget is being used by `map-widget` to filter the earthquakes markers data based on the range of `magnitude` of earthquakes, selected in `range-filter`(check the `react` property).
 
 ```dart
 import 'package:flutter/material.dart';
 import 'package:searchbase/searchbase.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
+import 'dart:async';
+import 'dart:ui';
 import 'package:flutter_searchbox/flutter_searchbox.dart';
 import 'package:flutter_searchbox_ui/flutter_searchbox_ui.dart';
-
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:dart_geohash/dart_geohash.dart';
+import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'results.dart';
 
 void main() {
@@ -54,7 +61,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
   // Avoid creating searchbase instance in build method
   // to preserve state on hot reloading
   final searchbaseInstance = SearchBase(
-      'good-books-ds',
+      'earthquakes',
       'https://appbase-demo-ansible-abxiydt-arc.searchbase.io',
       'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61',
       appbaseConfig: AppbaseSettings(
@@ -63,6 +70,41 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
           userId: 'jon@appbase.io'));
 
   FlutterSearchBoxUIApp({Key? key}) : super(key: key);
+
+  // Function to build cluster icon
+  Future<BitmapDescriptor> _getMarkerBitmap(int size, {String? text}) async {
+    if (kIsWeb) size = (size / 2).floor();
+
+    final PictureRecorder pictureRecorder = PictureRecorder();
+    final Canvas canvas = Canvas(pictureRecorder);
+    final Paint paint1 = Paint()..color = Colors.orange;
+    final Paint paint2 = Paint()..color = Colors.white;
+
+    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.0, paint1);
+    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.2, paint2);
+    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.8, paint1);
+
+    if (text != null) {
+      TextPainter painter = TextPainter(textDirection: TextDirection.ltr);
+      painter.text = TextSpan(
+        text: text,
+        style: TextStyle(
+            fontSize: size / 3,
+            color: Colors.white,
+            fontWeight: FontWeight.normal),
+      );
+      painter.layout();
+      painter.paint(
+        canvas,
+        Offset(size / 2 - painter.width / 2, size / 2 - painter.height / 2),
+      );
+    }
+
+    final img = await pictureRecorder.endRecording().toImage(size, size);
+    final data = await img.toByteData(format: ImageByteFormat.png) as ByteData;
+
+    return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +126,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
               id: 'range-selector',
               buildTitle: () {
                 return const Text(
-                  "Publication Years",
+                  "Filter by Magnitude",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,
@@ -94,7 +136,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
               },
               buildRangeLabel: () {
                 return const Text(
-                  "until",
+                  "to",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,
@@ -102,22 +144,21 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
                   ),
                 );
               },
-              dataField: 'original_publication_year',
+              dataField: 'magnitude',
               range: const RangeType(
-                start: 1900,
-                end: ['other', 1990, 2000, 2010, 'no_limit'],
+                start: 4,
+                end: 10,
               ),
-              defaultValue: const DefaultValue(start: 1980, end: 2000),
               rangeLabels: RangeLabelsType(
                 start: (value) {
                   return value == 'other'
                       ? 'Custom Other'
-                      : (value == 'no_limit' ? 'No Limit' : 'yr $value');
+                      : (value == 'no_limit' ? 'No Limit' : '$value');
                 },
                 end: (value) {
                   return value == 'other'
                       ? 'Custom Other'
-                      : (value == 'no_limit' ? 'No Limit' : 'yr $value');
+                      : (value == 'no_limit' ? 'No Limit' : '$value');
                 },
               ),
               validateRange: (start, end) {
@@ -180,284 +221,76 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
             backgroundColor: Colors.white.withOpacity(.9),
           ),
           body: Center(
-            // A custom UI widget to render a list of results
-            child: SearchWidgetConnector(
-                id: 'result-widget',
-                dataField: 'original_title',
-                react: const {
-                  'and': [
-                    'range-selector',
-                  ],
-                },
-                size: 10,
-                triggerQueryOnInit: true,
-                preserveResults: true,
-                builder: (context, searchController) =>
-                    ResultsWidget(searchController)),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-```
-
-___results.dart___
-
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:searchbase/searchbase.dart';
-
-class StarDisplay extends StatelessWidget {
-  final int value;
-  const StarDisplay({Key? key, this.value = 0}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: List.generate(5, (index) {
-          return Icon(
-            index < value ? Icons.star : Icons.star_border,
-            size: 20,
-          );
-        }),
-      ),
-    );
-  }
-}
-
-class ResultsWidget extends StatelessWidget {
-  final SearchController searchController;
-  ResultsWidget(this.searchController);
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Card(
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              color: Colors.white,
-              height: 20,
-              child: Text(
-                  '${searchController.results!.numberOfResults} results found in ${searchController.results!.time.toString()} ms'),
+            // A custom UI widget to render earthquakes markers
+            child: ReactiveGoogleMap(
+              id: 'map-widget',
+              // To update markers when magnitude gets changed
+              react: const {
+                "and": "range-selector",
+              },
+              // initial map center
+              initialCameraPosition: const CameraPosition(
+                target: LatLng(37.42796133580664, -122.085749655962),
+                zoom: 4,
+              ),
+              // To enable markers' clustering
+              showMarkerClusters: true,
+              // Build cluster marker
+              // Here we are displaying the [Marker] icon and text based on the number of items present in a cluster.
+              buildClusterMarker: (Cluster cluster) async {
+                return Marker(
+                  markerId: MarkerId(cluster.getId()),
+                  position: cluster.location,
+                  icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
+                      text:
+                          cluster.isMultiple ? cluster.count.toString() : null),
+                );
+              },
+              // To build marker when `showMarkerClusters` is set to `false`
+              // buildMarker: (Place place) {
+              //   return Marker(
+              //       markerId: MarkerId(place.id), position: place.position);
+              // },
+              // Database field mapped to geo points.
+              dataField: 'location',
+              // Size of Elasticsearch hits
+              // We set the `size` as zero because we're using aggregations to build markers.
+              size: 0,
+              // Size of Elasticsearch aggregations
+              aggregationSize: 50,
+              // To fetch initial results
+              triggerQueryOnInit: true,
+              // To update markers when map bounds change
+              searchAsMove: true,
+              // Use a default query to use Elasticsearch `geohash_grid` query.
+              defaultQuery: (SearchController controller) {
+                return {
+                  "aggregations": {
+                    "location": {
+                      "geohash_grid": {"field": "location", "precision": 3}
+                    }
+                  }
+                };
+              },
+              // Calculate markers from aggregation data
+              calculateMarkers: (SearchController controller) {
+                List<Place> places = [];
+                for (var bucket in controller.aggregationData?.data ?? []) {
+                  try {
+                    var locationDecode = GeoHash(bucket["_key"]);
+                    places.add(Place(
+                        id: bucket["_key"],
+                        position: LatLng(locationDecode.latitude(),
+                            locationDecode.longitude())));
+                  } catch (e) {}
+                }
+                return places;
+              },
             ),
           ),
         ),
-        Expanded(
-          child: ListView.builder(
-            itemBuilder: (context, index) {
-              WidgetsBinding.instance!.addPostFrameCallback((_) {
-                var offset = (searchController.from != null
-                        ? searchController.from
-                        : 0)! +
-                    searchController.size!;
-                if (index == offset - 1) {
-                  if (searchController.results!.numberOfResults > offset) {
-                    // Load next set of results
-                    searchController.setFrom(offset,
-                        options: Options(triggerDefaultQuery: true));
-                  }
-                }
-              });
-
-              return Container(
-                  child: (index < searchController.results!.data.length)
-                      ? Container(
-                          margin: const EdgeInsets.all(0.5),
-                          padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                          decoration: new BoxDecoration(
-                              border: Border.all(color: Colors.black26)),
-                          height: 200,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 3,
-                                child: Column(
-                                  children: [
-                                    Card(
-                                      semanticContainer: true,
-                                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                                      child: Image.network(
-                                        searchController.results!.data[index]
-                                            ["image_medium"],
-                                        fit: BoxFit.fill,
-                                      ),
-                                      elevation: 5,
-                                      margin: EdgeInsets.all(10),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                flex: 7,
-                                child: Column(
-                                  children: [
-                                    Column(
-                                      children: [
-                                        SizedBox(
-                                          height: 110,
-                                          width: 280,
-                                          child: ListTile(
-                                            title: Tooltip(
-                                              padding: EdgeInsets.all(5),
-                                              height: 35,
-                                              textStyle: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Colors.grey,
-                                                  fontWeight:
-                                                      FontWeight.normal),
-                                              decoration: BoxDecoration(
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey,
-                                                    spreadRadius: 1,
-                                                    blurRadius: 1,
-                                                    offset: Offset(0, 1),
-                                                  ),
-                                                ],
-                                                color: Colors.white,
-                                              ),
-                                              message:
-                                                  'By: ${searchController.results!.data[index]["original_title"]}',
-                                              child: Text(
-                                                searchController
-                                                            .results!
-                                                            .data[index][
-                                                                "original_title"]
-                                                            .length <
-                                                        40
-                                                    ? searchController.results!
-                                                            .data[index]
-                                                        ["original_title"]
-                                                    : '${searchController.results!.data[index]["original_title"].substring(0, 39)}...',
-                                                style: TextStyle(
-                                                  fontSize: 20.0,
-                                                ),
-                                              ),
-                                            ),
-                                            subtitle: Tooltip(
-                                              padding: EdgeInsets.all(5),
-                                              height: 35,
-                                              textStyle: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Colors.grey,
-                                                  fontWeight:
-                                                      FontWeight.normal),
-                                              decoration: BoxDecoration(
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey,
-                                                    spreadRadius: 1,
-                                                    blurRadius: 1,
-                                                    offset: Offset(0, 1),
-                                                  ),
-                                                ],
-                                                color: Colors.white,
-                                              ),
-                                              message:
-                                                  'By: ${searchController.results!.data[index]["authors"]}',
-                                              child: Text(
-                                                searchController
-                                                            .results!
-                                                            .data[index]
-                                                                ["authors"]
-                                                            .length >
-                                                        50
-                                                    ? 'By: ${searchController.results!.data[index]["authors"].substring(0, 49)}...'
-                                                    : 'By: ${searchController.results!.data[index]["authors"]}',
-                                                style: TextStyle(
-                                                  fontSize: 15.0,
-                                                ),
-                                              ),
-                                            ),
-                                            isThreeLine: true,
-                                          ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      25, 0, 0, 0),
-                                              child: IconTheme(
-                                                data: IconThemeData(
-                                                  color: Colors.amber,
-                                                  size: 48,
-                                                ),
-                                                child: StarDisplay(
-                                                    value: searchController
-                                                            .results!
-                                                            .data[index][
-                                                        "average_rating_rounded"]),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      10, 5, 0, 0),
-                                              child: Text(
-                                                '(${searchController.results!.data[index]["average_rating"]} avg)',
-                                                style: TextStyle(
-                                                  fontSize: 12.0,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      27, 10, 0, 0),
-                                              child: Text(
-                                                'Pub: ${searchController.results!.data[index]["original_publication_year"]}',
-                                                style: TextStyle(
-                                                  fontSize: 12.0,
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      : (searchController.requestPending
-                          ? Center(child: CircularProgressIndicator())
-                          : ListTile(
-                              title: Center(
-                                child: RichText(
-                                  text: TextSpan(
-                                    text:
-                                        searchController.results!.data.length >
-                                                0
-                                            ? "No more results"
-                                            : 'No results found',
-                                    style: TextStyle(
-                                        color: Colors.black54,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
-                            )));
-            },
-            itemCount: searchController.results!.data.length + 1,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
-
 ```

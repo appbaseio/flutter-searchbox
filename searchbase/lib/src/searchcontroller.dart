@@ -390,7 +390,7 @@ class SearchController extends Base {
   ///   // or Future.error()
   /// }
   /// ```
-  final Future Function(String? value)? beforeValueChange;
+  final Future Function(dynamic value)? beforeValueChange;
 
   /* ------------- change events -------------------------------- */
 
@@ -1176,7 +1176,8 @@ class SearchController extends Base {
         return Future.error(res);
       }
       if (res.statusCode >= 400) {
-        return Future.error(res);
+        final data = jsonDecode(res.body);
+        return Future.error(data);
       }
       final data = jsonDecode(res.body);
       final transformedData = await this._handleTransformResponse(data);
@@ -1264,7 +1265,7 @@ class SearchController extends Base {
 
   _handleAggregationResponse(Map aggsResponse,
       {Options? options, bool append = true}) {
-    aggregationField = this.aggregationField;
+    String? aggregationField = this.aggregationField;
     if ((aggregationField == null || aggregationField == "") &&
         this.dataField is String) {
       aggregationField = this.dataField;
