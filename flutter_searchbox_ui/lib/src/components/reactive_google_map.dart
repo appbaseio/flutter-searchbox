@@ -1222,7 +1222,7 @@ class ReactiveGoogleMap extends StatefulWidget {
   ///   // or Future.error()
   /// }
   /// ```
-  final Future Function(String value)? beforeValueChange;
+  final Future Function(dynamic value)? beforeValueChange;
 
   /* ------------- change events -------------------------------- */
 

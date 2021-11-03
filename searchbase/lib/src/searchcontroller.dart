@@ -390,7 +390,7 @@ class SearchController extends Base {
   ///   // or Future.error()
   /// }
   /// ```
-  final Future Function(String? value)? beforeValueChange;
+  final Future Function(dynamic value)? beforeValueChange;
 
   /* ------------- change events -------------------------------- */
 

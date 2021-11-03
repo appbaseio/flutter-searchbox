@@ -72,10 +72,10 @@ packages:
   flutter_searchbox:
     dependency: "direct main"
     description:
-      name: flutter_searchbox
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.2.1-nullsafety"
+      path: ".."
+      relative: true
+    source: path
+    version: "2.2.2-nullsafety"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -166,10 +166,10 @@ packages:
   searchbase:
     dependency: "direct main"
     description:
-      name: searchbase
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.2.0"
+      path: "../../searchbase"
+      relative: true
+    source: path
+    version: "2.2.1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -188,7 +188,7 @@ packages:
       name: speech_to_text
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.2.2"
+    version: "5.1.1"
   speech_to_text_platform_interface:
     dependency: transitive
     description:
