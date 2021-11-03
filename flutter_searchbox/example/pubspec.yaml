@@ -23,8 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  searchbase:
-    path: ./../../searchbase
+  searchbase: ^2.2.2
   flutter_searchbox:
     path: ./../
 

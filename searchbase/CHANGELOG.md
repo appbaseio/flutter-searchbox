@@ -1,3 +1,7 @@
+## 2.2.2
+
+- Fix `beforeValueChange` function signature
+
 ## 2.2.1
 
 - Fix `aggregationField` is same as `dataField` issue
