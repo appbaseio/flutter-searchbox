@@ -12,7 +12,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_searchbox: ^2.2.3-nullsafety
+  flutter_searchbox: ^2.3.1-without-speech
   searchbase: ^2.2.2
 ```
 
