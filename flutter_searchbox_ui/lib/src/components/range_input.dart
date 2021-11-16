@@ -233,6 +233,9 @@ class RangeInput extends StatefulWidget {
   /// Defaults to `N/A`.
   final String? missingLabel;
 
+  /// Defaults to `true`. It can be used to prevent the default query execution.
+  final bool? triggerQueryOnInit;
+
   /// It is a callback function that takes the [SearchController] instance as parameter and **returns** the data query to be applied to the source component, as defined in Elasticsearch Query DSL, which doesn't get leaked to other components.
   ///
   /// In simple words, `defaultQuery` is used with data-driven components to impact their own data.
@@ -745,6 +748,7 @@ class RangeInput extends StatefulWidget {
     this.subscribeTo,
     this.shouldListenForChanges,
     this.destroyOnDispose,
+    this.triggerQueryOnInit,
     // properties to configure search component
     this.credentials,
     this.index,
@@ -889,8 +893,7 @@ class _RangeInputState extends State<RangeInput> {
         );
       },
       subscribeTo: widget.subscribeTo,
-      // Avoid fetching query for each open/close action instead call it manually
-      triggerQueryOnInit: false,
+      triggerQueryOnInit: widget.triggerQueryOnInit,
       shouldListenForChanges: widget.shouldListenForChanges,
       destroyOnDispose: widget.destroyOnDispose,
       index: widget.index,

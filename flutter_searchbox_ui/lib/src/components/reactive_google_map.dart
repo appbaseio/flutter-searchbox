@@ -540,8 +540,7 @@ class _ReactiveGoogleMapState extends State<ReactiveGoogleMap> {
         );
       },
       subscribeTo: widget.subscribeTo,
-      // Avoid fetching query for each open/close action instead call it manually
-      triggerQueryOnInit: false,
+      triggerQueryOnInit: widget.triggerQueryOnInit,
       shouldListenForChanges: widget.shouldListenForChanges,
       destroyOnDispose: widget.destroyOnDispose,
       index: widget.index,
