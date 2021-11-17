@@ -625,21 +625,15 @@ class SearchController extends Base {
 
   /// can be used to set the `value` property
   void setValue(dynamic value, {Options? options}) async {
-    void performUpdate() {
-      final prev = this.value;
-      this.value = value;
-      this._applyOptions(options, 'value', prev, this.value);
-    }
-
     if (this.beforeValueChange != null) {
       try {
-        await beforeValueChange!(value);
-        performUpdate();
+        value = await beforeValueChange!(value);
+        this._performUpdate(value, options);
       } catch (e) {
         print(e);
       }
     } else {
-      performUpdate();
+      this._performUpdate(value, options);
     }
   }
 
@@ -1034,6 +1028,12 @@ class SearchController extends Base {
     } else {
       this.results!.setRaw(rawResults);
     }
+  }
+
+  void _performUpdate(dynamic value, Options? options) {
+    final prev = this.value;
+    this.value = value;
+    this._applyOptions(options, 'value', prev, this.value);
   }
 
   Future _handleError(dynamic err, {Option? options}) {
