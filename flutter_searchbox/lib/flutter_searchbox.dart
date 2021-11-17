@@ -339,7 +339,7 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
   /* ------------- change events -------------------------------- */
 
   // called when value changes
-  final void Function(String next, {String prev})? onValueChange;
+  final void Function(dynamic next, {dynamic prev})? onValueChange;
 
   // called when results change
   final void Function(List<Map> next, {List<Map> prev})? onResults;
@@ -1272,7 +1272,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   ///
   /// This property is handy in cases where you want to generate a side-effect on value selection.
   /// For example: You want to show a pop-up modal with the valid discount coupon code when a user searches for a product in a [SearchBox].
-  final void Function(String next, {String prev})? onValueChange;
+  final void Function(dynamic next, {dynamic prev})? onValueChange;
 
   /// It can be used to listen for the `results` changes.
   final void Function(List<Map> next, {List<Map> prev})? onResults;
@@ -1852,7 +1852,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
   ///
   /// This property is handy in cases where you want to generate a side-effect on value selection.
   /// For example: You want to show a pop-up modal with the valid discount coupon code when a user searches for a product in a [SearchBox].
-  final void Function(String next, {String prev})? onValueChange;
+  final void Function(dynamic next, {dynamic prev})? onValueChange;
 
   /// It can be used to listen for the `results` changes.
   final void Function(List<Map> next, {List<Map> prev})? onResults;

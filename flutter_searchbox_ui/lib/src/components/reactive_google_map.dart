@@ -1250,7 +1250,7 @@ class ReactiveGoogleMap extends StatefulWidget {
   ///
   /// This property is handy in cases where you want to generate a side-effect on value selection.
   /// For example: You want to show a pop-up modal with the valid discount coupon code when a user searches for a product in a [SearchBox].
-  final void Function(String next, {String prev})? onValueChange;
+  final void Function(dynamic next, {dynamic prev})? onValueChange;
 
   /// It can be used to listen for the `results` changes.
   final void Function(List<Map> next, {List<Map> prev})? onResults;
