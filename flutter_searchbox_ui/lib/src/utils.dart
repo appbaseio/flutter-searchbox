@@ -66,3 +66,34 @@ Location? getLocationObject(dynamic location) {
     }
   }
 }
+
+List prepareValueList(Map value) {
+  if (value.isEmpty) {
+    return [];
+  }
+  List valueList = [];
+  if (value.containsKey('start')) {
+    valueList.add(value['start']);
+  }
+  if (value.containsKey('end')) {
+    valueList.add(value['end']);
+  }
+  return valueList;
+}
+
+String processFilterValues(dynamic value) {
+  if (value == null || value.isEmpty) {
+    return "";
+  }
+  if (value is String) {
+    return value;
+  } else if (value is num) {
+    return value.toString();
+  } else if (value is List) {
+    return '[${value.join(", ")}]';
+  } else if (value is Map) {
+    return processFilterValues(prepareValueList(value));
+  } else {
+    return value.toString();
+  }
+}
