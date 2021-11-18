@@ -199,6 +199,34 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
                 // do something here
                 print('Filter $id with value: ${value.toString()} cleared');
               },
+              resetToDefault: true,
+              defaultValues: const {
+                "range-selector": {'start': 4, 'end': 10}
+              },
+              hideDefaultValues: false,
+              buildFilters: ([options]) {
+                List<Widget> widgets = [];
+                options!.selectedValues.forEach((id, filterValue) {
+                  widgets.add(
+                    Chip(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                      ),
+                      label: Text(
+                          ' $id --- ${options.getValueAsString(filterValue)}'),
+                      onDeleted: () {
+                        options.clearValue(id);
+                      },
+                    ),
+                  );
+                });
+                return Wrap(
+                  spacing: 16.0,
+                  crossAxisAlignment: WrapCrossAlignment.start,
+                  // gap between adjacent chips
+                  children: widgets,
+                );
+              },
             ),
           ),
 

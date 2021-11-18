@@ -100,10 +100,7 @@ String processFilterValues(dynamic value) {
 }
 
 bool isEqual(dynamic value, dynamic defaultValue) {
-  if (value == null ||
-      value.isEmpty ||
-      defaultValue == null ||
-      defaultValue.isEmpty) {
+  if (value == null || defaultValue == null) {
     return false;
   }
   if (value is String && defaultValue is String) {

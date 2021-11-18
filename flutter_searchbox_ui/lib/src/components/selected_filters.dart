@@ -5,10 +5,31 @@ import 'package:searchbase/searchbase.dart';
 import 'package:flutter_searchbox/flutter_searchbox.dart';
 import '../utils.dart';
 
-class SelectedFilter {
-  final String filterLabel;
-  final String filterValue;
-  const SelectedFilter({required this.filterLabel, required this.filterValue});
+class BuildOptions {
+  /// A map of search controller id to controller value
+  final Map<String, dynamic> selectedValues;
+
+  /// A utility method to parse the value to a string.
+  /// It covers all the value formats supported by Appbase.
+  final String Function(dynamic value) getValueAsString;
+
+  /// To reset the controller value to `null`.
+  /// The second param is optional which can be used to define the reset
+  /// value (default is `null).
+  final void Function(String id, [dynamic resetTo]) clearValue;
+
+  /// To clear the values
+  /// An optional param can be defined to reset values for controllers.
+  /// For example,
+  /// clearValues({ "searchbox": "", "author-filter": [] })
+  final void Function([Map<String, dynamic> resetTo]) clearValues;
+
+  BuildOptions({
+    required this.selectedValues,
+    required this.getValueAsString,
+    required this.clearValue,
+    required this.clearValues,
+  });
 }
 
 // It creates a selectable filter UI view displaying the current selected values from other active widgets.
@@ -137,6 +158,35 @@ class SelectedFilters extends StatefulWidget {
   /// ```
   final void Function(String, dynamic)? onClear;
 
+  /// It is used for custom rendering the filters
+  /// For example,
+  /// ```dart
+  /// SelectedFilters(
+  ///   ...
+  ///   buildFilters: (options) {
+  ///     List<Widget> widgets = [];
+  ///      options!.selectedValues.forEach((id, filterValue) {
+  ///      widgets.add(
+  ///        Chip(
+  ///          label: Text(
+  ///              ' $id --- ${options.getValueAsString(filterValue)}'),
+  ///          onDeleted: () {
+  ///            options.clearValue(id);
+  ///          },
+  ///        ),
+  ///      );
+  ///    });
+  ///    return Wrap(
+  ///      spacing: 16.0,
+  ///     crossAxisAlignment: WrapCrossAlignment.start,
+  ///     children: widgets,
+  ///    );
+  ///   },
+  ///   ...
+  /// )
+  /// ```
+
+  final Widget Function([BuildOptions? options])? buildFilters;
   const SelectedFilters({
     this.subscribeTo,
     this.filterLabel,
@@ -147,6 +197,7 @@ class SelectedFilters extends StatefulWidget {
     this.resetToDefault = false,
     this.defaultValues,
     this.hideDefaultValues = false,
+    this.buildFilters,
     Key? key,
   }) : super(key: key);
 
@@ -191,18 +242,19 @@ class _SelectedFiltersState extends State<SelectedFilters> {
         setState(() {
           final currentValue = changes['value']?.next;
           if (currentValue != null &&
-              !currentValue.isEmpty &&
               (widget.hideDefaultValues == true
-                  ? !isEqual(currentValue, widget.defaultValues)
+                  ? !isEqual(currentValue, widget.defaultValues![id])
                   : true)) {
             _selectedFilters[id] = currentValue;
+          } else {
+            _selectedFilters.remove(id);
           }
         });
       }, ["value"]);
     }
   }
 
-  void clearFilter(String id) {
+  void clearFilter(String id, [dynamic resetTo]) {
     final activeWidgets = this.activeWidgets;
     if (widget.onClear != null) {
       widget.onClear!(id, activeWidgets[id]?.value);
@@ -210,17 +262,17 @@ class _SelectedFiltersState extends State<SelectedFilters> {
 
     _selectedFilters.remove(id);
     activeWidgets[id]?.setValue(
-      getResetValue(id),
+      resetTo ?? getResetValue(id),
       options: Options(triggerCustomQuery: true),
     );
   }
 
-  void clearAllFilters() {
+  void clearAllFilters([Map<String, dynamic>? resetTo]) {
     final activeWidgets = this.activeWidgets;
     for (var id in activeWidgets.keys) {
       _selectedFilters.remove(id);
       var componentInstance = activeWidgets[id];
-      componentInstance?.setValue(null);
+      componentInstance?.setValue(resetTo![id] ?? getResetValue(id));
     }
     for (var id in activeWidgets.keys) {
       var componentInstance = activeWidgets[id];
@@ -275,6 +327,16 @@ class _SelectedFiltersState extends State<SelectedFilters> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.buildFilters != null) {
+      return widget.buildFilters!(
+        BuildOptions(
+          selectedValues: _selectedFilters,
+          getValueAsString: processFilterValues,
+          clearValue: clearFilter,
+          clearValues: clearAllFilters,
+        ),
+      );
+    }
     return Wrap(
       spacing: 16.0,
       crossAxisAlignment: WrapCrossAlignment.start,
