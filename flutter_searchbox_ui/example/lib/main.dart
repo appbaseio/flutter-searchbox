@@ -203,15 +203,12 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
               defaultValues: const {
                 "range-selector": {'start': 4, 'end': 10}
               },
-              hideDefaultValues: false,
+              hideDefaultValues: true,
               buildFilters: ([options]) {
                 List<Widget> widgets = [];
                 options!.selectedValues.forEach((id, filterValue) {
                   widgets.add(
                     Chip(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(2.0)),
-                      ),
                       label: Text(
                           ' $id --- ${options.getValueAsString(filterValue)}'),
                       onDeleted: () {
