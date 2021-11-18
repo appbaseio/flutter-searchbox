@@ -191,6 +191,14 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
               },
               showClearAll: true,
               clearAllLabel: "Vanish All",
+              onClearAll: () {
+                // do something here
+                print('Clear all called');
+              },
+              onClear: (id, value) {
+                // do something here
+                print('Filter $id with value: ${value.toString()} cleared');
+              },
             ),
           ),
 

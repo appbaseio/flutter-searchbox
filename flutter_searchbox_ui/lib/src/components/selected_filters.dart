@@ -49,7 +49,7 @@ class SelectedFilters extends StatefulWidget {
   /// ```
   final String Function(String id, String value)? filterLabel;
 
-  // If `true` then display `Clear All` button. Defaults to `true`.
+  /// If `true` then display `Clear All` button. Defaults to `true`.
   /// For example,
   /// ```dart
   /// SelectedFilters(
@@ -60,7 +60,7 @@ class SelectedFilters extends StatefulWidget {
   /// ```
   final bool? showClearAll;
 
-  // To modify the clear all label.
+  /// To modify the clear all label.
   /// For example,
   /// ```dart
   /// SelectedFilters(
@@ -71,11 +71,82 @@ class SelectedFilters extends StatefulWidget {
   /// ```
   final String? clearAllLabel;
 
+  /// A map of active widgets' default values.
+  /// For example,
+  /// ```dart
+  /// SelectedFilters(
+  ///   ...
+  ///   defaultValues: () {
+  ///         "price-filter": { start: 10000 }
+  ///     },
+  ///   ...
+  /// )
+  /// ```
+  final Map<String, dynamic>? defaultValues;
+
+  /// If `true` then `Clear All` action would reset the filter values to default
+  /// values. User must define the `defaultValues` prop when `resetToDefault` is `true`.
+  /// For example,
+  /// ```dart
+  /// SelectedFilters(
+  ///   ...
+  ///   resetToDefault: true,
+  ///   defaultValues: () {
+  ///         "price-filter": { start: 10000 }
+  ///     },
+  ///   ...
+  /// )
+  /// ```
+  final bool? resetToDefault;
+
+  /// If `true` then SelectedFilters will not show default values of active widgets.
+  /// For example,
+  /// ```dart
+  /// SelectedFilters(
+  ///   ...
+  ///   hideDefaultValues: true,
+  ///
+  ///   ...
+  /// )
+  /// ```
+  final bool? hideDefaultValues;
+
+  /// Callback function, triggered when all filters are cleared.
+  /// For example,
+  /// ```dart
+  /// SelectedFilters(
+  ///   ...
+  ///   onClearAll: () {
+  ///         // do something here
+  ///     },
+  ///   ...
+  /// )
+  /// ```
+  final void Function()? onClearAll;
+
+  /// Callback function, triggered when a specific filter is cleared.
+  /// For example,
+  /// ```dart
+  /// SelectedFilters(
+  ///   ...
+  ///   onClear: (id, value) {
+  ///         // do something here
+  ///     },
+  ///   ...
+  /// )
+  /// ```
+  final void Function(String, dynamic)? onClear;
+
   const SelectedFilters({
     this.subscribeTo,
     this.filterLabel,
     this.showClearAll = true,
     this.clearAllLabel,
+    this.onClearAll,
+    this.onClear,
+    this.resetToDefault = false,
+    this.defaultValues,
+    this.hideDefaultValues = false,
     Key? key,
   }) : super(key: key);
 
@@ -95,6 +166,18 @@ class _SelectedFiltersState extends State<SelectedFilters> {
     return SearchBaseProvider.of(context).getActiveWidgets();
   }
 
+  dynamic getResetValue(String id) {
+    if (widget.resetToDefault == true) {
+      if (widget.defaultValues == null || widget.defaultValues!.isEmpty) {
+        throw ("defaultValues property is expected when resetToDefault is set to true");
+      }
+
+      return widget.defaultValues![id] ?? "";
+    }
+
+    return "";
+  }
+
   void setSelectedFilters() {
     final activeWidgets = this.activeWidgets;
     for (var id in activeWidgets.keys) {
@@ -107,7 +190,11 @@ class _SelectedFiltersState extends State<SelectedFilters> {
       componentInstance?.subscribeToStateChanges((changes) {
         setState(() {
           final currentValue = changes['value']?.next;
-          if (currentValue != null && !currentValue.isEmpty) {
+          if (currentValue != null &&
+              !currentValue.isEmpty &&
+              (widget.hideDefaultValues == true
+                  ? !isEqual(currentValue, widget.defaultValues)
+                  : true)) {
             _selectedFilters[id] = currentValue;
           }
         });
@@ -116,10 +203,14 @@ class _SelectedFiltersState extends State<SelectedFilters> {
   }
 
   void clearFilter(String id) {
-    _selectedFilters.remove(id);
     final activeWidgets = this.activeWidgets;
+    if (widget.onClear != null) {
+      widget.onClear!(id, activeWidgets[id]?.value);
+    }
+
+    _selectedFilters.remove(id);
     activeWidgets[id]?.setValue(
-      "",
+      getResetValue(id),
       options: Options(triggerCustomQuery: true),
     );
   }
@@ -134,6 +225,10 @@ class _SelectedFiltersState extends State<SelectedFilters> {
     for (var id in activeWidgets.keys) {
       var componentInstance = activeWidgets[id];
       componentInstance?.triggerCustomQuery();
+    }
+
+    if (widget.onClearAll != null) {
+      widget.onClearAll!();
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:dart_geohash/dart_geohash.dart';
+import 'package:flutter/foundation.dart';
 
 bool isNumeric(var arg) {
   if (arg is String) {
@@ -95,5 +96,33 @@ String processFilterValues(dynamic value) {
     return processFilterValues(prepareValueList(value));
   } else {
     return value.toString();
+  }
+}
+
+bool isEqual(dynamic value, dynamic defaultValue) {
+  if (value == null ||
+      value.isEmpty ||
+      defaultValue == null ||
+      defaultValue.isEmpty) {
+    return false;
+  }
+  if (value is String && defaultValue is String) {
+    return value == defaultValue;
+  } else if (value is num && defaultValue is num) {
+    return value == defaultValue;
+  } else if (value is List && defaultValue is List) {
+    return listEquals(value, defaultValue);
+  } else if (value is Map && defaultValue is Map) {
+    if (value.keys.length != defaultValue.keys.length) {
+      return false;
+    }
+    for (var key in value.keys) {
+      if (!isEqual(value[key], defaultValue[key])) {
+        return false;
+      }
+    }
+    return true;
+  } else {
+    return false;
   }
 }
