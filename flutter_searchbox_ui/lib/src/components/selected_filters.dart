@@ -4,7 +4,7 @@ import 'package:flutter_searchbox/flutter_searchbox.dart';
 import '../utils.dart';
 
 class BuildOptions {
-  /// A map of search controller id to controller value
+  /// A map of search controller id to [SearchController]
   /// One can loop through the map to get the corresponding raw value for each filter.
   /// For example,
   /// selectedValues.forEach((filterId, filterValue){
@@ -37,12 +37,12 @@ class BuildOptions {
   });
 }
 
-// It creates a selectable filter UI view displaying the current selected values from other active widgets.
-//
-// This component is useful for improving selection accessibility of other components.
-//
-// Examples Use(s):
-//    - displaying all the user selected facet filters together in the main view area for better accessibility.
+/// It creates a selectable filter UI view displaying the current selected values from other active widgets.
+///
+/// This component is useful for improving selection accessibility of other components.
+///
+/// Examples Use(s):
+///    - displaying all the user selected facet filters together in the main view area for better accessibility.
 class SelectedFilters extends StatefulWidget {
   /// A list of component ids to subscribe to.
   /// [Optional]
@@ -52,7 +52,7 @@ class SelectedFilters extends StatefulWidget {
   /// ```dart
   /// SelectedFilters(
   ///   ...
-  ///   subscribeTo: const ['range-selector', 'map-widget'],
+  ///   subscribeTo: const ['range-selector'],
   ///   ...
   /// )
   /// ```
