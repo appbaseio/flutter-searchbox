@@ -37,12 +37,12 @@ class BuildOptions {
   });
 }
 
-// It creates a selectable filter UI view displaying the current selected values from other active widgets.
-//
-// This component is useful for improving selection accessibility of other components.
-//
-// Examples Use(s):
-//    - displaying all the user selected facet filters together in the main view area for better accessibility.
+/// It creates a selectable filter UI view displaying the current selected values from other active widgets.
+///
+/// This component is useful for improving selection accessibility of other components.
+///
+/// Examples Use(s):
+///    - displaying all the user selected facet filters together in the main view area for better accessibility.
 class SelectedFilters extends StatefulWidget {
   /// A list of component ids to subscribe to.
   /// [Optional]
