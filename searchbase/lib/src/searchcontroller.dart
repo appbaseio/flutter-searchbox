@@ -398,7 +398,7 @@ class SearchController extends Base {
   ///
   /// This property is handy in cases where you want to generate a side-effect on value selection.
   /// For example: You want to show a pop-up modal with the valid discount coupon code when a user searches for a product in a [SearchController].
-  final void Function(String? next, {String? prev})? onValueChange;
+  final void Function(dynamic next, {dynamic prev})? onValueChange;
 
   /// It can be used to listen for the `results` changes.
   final void Function(List<Map>? next, {List<Map>? prev})? onResults;
@@ -625,21 +625,15 @@ class SearchController extends Base {
 
   /// can be used to set the `value` property
   void setValue(dynamic value, {Options? options}) async {
-    void performUpdate() {
-      final prev = this.value;
-      this.value = value;
-      this._applyOptions(options, 'value', prev, this.value);
-    }
-
     if (this.beforeValueChange != null) {
       try {
-        await beforeValueChange!(value);
-        performUpdate();
+        value = await beforeValueChange!(value);
+        this._performUpdate(value, options);
       } catch (e) {
         print(e);
       }
     } else {
-      performUpdate();
+      this._performUpdate(value, options);
     }
   }
 
@@ -1034,6 +1028,12 @@ class SearchController extends Base {
     } else {
       this.results!.setRaw(rawResults);
     }
+  }
+
+  void _performUpdate(dynamic value, Options? options) {
+    final prev = this.value;
+    this.value = value;
+    this._applyOptions(options, 'value', prev, this.value);
   }
 
   Future _handleError(dynamic err, {Option? options}) {

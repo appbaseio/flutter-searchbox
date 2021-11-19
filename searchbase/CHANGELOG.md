@@ -1,3 +1,7 @@
+## 2.2.3
+
+- Apply value returned by `beforeValueChange` method
+
 ## 2.2.2
 
 - Fix `beforeValueChange` function signature

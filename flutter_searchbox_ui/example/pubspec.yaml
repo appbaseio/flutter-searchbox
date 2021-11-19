@@ -30,7 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_searchbox: ^2.2.3-nullsafety
-  searchbase: ^2.2.2
+  searchbase: ^2.2.3
   flutter_searchbox_ui:
     path: ./../
 

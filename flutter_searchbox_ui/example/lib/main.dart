@@ -82,6 +82,15 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
             // A filter to update earthquakes by magnitude
             title: RangeInput(
               id: 'range-selector',
+              beforeValueChange: (dynamic value) async {
+                final Map<String, dynamic> mapValue =
+                    value as Map<String, dynamic>;
+                if (mapValue['start'] == 0 && mapValue['end'] == null) {
+                  return Future.error(value);
+                }
+
+                return value;
+              },
               buildTitle: () {
                 return const Text(
                   "Filter by Magnitude",
