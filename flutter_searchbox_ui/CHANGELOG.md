@@ -1,3 +1,8 @@
+## [1.0.13-alpha] - 03-11-2021.
+
+- Add SelectedFilters widget
+- Update RangeInput widget to support SelectedFilters widget.
+
 ## [1.0.11-alpha] - 03-11-2021.
 
 - Update flutter searchbox
