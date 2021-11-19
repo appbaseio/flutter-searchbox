@@ -1321,7 +1321,22 @@ class _DropdownState extends State<Dropdown> {
   void didUpdateWidget(Dropdown oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    initDropdownValue();
+    if (_value != widget.defaultValue) {
+      if (widget.rangeItem is List) {
+        _isRangeItemList = true;
+      } else {
+        _showTextField = true;
+      }
+
+      if ((!isNumeric(widget.defaultValue) && !_isRangeItemList) ||
+          (_isRangeItemList &&
+              !widget.rangeItem.contains(widget.defaultValue))) {
+        _showTextField = true;
+        _value =
+            widget.defaultValue != null ? widget.defaultValue.toString() : "";
+      }
+      _value = initDropdownValue();
+    }
   }
 
   @override
