@@ -52,7 +52,7 @@ class SelectedFilters extends StatefulWidget {
   /// ```dart
   /// SelectedFilters(
   ///   ...
-  ///   subscribeTo: const ['range-selector', 'map-widget'],
+  ///   subscribeTo: const ['range-selector'],
   ///   ...
   /// )
   /// ```
