@@ -225,7 +225,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
             padding: EdgeInsets.all(20.0),
             // SelectedFilters: a widget to track all active filters
             child: SelectedFilters(
-              subscribeTo: const ['range-selector', 'map-widget'],
+              subscribeTo: const ['range-selector'],
               filterLabel: (id, value) {
                 if (id == 'range-selector') {
                   return 'Range: $value';
