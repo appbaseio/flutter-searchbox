@@ -4,7 +4,7 @@ import 'package:flutter_searchbox/flutter_searchbox.dart';
 import '../utils.dart';
 
 class BuildOptions {
-  /// A map of search controller id to controller value
+  /// A map of search controller id to [SearchController]
   /// One can loop through the map to get the corresponding raw value for each filter.
   /// For example,
   /// selectedValues.forEach((filterId, filterValue){
