@@ -1013,6 +1013,21 @@ class _RangeInputInnerState extends State<RangeInputInner> {
   @override
   void initState() {
     super.initState();
+    widget.searchController.subscribeToStateChanges((changes) {
+      var updatedValue = changes['value']?.next;
+      if (updatedValue == null ||
+          (updatedValue is Map && updatedValue.isEmpty)) {
+        dropdownValues['startValue'] = "";
+        dropdownValues['endValue'] = "";
+      } else {
+        dropdownValues['startValue'] = updatedValue['start'] ?? "";
+        dropdownValues['endValue'] = updatedValue['end'] ?? "";
+      }
+      setState(() {
+        dropdownValues['defaultStartValue'] = dropdownValues['startValue'];
+        dropdownValues['defaultEndValue'] = dropdownValues['endValue'];
+      });
+    }, ["value"]);
     try {
       setState(() {
         if (widget.searchController.value != null) {
@@ -1300,6 +1315,13 @@ class _DropdownState extends State<Dropdown> {
     } catch (e, stack) {
       // print('$e $stack');
     }
+  }
+
+  @override
+  void didUpdateWidget(Dropdown oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    initDropdownValue();
   }
 
   @override
