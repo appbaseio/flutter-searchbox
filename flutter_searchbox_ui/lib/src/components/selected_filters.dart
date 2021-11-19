@@ -251,7 +251,6 @@ class _SelectedFiltersState extends State<SelectedFilters> {
       componentInstance?.subscribeToStateChanges((changes) {
         setState(() {
           final currentValue = changes['value']?.next;
-          print('$id $currentValue');
           if (currentValue != "" &&
               currentValue != null &&
               ((currentValue is Map || currentValue is List)
