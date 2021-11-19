@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:searchbase/searchbase.dart';
 import 'package:flutter_searchbox/flutter_searchbox.dart';
 import '../utils.dart';
+import 'package:searchbase/searchbase.dart';
 
 class RangeType {
   final dynamic start;
@@ -1016,21 +1016,7 @@ class _RangeInputInnerState extends State<RangeInputInner> {
   @override
   void initState() {
     super.initState();
-    widget.searchController.subscribeToStateChanges((changes) {
-      var updatedValue = changes['value']?.next;
-      if (updatedValue == null ||
-          (updatedValue is Map && updatedValue.isEmpty)) {
-        dropdownValues['startValue'] = "";
-        dropdownValues['endValue'] = "";
-      } else {
-        dropdownValues['startValue'] = updatedValue['start'] ?? "";
-        dropdownValues['endValue'] = updatedValue['end'] ?? "";
-      }
-      setState(() {
-        dropdownValues['defaultStartValue'] = dropdownValues['startValue'];
-        dropdownValues['defaultEndValue'] = dropdownValues['endValue'];
-      });
-    }, ["value"]);
+
     try {
       setState(() {
         if (widget.searchController.value != null) {
@@ -1079,7 +1065,32 @@ class _RangeInputInnerState extends State<RangeInputInner> {
           .searchController
           .setValue(valueObj, options: Options(triggerCustomQuery: true)));
     } catch (e, stack) {
-      // print('$e $stack');
+      print('$e $stack');
+    }
+  }
+
+  @override
+  void didUpdateWidget(RangeInputInner oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    var updatedValue = widget.searchController.value;
+
+    if (!isEqual(updatedValue, {
+      "start": dropdownValues['startValue'],
+      "end": dropdownValues['endValue']
+    })) {
+      print('removed subscription');
+      if (updatedValue == null ||
+          (updatedValue is Map && updatedValue.isEmpty)) {
+        dropdownValues['startValue'] = "";
+        dropdownValues['endValue'] = "";
+      } else {
+        dropdownValues['startValue'] = updatedValue['start'] ?? "";
+        dropdownValues['endValue'] = updatedValue['end'] ?? "";
+      }
+      setState(() {
+        dropdownValues['defaultStartValue'] = dropdownValues['startValue'];
+        dropdownValues['defaultEndValue'] = dropdownValues['endValue'];
+      });
     }
   }
 
