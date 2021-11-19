@@ -1016,7 +1016,6 @@ class _RangeInputInnerState extends State<RangeInputInner> {
   @override
   void initState() {
     super.initState();
-
     try {
       setState(() {
         if (widget.searchController.value != null) {
@@ -1073,12 +1072,10 @@ class _RangeInputInnerState extends State<RangeInputInner> {
   void didUpdateWidget(RangeInputInner oldWidget) {
     super.didUpdateWidget(oldWidget);
     var updatedValue = widget.searchController.value;
-
     if (!isEqual(updatedValue, {
       "start": dropdownValues['startValue'],
       "end": dropdownValues['endValue']
     })) {
-      print('removed subscription');
       if (updatedValue == null ||
           (updatedValue is Map && updatedValue.isEmpty)) {
         dropdownValues['startValue'] = "";
@@ -1334,7 +1331,6 @@ class _DropdownState extends State<Dropdown> {
   @override
   void didUpdateWidget(Dropdown oldWidget) {
     super.didUpdateWidget(oldWidget);
-
     if (_value != widget.defaultValue) {
       if (widget.rangeItem is List) {
         _isRangeItemList = true;

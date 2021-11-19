@@ -9,8 +9,13 @@ import 'package:flutter_searchbox_ui/flutter_searchbox_ui.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:dart_geohash/dart_geohash.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
+import 'dart:io';
 
 void main() {
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    if (kReleaseMode) exit(1);
+  };
   runApp(FlutterSearchBoxUIApp());
 }
 
@@ -113,7 +118,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
               },
               dataField: 'magnitude',
               range: const RangeType(
-                start: [1, 2, 3],
+                start: 4,
                 end: 10,
               ),
               rangeLabels: RangeLabelsType(
@@ -208,32 +213,32 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
                 // do something here
                 print('Filter $id with value: ${value.toString()} cleared');
               },
-              resetToDefault: true,
+              resetToDefault: false,
               defaultValues: const {
                 "range-selector": {'start': 4, 'end': 10}
               },
-              hideDefaultValues: true,
+              // hideDefaultValues: true,
               // uncomment below property to render custom ui for SelectedFilters widget
-              buildFilters: (options) {
-                List<Widget> widgets = [];
-                options!.selectedValues.forEach((id, filterValue) {
-                  widgets.add(
-                    Chip(
-                      label: Text(
-                          ' $id --- ${options.getValueAsString(filterValue)}'),
-                      onDeleted: () {
-                        options.clearValue(id);
-                      },
-                    ),
-                  );
-                });
-                return Wrap(
-                  spacing: 16.0,
-                  crossAxisAlignment: WrapCrossAlignment.start,
-                  // gap between adjacent chips
-                  children: widgets,
-                );
-              },
+              // buildFilters: (options) {
+              //   List<Widget> widgets = [];
+              //   options!.selectedValues.forEach((id, filterValue) {
+              //     widgets.add(
+              //       Chip(
+              //         label: Text(
+              //             ' $id --- ${options.getValueAsString(filterValue)}'),
+              //         onDeleted: () {
+              //           options.clearValue(id);
+              //         },
+              //       ),
+              //     );
+              //   });
+              //   return Wrap(
+              //     spacing: 16.0,
+              //     crossAxisAlignment: WrapCrossAlignment.start,
+              //     // gap between adjacent chips
+              //     children: widgets,
+              //   );
+              // },
             ),
           ),
           body: ReactiveGoogleMap(

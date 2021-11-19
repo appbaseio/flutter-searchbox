@@ -230,39 +230,49 @@ class _SelectedFiltersState extends State<SelectedFilters> {
   }
 
   dynamic getResetValue(String id) {
-    if (widget.resetToDefault == true) {
-      return widget.defaultValues![id];
-    }
+    try {
+      if (widget.resetToDefault == true) {
+        return widget.defaultValues is Map ? widget.defaultValues![id] : null;
+      }
 
-    return null;
+      return null;
+    } catch (e) {
+      print('error in $e');
+    }
   }
 
   void setSelectedFilters() {
-    final activeWidgets = this.activeWidgets;
-    for (var id in activeWidgets.keys) {
-      if (widget.subscribeTo != null && widget.subscribeTo!.isNotEmpty) {
-        if (!widget.subscribeTo!.contains(id)) {
-          continue;
-        }
-      }
-      final componentInstance = activeWidgets[id];
-      componentInstance?.subscribeToStateChanges((changes) {
-        setState(() {
-          final currentValue = changes['value']?.next;
-          if (currentValue != "" &&
-              currentValue != null &&
-              ((currentValue is Map || currentValue is List)
-                  ? currentValue.isNotEmpty
-                  : false) &&
-              (widget.hideDefaultValues == true
-                  ? !isEqual(currentValue, widget.defaultValues![id])
-                  : true)) {
-            _selectedFilters[id] = currentValue;
-          } else {
-            _selectedFilters.remove(id);
+    try {
+      final activeWidgets = this.activeWidgets;
+      for (var id in activeWidgets.keys) {
+        if (widget.subscribeTo != null && widget.subscribeTo!.isNotEmpty) {
+          if (!widget.subscribeTo!.contains(id)) {
+            continue;
           }
-        });
-      }, ["value"]);
+        }
+        final componentInstance = activeWidgets[id];
+        componentInstance?.subscribeToStateChanges((changes) {
+          print('changes $changes');
+          setState(() {
+            final currentValue = changes['value']?.next;
+            print('$id $currentValue');
+            if (currentValue != "" &&
+                currentValue != null &&
+                ((currentValue is Map || currentValue is List)
+                    ? currentValue.isNotEmpty
+                    : false) &&
+                (widget.hideDefaultValues == true
+                    ? !isEqual(currentValue, widget.defaultValues![id])
+                    : true)) {
+              _selectedFilters[id] = currentValue;
+            } else {
+              _selectedFilters.remove(id);
+            }
+          });
+        }, ["value"]);
+      }
+    } catch (e) {
+      print('error $e');
     }
   }
 
@@ -271,7 +281,6 @@ class _SelectedFiltersState extends State<SelectedFilters> {
     if (widget.onClear != null) {
       widget.onClear!(id, activeWidgets[id]?.value);
     }
-
     _selectedFilters.remove(id);
     activeWidgets[id]?.setValue(resetTo ?? getResetValue(id),
         options: Options(
