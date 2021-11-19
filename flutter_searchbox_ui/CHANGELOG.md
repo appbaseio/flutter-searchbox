@@ -1,4 +1,4 @@
-## [1.0.13-alpha] - 03-11-2021.
+## [1.0.13-alpha] - 19-11-2021.
 
 - Add SelectedFilters widget
 - Update RangeInput widget to support SelectedFilters widget.
