@@ -248,7 +248,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
               },
               hideDefaultValues: true,
               // uncomment below property to render custom ui for SelectedFilters widget
-              // buildFilters: ([options]) {
+              // buildFilters: (options) {
               //   List<Widget> widgets = [];
               //   options!.selectedValues.forEach((id, filterValue) {
               //     widgets.add(

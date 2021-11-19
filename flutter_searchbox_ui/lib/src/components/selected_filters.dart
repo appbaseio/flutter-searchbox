@@ -191,7 +191,7 @@ class SelectedFilters extends StatefulWidget {
   /// )
   /// ```
 
-  final Widget Function([BuildOptions? options])? buildFilters;
+  final Widget Function(BuildOptions options)? buildFilters;
   SelectedFilters({
     this.subscribeTo,
     this.filterLabel,
@@ -231,7 +231,7 @@ class _SelectedFiltersState extends State<SelectedFilters> {
 
   dynamic getResetValue(String id) {
     if (widget.resetToDefault == true) {
-      return widget.defaultValues![id] ?? null;
+      return widget.defaultValues![id];
     }
 
     return null;

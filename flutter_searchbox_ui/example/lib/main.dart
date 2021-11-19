@@ -214,29 +214,28 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
               },
               hideDefaultValues: true,
               // uncomment below property to render custom ui for SelectedFilters widget
-              // buildFilters: ([options]) {
-              //   List<Widget> widgets = [];
-              //   options!.selectedValues.forEach((id, filterValue) {
-              //     widgets.add(
-              //       Chip(
-              //         label: Text(
-              //             ' $id --- ${options.getValueAsString(filterValue)}'),
-              //         onDeleted: () {
-              //           options.clearValue(id);
-              //         },
-              //       ),
-              //     );
-              //   });
-              //   return Wrap(
-              //     spacing: 16.0,
-              //     crossAxisAlignment: WrapCrossAlignment.start,
-              //     // gap between adjacent chips
-              //     children: widgets,
-              //   );
-              // },
+              buildFilters: (options) {
+                List<Widget> widgets = [];
+                options!.selectedValues.forEach((id, filterValue) {
+                  widgets.add(
+                    Chip(
+                      label: Text(
+                          ' $id --- ${options.getValueAsString(filterValue)}'),
+                      onDeleted: () {
+                        options.clearValue(id);
+                      },
+                    ),
+                  );
+                });
+                return Wrap(
+                  spacing: 16.0,
+                  crossAxisAlignment: WrapCrossAlignment.start,
+                  // gap between adjacent chips
+                  children: widgets,
+                );
+              },
             ),
           ),
-
           body: ReactiveGoogleMap(
             id: 'map-widget',
             // To update markers when magnitude gets changed
