@@ -1327,15 +1327,18 @@ class _DropdownState extends State<Dropdown> {
       } else {
         _showTextField = true;
       }
-
-      if ((!isNumeric(widget.defaultValue) && !_isRangeItemList) ||
-          (_isRangeItemList &&
-              !widget.rangeItem.contains(widget.defaultValue))) {
-        _showTextField = true;
-        _value =
-            widget.defaultValue != null ? widget.defaultValue.toString() : "";
-      }
-      _value = initDropdownValue();
+      setState(() {
+        if ((!isNumeric(widget.defaultValue) && !_isRangeItemList) ||
+            (_isRangeItemList &&
+                !widget.rangeItem.contains(widget.defaultValue))) {
+          _showTextField = true;
+          _value =
+              widget.defaultValue != null ? widget.defaultValue.toString() : "";
+        } else {
+          _value = initDropdownValue();
+        }
+        _controller.text = isNumeric(_value) ? renderLabel(_value) : "";
+      });
     }
   }
 
