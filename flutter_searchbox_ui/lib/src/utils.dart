@@ -91,7 +91,7 @@ String processFilterValues(dynamic value) {
   } else if (value is num) {
     return value.toString();
   } else if (value is List) {
-    return '[${value.join(", ")}]';
+    return value.join(", ");
   } else if (value is Map) {
     return processFilterValues(prepareValueList(value));
   } else {

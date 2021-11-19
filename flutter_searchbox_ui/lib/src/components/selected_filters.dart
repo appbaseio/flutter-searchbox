@@ -7,6 +7,11 @@ import '../utils.dart';
 
 class BuildOptions {
   /// A map of search controller id to controller value
+  /// One can loop through the map to get the corresponding raw value for each filter.
+  /// For example,
+  /// selectedValues.forEach((filterId, filterValue){
+  ///     // do something with extracted values
+  /// })
   final Map<String, dynamic> selectedValues;
 
   /// A utility method to parse the value to a string.
@@ -16,6 +21,8 @@ class BuildOptions {
   /// To reset the controller value to `null`.
   /// The second param is optional which can be used to define the reset
   /// value (default is `null).
+  /// For example,
+  /// clearValue("searchbox", "")
   final void Function(String id, [dynamic resetTo]) clearValue;
 
   /// To clear the values
@@ -187,19 +194,25 @@ class SelectedFilters extends StatefulWidget {
   /// ```
 
   final Widget Function([BuildOptions? options])? buildFilters;
-  const SelectedFilters({
+  SelectedFilters({
     this.subscribeTo,
     this.filterLabel,
     this.showClearAll = true,
     this.clearAllLabel,
     this.onClearAll,
     this.onClear,
-    this.resetToDefault = false,
+    this.resetToDefault,
     this.defaultValues,
-    this.hideDefaultValues = false,
+    this.hideDefaultValues,
     this.buildFilters,
     Key? key,
-  }) : super(key: key);
+  }) : super(key: key) {
+    if (resetToDefault != null || hideDefaultValues != null) {
+      if (defaultValues == null) {
+        throw ("defaultValues property is required, when resetToDefault/ hideDefaultValues properties are used.");
+      }
+    }
+  }
 
   @override
   _SelectedFiltersState createState() => _SelectedFiltersState();
@@ -210,6 +223,7 @@ class _SelectedFiltersState extends State<SelectedFilters> {
   @override
   initState() {
     super.initState();
+
     WidgetsBinding.instance?.addPostFrameCallback((_) => setSelectedFilters());
   }
 
@@ -219,14 +233,10 @@ class _SelectedFiltersState extends State<SelectedFilters> {
 
   dynamic getResetValue(String id) {
     if (widget.resetToDefault == true) {
-      if (widget.defaultValues == null || widget.defaultValues!.isEmpty) {
-        throw ("defaultValues property is expected when resetToDefault is set to true");
-      }
-
-      return widget.defaultValues![id] ?? "";
+      return widget.defaultValues![id] ?? null;
     }
 
-    return "";
+    return null;
   }
 
   void setSelectedFilters() {
@@ -241,6 +251,7 @@ class _SelectedFiltersState extends State<SelectedFilters> {
       componentInstance?.subscribeToStateChanges((changes) {
         setState(() {
           final currentValue = changes['value']?.next;
+          print('$id $currentValue');
           if (currentValue != "" &&
               currentValue != null &&
               ((currentValue is Map || currentValue is List)
@@ -265,10 +276,11 @@ class _SelectedFiltersState extends State<SelectedFilters> {
     }
 
     _selectedFilters.remove(id);
-    activeWidgets[id]?.setValue(
-      resetTo ?? getResetValue(id),
-      options: Options(triggerCustomQuery: true),
-    );
+    activeWidgets[id]?.setValue(resetTo ?? getResetValue(id),
+        options: Options(
+          triggerCustomQuery: true,
+          triggerDefaultQuery: true,
+        ));
   }
 
   void clearAllFilters([Map<String, dynamic>? resetTo]) {
@@ -300,19 +312,21 @@ class _SelectedFiltersState extends State<SelectedFilters> {
   List<Widget> getFilterChips() {
     List<Widget> widgets = [];
     _selectedFilters.forEach((id, filterValue) {
-      widgets.add(
-        Chip(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(2.0)),
+      if (processFilterValues(filterValue) != "") {
+        widgets.add(
+          Chip(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(2.0)),
+            ),
+            label: Text(
+              renderLabel(id, processFilterValues(filterValue)),
+            ),
+            onDeleted: () {
+              clearFilter(id);
+            },
           ),
-          label: Text(
-            renderLabel(id, processFilterValues(filterValue)),
-          ),
-          onDeleted: () {
-            clearFilter(id);
-          },
-        ),
-      );
+        );
+      }
     });
     if (widgets.length > 1 && widget.showClearAll == true) {
       widgets.add(
