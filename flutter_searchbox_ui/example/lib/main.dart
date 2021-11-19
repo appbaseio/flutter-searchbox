@@ -104,7 +104,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
               },
               dataField: 'magnitude',
               range: const RangeType(
-                start: 4,
+                start: [1, 2, 3],
                 end: 10,
               ),
               rangeLabels: RangeLabelsType(
@@ -181,6 +181,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
           // floatingActionButton: SelectedFilters(),
           bottomNavigationBar: Padding(
             padding: EdgeInsets.all(20.0),
+            // SelectedFilters: a widget to track all active filters
             child: SelectedFilters(
               subscribeTo: const ['range-selector', 'map-widget'],
               filterLabel: (id, value) {
@@ -204,26 +205,27 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
                 "range-selector": {'start': 4, 'end': 10}
               },
               hideDefaultValues: true,
-              buildFilters: ([options]) {
-                List<Widget> widgets = [];
-                options!.selectedValues.forEach((id, filterValue) {
-                  widgets.add(
-                    Chip(
-                      label: Text(
-                          ' $id --- ${options.getValueAsString(filterValue)}'),
-                      onDeleted: () {
-                        options.clearValue(id);
-                      },
-                    ),
-                  );
-                });
-                return Wrap(
-                  spacing: 16.0,
-                  crossAxisAlignment: WrapCrossAlignment.start,
-                  // gap between adjacent chips
-                  children: widgets,
-                );
-              },
+              // uncomment below property to render custom ui for SelectedFilters widget
+              // buildFilters: ([options]) {
+              //   List<Widget> widgets = [];
+              //   options!.selectedValues.forEach((id, filterValue) {
+              //     widgets.add(
+              //       Chip(
+              //         label: Text(
+              //             ' $id --- ${options.getValueAsString(filterValue)}'),
+              //         onDeleted: () {
+              //           options.clearValue(id);
+              //         },
+              //       ),
+              //     );
+              //   });
+              //   return Wrap(
+              //     spacing: 16.0,
+              //     crossAxisAlignment: WrapCrossAlignment.start,
+              //     // gap between adjacent chips
+              //     children: widgets,
+              //   );
+              // },
             ),
           ),
 
