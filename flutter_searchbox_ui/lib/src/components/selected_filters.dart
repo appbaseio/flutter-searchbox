@@ -276,7 +276,6 @@ class _SelectedFiltersState extends State<SelectedFilters> {
     activeWidgets[id]?.setValue(resetTo ?? getResetValue(id),
         options: Options(
           triggerCustomQuery: true,
-          triggerDefaultQuery: true,
         ));
   }
 
