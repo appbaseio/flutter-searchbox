@@ -221,7 +221,6 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
             toolbarHeight: 120,
             backgroundColor: Colors.white.withOpacity(.9),
           ),
-          // floatingActionButton: SelectedFilters(),
           bottomNavigationBar: Padding(
             padding: EdgeInsets.all(20.0),
             // SelectedFilters: a widget to track all active filters
