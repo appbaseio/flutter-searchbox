@@ -1,3 +1,8 @@
+## [1.0.15-alpha] - 19-11-2021
+
+- Fix issues reported: range-input not working well with selected-filters
+- null value handling
+
 ## [1.0.14-alpha] - 19-11-2021
 
 - Update docs

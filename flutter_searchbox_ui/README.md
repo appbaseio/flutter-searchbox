@@ -16,7 +16,7 @@ Add this to your package's `pubspec.yaml` file:
 dependencies:
   flutter_searchbox: ^2.2.3-nullsafety
   searchbase: ^2.2.2
-  flutter_searchbox_ui: 1.0.13-alpha
+  flutter_searchbox_ui: 1.0.15-alpha
 ```
 
 2. Install it
@@ -39,8 +39,7 @@ $ flutter pub get
 
 The following example renders a `RangeInput` ui widget from the `flutter_searchbox_ui` library with id `range-filter` to render a range input selector,. This widget is being used by `map-widget` to filter the earthquakes markers data based on the range of `magnitude` of earthquakes, selected in `range-filter`(check the `react` property).
 
-```dart
-import 'package:flutter/material.dart';
+```dartimport 'package:flutter/material.dart';
 import 'package:searchbase/searchbase.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
@@ -51,9 +50,13 @@ import 'package:flutter_searchbox_ui/flutter_searchbox_ui.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:dart_geohash/dart_geohash.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
-import 'results.dart';
+import 'dart:io';
 
 void main() {
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    if (kReleaseMode) exit(1);
+  };
   runApp(FlutterSearchBoxUIApp());
 }
 
@@ -125,6 +128,17 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
             // A filter to update earthquakes by magnitude
             title: RangeInput(
               id: 'range-selector',
+              beforeValueChange: (dynamic value) async {
+                if (value is Map<String, dynamic>) {
+                  final Map<String, dynamic> mapValue =
+                      value as Map<String, dynamic>;
+                  if (mapValue['start'] == 0 && mapValue['end'] == null) {
+                    return Future.error(value);
+                  }
+                }
+                print('beforeValueChange $value');
+                return value;
+              },
               buildTitle: () {
                 return const Text(
                   "Filter by Magnitude",
@@ -147,7 +161,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
               },
               dataField: 'magnitude',
               range: const RangeType(
-                start: [1, 2, 3],
+                start: ['other', 4, 5, 6, 7],
                 end: 10,
               ),
               rangeLabels: RangeLabelsType(
@@ -244,13 +258,13 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
               },
               resetToDefault: true,
               defaultValues: const {
-                "range-selector": {'start': 4, 'end': 10}
+                "range-selector": {'start': 5, 'end': 10}
               },
-              hideDefaultValues: true,
+              // hideDefaultValues: false,
               // uncomment below property to render custom ui for SelectedFilters widget
               // buildFilters: (options) {
               //   List<Widget> widgets = [];
-              //   options!.selectedValues.forEach((id, filterValue) {
+              //   options.selectedValues.forEach((id, filterValue) {
               //     widgets.add(
               //       Chip(
               //         label: Text(
@@ -270,7 +284,6 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
               // },
             ),
           ),
-
           body: ReactiveGoogleMap(
             id: 'map-widget',
             // To update markers when magnitude gets changed
