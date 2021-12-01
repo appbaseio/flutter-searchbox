@@ -252,10 +252,8 @@ class _SelectedFiltersState extends State<SelectedFilters> {
         }
         final componentInstance = activeWidgets[id];
         componentInstance?.subscribeToStateChanges((changes) {
-          print('changes $changes');
           setState(() {
             final currentValue = changes['value']?.next;
-            print('$id $currentValue');
             if (currentValue != "" &&
                 currentValue != null &&
                 ((currentValue is Map || currentValue is List)
@@ -277,15 +275,20 @@ class _SelectedFiltersState extends State<SelectedFilters> {
   }
 
   void clearFilter(String id, [dynamic resetTo]) {
-    final activeWidgets = this.activeWidgets;
-    if (widget.onClear != null) {
-      widget.onClear!(id, activeWidgets[id]?.value);
+    try {
+      final activeWidgets = this.activeWidgets;
+      if (widget.onClear != null) {
+        widget.onClear!(id, activeWidgets[id]?.value);
+      }
+
+      _selectedFilters.remove(id);
+      activeWidgets[id]?.setValue(resetTo ?? getResetValue(id),
+          options: Options(
+            triggerCustomQuery: true,
+          ));
+    } catch (e) {
+      print('Error: $e');
     }
-    _selectedFilters.remove(id);
-    activeWidgets[id]?.setValue(resetTo ?? getResetValue(id),
-        options: Options(
-          triggerCustomQuery: true,
-        ));
   }
 
   void clearAllFilters([Map<String, dynamic>? resetTo]) {

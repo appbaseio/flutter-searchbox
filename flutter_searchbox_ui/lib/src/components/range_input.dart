@@ -1331,23 +1331,22 @@ class _DropdownState extends State<Dropdown> {
   @override
   void didUpdateWidget(Dropdown oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (_value != widget.defaultValue) {
+    if (_value != widget.value) {
+      var valueToSet = widget.value ?? "";
       if (widget.rangeItem is List) {
         _isRangeItemList = true;
       } else {
         _showTextField = true;
       }
       setState(() {
-        if ((!isNumeric(widget.defaultValue) && !_isRangeItemList) ||
-            (_isRangeItemList &&
-                !widget.rangeItem.contains(widget.defaultValue))) {
+        if ((!isNumeric(valueToSet) && !_isRangeItemList) ||
+            (_isRangeItemList && !widget.rangeItem.contains(valueToSet))) {
           _showTextField = true;
-          _value =
-              widget.defaultValue != null ? widget.defaultValue.toString() : "";
-        } else {
-          _value = initDropdownValue();
+          _value = valueToSet;
+        } else if (_isRangeItemList && widget.rangeItem.contains(valueToSet)) {
+          _value = valueToSet;
         }
-        _controller.text = isNumeric(_value) ? renderLabel(_value) : "";
+        _controller.text = isNumeric(valueToSet) ? renderLabel(valueToSet) : "";
       });
     }
   }
