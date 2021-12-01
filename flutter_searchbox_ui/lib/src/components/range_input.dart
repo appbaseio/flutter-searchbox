@@ -1110,7 +1110,6 @@ class _RangeInputInnerState extends State<RangeInputInner> {
         dropdownValues['defaultStartValue'] = dropdownValues['startValue'];
         dropdownValues['defaultEndValue'] = dropdownValues['endValue'];
       });
-      print('updated $dropdownValues');
     }
   }
 
@@ -1348,7 +1347,7 @@ class _DropdownState extends State<Dropdown> {
         }
       });
     } catch (e, stack) {
-      print('$e $stack');
+      // print('$e $stack');
     }
   }
 
@@ -1357,7 +1356,6 @@ class _DropdownState extends State<Dropdown> {
     super.didUpdateWidget(oldWidget);
     if (_value != widget.value) {
       var valueToSet = widget.value ?? "";
-      print('valueToSet $valueToSet');
       if (widget.rangeItem is List) {
         _isRangeItemList = true;
       } else {
