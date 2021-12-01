@@ -88,12 +88,14 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
             title: RangeInput(
               id: 'range-selector',
               beforeValueChange: (dynamic value) async {
-                final Map<String, dynamic> mapValue =
-                    value as Map<String, dynamic>;
-                if (mapValue['start'] == 0 && mapValue['end'] == null) {
-                  return Future.error(value);
+                if (value is Map<String, dynamic>) {
+                  final Map<String, dynamic> mapValue =
+                      value as Map<String, dynamic>;
+                  if (mapValue['start'] == 0 && mapValue['end'] == null) {
+                    return Future.error(value);
+                  }
                 }
-
+                print('beforeValueChange $value');
                 return value;
               },
               buildTitle: () {
@@ -118,7 +120,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
               },
               dataField: 'magnitude',
               range: const RangeType(
-                start: 4,
+                start: ['other', 4, 5, 6, 7],
                 end: 10,
               ),
               rangeLabels: RangeLabelsType(
@@ -213,15 +215,15 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
                 // do something here
                 print('Filter $id with value: ${value.toString()} cleared');
               },
-              resetToDefault: false,
+              resetToDefault: true,
               defaultValues: const {
-                "range-selector": {'start': 4, 'end': 10}
+                "range-selector": {'start': 5, 'end': 10}
               },
-              // hideDefaultValues: true,
+              // hideDefaultValues: false,
               // uncomment below property to render custom ui for SelectedFilters widget
               // buildFilters: (options) {
               //   List<Widget> widgets = [];
-              //   options!.selectedValues.forEach((id, filterValue) {
+              //   options.selectedValues.forEach((id, filterValue) {
               //     widgets.add(
               //       Chip(
               //         label: Text(

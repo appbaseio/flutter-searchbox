@@ -1019,8 +1019,11 @@ class _RangeInputInnerState extends State<RangeInputInner> {
     try {
       setState(() {
         if (widget.searchController.value != null) {
-          dropdownValues['startValue'] =
-              widget.searchController.value['start'] ?? "";
+          dropdownValues['startValue'] = widget
+                  .searchController.value['start'] ??
+              (widget.range.start[widget.range.start.length - 1] == 'no_limit'
+                  ? widget.range.start[widget.range.start.length - 1]
+                  : "");
           dropdownValues['endValue'] = widget.searchController.value['end'] ??
               (widget.range.end[widget.range.end.length - 1] == 'no_limit'
                   ? widget.range.end[widget.range.end.length - 1]
@@ -1052,12 +1055,10 @@ class _RangeInputInnerState extends State<RangeInputInner> {
         dropdownValues['defaultEndValue'] = dropdownValues['endValue'];
       });
       Map<String, dynamic> valueObj = {};
-      if (dropdownValues['startValue'] != null &&
-          dropdownValues['startValue'] != "no_limit") {
+      if (dropdownValues['startValue'] != null) {
         valueObj["start"] = dropdownValues['startValue'];
       }
-      if (dropdownValues['endValue'] != null &&
-          dropdownValues['endValue'] != "no_limit") {
+      if (dropdownValues['endValue'] != null) {
         valueObj["end"] = dropdownValues['endValue'];
       }
       WidgetsBinding.instance!.addPostFrameCallback((_) => widget
@@ -1078,16 +1079,38 @@ class _RangeInputInnerState extends State<RangeInputInner> {
     })) {
       if (updatedValue == null ||
           (updatedValue is Map && updatedValue.isEmpty)) {
-        dropdownValues['startValue'] = "";
-        dropdownValues['endValue'] = "";
+        dropdownValues['startValue'] = (widget.range.start is List
+            ? (widget.range.start[widget.range.start.length - 1] == 'no_limit'
+                ? widget.range.start[widget.range.start.length - 1]
+                : widget.range.start[0] == 'other'
+                    ? widget.range.start[1]
+                    : widget.range.start[0])
+            : "");
+        dropdownValues['endValue'] = (widget.range.end is List
+            ? (widget.range.end[widget.range.end.length - 1] == 'no_limit'
+                ? widget.range.end[widget.range.end.length - 1]
+                : widget.range.end[0] == 'other'
+                    ? widget.range.end[1]
+                    : widget.range.end[0])
+            : "");
       } else {
-        dropdownValues['startValue'] = updatedValue['start'] ?? "";
-        dropdownValues['endValue'] = updatedValue['end'] ?? "";
+        dropdownValues['startValue'] = updatedValue['start'] ??
+            (widget.range.start is List &&
+                    widget.range.start[widget.range.start.length - 1] ==
+                        'no_limit'
+                ? widget.range.start[widget.range.start.length - 1]
+                : "");
+        dropdownValues['endValue'] = updatedValue['end'] ??
+            (widget.range.end is List &&
+                    widget.range.end[widget.range.end.length - 1] == 'no_limit'
+                ? widget.range.end[widget.range.end.length - 1]
+                : "");
       }
       setState(() {
         dropdownValues['defaultStartValue'] = dropdownValues['startValue'];
         dropdownValues['defaultEndValue'] = dropdownValues['endValue'];
       });
+      print('updated $dropdownValues');
     }
   }
 
@@ -1314,7 +1337,8 @@ class _DropdownState extends State<Dropdown> {
           widget.onChangeHandler(_controller.text);
           _controller.text = renderLabel(_value);
         } else {
-          _controller.text = _isRangeItemList && !_showTextField ? "" : _value;
+          _controller.text =
+              _isRangeItemList && !_showTextField ? "" : _value.toString();
         }
       });
 
@@ -1324,7 +1348,7 @@ class _DropdownState extends State<Dropdown> {
         }
       });
     } catch (e, stack) {
-      // print('$e $stack');
+      print('$e $stack');
     }
   }
 
@@ -1333,6 +1357,7 @@ class _DropdownState extends State<Dropdown> {
     super.didUpdateWidget(oldWidget);
     if (_value != widget.value) {
       var valueToSet = widget.value ?? "";
+      print('valueToSet $valueToSet');
       if (widget.rangeItem is List) {
         _isRangeItemList = true;
       } else {
@@ -1342,11 +1367,9 @@ class _DropdownState extends State<Dropdown> {
         if ((!isNumeric(valueToSet) && !_isRangeItemList) ||
             (_isRangeItemList && !widget.rangeItem.contains(valueToSet))) {
           _showTextField = true;
-          _value = valueToSet;
-        } else if (_isRangeItemList && widget.rangeItem.contains(valueToSet)) {
-          _value = valueToSet;
         }
-        _controller.text = isNumeric(valueToSet) ? renderLabel(valueToSet) : "";
+        _value = valueToSet;
+        _controller.text = renderLabel(valueToSet);
       });
     }
   }
