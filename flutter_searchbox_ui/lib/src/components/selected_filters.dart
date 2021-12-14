@@ -221,7 +221,6 @@ class _SelectedFiltersState extends State<SelectedFilters> {
   @override
   initState() {
     super.initState();
-
     WidgetsBinding.instance?.addPostFrameCallback((_) => setSelectedFilters());
   }
 
@@ -251,9 +250,11 @@ class _SelectedFiltersState extends State<SelectedFilters> {
           }
         }
         final componentInstance = activeWidgets[id];
-        componentInstance?.subscribeToStateChanges((changes) {
+        // the block below is added to initialize the values
+        // after that, subscription method takes charge to update values
+        if (mounted) {
           setState(() {
-            final currentValue = changes['value']?.next;
+            final currentValue = componentInstance!.value;
             if (currentValue != "" &&
                 currentValue != null &&
                 ((currentValue is Map || currentValue is List)
@@ -267,6 +268,32 @@ class _SelectedFiltersState extends State<SelectedFilters> {
               _selectedFilters.remove(id);
             }
           });
+        }
+        // initialization block ends
+        componentInstance?.subscribeToStateChanges((changes) {
+          void applyChanges() {
+            final currentValue = changes['value']?.next;
+            if (currentValue != "" &&
+                currentValue != null &&
+                ((currentValue is Map || currentValue is List)
+                    ? currentValue.isNotEmpty
+                    : false) &&
+                (widget.hideDefaultValues == true
+                    ? !isEqual(currentValue, widget.defaultValues![id])
+                    : true)) {
+              _selectedFilters[id] = currentValue;
+            } else {
+              _selectedFilters.remove(id);
+            }
+          }
+
+          if (mounted) {
+            setState(() {
+              applyChanges();
+            });
+          } else {
+            applyChanges();
+          }
         }, ["value"]);
       }
     } catch (e) {
