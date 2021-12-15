@@ -827,16 +827,9 @@ class _RangeInputState extends State<RangeInput> {
     super.initState();
 
     // validating the range input
-    if (!isNumeric(widget.range.start) && !isNumeric(widget.range.start)) {
+    if (!isNumeric(widget.range.start) && !isNumeric(widget.range.end)) {
       throw Exception(
-          "Range values, start/ end should be in numeric or parsable numeric string format!, eg: 23 or \"23\"");
-    }
-    // validating the defaultValue input
-    if (widget.defaultValue is DefaultValue &&
-        !isNumeric(widget.defaultValue?.start) &&
-        !isNumeric(widget.defaultValue?.start)) {
-      throw Exception(
-          "Default values, start/ end should be in numeric or parsable numeric string format!, eg: 23 or \"23\"");
+          "Range values, start/ end should be in numeric or parsable numeric string format!, eg: 23 or \"23\" or [23,\"23\"]");
     }
   }
 
@@ -1055,12 +1048,15 @@ class _RangeInputInnerState extends State<RangeInputInner> {
         dropdownValues['defaultEndValue'] = dropdownValues['endValue'];
       });
       Map<String, dynamic> valueObj = {};
-      if (dropdownValues['startValue'] != null) {
+      if (dropdownValues['startValue'] != null &&
+          isNumeric(dropdownValues['startValue'])) {
         valueObj["start"] = dropdownValues['startValue'];
       }
-      if (dropdownValues['endValue'] != null) {
+      if (dropdownValues['endValue'] != null &&
+          isNumeric(dropdownValues['endValue'])) {
         valueObj["end"] = dropdownValues['endValue'];
       }
+
       WidgetsBinding.instance!.addPostFrameCallback((_) => widget
           .searchController
           .setValue(valueObj, options: Options(triggerCustomQuery: true)));
