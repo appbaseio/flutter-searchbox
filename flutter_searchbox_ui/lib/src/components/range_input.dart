@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:searchbase/searchbase.dart';
 import 'package:flutter_searchbox/flutter_searchbox.dart';
 import '../utils.dart';
+import 'package:searchbase/searchbase.dart';
 
 class RangeType {
   final dynamic start;
@@ -1019,8 +1019,11 @@ class _RangeInputInnerState extends State<RangeInputInner> {
     try {
       setState(() {
         if (widget.searchController.value != null) {
-          dropdownValues['startValue'] =
-              widget.searchController.value['start'] ?? "";
+          dropdownValues['startValue'] = widget
+                  .searchController.value['start'] ??
+              (widget.range.start[widget.range.start.length - 1] == 'no_limit'
+                  ? widget.range.start[widget.range.start.length - 1]
+                  : "");
           dropdownValues['endValue'] = widget.searchController.value['end'] ??
               (widget.range.end[widget.range.end.length - 1] == 'no_limit'
                   ? widget.range.end[widget.range.end.length - 1]
@@ -1052,19 +1055,61 @@ class _RangeInputInnerState extends State<RangeInputInner> {
         dropdownValues['defaultEndValue'] = dropdownValues['endValue'];
       });
       Map<String, dynamic> valueObj = {};
-      if (dropdownValues['startValue'] != null &&
-          dropdownValues['startValue'] != "no_limit") {
+      if (dropdownValues['startValue'] != null) {
         valueObj["start"] = dropdownValues['startValue'];
       }
-      if (dropdownValues['endValue'] != null &&
-          dropdownValues['endValue'] != "no_limit") {
+      if (dropdownValues['endValue'] != null) {
         valueObj["end"] = dropdownValues['endValue'];
       }
       WidgetsBinding.instance!.addPostFrameCallback((_) => widget
           .searchController
           .setValue(valueObj, options: Options(triggerCustomQuery: true)));
     } catch (e, stack) {
-      // print('$e $stack');
+      print('$e $stack');
+    }
+  }
+
+  @override
+  void didUpdateWidget(RangeInputInner oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    var updatedValue = widget.searchController.value;
+    if (!isEqual(updatedValue, {
+      "start": dropdownValues['startValue'],
+      "end": dropdownValues['endValue']
+    })) {
+      if (updatedValue == null ||
+          (updatedValue is Map && updatedValue.isEmpty)) {
+        dropdownValues['startValue'] = (widget.range.start is List
+            ? (widget.range.start[widget.range.start.length - 1] == 'no_limit'
+                ? widget.range.start[widget.range.start.length - 1]
+                : widget.range.start[0] == 'other'
+                    ? widget.range.start[1]
+                    : widget.range.start[0])
+            : "");
+        dropdownValues['endValue'] = (widget.range.end is List
+            ? (widget.range.end[widget.range.end.length - 1] == 'no_limit'
+                ? widget.range.end[widget.range.end.length - 1]
+                : widget.range.end[0] == 'other'
+                    ? widget.range.end[1]
+                    : widget.range.end[0])
+            : "");
+      } else {
+        dropdownValues['startValue'] = updatedValue['start'] ??
+            (widget.range.start is List &&
+                    widget.range.start[widget.range.start.length - 1] ==
+                        'no_limit'
+                ? widget.range.start[widget.range.start.length - 1]
+                : "");
+        dropdownValues['endValue'] = updatedValue['end'] ??
+            (widget.range.end is List &&
+                    widget.range.end[widget.range.end.length - 1] == 'no_limit'
+                ? widget.range.end[widget.range.end.length - 1]
+                : "");
+      }
+      setState(() {
+        dropdownValues['defaultStartValue'] = dropdownValues['startValue'];
+        dropdownValues['defaultEndValue'] = dropdownValues['endValue'];
+      });
     }
   }
 
@@ -1291,7 +1336,8 @@ class _DropdownState extends State<Dropdown> {
           widget.onChangeHandler(_controller.text);
           _controller.text = renderLabel(_value);
         } else {
-          _controller.text = _isRangeItemList && !_showTextField ? "" : _value;
+          _controller.text =
+              _isRangeItemList && !_showTextField ? "" : _value.toString();
         }
       });
 
@@ -1302,6 +1348,27 @@ class _DropdownState extends State<Dropdown> {
       });
     } catch (e, stack) {
       // print('$e $stack');
+    }
+  }
+
+  @override
+  void didUpdateWidget(Dropdown oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (_value != widget.value) {
+      var valueToSet = widget.value ?? "";
+      if (widget.rangeItem is List) {
+        _isRangeItemList = true;
+      } else {
+        _showTextField = true;
+      }
+      setState(() {
+        if ((!isNumeric(valueToSet) && !_isRangeItemList) ||
+            (_isRangeItemList && !widget.rangeItem.contains(valueToSet))) {
+          _showTextField = true;
+        }
+        _value = valueToSet;
+        _controller.text = renderLabel(valueToSet);
+      });
     }
   }
 

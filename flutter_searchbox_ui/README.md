@@ -16,7 +16,7 @@ Add this to your package's `pubspec.yaml` file:
 dependencies:
   flutter_searchbox: ^2.2.3-nullsafety
   searchbase: ^2.2.2
-  flutter_searchbox_ui: 1.0.11-alpha
+  flutter_searchbox_ui: 1.0.15-alpha
 ```
 
 2. Install it
@@ -39,8 +39,7 @@ $ flutter pub get
 
 The following example renders a `RangeInput` ui widget from the `flutter_searchbox_ui` library with id `range-filter` to render a range input selector,. This widget is being used by `map-widget` to filter the earthquakes markers data based on the range of `magnitude` of earthquakes, selected in `range-filter`(check the `react` property).
 
-```dart
-import 'package:flutter/material.dart';
+```dartimport 'package:flutter/material.dart';
 import 'package:searchbase/searchbase.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
@@ -51,9 +50,13 @@ import 'package:flutter_searchbox_ui/flutter_searchbox_ui.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:dart_geohash/dart_geohash.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
-import 'results.dart';
+import 'dart:io';
 
 void main() {
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    if (kReleaseMode) exit(1);
+  };
   runApp(FlutterSearchBoxUIApp());
 }
 
@@ -122,8 +125,20 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
         ),
         home: Scaffold(
           appBar: AppBar(
+            // A filter to update earthquakes by magnitude
             title: RangeInput(
               id: 'range-selector',
+              beforeValueChange: (dynamic value) async {
+                if (value is Map<String, dynamic>) {
+                  final Map<String, dynamic> mapValue =
+                      value as Map<String, dynamic>;
+                  if (mapValue['start'] == 0 && mapValue['end'] == null) {
+                    return Future.error(value);
+                  }
+                }
+                print('beforeValueChange $value');
+                return value;
+              },
               buildTitle: () {
                 return const Text(
                   "Filter by Magnitude",
@@ -146,7 +161,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
               },
               dataField: 'magnitude',
               range: const RangeType(
-                start: 4,
+                start: ['other', 4, 5, 6, 7],
                 end: 10,
               ),
               rangeLabels: RangeLabelsType(
@@ -220,73 +235,136 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
             toolbarHeight: 120,
             backgroundColor: Colors.white.withOpacity(.9),
           ),
-          body: Center(
-            // A custom UI widget to render earthquakes markers
-            child: ReactiveGoogleMap(
-              id: 'map-widget',
-              // To update markers when magnitude gets changed
-              react: const {
-                "and": "range-selector",
-              },
-              // initial map center
-              initialCameraPosition: const CameraPosition(
-                target: LatLng(37.42796133580664, -122.085749655962),
-                zoom: 4,
-              ),
-              // To enable markers' clustering
-              showMarkerClusters: true,
-              // Build cluster marker
-              // Here we are displaying the [Marker] icon and text based on the number of items present in a cluster.
-              buildClusterMarker: (Cluster cluster) async {
-                return Marker(
-                  markerId: MarkerId(cluster.getId()),
-                  position: cluster.location,
-                  icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
-                      text:
-                          cluster.isMultiple ? cluster.count.toString() : null),
-                );
-              },
-              // To build marker when `showMarkerClusters` is set to `false`
-              // buildMarker: (Place place) {
-              //   return Marker(
-              //       markerId: MarkerId(place.id), position: place.position);
-              // },
-              // Database field mapped to geo points.
-              dataField: 'location',
-              // Size of Elasticsearch hits
-              // We set the `size` as zero because we're using aggregations to build markers.
-              size: 0,
-              // Size of Elasticsearch aggregations
-              aggregationSize: 50,
-              // To fetch initial results
-              triggerQueryOnInit: true,
-              // To update markers when map bounds change
-              searchAsMove: true,
-              // Use a default query to use Elasticsearch `geohash_grid` query.
-              defaultQuery: (SearchController controller) {
-                return {
-                  "aggregations": {
-                    "location": {
-                      "geohash_grid": {"field": "location", "precision": 3}
-                    }
-                  }
-                };
-              },
-              // Calculate markers from aggregation data
-              calculateMarkers: (SearchController controller) {
-                List<Place> places = [];
-                for (var bucket in controller.aggregationData?.data ?? []) {
-                  try {
-                    var locationDecode = GeoHash(bucket["_key"]);
-                    places.add(Place(
-                        id: bucket["_key"],
-                        position: LatLng(locationDecode.latitude(),
-                            locationDecode.longitude())));
-                  } catch (e) {}
+          bottomNavigationBar: Padding(
+            padding: EdgeInsets.all(20.0),
+            // SelectedFilters: a widget to track all active filters
+            child: SelectedFilters(
+              subscribeTo: const ['range-selector'],
+              filterLabel: (id, value) {
+                if (id == 'range-selector') {
+                  return 'Range: $value';
                 }
-                return places;
+                return '$id: $value';
               },
+              showClearAll: true,
+              clearAllLabel: "Vanish All",
+              onClearAll: () {
+                // do something here
+                print('Clear all called');
+              },
+              onClear: (id, value) {
+                // do something here
+                print('Filter $id with value: ${value.toString()} cleared');
+              },
+              resetToDefault: true,
+              defaultValues: const {
+                "range-selector": {'start': 5, 'end': 10}
+              },
+              // hideDefaultValues: false,
+              // uncomment below property to render custom ui for SelectedFilters widget
+              // buildFilters: (options) {
+              //   List<Widget> widgets = [];
+              //   options.selectedValues.forEach((id, filterValue) {
+              //     widgets.add(
+              //       Chip(
+              //         label: Text(
+              //             ' $id --- ${options.getValueAsString(filterValue)}'),
+              //         onDeleted: () {
+              //           options.clearValue(id);
+              //         },
+              //       ),
+              //     );
+              //   });
+              //   return Wrap(
+              //     spacing: 16.0,
+              //     crossAxisAlignment: WrapCrossAlignment.start,
+              //     // gap between adjacent chips
+              //     children: widgets,
+              //   );
+              // },
             ),
+          ),
+          body: ReactiveGoogleMap(
+            id: 'map-widget',
+            // To update markers when magnitude gets changed
+            react: const {
+              "and": "range-selector",
+            },
+            // initial map center
+            initialCameraPosition: const CameraPosition(
+              target: LatLng(37.42796133580664, -122.085749655962),
+              zoom: 4,
+            ),
+            // To enable markers' clustering
+            showMarkerClusters: true,
+            // Build cluster marker
+            // Here we are displaying the [Marker] icon and text based on the number of items present in a cluster.
+            buildClusterMarker: (Cluster<Place> cluster) async {
+              return Marker(
+                markerId: MarkerId(cluster.getId()),
+                position: cluster.location,
+                icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
+                    text: cluster.isMultiple
+                        ? cluster.count.toString()
+                        : cluster.items.first.source?["magnitude"]),
+              );
+            },
+            // To build marker when `showMarkerClusters` is set to `false`
+            // buildMarker: (Place place) {
+            //   return Marker(
+            //       markerId: MarkerId(place.id), position: place.position);
+            // },
+            // Database field mapped to geo points.
+            dataField: 'location',
+            // Size of Elasticsearch hits
+            // We set the `size` as zero because we're using aggregations to build markers.
+            size: 0,
+            // Size of Elasticsearch aggregations
+            aggregationSize: 50,
+            // To fetch initial results
+            triggerQueryOnInit: true,
+            // To update markers when map bounds change
+            searchAsMove: true,
+            // [Optipnal] Use a default query to use Elasticsearch `geohash_grid` query.
+            defaultQuery: (SearchController controller) {
+              return {
+                "aggregations": {
+                  "location": {
+                    "geohash_grid": {"field": "location", "precision": 3},
+                    "aggs": {
+                      "top_earthquakes": {
+                        "top_hits": {
+                          "_source": {
+                            "includes": ["magnitude"]
+                          },
+                          "size": 1
+                        }
+                      }
+                    }
+                  },
+                }
+              };
+            },
+            // [Optipnal] Calculate markers from aggregation data
+            calculateMarkers: (SearchController controller) {
+              List<Place> places = [];
+              for (var bucket
+                  in controller.aggregationData?.raw?["buckets"] ?? []) {
+                try {
+                  var locationDecode = GeoHash(bucket["key"]);
+                  var source = bucket["top_earthquakes"]?["hits"]?["hits"]?[0]
+                      ?["_source"];
+                  places.add(
+                    Place(
+                        id: bucket["key"],
+                        position: LatLng(locationDecode.latitude(),
+                            locationDecode.longitude()),
+                        source: source),
+                  );
+                } catch (e) {}
+              }
+              return places;
+            },
           ),
         ),
       ),
