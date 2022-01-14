@@ -666,6 +666,11 @@ class RangeInput extends StatefulWidget {
   /// ```
   final TextStyle? inputStyle;
 
+  /// [TextField] keyboardType property
+  final TextInputType? keyboardType;
+
+  /// [TextField] textInputAction property
+  final TextInputAction? textInputAction;
   // To custom style the Dropdown
   //
   /// For example,
@@ -812,6 +817,8 @@ class RangeInput extends StatefulWidget {
     this.validateRange,
     this.buildErrorMessage,
     this.inputStyle,
+    this.keyboardType,
+    this.textInputAction,
     this.dropdownStyle,
     this.customContainer,
     this.closeIcon,
@@ -887,6 +894,8 @@ class _RangeInputState extends State<RangeInput> {
               widget.validateRange is Function ? widget.validateRange : null,
           buildErrorMessage: widget.buildErrorMessage,
           inputStyle: widget.inputStyle,
+          textInputAction: widget.textInputAction,
+          keyboardType: widget.keyboardType,
           dropdownStyle: widget.dropdownStyle,
           customContainer: widget.customContainer,
           closeIcon: widget.closeIcon,
@@ -964,27 +973,31 @@ class RangeInputInner extends StatefulWidget {
   final Widget Function(dynamic start, dynamic end)? buildErrorMessage;
   final RangeLabelsType? rangeLabels;
   final TextStyle? inputStyle;
+  final TextInputAction? textInputAction;
+  final TextInputType? keyboardType;
   final TextStyle? dropdownStyle;
   final Container Function(bool showError, Widget childWidget)? customContainer;
   final Widget Function()? closeIcon;
   final Widget Function(bool showError)? dropdownIcon;
   final SearchController searchController;
-  const RangeInputInner({
-    Key? key,
-    required this.searchController,
-    required this.title,
-    required this.rangeLabel,
-    required this.range,
-    required this.defaultValue,
-    this.rangeLabels,
-    this.validateRange,
-    this.buildErrorMessage,
-    this.inputStyle,
-    this.dropdownStyle,
-    this.customContainer,
-    this.closeIcon,
-    this.dropdownIcon,
-  }) : super(key: key);
+  const RangeInputInner(
+      {Key? key,
+      required this.searchController,
+      required this.title,
+      required this.rangeLabel,
+      required this.range,
+      required this.defaultValue,
+      this.rangeLabels,
+      this.validateRange,
+      this.buildErrorMessage,
+      this.inputStyle,
+      this.textInputAction,
+      this.dropdownStyle,
+      this.customContainer,
+      this.closeIcon,
+      this.dropdownIcon,
+      this.keyboardType})
+      : super(key: key);
 
   @override
   _RangeInputInnerState createState() => _RangeInputInnerState();
@@ -1187,6 +1200,8 @@ class _RangeInputInnerState extends State<RangeInputInner> {
                         ? widget.rangeLabels!.start
                         : null,
                     inputStyle: widget.inputStyle,
+                    textInputAction: widget.textInputAction,
+                    keyboardType: widget.keyboardType,
                     dropdownStyle: widget.dropdownStyle,
                     customContainer: widget.customContainer,
                     closeIcon: widget.closeIcon,
@@ -1209,6 +1224,8 @@ class _RangeInputInnerState extends State<RangeInputInner> {
                         ? widget.rangeLabels!.end
                         : null,
                     inputStyle: widget.inputStyle,
+                    textInputAction: widget.textInputAction,
+                    keyboardType: widget.keyboardType,
                     dropdownStyle: widget.dropdownStyle,
                     customContainer: widget.customContainer,
                     closeIcon: widget.closeIcon,
@@ -1238,26 +1255,30 @@ class Dropdown extends StatefulWidget {
   final bool showError;
   final dynamic renderLabel;
   final TextStyle? inputStyle;
+  final TextInputAction? textInputAction;
+  final TextInputType? keyboardType;
   final TextStyle? dropdownStyle;
   final Container Function(bool showError, Widget childWidget)? customContainer;
   final Widget Function()? closeIcon;
   final Widget Function(bool showError)? dropdownIcon;
 
-  const Dropdown({
-    Key? key,
-    required this.rangeItem,
-    required this.value,
-    required this.onChangeHandler,
-    required this.hintLabel,
-    required this.showError,
-    required this.renderLabel,
-    required this.defaultValue,
-    this.inputStyle,
-    this.dropdownStyle,
-    this.customContainer,
-    this.closeIcon,
-    this.dropdownIcon,
-  }) : super(key: key);
+  const Dropdown(
+      {Key? key,
+      required this.rangeItem,
+      required this.value,
+      required this.onChangeHandler,
+      required this.hintLabel,
+      required this.showError,
+      required this.renderLabel,
+      required this.defaultValue,
+      this.inputStyle,
+      this.textInputAction,
+      this.dropdownStyle,
+      this.customContainer,
+      this.closeIcon,
+      this.dropdownIcon,
+      this.keyboardType})
+      : super(key: key);
 
   @override
   _DropdownState createState() => _DropdownState();
@@ -1441,6 +1462,8 @@ class _DropdownState extends State<Dropdown> {
               fontSize: 22,
               height: 1,
             ),
+        keyboardType: widget.keyboardType,
+        textInputAction: widget.textInputAction,
         focusNode: _focusNode,
         controller: _controller,
         decoration: InputDecoration(
