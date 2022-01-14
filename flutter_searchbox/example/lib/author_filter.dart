@@ -74,7 +74,7 @@ class AuthorFilter extends StatelessWidget {
                     body: searchController.requestPending
                         ? Center(child: CircularProgressIndicator())
                         : ListView(
-                            children: searchController.aggregationData!.data!
+                            children: searchController.aggregationData.data!
                                 .map((bucket) {
                               return Container(
                                 child: Column(
@@ -94,7 +94,10 @@ class AuthorFilter extends StatelessWidget {
                                         final List values =
                                             searchController.value == null
                                                 ? []
-                                                : searchController.value;
+                                                : [
+                                                    ...searchController.value
+                                                        as List
+                                                  ];
                                         if (values.contains(bucket['_key'])) {
                                           values.remove(bucket['_key']);
                                         } else {

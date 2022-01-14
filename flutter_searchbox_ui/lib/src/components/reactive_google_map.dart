@@ -607,7 +607,6 @@ class _ReactiveGoogleMapState extends State<ReactiveGoogleMap> {
       showDistinctSuggestions: widget.showDistinctSuggestions,
       preserveResults: widget.preserveResults,
       clearOnQueryChange: widget.clearOnQueryChange,
-      results: widget.results,
       transformRequest: widget.transformRequest,
       transformResponse: widget.transformResponse,
       distinctField: widget.distinctField,
@@ -1253,10 +1252,11 @@ class ReactiveGoogleMap extends StatefulWidget {
   final void Function(dynamic next, {dynamic prev})? onValueChange;
 
   /// It can be used to listen for the `results` changes.
-  final void Function(List<Map> next, {List<Map> prev})? onResults;
+  final void Function(Results next, {Results prev})? onResults;
 
   /// It can be used to listen for the `aggregationData` property changes.
-  final void Function(List<Map> next, {List<Map> prev})? onAggregationData;
+  final void Function(Aggregations next, {Aggregations prev})?
+      onAggregationData;
 
   /// It gets triggered in case of an error occurs while fetching results.
   final void Function(dynamic error)? onError;
@@ -1264,11 +1264,11 @@ class ReactiveGoogleMap extends StatefulWidget {
   /// It can be used to listen for the request status changes.
   final void Function(String next, {String prev})? onRequestStatusChange;
 
-  /// It is a callback function which accepts widget's **prevQuery** and **nextQuery** as parameters.
+  /// It is a callback function which accepts widget's **nextQuery** and **prevQuery** as parameters.
   ///
   /// It is called everytime the widget's query changes.
   /// This property is handy in cases where you want to generate a side-effect whenever the widget's query would change.
-  final void Function(Map next, {Map prev})? onQueryChange;
+  final void Function(List<Map>? next, {List<Map>? prev})? onQueryChange;
 
   // Google Map Props
   /// Callback method for when the map is ready to be used.

@@ -46,4 +46,13 @@ class Aggregations {
       this.data = parsedData;
     }
   }
+
+  /// To clone the object
+  Aggregations clone() {
+    var aggData = new Aggregations();
+    aggData.data = data;
+    aggData.afterKey = afterKey;
+    aggData.raw = raw;
+    return aggData;
+  }
 }

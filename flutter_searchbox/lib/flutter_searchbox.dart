@@ -326,8 +326,6 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
 
   final TransformResponse? transformResponse;
 
-  final List<Map>? results;
-
   final String? distinctField;
 
   final Map? distinctFieldConfig;
@@ -342,10 +340,11 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
   final void Function(dynamic next, {dynamic prev})? onValueChange;
 
   // called when results change
-  final void Function(List<Map> next, {List<Map> prev})? onResults;
+  final void Function(Results next, {Results prev})? onResults;
 
   // called when composite aggregationData change
-  final void Function(List<Map> next, {List<Map> prev})? onAggregationData;
+  final void Function(Aggregations next, {Aggregations prev})?
+      onAggregationData;
   // called when there is an error while fetching results
   final void Function(dynamic error)? onError;
 
@@ -353,7 +352,7 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
   final void Function(String next, {String prev})? onRequestStatusChange;
 
   // called when query changes
-  final void Function(Map next, {Map prev})? onQueryChange;
+  final void Function(List<Map>? next, {List<Map>? prev})? onQueryChange;
 
   _SearchWidgetListener({
     Key? key,
@@ -417,7 +416,6 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
     this.preserveResults,
     this.clearOnQueryChange = false,
     this.value,
-    this.results,
     this.distinctField,
     this.distinctFieldConfig,
   }) : super(key: key);
@@ -451,7 +449,6 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
           'includeNullValues': includeNullValues,
           'includeFields': includeFields,
           'excludeFields': excludeFields,
-          'results': results,
           'fuzziness': fuzziness,
           'searchOperators': searchOperators,
           'highlight': highlight,
@@ -1165,11 +1162,6 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// The default value is `false`
   final bool clearOnQueryChange;
 
-  /// A list of map to pre-populate results with static data.
-  ///
-  /// Data must be in form of Elasticsearch response.
-  final List<Map>? results;
-
   // callbacks
 
   /// Enables transformation of network request before execution.
@@ -1275,10 +1267,11 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   final void Function(dynamic next, {dynamic prev})? onValueChange;
 
   /// It can be used to listen for the `results` changes.
-  final void Function(List<Map> next, {List<Map> prev})? onResults;
+  final void Function(Results next, {Results prev})? onResults;
 
   /// It can be used to listen for the `aggregationData` property changes.
-  final void Function(List<Map> next, {List<Map> prev})? onAggregationData;
+  final void Function(Aggregations next, {Aggregations prev})?
+      onAggregationData;
 
   /// It gets triggered in case of an error occurs while fetching results.
   final void Function(dynamic error)? onError;
@@ -1286,11 +1279,11 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// It can be used to listen for the request status changes.
   final void Function(String next, {String prev})? onRequestStatusChange;
 
-  /// It is a callback function which accepts widget's **prevQuery** and **nextQuery** as parameters.
+  /// It is a callback function which accepts widget's **nextQuery** and **prevQuery** as parameters.
   ///
   /// It is called everytime the widget's query changes.
   /// This property is handy in cases where you want to generate a side-effect whenever the widget's query would change.
-  final void Function(Map next, {Map prev})? onQueryChange;
+  final void Function(List<Map>? next, {List<Map>? prev})? onQueryChange;
 
   SearchWidgetConnector({
     Key? key,
@@ -1352,7 +1345,6 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
     this.preserveResults,
     this.clearOnQueryChange = false,
     this.value,
-    this.results,
     this.distinctField,
     this.distinctFieldConfig,
   }) : super(key: key);
@@ -1420,7 +1412,6 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
               preserveResults: preserveResults,
               clearOnQueryChange: clearOnQueryChange,
               value: value,
-              results: results,
               distinctField: distinctField,
               distinctFieldConfig: distinctFieldConfig,
             ));
@@ -1791,11 +1782,6 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
   /// ```
   final TransformResponse? transformResponse;
 
-  /// A list of map to pre-populate results with static data.
-  ///
-  /// Data must be in form of Elasticsearch response.
-  final List<Map>? results;
-
   /// This prop returns only the distinct value documents for the specified field.
   /// It is equivalent to the DISTINCT clause in SQL. It internally uses the collapse feature of Elasticsearch.
   /// You can read more about it over here - https://www.elastic.co/guide/en/elasticsearch/reference/current/collapse-search-results.html
@@ -1855,10 +1841,11 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
   final void Function(dynamic next, {dynamic prev})? onValueChange;
 
   /// It can be used to listen for the `results` changes.
-  final void Function(List<Map> next, {List<Map> prev})? onResults;
+  final void Function(Results next, {Results prev})? onResults;
 
   /// It can be used to listen for the `aggregationData` property changes.
-  final void Function(List<Map> next, {List<Map> prev})? onAggregationData;
+  final void Function(Aggregations next, {Aggregations prev})?
+      onAggregationData;
 
   /// It gets triggered in case of an error occurs while fetching results.
   final void Function(dynamic error)? onError;
@@ -1866,11 +1853,11 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
   /// It can be used to listen for the request status changes.
   final void Function(String next, {String prev})? onRequestStatusChange;
 
-  /// It is a callback function which accepts widget's **prevQuery** and **nextQuery** as parameters.
+  /// It is a callback function which accepts widget's **nextQuery** and **prevQuery** as parameters.
   ///
   /// It is called everytime the widget's query changes.
   /// This property is handy in cases where you want to generate a side-effect whenever the widget's query would change.
-  final void Function(Map next, {Map? prev})? onQueryChange;
+  final void Function(List<Map>? next, {List<Map>? prev})? onQueryChange;
 
   // SearchBox specific properties
 
@@ -1975,7 +1962,6 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
       this.clearOnQueryChange = true,
       this.distinctField,
       this.distinctFieldConfig,
-      this.results,
       // searchbox specific properties
       this.enableRecentSearches = false,
       this.showAutoFill = false,
@@ -2183,7 +2169,6 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
         preserveResults: preserveResults,
         clearOnQueryChange: clearOnQueryChange,
         value: query,
-        results: results,
         distinctField: distinctField,
         distinctFieldConfig: distinctFieldConfig,
         builder: (context, searchController) {
