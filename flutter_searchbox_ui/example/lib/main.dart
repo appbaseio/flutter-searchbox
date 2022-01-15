@@ -95,7 +95,6 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
                     return Future.error(value);
                   }
                 }
-                print('beforeValueChange $value');
                 return value;
               },
               buildTitle: () {
