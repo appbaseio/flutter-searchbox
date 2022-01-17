@@ -16,8 +16,8 @@ bool isNumeric(var arg) {
   } else if (arg is num) {
     return true;
   } else if (arg is List) {
-    for (var i = 1; i < arg.length; i++) {
-      // leaving out the first element for other options
+    for (var i = 1; i < arg.length - 1; i++) {
+      // leaving out the first and last elements for other/ no_limit options
       if (isNumeric(arg[i])) {
         return true;
       } else {
