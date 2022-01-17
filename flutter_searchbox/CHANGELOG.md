@@ -1,3 +1,7 @@
+## [2.2.4-nullsafety] - 15-01-2022
+
+- Update searchbase
+
 ## [2.2.3-nullsafety] - 03-11-2021
 
 - Update beforeValueChange function signature

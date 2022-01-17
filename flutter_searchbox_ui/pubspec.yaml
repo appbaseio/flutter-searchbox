@@ -11,10 +11,10 @@ dependencies:
   dart_geohash: ^2.0.1
   flutter:
     sdk: flutter
-  flutter_searchbox: ^2.2.3-nullsafety
+  flutter_searchbox: ^2.2.4-nullsafety
   google_maps_cluster_manager: ^3.0.0+1
   google_maps_flutter: ^2.0.11
-  searchbase: ^2.2.2
+  searchbase: ^2.2.4
 dev_dependencies:
   flutter_test:
     sdk: flutter

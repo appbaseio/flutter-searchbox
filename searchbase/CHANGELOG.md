@@ -1,3 +1,7 @@
+## 2.2.4
+
+- Fix callbacks for change events
+
 ## 2.2.3
 
 - Apply value returned by `beforeValueChange` method
