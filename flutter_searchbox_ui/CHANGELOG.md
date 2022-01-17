@@ -1,3 +1,8 @@
+## [1.0.16-alpha] - 14-12-2021
+
+- fix: selected_filters widget breaking when used in a page or drawer
+- fix: range_input widget breaking when passed with a non-acceptable value as defaultvalue
+
 ## [1.0.15-alpha] - 19-11-2021
 
 - Fix issues reported: range-input not working well with selected-filters
