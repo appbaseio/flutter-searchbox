@@ -404,7 +404,7 @@ class ReactiveMapState extends State<ReactiveMap> {
       items = widget.calculateMarkers!(widget.searchController);
     } else {
       // update markers
-      for (var hit in widget.searchController.results?.data ?? []) {
+      for (var hit in widget.searchController.results.data) {
         if (hit[widget.searchController.dataField] != null) {
           Location? location =
               getLocationObject(hit[widget.searchController.dataField]);

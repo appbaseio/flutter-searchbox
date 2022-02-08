@@ -307,7 +307,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
             calculateMarkers: (SearchController controller) {
               List<Place> places = [];
               for (var bucket
-                  in controller.aggregationData?.raw?["buckets"] ?? []) {
+                  in controller.aggregationData.raw?["buckets"] ?? []) {
                 try {
                   var locationDecode = GeoHash(bucket["key"]);
                   var source = bucket["top_earthquakes"]?["hits"]?["hits"]?[0]

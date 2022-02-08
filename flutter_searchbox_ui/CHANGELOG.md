@@ -1,3 +1,7 @@
+## [1.0.19-alpha] - 08-012-2022
+
+- Fix type errors
+
 ## [1.0.17-alpha] - 17-01-2022
 
 - Fix callback for change events
