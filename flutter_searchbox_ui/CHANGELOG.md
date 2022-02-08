@@ -1,3 +1,32 @@
+## [1.0.19-alpha] - 08-012-2022
+
+- Fix type errors
+
+## [1.0.17-alpha] - 17-01-2022
+
+- Fix callback for change events
+
+## [1.0.16-alpha] - 14-12-2021
+
+- fix: selected_filters widget breaking when used in a page or drawer
+- fix: range_input widget breaking when passed with a non-acceptable value as defaultvalue
+
+## [1.0.15-alpha] - 19-11-2021
+
+- Fix issues reported: range-input not working well with selected-filters
+- null value handling
+
+## [1.0.14-alpha] - 19-11-2021
+
+- Update docs
+
+## [1.0.13-alpha] - 03-11-2021.
+
+- Add SelectedFilters widget
+- Update RangeInput widget to support SelectedFilters widget.
+
+## [1.0.12-alpha] - 17-11-2021.
+
 ## [1.0.11-alpha] - 03-11-2021.
 
 - Update flutter searchbox

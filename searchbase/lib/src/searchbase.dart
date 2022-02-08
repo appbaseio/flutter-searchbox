@@ -128,7 +128,6 @@ class SearchBase extends Base {
         includeNullValues: searchController["includeNullValues"],
         includeFields: searchController["includeFields"],
         excludeFields: searchController["excludeFields"],
-        results: searchController["results"],
         fuzziness: searchController["fuzziness"],
         searchOperators: searchController["searchOperators"],
         highlight: searchController["highlight"],

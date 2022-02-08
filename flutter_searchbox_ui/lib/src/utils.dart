@@ -1,4 +1,5 @@
 import 'package:dart_geohash/dart_geohash.dart';
+import 'package:flutter/foundation.dart';
 
 bool isNumeric(var arg) {
   if (arg is String) {
@@ -15,8 +16,8 @@ bool isNumeric(var arg) {
   } else if (arg is num) {
     return true;
   } else if (arg is List) {
-    for (var i = 1; i < arg.length; i++) {
-      // leaving out the first element for other options
+    for (var i = 1; i < arg.length - 1; i++) {
+      // leaving out the first and last elements for other/ no_limit options
       if (isNumeric(arg[i])) {
         return true;
       } else {
@@ -64,5 +65,61 @@ Location? getLocationObject(dynamic location) {
     if (lat != null && lng != null) {
       return Location(lat, lng);
     }
+  }
+}
+
+List prepareValueList(Map value) {
+  if (value.isEmpty) {
+    return [];
+  }
+  List valueList = [];
+  if (value.containsKey('start')) {
+    valueList.add(value['start']);
+  }
+  if (value.containsKey('end')) {
+    valueList.add(value['end']);
+  }
+  return valueList;
+}
+
+String processFilterValues(dynamic value) {
+  if (value == null || value.isEmpty) {
+    return "";
+  }
+  if (value is String) {
+    return value;
+  } else if (value is num) {
+    return value.toString();
+  } else if (value is List) {
+    return value.join(", ");
+  } else if (value is Map) {
+    return processFilterValues(prepareValueList(value));
+  } else {
+    return value.toString();
+  }
+}
+
+bool isEqual(dynamic value, dynamic defaultValue) {
+  if (value == null || defaultValue == null) {
+    return false;
+  }
+  if (value is String && defaultValue is String) {
+    return value == defaultValue;
+  } else if (value is num && defaultValue is num) {
+    return value == defaultValue;
+  } else if (value is List && defaultValue is List) {
+    return listEquals(value, defaultValue);
+  } else if (value is Map && defaultValue is Map) {
+    if (value.keys.length != defaultValue.keys.length) {
+      return false;
+    }
+    for (var key in value.keys) {
+      if (!isEqual(value[key], defaultValue[key])) {
+        return false;
+      }
+    }
+    return true;
+  } else {
+    return false;
   }
 }

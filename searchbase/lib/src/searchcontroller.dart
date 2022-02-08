@@ -320,7 +320,7 @@ class SearchController extends Base {
   bool? preserveResults;
 
   /// It is an object that represents the elasticsearch query response.
-  Results? results;
+  late Results results;
 
   /// Represents the error response returned by elasticsearch.
   dynamic error;
@@ -337,7 +337,7 @@ class SearchController extends Base {
   RequestStatus? requestStatus;
 
   /// An object that contains the aggregations data for [QueryType.term] queries.
-  Aggregations? aggregationData;
+  late Aggregations aggregationData;
 
   /// A list of recent searches as suggestions.
   List<Suggestion>? recentSearches;
@@ -398,13 +398,14 @@ class SearchController extends Base {
   ///
   /// This property is handy in cases where you want to generate a side-effect on value selection.
   /// For example: You want to show a pop-up modal with the valid discount coupon code when a user searches for a product in a [SearchController].
-  final void Function(String? next, {String? prev})? onValueChange;
+  final void Function(dynamic next, {dynamic prev})? onValueChange;
 
   /// It can be used to listen for the `results` changes.
-  final void Function(List<Map>? next, {List<Map>? prev})? onResults;
+  final void Function(Results next, {Results prev})? onResults;
 
   /// It can be used to listen for the `aggregationData` property changes.
-  final void Function(List<Map>? next, {List<Map>? prev})? onAggregationData;
+  final void Function(Aggregations next, {Aggregations prev})?
+      onAggregationData;
 
   /// It gets triggered in case of an error while fetching results.
   final void Function(dynamic error)? onError;
@@ -412,11 +413,11 @@ class SearchController extends Base {
   /// It can be used to listen for the request status changes.
   final void Function(String? next, {String? prev})? onRequestStatusChange;
 
-  /// It is a callback function which accepts widget's **prevQuery** and **nextQuery** as parameters.
+  /// It is a callback function which accepts widget's **nextQuery** and **prevQuery** as parameters.
   ///
   /// It is called everytime the widget's query changes.
   /// This property is handy in cases where you want to generate a side-effect whenever the widget's query would change.
-  final void Function(Map? /*?*/ next, {Map? prev})? onQueryChange;
+  final void Function(List<Map>? next, {List<Map>? prev})? onQueryChange;
 
   /* ------ Private properties only for the internal use ----------- */
   SearchBase? _parent;
@@ -483,7 +484,6 @@ class SearchController extends Base {
     this.distinctFieldConfig,
     this.value,
     this.clearOnQueryChange = false,
-    List<Map>? results,
   }) : super(index, url, credentials,
             appbaseConfig: appbaseConfig,
             transformRequest: transformRequest,
@@ -499,8 +499,7 @@ class SearchController extends Base {
     // Initialize the state changes observable
     this.stateChanges = new Observable();
 
-    this.results = new Results(
-        results != null ? results as List<Map<String, dynamic>> : []);
+    this.results = new Results([]);
 
     this.aggregationData = new Aggregations(data: []);
 
@@ -533,16 +532,16 @@ class SearchController extends Base {
       return [];
     }
     List<String> fields = getNormalizedField(this.dataField);
-    if (fields.length == 0 && this.results!.data.length > 0) {
+    if (fields.length == 0 && this.results.data.length > 0) {
       // Extract fields from _source
-      fields = this.results!.data[0].keys.toList();
+      fields = this.results.data[0].keys.toList();
     }
     if (this.enablePopularSuggestions == true) {
       // extract suggestions from popular suggestion fields too
       fields = [...fields, ...popularSuggestionFields];
     }
     return getSuggestions(
-        fields, this.results!.data, this.value, this.showDistinctSuggestions);
+        fields, this.results.data, this.value, this.showDistinctSuggestions);
   }
 
   /// to get the raw query based on the current state
@@ -625,21 +624,15 @@ class SearchController extends Base {
 
   /// can be used to set the `value` property
   void setValue(dynamic value, {Options? options}) async {
-    void performUpdate() {
-      final prev = this.value;
-      this.value = value;
-      this._applyOptions(options, 'value', prev, this.value);
-    }
-
     if (this.beforeValueChange != null) {
       try {
-        await beforeValueChange!(value);
-        performUpdate();
+        var val = await beforeValueChange!(value);
+        this._performUpdate(val, options);
       } catch (e) {
         print(e);
       }
     } else {
-      performUpdate();
+      this._performUpdate(value, options);
     }
   }
 
@@ -714,7 +707,7 @@ class SearchController extends Base {
   void setAfter(Map? after, {Options? options}) {
     final prev = this.after;
     this.after = after;
-    this.aggregationData!.setAfterKey(after);
+    this.aggregationData.setAfterKey(after);
     this._applyOptions(options, 'after', prev, after);
   }
 
@@ -758,7 +751,7 @@ class SearchController extends Base {
         'query': this.query is List ? this.query : [this.query],
         'settings': this.appbaseSettings?.toJSON()
       }, false);
-      final prev = this.results;
+      final prev = this.results.clone();
       final Map? rawResults = results[this.id] is Map ? results[this.id] : {};
       void afterResponse() {
         if (rawResults!['aggregations'] != null) {
@@ -864,7 +857,7 @@ class SearchController extends Base {
             Map rawResults = results[id] != null ? results[id] : {};
             // Set results
             if (rawResults['hits'] != null) {
-              componentInstance.results!.setRaw(rawResults);
+              componentInstance.results.setRaw(rawResults);
               componentInstance._applyOptions(
                   Options(stateChanges: options?.stateChanges),
                   'results',
@@ -941,7 +934,7 @@ class SearchController extends Base {
   /// to empty results
   void clearResults({Options? options}) {
     final prev = this.results;
-    this.results!.setRaw({
+    this.results.setRaw({
       'hits': {'hits': []}
     });
     this._applyOptions(Options(stateChanges: options?.stateChanges), 'results',
@@ -1018,22 +1011,28 @@ class SearchController extends Base {
         rawResults != null &&
         rawResults['hits'] != null &&
         rawResults['hits']['hits'] is List &&
-        this.results!.rawData != null &&
-        this.results!.rawData!['hits'] != null &&
-        this.results!.rawData!['hits']['hits'] is List) {
-      this.results!.setRaw({
+        this.results.rawData != null &&
+        this.results.rawData!['hits'] != null &&
+        this.results.rawData!['hits']['hits'] is List) {
+      this.results.setRaw({
         ...rawResults,
         'hits': {
           ...rawResults['hits'],
           'hits': [
-            ...this.results!.rawData!['hits']['hits'],
+            ...this.results.rawData!['hits']['hits'],
             ...rawResults['hits']['hits']
           ]
         }
       });
     } else {
-      this.results!.setRaw(rawResults);
+      this.results.setRaw(rawResults);
     }
+  }
+
+  void _performUpdate(dynamic value, Options? options) {
+    dynamic prev = this.value;
+    this.value = value;
+    this._applyOptions(options, 'value', prev, this.value);
   }
 
   Future _handleError(dynamic err, {Option? options}) {
@@ -1270,15 +1269,15 @@ class SearchController extends Base {
         this.dataField is String) {
       aggregationField = this.dataField;
     }
-    final prev = this.aggregationData;
+    final prev = this.aggregationData.clone();
     if (aggsResponse[aggregationField] != null) {
-      this.aggregationData!.setRaw(aggsResponse[aggregationField]);
+      this.aggregationData.setRaw(aggsResponse[aggregationField]);
       if (aggsResponse[aggregationField] != null &&
           aggsResponse[aggregationField]['buckets'] is List) {
         final mapped = (aggsResponse[aggregationField]['buckets'] as List)
             .map((model) => Map.from(model));
         final data = mapped.toList();
-        this.aggregationData!.setData(aggregationField, data,
+        this.aggregationData.setData(aggregationField, data,
             append: this.preserveResults == true && append);
       }
       this._applyOptions(new Options(stateChanges: options?.stateChanges),

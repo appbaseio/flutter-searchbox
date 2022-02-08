@@ -282,6 +282,16 @@ class ReactiveMap extends StatefulWidget {
   /// were not claimed by any other gesture recognizer.
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
 
+  // cluster options
+  /// Zoom levels configuration
+  final List<double> levels;
+
+  /// Extra percent of markers to be loaded (ex : 0.2 for 20%)
+  final double extraPercent;
+
+  /// Zoom level to stop cluster rendering
+  final double? stopClusteringZoom;
+
   const ReactiveMap({
     Key? key,
     required this.searchController,
@@ -291,6 +301,10 @@ class ReactiveMap extends StatefulWidget {
     this.calculateMarkers,
     this.buildMarker,
     this.buildClusterMarker,
+    // cluster options
+    this.levels = const [1, 4.25, 6.75, 8.25, 11.5, 14.5, 16.0, 16.5, 20.0],
+    this.extraPercent = 0.5,
+    this.stopClusteringZoom,
     // Google map props
     required this.initialCameraPosition,
     this.mapType = MapType.normal,
@@ -356,7 +370,10 @@ class ReactiveMapState extends State<ReactiveMap> {
 
   ClusterManager _initClusterManager() {
     return ClusterManager<Place>(items, _updateMarkers,
-        markerBuilder: _markerBuilder);
+        markerBuilder: _markerBuilder,
+        levels: widget.levels,
+        extraPercent: widget.extraPercent,
+        stopClusteringZoom: widget.stopClusteringZoom);
   }
 
   void triggerQuery() async {
@@ -387,7 +404,7 @@ class ReactiveMapState extends State<ReactiveMap> {
       items = widget.calculateMarkers!(widget.searchController);
     } else {
       // update markers
-      for (var hit in widget.searchController.results?.data ?? []) {
+      for (var hit in widget.searchController.results.data) {
         if (hit[widget.searchController.dataField] != null) {
           Location? location =
               getLocationObject(hit[widget.searchController.dataField]);
@@ -537,11 +554,14 @@ class _ReactiveGoogleMapState extends State<ReactiveGoogleMap> {
           onTap: widget.onTap,
           onLongPress: widget.onLongPress,
           gestureRecognizers: widget.gestureRecognizers,
+          // cluster options
+          levels: widget.levels,
+          extraPercent: widget.extraPercent,
+          stopClusteringZoom: widget.stopClusteringZoom,
         );
       },
       subscribeTo: widget.subscribeTo,
-      // Avoid fetching query for each open/close action instead call it manually
-      triggerQueryOnInit: false,
+      triggerQueryOnInit: widget.triggerQueryOnInit,
       shouldListenForChanges: widget.shouldListenForChanges,
       destroyOnDispose: widget.destroyOnDispose,
       index: widget.index,
@@ -587,7 +607,6 @@ class _ReactiveGoogleMapState extends State<ReactiveGoogleMap> {
       showDistinctSuggestions: widget.showDistinctSuggestions,
       preserveResults: widget.preserveResults,
       clearOnQueryChange: widget.clearOnQueryChange,
-      results: widget.results,
       transformRequest: widget.transformRequest,
       transformResponse: widget.transformResponse,
       distinctField: widget.distinctField,
@@ -1230,13 +1249,14 @@ class ReactiveGoogleMap extends StatefulWidget {
   ///
   /// This property is handy in cases where you want to generate a side-effect on value selection.
   /// For example: You want to show a pop-up modal with the valid discount coupon code when a user searches for a product in a [SearchBox].
-  final void Function(String next, {String prev})? onValueChange;
+  final void Function(dynamic next, {dynamic prev})? onValueChange;
 
   /// It can be used to listen for the `results` changes.
-  final void Function(List<Map> next, {List<Map> prev})? onResults;
+  final void Function(Results next, {Results prev})? onResults;
 
   /// It can be used to listen for the `aggregationData` property changes.
-  final void Function(List<Map> next, {List<Map> prev})? onAggregationData;
+  final void Function(Aggregations next, {Aggregations prev})?
+      onAggregationData;
 
   /// It gets triggered in case of an error occurs while fetching results.
   final void Function(dynamic error)? onError;
@@ -1244,11 +1264,11 @@ class ReactiveGoogleMap extends StatefulWidget {
   /// It can be used to listen for the request status changes.
   final void Function(String next, {String prev})? onRequestStatusChange;
 
-  /// It is a callback function which accepts widget's **prevQuery** and **nextQuery** as parameters.
+  /// It is a callback function which accepts widget's **nextQuery** and **prevQuery** as parameters.
   ///
   /// It is called everytime the widget's query changes.
   /// This property is handy in cases where you want to generate a side-effect whenever the widget's query would change.
-  final void Function(Map next, {Map prev})? onQueryChange;
+  final void Function(List<Map>? next, {List<Map>? prev})? onQueryChange;
 
   // Google Map Props
   /// Callback method for when the map is ready to be used.
@@ -1503,6 +1523,15 @@ class ReactiveGoogleMap extends StatefulWidget {
   final List<Place> Function(SearchController searchController)?
       calculateMarkers;
 
+  /// Zoom levels configuration
+  final List<double> levels;
+
+  /// Extra percent of markers to be loaded (ex : 0.2 for 20%)
+  final double extraPercent;
+
+  /// Zoom level to stop cluster rendering
+  final double? stopClusteringZoom;
+
   const ReactiveGoogleMap({
     Key? key,
     required this.id,
@@ -1516,6 +1545,9 @@ class ReactiveGoogleMap extends StatefulWidget {
     this.triggerQueryOnInit,
     this.shouldListenForChanges,
     this.destroyOnDispose,
+    this.levels = const [1, 4.25, 6.75, 8.25, 11.5, 14.5, 16.0, 16.5, 20.0],
+    this.extraPercent = 0.5,
+    this.stopClusteringZoom,
     // properties to configure search component
     this.credentials,
     this.index,

@@ -9,8 +9,8 @@ class Results {
   Map? raw;
 
   /// To parse the results.
-  List<Map<String, dynamic>> Function(List<Map> results, [List<Map>? sourceData])?
-      parseResults;
+  List<Map<String, dynamic>> Function(List<Map> results,
+      [List<Map>? sourceData])? parseResults;
 
   Results(this.data) {}
 
@@ -97,7 +97,8 @@ class Results {
     List<Map<String, dynamic>> filteredResults = parseHits(data);
     // filter results & remove duplicates if any
     if (this.promotedData.length != 0) {
-      final List<String> ids = this.promotedData.map((item) => item["_id"]) as List<String>;
+      final List<String> ids =
+          this.promotedData.map((item) => item["_id"]) as List<String>;
       if (ids.length != 0) {
         filteredResults.where((item) {
           // remove duplicate results
@@ -109,9 +110,8 @@ class Results {
       }
 
       filteredResults = [
-        ...this
-            .promotedData
-            .map((dataItem) => ({...dataItem as Map<String, dynamic>, "_promoted": true})),
+        ...this.promotedData.map((dataItem) =>
+            ({...dataItem as Map<String, dynamic>, "_promoted": true})),
         ...filteredResults
       ];
     }
@@ -124,5 +124,13 @@ class Results {
     }
     // Add click ids in data
     this.data = withClickIds(this.data);
+  }
+
+  // Returns a clone
+  Results clone() {
+    var results = Results(this.data);
+    results.data = this.data;
+    results.raw = this.raw;
+    return results;
   }
 }
