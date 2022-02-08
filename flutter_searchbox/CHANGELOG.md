@@ -1,3 +1,7 @@
+## [2.4.0-without-speech] - 08-02-2022
+
+- Fix callback for change events
+
 ## [2.3.0-without-speech] - 19-10-2021
 
 - Update provider package
