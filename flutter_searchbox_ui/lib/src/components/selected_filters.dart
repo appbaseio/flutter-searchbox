@@ -243,7 +243,6 @@ class _SelectedFiltersState extends State<SelectedFilters> {
   void setSelectedFilters() {
     try {
       final activeWidgets = this.activeWidgets;
-      print('activewidgets $activeWidgets');
       for (var id in activeWidgets.keys) {
         if (widget.subscribeTo != null && widget.subscribeTo!.isNotEmpty) {
           if (!widget.subscribeTo!.contains(id)) {
