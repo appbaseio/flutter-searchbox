@@ -123,3 +123,10 @@ bool isEqual(dynamic value, dynamic defaultValue) {
     return false;
   }
 }
+
+bool isNullEmptyOrFalse(dynamic val) {
+  if (val is Map || val is List) {
+    return !val.isNotEmpty;
+  }
+  return val == null || false == val || "" == val;
+}
