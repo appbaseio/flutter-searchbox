@@ -128,5 +128,5 @@ bool isNullEmptyOrFalse(dynamic val) {
   if (val is Map || val is List) {
     return !val.isNotEmpty;
   }
-  return val == null || false == val || "" == val;
+  return val == null || val == "";
 }
