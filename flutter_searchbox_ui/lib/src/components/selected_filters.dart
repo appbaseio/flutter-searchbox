@@ -243,7 +243,6 @@ class _SelectedFiltersState extends State<SelectedFilters> {
   void setSelectedFilters() {
     try {
       final activeWidgets = this.activeWidgets;
-
       for (var id in activeWidgets.keys) {
         if (widget.subscribeTo != null && widget.subscribeTo!.isNotEmpty) {
           if (!widget.subscribeTo!.contains(id)) {
@@ -256,11 +255,7 @@ class _SelectedFiltersState extends State<SelectedFilters> {
         if (mounted) {
           setState(() {
             final currentValue = componentInstance!.value;
-            if (currentValue != "" &&
-                currentValue != null &&
-                ((currentValue is Map || currentValue is List)
-                    ? currentValue.isNotEmpty
-                    : false) &&
+            if (!isNullEmptyOrFalse(currentValue) &&
                 (widget.hideDefaultValues == true
                     ? !isEqual(currentValue, widget.defaultValues![id])
                     : true)) {
@@ -274,11 +269,7 @@ class _SelectedFiltersState extends State<SelectedFilters> {
         componentInstance?.subscribeToStateChanges((changes) {
           void applyChanges() {
             final currentValue = changes['value']?.next;
-            if (currentValue != "" &&
-                currentValue != null &&
-                ((currentValue is Map || currentValue is List)
-                    ? currentValue.isNotEmpty
-                    : false) &&
+            if (!isNullEmptyOrFalse(currentValue) &&
                 (widget.hideDefaultValues == true
                     ? !isEqual(currentValue, widget.defaultValues![id])
                     : true)) {

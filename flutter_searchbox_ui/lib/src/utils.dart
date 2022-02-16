@@ -83,7 +83,7 @@ List prepareValueList(Map value) {
 }
 
 String processFilterValues(dynamic value) {
-  if (value == null || value.isEmpty) {
+  if (isNullEmptyOrFalse(value)) {
     return "";
   }
   if (value is String) {
@@ -122,4 +122,11 @@ bool isEqual(dynamic value, dynamic defaultValue) {
   } else {
     return false;
   }
+}
+
+bool isNullEmptyOrFalse(dynamic val) {
+  if (val is Map || val is List) {
+    return !val.isNotEmpty;
+  }
+  return val == null || val == "";
 }
