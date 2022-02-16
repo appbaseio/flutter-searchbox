@@ -1,3 +1,7 @@
+## [1.0.20-alpha] - 16-02-2022
+
+- Allow strings and bool type in SelectedFilters
+
 ## [1.0.19-alpha] - 08-012-2022
 
 - Fix type errors
