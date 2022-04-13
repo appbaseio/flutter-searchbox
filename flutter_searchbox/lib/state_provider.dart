@@ -124,6 +124,9 @@ class StateProvider extends StatefulWidget {
 
 class _StateProviderState extends State<StateProvider> {
   final Map<String, SearchControllerState> _controllersState = {};
+  // _widgetSubscribers will be used for unsubscrbing in destroy lifecycle
+  final Map<String, Map<String, dynamic>> _widgetSubscribers = {};
+
   @override
   initState() {
     super.initState();
@@ -133,6 +136,15 @@ class _StateProviderState extends State<StateProvider> {
 
   Map<String, SearchController> get activeWidgets {
     return SearchBaseProvider.of(context).getActiveWidgets();
+  }
+
+  @override
+  void dispose() {
+    // Remove subscriptions
+    for (var id in _widgetSubscribers.keys){
+        _widgetSubscribers[id]!['controller'].unsubscribeToStateChanges(_widgetSubscribers[id]!['subscriberFunction']);
+    }
+    super.dispose();
   }
 
   void subscribeToProperties() {
@@ -148,7 +160,7 @@ class _StateProviderState extends State<StateProvider> {
         final componentInstance = activeWidgets[id];
        
         List<String>? subscribedKeys = widget.subscribeTo![id]?.map((keyEnum) => getStringFromEnum(keyEnum) ).toList() ?? [];
-        componentInstance?.subscribeToStateChanges((changes) {
+        void subscriberMethod(changes) {
           void applyChanges() {
             final prevState = {..._controllersState};
 
@@ -217,7 +229,13 @@ class _StateProviderState extends State<StateProvider> {
           } else {
             applyChanges();
           }
-        }, subscribedKeys);
+        }
+        _widgetSubscribers[id] = {
+          "controller": componentInstance,
+          "subscriberFunction": subscriberMethod,
+        };
+
+        componentInstance?.subscribeToStateChanges(subscriberMethod, subscribedKeys);
       }
     } catch (e) {
       print('error $e');
