@@ -59,7 +59,7 @@ class StateProvider extends StatefulWidget {
   /// StateProvider(
   ///   ...
   ///   subscribeTo: {
-  ///     'result-component': ['results', 'from']
+  ///     'result-component': [KeysToSubscribe.Results, KeysToSubscribe.From]
   ///   },
   ///   ...
   /// )
