@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_searchbox/flutter_searchbox.dart';
 import 'package:searchbase/searchbase.dart';
 
-String getStringFromEnum(SubscribableKeys key){
- return '${key.name[0].toLowerCase()}${key.name.substring(1)}';
-}
 
 class SearchControllerState {
   final Aggregations? aggregationData;
@@ -26,24 +23,24 @@ class SearchControllerState {
   final Map Function(SearchController searchController)? defaultQuery;
   final Map Function(SearchController searchController)? customQuery;
 
-  SearchControllerState(
-      {this.aggregationData,
-      this.results,
-      this.requestStatus,
-      this.error,
-      this.value,
-      this.query,
-      this.dataField,
-      this.size,
-      this.from,
-      this.fuzziness,
-      this.includeFields,
-      this.excludeFields,
-      this.sortBy,
-      this.react,
-      this.defaultQuery,
-      this.customQuery,});
-
+  SearchControllerState({
+    this.aggregationData,
+    this.results,
+    this.requestStatus,
+    this.error,
+    this.value,
+    this.query,
+    this.dataField,
+    this.size,
+    this.from,
+    this.fuzziness,
+    this.includeFields,
+    this.excludeFields,
+    this.sortBy,
+    this.react,
+    this.defaultQuery,
+    this.customQuery,
+  });
 }
 
 /// It allows you to access the current state of your widgets along with the search results.
@@ -67,7 +64,7 @@ class StateProvider extends StatefulWidget {
   ///   ...
   /// )
   /// ```
-  final Map<String, List<SubscribableKeys>>? subscribeTo;
+  final Map<String, List<KeysToSubscribe>>? subscribeTo;
 
   /// Callback function,  is a callback function called when the search state changes
   /// and accepts the previous and next search state as arguments.
@@ -137,8 +134,9 @@ class _StateProviderState extends State<StateProvider> {
   @override
   void dispose() {
     // Remove subscriptions
-    for (var id in _widgetSubscribers.keys){
-        _widgetSubscribers[id]!['controller'].unsubscribeToStateChanges(_widgetSubscribers[id]!['subscriberFunction']);
+    for (var id in _widgetSubscribers.keys) {
+      _widgetSubscribers[id]!['controller'].unsubscribeToStateChanges(
+          _widgetSubscribers[id]!['subscriberFunction']);
     }
     super.dispose();
   }
@@ -149,68 +147,77 @@ class _StateProviderState extends State<StateProvider> {
       final activeWidgets = this.activeWidgets;
       for (var id in activeWidgets.keys) {
         if (widget.subscribeTo != null && widget.subscribeTo!.isNotEmpty) {
-          if (!widget.subscribeTo!.keys.contains(id)) {
+          if (widget.subscribeTo?.keys.contains(id) == false) {
             continue;
           }
         }
         final componentInstance = activeWidgets[id];
-       
-        List<String>? subscribedKeys = widget.subscribeTo![id]?.map((keyEnum) => getStringFromEnum(keyEnum) ).toList() ?? [];
+        var subscribedKeys;
+        if (widget.subscribeTo?.keys.contains(id) == true) {
+          subscribedKeys = widget.subscribeTo![id];
+        } else {
+          subscribedKeys = KeysToSubscribe.values;
+        }
+        print('$subscribedKeys------- ${subscribedKeys.contains(KeysToSubscribe.Results.name)}');
         void subscriberMethod(changes) {
           void applyChanges() {
             final prevState = {..._controllersState};
 
-
             _controllersState[id] = SearchControllerState(
-              results: subscribedKeys.contains('results')
-                  ? changes['results']?.next
+              results: subscribedKeys.contains(KeysToSubscribe.Results)
+                  ? changes[KeysToSubscribe.Results.name]?.next
                   : null,
               aggregationData:
-                  subscribedKeys.contains('?aggregationData')
-                      ? changes['aggregationData']?.next
+                  subscribedKeys.contains(KeysToSubscribe.AggregationData)
+                      ? changes[KeysToSubscribe.AggregationData.name]?.next
                       : null,
-              requestStatus: subscribedKeys.contains('requestStatus')
-                  ? changes['requestStatus']?.next
+              requestStatus:
+                  subscribedKeys.contains(KeysToSubscribe.RequestStatus)
+                      ? changes[KeysToSubscribe.RequestStatus.name]?.next
+                      : null,
+              error: subscribedKeys.contains(KeysToSubscribe.Error)
+                  ? changes[KeysToSubscribe.Error.name]?.next
                   : null,
-              error: subscribedKeys.contains('error')
-                  ? changes['error']?.next
+              value: subscribedKeys.contains(KeysToSubscribe.Value)
+                  ? changes[KeysToSubscribe.Value.name]?.next
                   : null,
-              value: subscribedKeys.contains('value') 
-                  ? changes['value']?.next
+              query: subscribedKeys.contains(KeysToSubscribe.Query)
+                  ? changes[KeysToSubscribe.Query.name]?.next
                   : null,
-              query: subscribedKeys.contains('query')
-                  ? changes['query']?.next
+              dataField: subscribedKeys.contains(KeysToSubscribe.DataField)
+                  ? changes[KeysToSubscribe.DataField.name]?.next
                   : null,
-              dataField: subscribedKeys.contains('dataField')
-                  ? changes['dataField']?.next
+              size: subscribedKeys.contains(KeysToSubscribe.Size)
+                  ? changes[KeysToSubscribe.Size.name]?.next
                   : null,
-              size: subscribedKeys.contains('size')
-                  ? changes['size']?.next
+              from: subscribedKeys.contains(KeysToSubscribe.From)
+                  ? changes[KeysToSubscribe.From.name]?.next
                   : null,
-              from: subscribedKeys.contains('from')
-                  ? changes['from']?.next
+              fuzziness: subscribedKeys.contains(KeysToSubscribe.Fuzziness)
+                  ? changes[KeysToSubscribe.Fuzziness.name]?.next
                   : null,
-              fuzziness: subscribedKeys.contains('fuzziness')
-                  ? changes['fuzziness']?.next
+              includeFields:
+                  subscribedKeys.contains(KeysToSubscribe.IncludeFields)
+                      ? changes[KeysToSubscribe.IncludeFields.name]?.next
+                      : null,
+              excludeFields:
+                  subscribedKeys.contains(KeysToSubscribe.ExcludeFields)
+                      ? changes[KeysToSubscribe.ExcludeFields.name]?.next
+                      : null,
+              sortBy: subscribedKeys.contains(KeysToSubscribe.SortBy)
+                  ? changes[KeysToSubscribe.SortBy.name]?.next
                   : null,
-              includeFields: subscribedKeys.contains('includeFields')
-                  ? changes['includeFields']?.next
+              react: subscribedKeys.contains(KeysToSubscribe.React)
+                  ? changes[KeysToSubscribe.React.name]?.next
                   : null,
-              excludeFields: subscribedKeys.contains('excludeFields')
-                  ? changes['excludeFields']?.next
-                  : null,
-              sortBy: subscribedKeys.contains('sortBy')
-                  ? changes['sortBy']?.next
-                  : null,
-              react: subscribedKeys.contains('react')
-                  ? changes['react']?.next
-                  : null,
-              defaultQuery: subscribedKeys.contains('defaultQuery')
-                  ? changes['defaultQuery']?.next
-                  : null,
-              customQuery: subscribedKeys.contains('customQuery')
-                  ? changes['customQuery']?.next
-                  : null,
+              defaultQuery:
+                  subscribedKeys.contains(KeysToSubscribe.DefaultQuery)
+                      ? changes[KeysToSubscribe.DefaultQuery.name]?.next
+                      : null,
+              customQuery:
+                  subscribedKeys.contains(KeysToSubscribe.CustomQuery)
+                      ? changes[KeysToSubscribe.CustomQuery.name]?.next
+                      : null,
             );
 
             if (widget.onChange is Function) {
@@ -226,12 +233,14 @@ class _StateProviderState extends State<StateProvider> {
             applyChanges();
           }
         }
+
         _widgetSubscribers[id] = {
           "controller": componentInstance,
           "subscriberFunction": subscriberMethod,
         };
 
-        componentInstance?.subscribeToStateChanges(subscriberMethod, subscribedKeys);
+        componentInstance?.subscribeToStateChanges(
+            subscriberMethod, subscribedKeys);
       }
     } catch (e) {
       print('error $e');
