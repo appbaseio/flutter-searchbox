@@ -127,7 +127,7 @@ class Suggestion {
 }
 
 
-enum SubscribableKeys {
+enum KeysToSubscribe {
   Results,
   AggregationData,
   RequestStatus,
@@ -146,4 +146,52 @@ enum SubscribableKeys {
   CustomQuery,
   RequestPending,
   RecentSearches
+}
+
+extension KeysToSubscribeExtension on KeysToSubscribe {
+
+  String get name {
+    switch (this) {
+      case KeysToSubscribe.Results:
+        return 'results';
+      case KeysToSubscribe.AggregationData:
+        return 'aggregationData';
+      case KeysToSubscribe.RequestStatus:
+        return 'requestStatus';
+      case KeysToSubscribe.Error:
+        return 'error';    
+      case KeysToSubscribe.Value:
+        return 'value';              
+      case KeysToSubscribe.Query:
+        return 'query';         
+      case KeysToSubscribe.DataField:
+        return 'dataField';               
+      case KeysToSubscribe.Size:
+        return 'size';   
+      case KeysToSubscribe.From:
+        return 'from';   
+      case KeysToSubscribe.Fuzziness:
+        return 'fuzziness';     
+      case KeysToSubscribe.IncludeFields:
+        return 'includeFields';     
+      case KeysToSubscribe.ExcludeFields:
+        return 'excludeFields';     
+      case KeysToSubscribe.SortBy:
+        return 'sortBy';     
+      case KeysToSubscribe.React:
+        return 'react';     
+      case KeysToSubscribe.DefaultQuery:
+        return 'defaultQuery';     
+      case KeysToSubscribe.CustomQuery:
+        return 'customQuery';            
+      case KeysToSubscribe.CustomQuery:
+        return 'customQuery';    
+      case KeysToSubscribe.RequestPending:
+        return 'requestPending';    
+      case KeysToSubscribe.RecentSearches:
+        return 'recentSearches';                                                                                                           
+      default:
+        return "";
+    }
+  }
 }

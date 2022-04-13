@@ -922,8 +922,10 @@ class SearchController extends Base {
   /// -   `customQuery`
   ///
   subscribeToStateChanges(
-      SubscriptionFunction fn, List<String>? propertiesToSubscribe) {
-    this.stateChanges.subscribe(fn, propertiesToSubscribe);
+      SubscriptionFunction fn, List<KeysToSubscribe>? propertiesToSubscribe) {
+
+    final keysToSubscribeValues = propertiesToSubscribe?.map((item)=>item.name).toList();
+    this.stateChanges.subscribe(fn, keysToSubscribeValues);
   }
 
   /// It is recommended to unsubscribe the callback functions after the component has been unmounted.

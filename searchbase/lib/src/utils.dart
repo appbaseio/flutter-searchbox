@@ -260,6 +260,3 @@ bool isEqual(dynamic x, dynamic y) {
   return deepEq(x, y);
 }
 
-String getStringFromEnum(SubscribableKeys key){
- return key.name.toLowerCase();
-}
