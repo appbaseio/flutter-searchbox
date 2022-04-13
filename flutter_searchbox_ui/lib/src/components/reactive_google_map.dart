@@ -362,7 +362,7 @@ class ReactiveMapState extends State<ReactiveMap> {
     // subscribe to the results and aggregationData to update markers
     widget.searchController.subscribeToStateChanges((changes) {
       setMarkers();
-    }, ["results", "aggregationData"]);
+    }, [KeysToSubscribe.Results, KeysToSubscribe.AggregationData]);
     // trigger map query
     triggerQuery();
     super.initState();
@@ -806,8 +806,8 @@ class _ReactiveGoogleMapState extends State<ReactiveGoogleMap> {
 class ReactiveGoogleMap extends StatefulWidget {
   /// This property allows to define a list of properties of [SearchController] class which can trigger the re-build when any changes happen.
   ///
-  /// For example, if `subscribeTo` is defined as `['results']` then it'll only update the UI when results property would change.
-  final List<String>? subscribeTo;
+  /// For example, if `subscribeTo` is defined as `[KeysToSubscribe.Results]` then it'll only update the UI when results property would change.
+  final List<KeysToSubscribe>? subscribeTo;
 
   /// It can be used to prevent the default query execution at the time of initial build.
   ///
