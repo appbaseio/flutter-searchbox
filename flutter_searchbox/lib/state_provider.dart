@@ -142,7 +142,6 @@ class _StateProviderState extends State<StateProvider> {
   }
 
   void subscribeToProperties() {
-    print('subscripotion initiated');
     try {
       final activeWidgets = this.activeWidgets;
       for (var id in activeWidgets.keys) {
@@ -158,7 +157,7 @@ class _StateProviderState extends State<StateProvider> {
         } else {
           subscribedKeys = KeysToSubscribe.values;
         }
-        print('$subscribedKeys------- ${subscribedKeys.contains(KeysToSubscribe.Results.name)}');
+        
         void subscriberMethod(changes) {
           void applyChanges() {
             final prevState = {..._controllersState};
