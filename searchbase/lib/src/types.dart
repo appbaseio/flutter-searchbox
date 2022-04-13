@@ -125,3 +125,23 @@ class Suggestion {
         this.source != null && this.source!['_popular_suggestion'] == true;
   }
 }
+
+
+enum SubscribableKeys {
+  Results,
+  AggregationData,
+  RequestStatus,
+  Error,
+  Value,
+  Query,
+  DataField,
+  Size,
+  From,
+  Fuzziness,
+  IncludeFields,
+  ExcludeFields,
+  SortBy,
+  React,
+  DefaultQuery,
+  CustomQuery
+}

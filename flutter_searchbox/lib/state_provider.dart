@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_searchbox/flutter_searchbox.dart';
 import 'package:searchbase/searchbase.dart';
 
+String getStringFromEnum(SubscribableKeys key){
+ return key.name.toLowerCase();
+}
+
 class SearchControllerState {
   final Aggregations? aggregationData;
   final Results? results;
@@ -63,7 +67,7 @@ class StateProvider extends StatefulWidget {
   ///   ...
   /// )
   /// ```
-  final Map<String, List<String>>? subscribeTo;
+  final Map<String, List<SubscribableKeys>>? subscribeTo;
 
   /// Callback function,  is a callback function called when the search state changes
   /// and accepts the previous and next search state as arguments.
@@ -200,58 +204,60 @@ class _StateProviderState extends State<StateProvider> {
         //   });
         // }
         // initialization block ends
+        List<String>? subscribedKeys = widget.subscribeTo![id]?.map((keyEnum) => getStringFromEnum(keyEnum) ).toList() ?? [];
         componentInstance?.subscribeToStateChanges((changes) {
           void applyChanges() {
             final prevState = {..._controllersState};
 
+
             _controllersState[id] = SearchControllerState(
-              results: widget.subscribeTo![id]!.contains('results')
+              results: subscribedKeys.contains('results')
                   ? changes['results']?.next
                   : null,
               aggregationData:
-                  widget.subscribeTo![id]!.contains('aggregationData')
+                  subscribedKeys.contains('?aggregationData')
                       ? changes['aggregationData']?.next
                       : null,
-              requestStatus: widget.subscribeTo![id]!.contains('requestStatus')
+              requestStatus: subscribedKeys.contains('requestStatus')
                   ? changes['requestStatus']?.next
                   : null,
-              error: widget.subscribeTo![id]!.contains('error')
+              error: subscribedKeys.contains('error')
                   ? changes['error']?.next
                   : null,
-              value: widget.subscribeTo![id]!.contains('value') 
+              value: subscribedKeys.contains('value') 
                   ? changes['value']?.next
                   : null,
-              query: widget.subscribeTo![id]!.contains('query')
+              query: subscribedKeys.contains('query')
                   ? changes['query']?.next
                   : null,
-              dataField: widget.subscribeTo![id]!.contains('dataField')
+              dataField: subscribedKeys.contains('dataField')
                   ? changes['dataField']?.next
                   : null,
-              size: widget.subscribeTo![id]!.contains('size')
+              size: subscribedKeys.contains('size')
                   ? changes['size']?.next
                   : null,
-              from: widget.subscribeTo![id]!.contains('from')
+              from: subscribedKeys.contains('from')
                   ? changes['from']?.next
                   : null,
-              fuzziness: widget.subscribeTo![id]!.contains('fuzziness')
+              fuzziness: subscribedKeys.contains('fuzziness')
                   ? changes['fuzziness']?.next
                   : null,
-              includeFields: widget.subscribeTo![id]!.contains('includeFields')
+              includeFields: subscribedKeys.contains('includeFields')
                   ? changes['includeFields']?.next
                   : null,
-              excludeFields: widget.subscribeTo![id]!.contains('excludeFields')
+              excludeFields: subscribedKeys.contains('excludeFields')
                   ? changes['excludeFields']?.next
                   : null,
-              sortBy: widget.subscribeTo![id]!.contains('sortBy')
+              sortBy: subscribedKeys.contains('sortBy')
                   ? changes['sortBy']?.next
                   : null,
-              react: widget.subscribeTo![id]!.contains('react')
+              react: subscribedKeys.contains('react')
                   ? changes['react']?.next
                   : null,
-              defaultQuery: widget.subscribeTo![id]!.contains('defaultQuery')
+              defaultQuery: subscribedKeys.contains('defaultQuery')
                   ? changes['defaultQuery']?.next
                   : null,
-              customQuery: widget.subscribeTo![id]!.contains('customQuery')
+              customQuery: subscribedKeys.contains('customQuery')
                   ? changes['customQuery']?.next
                   : null,
             );
@@ -268,7 +274,7 @@ class _StateProviderState extends State<StateProvider> {
           } else {
             applyChanges();
           }
-        }, widget.subscribeTo![id] ?? []);
+        }, subscribedKeys);
       }
     } catch (e) {
       print('error $e');
