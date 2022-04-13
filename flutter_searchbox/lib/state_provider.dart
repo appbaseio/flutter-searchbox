@@ -5,7 +5,7 @@ import 'package:flutter_searchbox/flutter_searchbox.dart';
 import 'package:searchbase/searchbase.dart';
 
 String getStringFromEnum(SubscribableKeys key){
- return key.name.toLowerCase();
+ return '${key.name[0].toLowerCase()}${key.name.substring(1)}';
 }
 
 class SearchControllerState {
@@ -146,64 +146,7 @@ class _StateProviderState extends State<StateProvider> {
           }
         }
         final componentInstance = activeWidgets[id];
-        // // the block below is added to initialize the values
-        // // after that, subscription method takes charge to update values
-        // if (mounted) {
-        //   setState(() {
-        //     _controllersState[id] = SearchControllerState(
-        //       results: widget.subscribeTo![id]!.contains('results')
-        //           ? componentInstance!.results
-        //           : null,
-        //       aggregationData:
-        //           widget.subscribeTo![id]!.contains('aggregationData')
-        //               ? componentInstance!.aggregationData
-        //               : null,
-        //       requestStatus: widget.subscribeTo![id]!.contains('requestStatus')
-        //           ? componentInstance!.requestStatus
-        //           : null,
-        //       error: widget.subscribeTo![id]!.contains('error')
-        //           ? componentInstance!.error
-        //           : null,
-        //       value: widget.subscribeTo![id]!.contains('value')
-        //           ? componentInstance!.value
-        //           : null,
-        //       query: widget.subscribeTo![id]!.contains('query')
-        //           ? componentInstance!.query
-        //           : null,
-        //       dataField: widget.subscribeTo![id]!.contains('dataField')
-        //           ? componentInstance!.dataField
-        //           : null,
-        //       size: widget.subscribeTo![id]!.contains('size')
-        //           ? componentInstance!.size
-        //           : null,
-        //       from: widget.subscribeTo![id]!.contains('from')
-        //           ? componentInstance!.from
-        //           : null,
-        //       fuzziness: widget.subscribeTo![id]!.contains('fuzziness')
-        //           ? componentInstance!.fuzziness
-        //           : null,
-        //       includeFields: widget.subscribeTo![id]!.contains('includeFields')
-        //           ? componentInstance!.includeFields
-        //           : null,
-        //       excludeFields: widget.subscribeTo![id]!.contains('excludeFields')
-        //           ? componentInstance!.excludeFields
-        //           : null,
-        //       sortBy: widget.subscribeTo![id]!.contains('sortBy')
-        //           ? componentInstance!.sortBy
-        //           : null,
-        //       react: widget.subscribeTo![id]!.contains('react')
-        //           ? componentInstance!.react
-        //           : null,
-        //       defaultQuery: widget.subscribeTo![id]!.contains('defaultQuery')
-        //           ? componentInstance!.defaultQuery
-        //           : null,
-        //       customQuery: widget.subscribeTo![id]!.contains('customQuery')
-        //           ? componentInstance!.customQuery
-        //           : null,
-        //     );
-        //   });
-        // }
-        // initialization block ends
+       
         List<String>? subscribedKeys = widget.subscribeTo![id]?.map((keyEnum) => getStringFromEnum(keyEnum) ).toList() ?? [];
         componentInstance?.subscribeToStateChanges((changes) {
           void applyChanges() {

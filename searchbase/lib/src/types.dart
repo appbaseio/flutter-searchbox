@@ -143,5 +143,7 @@ enum SubscribableKeys {
   SortBy,
   React,
   DefaultQuery,
-  CustomQuery
+  CustomQuery,
+  RequestPending,
+  RecentSearches
 }
