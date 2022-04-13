@@ -109,13 +109,9 @@ class StateProvider extends StatefulWidget {
     this.build,
     Key? key,
   }) : super(key: key) {
-    if (subscribeTo == null) {
-      throw ("subscribeTo property is required.");
+    if (build == null && onChange == null) {
+      throw ("Atleast one, build or onChange prop is required.");
     }
-    if ((subscribeTo is Map) && subscribeTo!.isEmpty) {
-      throw ("subscribeTo property cannot be empty.");
-    }
-    
   }
 
   @override
