@@ -91,8 +91,8 @@ void main() {
   resultWidget.triggerDefaultQuery();
 
   resultWidget.subscribeToStateChanges((change) {
-    final results = change[KeysToSubscribe.Results.name]!.next;
-    final items = results.data?.map((i) {
+    final results = change.Results!.next;
+    final items = results!.data.map((i) {
       return """
     <div id=${i['_id']} class="result-set">
       <div class="image">
@@ -118,10 +118,10 @@ void main() {
   filterWidget.triggerDefaultQuery();
 
   filterWidget.subscribeToStateChanges((change) {
-    final aggregations = change[KeysToSubscribe.AggregationData.name]!.next;
+    final aggregations = change.AggregationData!.next;
     final container = document.getElementById('language-filter');
     container!.setInnerHtml('');
-    aggregations.data.forEach((i) {
+    aggregations?.data?.forEach((i) {
       if (i['_key'] != null) {
         final checkbox = document.createElement('input');
         checkbox.setAttribute('type', 'checkbox');
