@@ -268,7 +268,7 @@ class _SelectedFiltersState extends State<SelectedFilters> {
         // initialization block ends
         componentInstance?.subscribeToStateChanges((changes) {
           void applyChanges() {
-            final currentValue = changes[KeysToSubscribe.Value.name]?.next;
+            final currentValue = changes.Value?.next;
             if (!isNullEmptyOrFalse(currentValue) &&
                 (widget.hideDefaultValues == true
                     ? !isEqual(currentValue, widget.defaultValues![id])
