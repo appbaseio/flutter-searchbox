@@ -76,8 +76,8 @@ class StateProvider extends StatefulWidget {
   ///   ...
   /// )
   /// ```
-  final void Function(Map<String, SearchControllerState>,
-      Map<String, SearchControllerState>)? onChange;
+  final void Function(Map<String, SearchControllerState> nextState,
+      {Map<String, SearchControllerState>? prevState})? onChange;
 
   /// It is used for rendering a custom UI based on updated state
   /// For example,
@@ -96,7 +96,8 @@ class StateProvider extends StatefulWidget {
   ///   ...
   /// )
   /// ```
-  final Widget Function(Map<String, SearchControllerState>)? build;
+  final Widget Function(Map<String, SearchControllerState>,
+      {Map<String, SearchControllerState>? prevState})? build;
 
   StateProvider({
     this.subscribeTo,
@@ -326,7 +327,8 @@ class _StateProviderState extends State<StateProvider> {
             );
 
             if (widget.onChange is Function) {
-              widget.onChange!(_controllersState, _prevControllersState);
+              widget.onChange!(_controllersState,
+                  prevState: _prevControllersState);
             }
           }
 
