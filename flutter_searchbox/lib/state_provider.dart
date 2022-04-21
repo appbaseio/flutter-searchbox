@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_searchbox/flutter_searchbox.dart';
 import 'package:searchbase/searchbase.dart';
 
+/// It stores the state of the SearchController at any time.
 class SearchControllerState {
   final Aggregations? aggregationData;
   final Results? results;
@@ -103,9 +104,8 @@ class StateProvider extends StatefulWidget {
     this.build,
     Key? key,
   }) : super(key: key) {
-    if (build == null && onChange == null) {
-      throw ("Atleast one, build or onChange prop is required.");
-    }
+    assert(build != null || onChange != null,
+        "Atleast one, build or onChange prop is required.");
   }
 
   @override
