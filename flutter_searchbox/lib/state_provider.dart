@@ -1,9 +1,6 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_searchbox/flutter_searchbox.dart';
 import 'package:searchbase/searchbase.dart';
-
 
 class SearchControllerState {
   final Aggregations? aggregationData;
@@ -157,66 +154,65 @@ class _StateProviderState extends State<StateProvider> {
         } else {
           subscribedKeys = KeysToSubscribe.values;
         }
-        
-        void subscriberMethod(changes) {
+
+        void subscriberMethod(ChangesController changes) {
           void applyChanges() {
             final prevState = {..._controllersState};
 
             _controllersState[id] = SearchControllerState(
               results: subscribedKeys.contains(KeysToSubscribe.Results)
-                  ? changes[KeysToSubscribe.Results.name]?.next
+                  ? changes.Results?.next
                   : null,
               aggregationData:
                   subscribedKeys.contains(KeysToSubscribe.AggregationData)
-                      ? changes[KeysToSubscribe.AggregationData.name]?.next
+                      ? changes.AggregationData?.next
                       : null,
               requestStatus:
                   subscribedKeys.contains(KeysToSubscribe.RequestStatus)
-                      ? changes[KeysToSubscribe.RequestStatus.name]?.next
+                      ? changes.RequestStatus?.next
                       : null,
               error: subscribedKeys.contains(KeysToSubscribe.Error)
-                  ? changes[KeysToSubscribe.Error.name]?.next
+                  ? changes.Error?.next
                   : null,
               value: subscribedKeys.contains(KeysToSubscribe.Value)
-                  ? changes[KeysToSubscribe.Value.name]?.next
+                  ? changes.Value?.next
                   : null,
               query: subscribedKeys.contains(KeysToSubscribe.Query)
-                  ? changes[KeysToSubscribe.Query.name]?.next
+                  ? changes.Query?.next
                   : null,
               dataField: subscribedKeys.contains(KeysToSubscribe.DataField)
-                  ? changes[KeysToSubscribe.DataField.name]?.next
+                  ? changes.DataField?.next
                   : null,
               size: subscribedKeys.contains(KeysToSubscribe.Size)
-                  ? changes[KeysToSubscribe.Size.name]?.next
+                  ? changes.Size?.next
                   : null,
               from: subscribedKeys.contains(KeysToSubscribe.From)
-                  ? changes[KeysToSubscribe.From.name]?.next
+                  ? changes.From?.next
                   : null,
               fuzziness: subscribedKeys.contains(KeysToSubscribe.Fuzziness)
-                  ? changes[KeysToSubscribe.Fuzziness.name]?.next
+                  ? changes.Fuzziness?.next
                   : null,
               includeFields:
                   subscribedKeys.contains(KeysToSubscribe.IncludeFields)
-                      ? changes[KeysToSubscribe.IncludeFields.name]?.next
+                      ? changes.IncludeFields?.next
                       : null,
               excludeFields:
                   subscribedKeys.contains(KeysToSubscribe.ExcludeFields)
-                      ? changes[KeysToSubscribe.ExcludeFields.name]?.next
+                      ? changes.ExcludeFields?.next
                       : null,
               sortBy: subscribedKeys.contains(KeysToSubscribe.SortBy)
-                  ? changes[KeysToSubscribe.SortBy.name]?.next
+                  ? changes.SortBy?.next
                   : null,
               react: subscribedKeys.contains(KeysToSubscribe.React)
-                  ? changes[KeysToSubscribe.React.name]?.next
+                  ? changes.React?.next
                   : null,
               defaultQuery:
                   subscribedKeys.contains(KeysToSubscribe.DefaultQuery)
-                      ? changes[KeysToSubscribe.DefaultQuery.name]?.next
+                      ? changes.DefaultQuery?.next
                       : null,
-              customQuery:
-                  subscribedKeys.contains(KeysToSubscribe.CustomQuery)
-                      ? changes[KeysToSubscribe.CustomQuery.name]?.next
-                      : null,
+              customQuery: subscribedKeys.contains(KeysToSubscribe.CustomQuery)
+                  ? changes.CustomQuery?.next
+                  : null,
             );
 
             if (widget.onChange is Function) {
@@ -251,6 +247,6 @@ class _StateProviderState extends State<StateProvider> {
     if (widget.build != null) {
       return widget.build!(_controllersState);
     }
-    return SizedBox.shrink();
+    return Container();
   }
 }

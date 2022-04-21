@@ -1,4 +1,5 @@
 library flutter_searchbox;
+
 export './state_provider.dart';
 
 import 'dart:async';
@@ -198,7 +199,7 @@ class _SearchWidgetListenerState<S, ViewModel>
     super.dispose();
   }
 
-  void subscribeToState(Map<String, Changes> changes) {
+  void subscribeToState(ChangesController changes) {
     if (mounted) {
       // Trigger the rebuild on state changes
       setState(() {});
