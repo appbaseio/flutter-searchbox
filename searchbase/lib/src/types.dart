@@ -25,6 +25,9 @@ class ChangesController {
   ReactTypeChanges? React;
   DefaultQueryTypeChanges? DefaultQuery;
   DefaultQueryTypeChanges? CustomQuery;
+  BooleanTypeChanges? RequestPending;
+  RecentSearchesChanges? RecentSearches;
+  DynamicMapTypeChanges? After;
 
   ChangesController(KeysToSubscribe key, dynamic prev, dynamic next) {
     if (key == KeysToSubscribe.Results) {}
@@ -77,10 +80,40 @@ class ChangesController {
       case KeysToSubscribe.CustomQuery:
         this.CustomQuery = DefaultQueryTypeChanges(prev, next);
         break;
+      case KeysToSubscribe.RequestPending:
+        this.RequestPending = BooleanTypeChanges(prev, next);
+        break;
+      case KeysToSubscribe.RecentSearches:
+        this.RecentSearches = RecentSearchesChanges(prev, next);
+        break;
+      case KeysToSubscribe.After:
+        this.After = DynamicMapTypeChanges(prev, next);
+        break;
       default:
         break;
     }
   }
+}
+
+/// Represents the Map<dynamic> type change object with `prev` and `next` values.
+class DynamicMapTypeChanges {
+  Map? prev;
+  Map? next;
+  DynamicMapTypeChanges(this.prev, this.next);
+}
+
+/// Represents the RecentSeaches change object with `prev` and `next` values.
+class RecentSearchesChanges {
+  bool? prev;
+  bool? next;
+  RecentSearchesChanges(this.prev, this.next);
+}
+
+/// Represents the bool type change object with `prev` and `next` values.
+class BooleanTypeChanges {
+  bool? prev;
+  bool? next;
+  BooleanTypeChanges(this.prev, this.next);
 }
 
 /// Represents the DefaultQuery type change object with `prev` and `next` values.
