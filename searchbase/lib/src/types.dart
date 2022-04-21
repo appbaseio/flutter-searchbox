@@ -1,6 +1,143 @@
+import 'results.dart';
+import 'aggregations.dart';
+import 'constants.dart';
+import 'searchcontroller.dart';
+
 typedef TransformRequest = Future<Object> Function(Map requestOptions);
 typedef TransformResponse = Future Function(dynamic response);
-typedef SubscriptionFunction = Function(Map<String, Changes> change);
+typedef SubscriptionFunction = Function(ChangesController change);
+
+// controller class for state changes
+class ChangesController {
+  ResultsChanges? Results;
+  AggregationDataChanges? AggregationData;
+  RequestStatusChanges? RequestStatus;
+  Changes? Error;
+  Changes? Value;
+  Changes? Query;
+  Changes? DataField;
+  IntegerChanges? Size;
+  IntegerChanges? From;
+  Changes? Fuzziness;
+  StringListChanges? IncludeFields;
+  StringListChanges? ExcludeFields;
+  SortTypeChanges? SortBy;
+  ReactTypeChanges? React;
+  DefaultQueryTypeChanges? DefaultQuery;
+  DefaultQueryTypeChanges? CustomQuery;
+
+  ChangesController(KeysToSubscribe key, dynamic prev, dynamic next) {
+    if (key == KeysToSubscribe.Results) {}
+    switch (key) {
+      case KeysToSubscribe.Results:
+        this.Results = ResultsChanges(prev, next);
+        break;
+      case KeysToSubscribe.AggregationData:
+        this.AggregationData = AggregationDataChanges(prev, next);
+        break;
+      case KeysToSubscribe.RequestStatus:
+        this.RequestStatus = RequestStatusChanges(prev, next);
+        break;
+      case KeysToSubscribe.Error:
+        this.Error = Changes(prev, next);
+        break;
+      case KeysToSubscribe.Value:
+        this.Value = Changes(prev, next);
+        break;
+      case KeysToSubscribe.Query:
+        this.Query = Changes(prev, next);
+        break;
+      case KeysToSubscribe.DataField:
+        this.DataField = Changes(prev, next);
+        break;
+      case KeysToSubscribe.Size:
+        this.Size = IntegerChanges(prev, next);
+        break;
+      case KeysToSubscribe.From:
+        this.From = IntegerChanges(prev, next);
+        break;
+      case KeysToSubscribe.Fuzziness:
+        this.Fuzziness = Changes(prev, next);
+        break;
+      case KeysToSubscribe.IncludeFields:
+        this.IncludeFields = StringListChanges(prev, next);
+        break;
+      case KeysToSubscribe.ExcludeFields:
+        this.ExcludeFields = StringListChanges(prev, next);
+        break;
+      case KeysToSubscribe.SortBy:
+        this.SortBy = SortTypeChanges(prev, next);
+        break;
+      case KeysToSubscribe.React:
+        this.React = ReactTypeChanges(prev, next);
+        break;
+      case KeysToSubscribe.DefaultQuery:
+        this.DefaultQuery = DefaultQueryTypeChanges(prev, next);
+        break;
+      case KeysToSubscribe.CustomQuery:
+        this.CustomQuery = DefaultQueryTypeChanges(prev, next);
+        break;
+      default:
+        break;
+    }
+  }
+}
+
+/// Represents the DefaultQuery type change object with `prev` and `next` values.
+class DefaultQueryTypeChanges {
+  Map Function(SearchController searchController)? prev;
+  Map Function(SearchController searchController)? next;
+  DefaultQueryTypeChanges(this.prev, this.next);
+}
+
+/// Represents the React type change object with `prev` and `next` values.
+class ReactTypeChanges {
+  Map<String, dynamic>? prev;
+  Map<String, dynamic>? next;
+  ReactTypeChanges(this.prev, this.next);
+}
+
+/// Represents the SortType type change object with `prev` and `next` values.
+class SortTypeChanges {
+  SortType? prev;
+  SortType? next;
+  SortTypeChanges(this.prev, this.next);
+}
+
+/// Represents the List<String> type change object with `prev` and `next` values.
+class StringListChanges {
+  List<String>? prev;
+  List<String>? next;
+  StringListChanges(this.prev, this.next);
+}
+
+/// Represents the Integer type change object with `prev` and `next` values.
+class IntegerChanges {
+  int? prev;
+  int? next;
+  IntegerChanges(this.prev, this.next);
+}
+
+/// Represents the RequestStatus change object with `prev` and `next` values.
+class RequestStatusChanges {
+  RequestStatus? prev;
+  RequestStatus? next;
+  RequestStatusChanges(this.prev, this.next);
+}
+
+/// Represents the AggregationData change object with `prev` and `next` values.
+class AggregationDataChanges {
+  Aggregations? prev;
+  Aggregations? next;
+  AggregationDataChanges(this.prev, this.next);
+}
+
+/// Represents the Results change object with `prev` and `next` values.
+class ResultsChanges {
+  Results? prev;
+  Results? next;
+  ResultsChanges(this.prev, this.next);
+}
 
 /// Represents the change object with `prev` and `next` values.
 class Changes {
@@ -281,7 +418,14 @@ enum KeysToSubscribe {
   RequestPending,
 
   /// A list of recent searches as suggestions.
-  RecentSearches
+  RecentSearches,
+
+  /// This property can be used to implement the pagination for `aggregations`.
+  ///
+  /// We use the [composite aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-composite-aggregation.html) of `Elasticsearch` to execute the aggregations' query,
+  /// the response of composite aggregations includes a key named `after_key` which can be used to fetch the next set of aggregations for the same query.
+  /// You can read more about the pagination for composite aggregations at [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-composite-aggregation.html#_pagination).
+  After
 }
 
 extension KeysToSubscribeExtension on KeysToSubscribe {
@@ -325,6 +469,8 @@ extension KeysToSubscribeExtension on KeysToSubscribe {
         return 'requestPending';
       case KeysToSubscribe.RecentSearches:
         return 'recentSearches';
+      case KeysToSubscribe.After:
+        return 'after';
       default:
         return "";
     }
