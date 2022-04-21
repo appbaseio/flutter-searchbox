@@ -30,7 +30,6 @@ class ChangesController {
   DynamicMapTypeChanges? After;
 
   ChangesController(KeysToSubscribe key, dynamic prev, dynamic next) {
-    if (key == KeysToSubscribe.Results) {}
     switch (key) {
       case KeysToSubscribe.Results:
         this.Results = ResultsChanges(prev, next);
