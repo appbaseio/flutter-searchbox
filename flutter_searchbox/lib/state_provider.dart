@@ -114,7 +114,7 @@ class StateProvider extends StatefulWidget {
 
 class _StateProviderState extends State<StateProvider> {
   final Map<String, SearchControllerState> _controllersState = {};
-  // _widgetSubscribers will be used for unsubscrbing in destroy lifecycle
+  // _widgetSubscribers will be used for unsubscribing in destroy lifecycle
   final Map<String, Map<String, dynamic>> _widgetSubscribers = {};
 
   @override
