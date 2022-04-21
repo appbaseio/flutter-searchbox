@@ -70,7 +70,7 @@ class StateProvider extends StatefulWidget {
   /// ```dart
   /// StateProvider(
   ///   ...
-  ///   onChange: (prevState, nextState) {
+  ///   onChange: (nextState, prevState) {
   ///         // do something here
   ///     },
   ///   ...
