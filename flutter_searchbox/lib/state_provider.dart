@@ -70,6 +70,7 @@ class SearchControllerState {
 ///    return Text("results" + "empty");
 ///  },
 /// )
+/// ```dart
 class StateProvider extends StatefulWidget {
   /// A map of widget ids and list of properties to subscribe to.
   /// [Optional]
