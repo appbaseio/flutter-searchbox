@@ -247,9 +247,6 @@ class _StateProviderState extends State<StateProvider> {
     if (widget.build != null) {
       return widget.build!(_controllersState);
     }
-    return Container(
-      height: 0.0,
-      width: 0.0,
-    );
+    return SizedBox.shrink();
   }
 }
