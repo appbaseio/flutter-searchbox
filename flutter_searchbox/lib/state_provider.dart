@@ -155,6 +155,72 @@ class _StateProviderState extends State<StateProvider> {
           subscribedKeys = KeysToSubscribe.values;
         }
 
+        /* hydrating the initial state, 
+        handles an edge case like when StateProvider is used in a drawer */
+        if (mounted) {
+          setState(
+            () {
+              _controllersState[id] = SearchControllerState(
+                results: subscribedKeys.contains(KeysToSubscribe.Results)
+                    ? componentInstance!.results
+                    : null,
+                aggregationData:
+                    subscribedKeys.contains(KeysToSubscribe.AggregationData)
+                        ? componentInstance!.aggregationData
+                        : null,
+                requestStatus:
+                    subscribedKeys.contains(KeysToSubscribe.RequestStatus)
+                        ? componentInstance!.requestStatus
+                        : null,
+                error: subscribedKeys.contains(KeysToSubscribe.Error)
+                    ? componentInstance!.error
+                    : null,
+                value: subscribedKeys.contains(KeysToSubscribe.Value)
+                    ? componentInstance!.value
+                    : null,
+                query: subscribedKeys.contains(KeysToSubscribe.Query)
+                    ? componentInstance!.query
+                    : null,
+                dataField: subscribedKeys.contains(KeysToSubscribe.DataField)
+                    ? componentInstance!.dataField
+                    : null,
+                size: subscribedKeys.contains(KeysToSubscribe.Size)
+                    ? componentInstance!.size
+                    : null,
+                from: subscribedKeys.contains(KeysToSubscribe.From)
+                    ? componentInstance!.from
+                    : null,
+                fuzziness: subscribedKeys.contains(KeysToSubscribe.Fuzziness)
+                    ? componentInstance!.fuzziness
+                    : null,
+                includeFields:
+                    subscribedKeys.contains(KeysToSubscribe.IncludeFields)
+                        ? componentInstance!.includeFields
+                        : null,
+                excludeFields:
+                    subscribedKeys.contains(KeysToSubscribe.ExcludeFields)
+                        ? componentInstance!.excludeFields
+                        : null,
+                sortBy: subscribedKeys.contains(KeysToSubscribe.SortBy)
+                    ? componentInstance!.sortBy
+                    : null,
+                react: subscribedKeys.contains(KeysToSubscribe.React)
+                    ? componentInstance!.react
+                    : null,
+                defaultQuery:
+                    subscribedKeys.contains(KeysToSubscribe.DefaultQuery)
+                        ? componentInstance!.defaultQuery
+                        : null,
+                customQuery:
+                    subscribedKeys.contains(KeysToSubscribe.CustomQuery)
+                        ? componentInstance!.customQuery
+                        : null,
+              );
+            },
+          );
+        }
+
+        /* subscriberMethod to handle state changes */
         void subscriberMethod(ChangesController changes) {
           void applyChanges() {
             final prevState = {..._controllersState};
