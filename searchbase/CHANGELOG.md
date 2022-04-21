@@ -1,3 +1,24 @@
+## 3.0.0
+
+- Add support for KeysToSuscribe enum.
+- Add support for ChangesController class
+- Breaking Change
+    - `subscribeToStateChanges()` now accepts array of enums (`KeysToSubscribe`) for properties to subscribe, instead of hard-coded strings.
+        Also, the subscription callback function receives a `ChangesController` class argument instead of `Changes` type.
+        - **before**
+        ```dart
+            widgetInstance.subscribeToStateChanges((Changes change){
+                print('${changes['results']!.next}');
+            }, ['results']);
+        ```
+        - **after**
+        ```dart
+            widgetInstance.subscribeToStateChanges((ChangesController change){
+                print('${changes.Results!.next}');
+            }, [KeysToSubscribe.Results]);
+        ```        
+    > Refer to docs to see the `KeysToSubscribe` enum defined under *types.dart*
+
 ## 2.2.4
 
 - Fix callbacks for change events
