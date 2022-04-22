@@ -91,8 +91,8 @@ void main() {
   resultWidget.triggerDefaultQuery();
 
   resultWidget.subscribeToStateChanges((change) {
-    final results = change['results']!.next;
-    final items = results.data?.map((i) {
+    final results = change.Results!.next;
+    final items = results!.data.map((i) {
       return """
     <div id=${i['_id']} class="result-set">
       <div class="image">
@@ -112,16 +112,16 @@ void main() {
           ..allowHtml5()
           ..allowElement('img',
               attributes: ['src'], uriPolicy: DefaultUriPolicy()));
-  }, ['results']);
+  }, [KeysToSubscribe.Results]);
 
   // Fetch initial filter options
   filterWidget.triggerDefaultQuery();
 
   filterWidget.subscribeToStateChanges((change) {
-    final aggregations = change['aggregationData']!.next;
+    final aggregations = change.AggregationData!.next;
     final container = document.getElementById('language-filter');
     container!.setInnerHtml('');
-    aggregations.data.forEach((i) {
+    aggregations?.data?.forEach((i) {
       if (i['_key'] != null) {
         final checkbox = document.createElement('input');
         checkbox.setAttribute('type', 'checkbox');
@@ -148,11 +148,11 @@ void main() {
         container.append(div);
       }
     });
-  }, ['aggregationData']);
+  }, [KeysToSubscribe.AggregationData]);
 
   searchController.subscribeToStateChanges((change) {
     print('Track State Updates');
     print('Search Suggestions');
     window.console.log(searchController.suggestions);
-  }, ['results']);
+  }, [KeysToSubscribe.Results]);
 }

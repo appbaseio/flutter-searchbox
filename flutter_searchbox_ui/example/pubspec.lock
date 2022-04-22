@@ -93,9 +93,9 @@ packages:
   flutter_searchbox:
     dependency: "direct main"
     description:
-      name: flutter_searchbox
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../../flutter_searchbox"
+      relative: true
+    source: path
     version: "2.2.4-nullsafety"
   flutter_searchbox_ui:
     dependency: "direct main"
@@ -222,10 +222,10 @@ packages:
   searchbase:
     dependency: "direct main"
     description:
-      name: searchbase
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.2.4"
+      path: "../../searchbase"
+      relative: true
+    source: path
+    version: "3.0.0"
   sky_engine:
     dependency: transitive
     description: flutter

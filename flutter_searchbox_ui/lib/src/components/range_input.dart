@@ -30,8 +30,8 @@ class RangeLabelsType {
 class RangeInput extends StatefulWidget {
   /// This property allows to define a list of properties of [SearchController] class which can trigger the re-build when any changes happen.
   ///
-  /// For example, if `subscribeTo` is defined as `['results']` then it'll only update the UI when results property would change.
-  final List<String>? subscribeTo;
+  /// For example, if `subscribeTo` is defined as `[KeysToSubscribe.Results]` then it'll only update the UI when results property would change.
+  final List<KeysToSubscribe>? subscribeTo;
 
   /// It can be used to prevent state updates.
   ///

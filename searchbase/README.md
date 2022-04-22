@@ -47,7 +47,7 @@ void main() {
 
   // Build DOM when search results update
   searchController.subscribeToStateChanges((change) {
-		final results = change['results'].next;
+		final results = change.Results!.next;
 		final resultsElement = querySelector('#results');
 		resultsElement.innerHTML = '';
 		results.data.forEach((element) {
@@ -57,7 +57,7 @@ void main() {
 			resultsElement.append(node);
 		});
 	},
-	['results'],
+	[KeysToSubscribe.Results],
  );
 
  // Fetch the default results at initial load
@@ -173,7 +173,7 @@ void main() {
 
   // subscribe to `results` property to update re-build result list when update happens
   resultWidget.subscribeToStateChanges((change) {
-    final results = change['results'].next;
+    final results = change.Results!.next;
     final items = results.data?.map((i) {
       return """
     <div id=${i['_id']} class="result-set">
@@ -195,14 +195,14 @@ void main() {
           ..allowHtml5()
           ..allowElement('img',
               attributes: ['src'], uriPolicy: new DefaultUriPolicy()));
-  }, ['results']);
+  }, [KeysToSubscribe.Results]);
 
   // Fetch initial filter options
   filterWidget.triggerDefaultQuery();
 
   // subscribe to updates in `aggregationData` property so filter options can change based on search
   filterWidget.subscribeToStateChanges((change) {
-    final aggregations = change['aggregationData'].next;
+    final aggregations = change.AggregationData!.next;
     final container = document.getElementById('language-filter');
     container.setInnerHtml('');
     aggregations.data.forEach((i) {
@@ -233,12 +233,12 @@ void main() {
         container.append(div);
       }
     });
-  }, ['aggregationData']);
+  }, [KeysToSubscribe.AggregationData]);
 
   searchController.subscribeToStateChanges((change) {
     print('Track State Updates');
     print(change);
-  }, ['results']);
+  }, [KeysToSubscribe.Results]);
 }
 
 class DefaultUriPolicy implements UriPolicy {
