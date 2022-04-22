@@ -12,8 +12,8 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_searchbox: ^2.3.1-without-speech
-  searchbase: ^2.2.2
+  flutter_searchbox: ^3.0.0-without-speech
+  searchbase: ^3.0.0
 ```
 
 2. Install it

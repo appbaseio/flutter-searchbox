@@ -259,3 +259,4 @@ bool isEqual(dynamic x, dynamic y) {
   Function deepEq = const DeepCollectionEquality().equals;
   return deepEq(x, y);
 }
+

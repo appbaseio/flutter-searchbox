@@ -45,7 +45,7 @@ class BuildOptions {
 ///    - displaying all the user selected facet filters together in the main view area for better accessibility.
 class SelectedFilters extends StatefulWidget {
   /// A list of component ids to subscribe to.
-  /// [Optional]
+  ///
   /// This property allows users to select the search contollerer for which
   /// they want to display the filter value.
   /// For example,
@@ -243,7 +243,6 @@ class _SelectedFiltersState extends State<SelectedFilters> {
   void setSelectedFilters() {
     try {
       final activeWidgets = this.activeWidgets;
-
       for (var id in activeWidgets.keys) {
         if (widget.subscribeTo != null && widget.subscribeTo!.isNotEmpty) {
           if (!widget.subscribeTo!.contains(id)) {
@@ -256,11 +255,7 @@ class _SelectedFiltersState extends State<SelectedFilters> {
         if (mounted) {
           setState(() {
             final currentValue = componentInstance!.value;
-            if (currentValue != "" &&
-                currentValue != null &&
-                ((currentValue is Map || currentValue is List)
-                    ? currentValue.isNotEmpty
-                    : false) &&
+            if (!isNullEmptyOrFalse(currentValue) &&
                 (widget.hideDefaultValues == true
                     ? !isEqual(currentValue, widget.defaultValues![id])
                     : true)) {
@@ -273,12 +268,8 @@ class _SelectedFiltersState extends State<SelectedFilters> {
         // initialization block ends
         componentInstance?.subscribeToStateChanges((changes) {
           void applyChanges() {
-            final currentValue = changes['value']?.next;
-            if (currentValue != "" &&
-                currentValue != null &&
-                ((currentValue is Map || currentValue is List)
-                    ? currentValue.isNotEmpty
-                    : false) &&
+            final currentValue = changes.Value?.next;
+            if (!isNullEmptyOrFalse(currentValue) &&
                 (widget.hideDefaultValues == true
                     ? !isEqual(currentValue, widget.defaultValues![id])
                     : true)) {
@@ -295,7 +286,7 @@ class _SelectedFiltersState extends State<SelectedFilters> {
           } else {
             applyChanges();
           }
-        }, ["value"]);
+        }, [KeysToSubscribe.Value]);
       }
     } catch (e) {
       print('error $e');

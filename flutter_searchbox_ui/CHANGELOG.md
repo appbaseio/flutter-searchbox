@@ -1,3 +1,21 @@
+## [1.1.0] - 21-04-2022
+
+- Breaking changes as per `searchbase: 3.0.0` & `flutter_searchbox: 3.0.0`
+  - `RangeInput()`'s subscribeTo property accepts a list of enums(KeysToSubscribe) instead of List<String>.
+    - **before**
+      ```dart
+        RangeInput(
+          subscribeTo: ['results', 'aggregationData']
+        )
+      ```
+    - **after**
+      `dart RangeInput( subscribeTo: [KeysToSubscribe.Results, KeysToSubscribe.AggregationData] ) `
+      > The same applies for `ReactiveGoogleMap()` widget.
+
+## [1.0.20-alpha] - 16-02-2022
+
+- Allow strings and bool type in SelectedFilters
+
 ## [1.0.19-alpha] - 08-012-2022
 
 - Fix type errors

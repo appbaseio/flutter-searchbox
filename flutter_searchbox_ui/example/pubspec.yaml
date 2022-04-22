@@ -25,8 +25,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_searchbox: ^2.2.4-nullsafety
-  searchbase: ^2.2.4
+  flutter_searchbox: 3.0.0
+  searchbase: 3.0.0
   flutter_searchbox_ui:
     path: ./../
 

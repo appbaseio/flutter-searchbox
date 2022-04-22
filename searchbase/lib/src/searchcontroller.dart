@@ -619,7 +619,7 @@ class SearchController extends Base {
   void setDataField(dynamic dataField, {Options? options}) {
     final prev = this.dataField;
     this.dataField = dataField;
-    this._applyOptions(options, 'dataField', prev, dataField);
+    this._applyOptions(options, KeysToSubscribe.DataField, prev, dataField);
   }
 
   /// can be used to set the `value` property
@@ -640,49 +640,52 @@ class SearchController extends Base {
   void setSize(int size, {Options? options}) {
     final prev = this.size;
     this.size = size;
-    this._applyOptions(options, 'size', prev, this.size);
+    this._applyOptions(options, KeysToSubscribe.Size, prev, this.size);
   }
 
   /// sets the `from` property that is helpful to implement pagination
   void setFrom(int from, {Options? options}) {
     final prev = this.from;
     this.from = from;
-    this._applyOptions(options, 'from', prev, this.from);
+    this._applyOptions(options, KeysToSubscribe.From, prev, this.from);
   }
 
   /// sets the `fuzziness` property
   void setFuzziness(dynamic fuzziness, {Options? options}) {
     final prev = this.fuzziness;
     this.fuzziness = fuzziness;
-    this._applyOptions(options, 'fuzziness', prev, this.fuzziness);
+    this._applyOptions(
+        options, KeysToSubscribe.Fuzziness, prev, this.fuzziness);
   }
 
   /// can be used to set the `includeFields` property
   void setIncludeFields(List<String> includeFields, {Options? options}) {
     final prev = this.includeFields;
     this.includeFields = includeFields;
-    this._applyOptions(options, 'includeFields', prev, includeFields);
+    this._applyOptions(
+        options, KeysToSubscribe.IncludeFields, prev, includeFields);
   }
 
   /// can be used to set the `excludeFields` property
   void setExcludeFields(List<String> excludeFields, {Options? options}) {
     final prev = this.excludeFields;
     this.excludeFields = excludeFields;
-    this._applyOptions(options, 'excludeFields', prev, excludeFields);
+    this._applyOptions(
+        options, KeysToSubscribe.ExcludeFields, prev, excludeFields);
   }
 
   /// to set `soryBy` property
   void setSortBy(SortType sortBy, {Options? options}) {
     final prev = this.sortBy;
     this.sortBy = sortBy;
-    this._applyOptions(options, 'sortBy', prev, sortBy);
+    this._applyOptions(options, KeysToSubscribe.SortBy, prev, sortBy);
   }
 
   /// to update `react` property
   void setReact(Map<String, dynamic> react, {Options? options}) {
     final prev = this.react;
     this.react = react;
-    this._applyOptions(options, 'react', prev, react);
+    this._applyOptions(options, KeysToSubscribe.React, prev, react);
   }
 
   /// to update `defaultQuery` property
@@ -691,7 +694,8 @@ class SearchController extends Base {
       {Options? options}) {
     final prev = this.defaultQuery;
     this.defaultQuery = defaultQuery;
-    this._applyOptions(options, 'defaultQuery', prev, defaultQuery);
+    this._applyOptions(
+        options, KeysToSubscribe.DefaultQuery, prev, defaultQuery);
   }
 
   /// sets the `customQuery` property
@@ -700,7 +704,7 @@ class SearchController extends Base {
       {Options? options}) {
     final prev = this.customQuery;
     this.customQuery = customQuery;
-    this._applyOptions(options, 'customQuery', prev, customQuery);
+    this._applyOptions(options, KeysToSubscribe.CustomQuery, prev, customQuery);
   }
 
   /// can be used to set the `after` property, which is useful while implementing pagination with [QueryType.term] type of widgets
@@ -708,7 +712,7 @@ class SearchController extends Base {
     final prev = this.after;
     this.after = after;
     this.aggregationData.setAfterKey(after);
-    this._applyOptions(options, 'after', prev, after);
+    this._applyOptions(options, KeysToSubscribe.After, prev, after);
   }
 
   /// to record click analytics of a search request.
@@ -760,7 +764,7 @@ class SearchController extends Base {
         }
         this._setRequestStatus(RequestStatus.INACTIVE, options: options);
         this._applyOptions(new Options(stateChanges: options?.stateChanges),
-            'results', prev, this.results);
+            KeysToSubscribe.Results, prev, this.results);
       }
 
       if ((this.type == null || this.type == QueryType.search) &&
@@ -860,7 +864,7 @@ class SearchController extends Base {
               componentInstance.results.setRaw(rawResults);
               componentInstance._applyOptions(
                   Options(stateChanges: options?.stateChanges),
-                  'results',
+                  KeysToSubscribe.Results,
                   prev,
                   componentInstance.results);
             }
@@ -922,7 +926,7 @@ class SearchController extends Base {
   /// -   `customQuery`
   ///
   subscribeToStateChanges(
-      SubscriptionFunction fn, List<String>? propertiesToSubscribe) {
+      SubscriptionFunction fn, List<KeysToSubscribe>? propertiesToSubscribe) {
     this.stateChanges.subscribe(fn, propertiesToSubscribe);
   }
 
@@ -937,8 +941,8 @@ class SearchController extends Base {
     this.results.setRaw({
       'hits': {'hits': []}
     });
-    this._applyOptions(Options(stateChanges: options?.stateChanges), 'results',
-        prev, this.results);
+    this._applyOptions(Options(stateChanges: options?.stateChanges),
+        KeysToSubscribe.Results, prev, this.results);
   }
 
   /// to get recent searches
@@ -993,7 +997,7 @@ class SearchController extends Base {
           Suggestion(searchObject['key'], searchObject['key'],
               isRecentSearch: true))).toList();
       this._applyOptions(new Options(stateChanges: options?.stateChanges),
-          'recentSearches', prev, this.recentSearches);
+          KeysToSubscribe.RecentSearches, prev, this.recentSearches);
       return Future.value(this.recentSearches);
     } catch (e) {
       return Future.error(e);
@@ -1032,7 +1036,7 @@ class SearchController extends Base {
   void _performUpdate(dynamic value, Options? options) {
     dynamic prev = this.value;
     this.value = value;
-    this._applyOptions(options, 'value', prev, this.value);
+    this._applyOptions(options, KeysToSubscribe.Value, prev, this.value);
   }
 
   Future _handleError(dynamic err, {Option? options}) {
@@ -1108,25 +1112,28 @@ class SearchController extends Base {
     };
   }
 
-  // Method to apply the changed based on set options
-  void _applyOptions(Options? options, String key, prevValue, nextValue) {
+  // Method to apply the changes based on set options
+  void _applyOptions(
+      Options? options, KeysToSubscribe key, prevValue, nextValue) {
     // Trigger events
-    if (key == 'query' && this.onQueryChange != null) {
+    if (key == KeysToSubscribe.Query && this.onQueryChange != null) {
       this.onQueryChange!(nextValue, prev: prevValue);
     }
-    if (key == 'value' && this.onValueChange != null) {
+    if (key == KeysToSubscribe.Value && this.onValueChange != null) {
       this.onValueChange!(nextValue, prev: prevValue);
     }
-    if (key == 'error' && this.onError != null) {
+    if (key == KeysToSubscribe.Error && this.onError != null) {
       this.onError!(nextValue);
     }
-    if (key == 'results' && this.onResults != null) {
+    if (key == KeysToSubscribe.Results && this.onResults != null) {
       this.onResults!(nextValue, prev: prevValue);
     }
-    if (key == 'aggregationData' && this.onAggregationData != null) {
+    if (key == KeysToSubscribe.AggregationData &&
+        this.onAggregationData != null) {
       this.onAggregationData!(nextValue, prev: prevValue);
     }
-    if (key == 'requestStatus' && this.onRequestStatusChange != null) {
+    if (key == KeysToSubscribe.RequestStatus &&
+        this.onRequestStatusChange != null) {
       this.onRequestStatusChange!(nextValue, prev: prevValue);
     }
     if (options?.triggerDefaultQuery == true) {
@@ -1136,7 +1143,7 @@ class SearchController extends Base {
       this.triggerCustomQuery();
     }
     if (options == null || options.stateChanges!) {
-      this.stateChanges.next({key: new Changes(prevValue, nextValue)}, key);
+      this.stateChanges.next(ChangesController(key, prevValue, nextValue), key);
     }
   }
 
@@ -1281,7 +1288,7 @@ class SearchController extends Base {
             append: this.preserveResults == true && append);
       }
       this._applyOptions(new Options(stateChanges: options?.stateChanges),
-          'aggregationData', prev, this.aggregationData);
+          KeysToSubscribe.AggregationData, prev, this.aggregationData);
     }
   }
 
@@ -1290,14 +1297,14 @@ class SearchController extends Base {
         options: Option(stateChanges: options?.stateChanges));
     final prev = this.error;
     this.error = error;
-    this._applyOptions(options, 'error', prev, this.error);
+    this._applyOptions(options, KeysToSubscribe.Error, prev, this.error);
   }
 
   _setRequestStatus(RequestStatus requestStatus, {Option? options}) {
     final prev = this.requestStatus;
     this.requestStatus = requestStatus;
     this._applyOptions(Options(stateChanges: options?.stateChanges),
-        'requestStatus', prev, this.requestStatus);
+        KeysToSubscribe.RequestStatus, prev, this.requestStatus);
   }
 
   // Method to set the default query value
@@ -1318,7 +1325,7 @@ class SearchController extends Base {
       }
     });
     this._query = query != null ? query : finalQuery;
-    this._applyOptions(
-        new Options(stateChanges: false), 'query', prevQuery, this._query);
+    this._applyOptions(new Options(stateChanges: false), KeysToSubscribe.Query,
+        prevQuery, this._query);
   }
 }

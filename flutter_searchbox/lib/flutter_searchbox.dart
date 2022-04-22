@@ -1,5 +1,7 @@
 library flutter_searchbox;
 
+export './state_provider.dart';
+
 import 'dart:async';
 import 'package:searchbase/searchbase.dart';
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
@@ -96,7 +98,7 @@ class _SearchWidgetListenerState<S, ViewModel>
 
   late SearchController componentInstance;
 
-  final List<String>? subscribeTo;
+  final List<KeysToSubscribe>? subscribeTo;
 
   /// Defaults to `true`. It can be used to prevent the default query execution.
   final bool? triggerQueryOnInit;
@@ -148,7 +150,7 @@ class _SearchWidgetListenerState<S, ViewModel>
     super.dispose();
   }
 
-  void subscribeToState(Map<String, Changes> changes) {
+  void subscribeToState(ChangesController changes) {
     if (mounted) {
       // Trigger the rebuild on state changes
       setState(() {});
@@ -169,7 +171,7 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
 
   final SearchBase searchbase;
 
-  final List<String>? subscribeTo;
+  final List<KeysToSubscribe>? subscribeTo;
 
   /// Defaults to `true`. It can be used to prevent the default query execution.
   final bool? triggerQueryOnInit;
@@ -455,8 +457,8 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
 
   /// This property allows to define a list of properties of [SearchController] class which can trigger the re-build when any changes happen.
   ///
-  /// For example, if `subscribeTo` is defined as `['results']` then it'll only update the UI when results property would change.
-  final List<String>? subscribeTo;
+  /// For example, if `subscribeTo` is defined as `[KeysToSubscribe.Results]` then it'll only update the UI when results property would change.
+  final List<KeysToSubscribe>? subscribeTo;
 
   /// It can be used to prevent the default query execution at the time of initial build.
   ///
@@ -1695,11 +1697,11 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
         id: id,
         triggerQueryOnInit: true,
         subscribeTo: [
-          'error',
-          'requestPending',
-          'results',
-          'value',
-          'recentSearches'
+          KeysToSubscribe.Error,
+          KeysToSubscribe.RequestPending,
+          KeysToSubscribe.Results,
+          KeysToSubscribe.Value,
+          KeysToSubscribe.RecentSearches
         ],
         // properties to configure search component
         credentials: credentials,
