@@ -75,7 +75,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "3.0.0-without-speech"
+    version: "3.0.1-without-speech"
   flutter_test:
     dependency: "direct dev"
     description: flutter

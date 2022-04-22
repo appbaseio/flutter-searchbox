@@ -12,7 +12,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_searchbox: ^3.0.0-without-speech
+  flutter_searchbox: ^3.0.1-without-speech
   searchbase: ^3.0.0
 ```
 
