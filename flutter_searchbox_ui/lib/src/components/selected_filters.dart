@@ -45,7 +45,7 @@ class BuildOptions {
 ///    - displaying all the user selected facet filters together in the main view area for better accessibility.
 class SelectedFilters extends StatefulWidget {
   /// A list of component ids to subscribe to.
-  /// [Optional]
+  ///
   /// This property allows users to select the search contollerer for which
   /// they want to display the filter value.
   /// For example,

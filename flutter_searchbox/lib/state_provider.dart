@@ -73,7 +73,7 @@ class SearchControllerState {
 /// ```dart
 class StateProvider extends StatefulWidget {
   /// A map of widget ids and list of properties to subscribe to.
-  /// [Optional]
+  ///
   /// This property allows users to select the widgets for which
   /// they want to listen to the state changes.
   /// For example,
