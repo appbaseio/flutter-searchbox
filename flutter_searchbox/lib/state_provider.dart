@@ -47,6 +47,30 @@ class SearchControllerState {
 /// Examples Use(s):
 ///    - perform side-effects based on the results states of various widgets.
 ///    - render custom UI based on the current state of app.
+///
+/// For example,
+/// ```dart
+/// StateProvider(
+///  subscribeTo: {
+///    'author-filter': [KeysToSubscribe.Value]
+///  },
+///  onChange: (next, prev) {
+///    print("Next state");
+///    print(next['author-filter']?.va
+///    print("Prev state");
+///    print(prev['author-filter']?.value);
+///  },
+///  build: (searchState) {
+///    var results =
+///        searchState['result-widget']?.results?.numberOfResults;
+///
+///    if (results != null) {
+///      return Text("results" + results.toString());
+///    }
+///    return Text("results" + "empty");
+///  },
+/// )
+/// ```dart
 class StateProvider extends StatefulWidget {
   /// A map of widget ids and list of properties to subscribe to.
   /// [Optional]
