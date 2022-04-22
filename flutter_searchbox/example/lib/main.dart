@@ -63,74 +63,108 @@ class HomePage extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Scaffold(
-          appBar: AppBar(
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    // Invoke the Search Delegate to display search UI with autosuggestions
-                    showSearch(
-                      context: context,
-                      // SearchBox widget from flutter searchbox
-                      delegate: SearchBox(
-                          // A unique identifier that can be used by other widgetss to reactively update data
-                          id: 'search-widget',
-                          enableRecentSearches: true,
-                          enablePopularSuggestions: true,
-                          showAutoFill: true,
-                          maxPopularSuggestions: 3,
-                          size: 5,
-                          dataField: [
-                            {'field': 'original_title', 'weight': 1},
-                            {'field': 'original_title.search', 'weight': 3}
-                          ],
-                          // pass the speech to text instance to enable voice search
-                          speechToTextInstance: speechToTextInstance),
-                      // Initialize query to persist suggestions for active search
-                      query: SearchBaseProvider?.of(context)
-                          .getSearchWidget('search-widget')
-                          ?.value
-                          ?.toString(),
-                    );
-                  }),
-            ],
-            title: Text('SearchBox Demo'),
-          ),
-          body: Center(
-            // A custom UI widget to render a list of results
-            child: SearchWidgetConnector(
-                id: 'result-widget',
-                dataField: 'original_title',
-                react: {
-                  'and': ['search-widget', 'author-filter'],
-                },
-                size: 10,
-                triggerQueryOnInit: true,
-                preserveResults: true,
-                builder: (context, searchController) =>
-                    ResultsWidget(searchController)),
-          ),
-          // A custom UI widget to render a list of authors
-          drawer: SearchWidgetConnector(
-            id: 'author-filter',
-            type: QueryType.term,
-            dataField: "authors.keyword",
-            size: 10,
-            // Initialize with default value
-            value: [],
-            react: {
-              'and': ['search-widget']
+        appBar: AppBar(
+          actions: <Widget>[
+            IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  // Invoke the Search Delegate to display search UI with autosuggestions
+                  showSearch(
+                    context: context,
+                    // SearchBox widget from flutter searchbox
+                    delegate: SearchBox(
+                        // A unique identifier that can be used by other widgetss to reactively update data
+                        id: 'search-widget',
+                        enableRecentSearches: true,
+                        enablePopularSuggestions: true,
+                        showAutoFill: true,
+                        maxPopularSuggestions: 3,
+                        size: 5,
+                        dataField: [
+                          {'field': 'original_title', 'weight': 1},
+                          {'field': 'original_title.search', 'weight': 3}
+                        ],
+                        // pass the speech to text instance to enable voice search
+                        speechToTextInstance: speechToTextInstance),
+                    // Initialize query to persist suggestions for active search
+                    query: SearchBaseProvider?.of(context)
+                        .getSearchWidget('search-widget')
+                        ?.value
+                        ?.toString(),
+                  );
+                }),
+          ],
+          title: StateProvider(
+              subscribeTo: {
+                'result-widget': [KeysToSubscribe.Results]
+              },
+              onChange: (next, prev) {
+                print("Next state");
+                print(next['result-widget']?.results?.data.length);
+                print("Prev state");
+                print(prev['result-widget']?.results?.data.length);
+              },
+              build: (searchState) {
+                var results =
+                    searchState['result-widget']?.results?.numberOfResults;
+                print("SEARCH STATE");
+                print(searchState);
+                if (results != null) {
+                  return Text("results" + results.toString());
+                }
+                return Text("results" + "empty");
+              }),
+        ),
+        body: Center(
+          // A custom UI widget to render a list of results
+          child: SearchWidgetConnector(
+              id: 'result-widget',
+              dataField: 'original_title',
+              react: {
+                'and': ['search-widget', 'author-filter'],
+              },
+              size: 10,
+              triggerQueryOnInit: true,
+              preserveResults: true,
+              builder: (context, searchController) =>
+                  ResultsWidget(searchController)),
+        ),
+        // A custom UI widget to render a list of authors
+        drawer: StateProvider(
+            subscribeTo: {
+              'result-widget': [KeysToSubscribe.Results]
             },
-            builder: (context, searchController) {
-              // Call searchController's query at first time
-              if (searchController.query == null) {
-                searchController.triggerDefaultQuery();
+            build: (searchState) {
+              var results =
+                  searchState['result-widget']?.results?.numberOfResults;
+              print("SEARCH STATE");
+              print(searchState);
+              if (results != null) {
+                return Text("results" + results.toString());
               }
-              return AuthorFilter(searchController);
-            },
-            // Avoid fetching query for each open/close action instead call it manually
-            triggerQueryOnInit: false,
-          )),
+              return Text("results" + "empty");
+            }),
+        // drawer: SearchWidgetConnector(
+        //   id: 'author-filter',
+        //   type: QueryType.term,
+        //   dataField: "authors.keyword",
+        //   size: 10,
+        //   // Initialize with default value
+        //   value: [],
+        //   react: {
+        //     'and': ['search-widget']
+        //   },
+        //   builder: (context, searchController) {
+        //     // Call searchController's query at first time
+        //     if (searchController.query == null) {
+        //       searchController.triggerDefaultQuery();
+        //     }
+        //     return AuthorFilter(searchController);
+        //   },
+        //   // Avoid fetching query for each open/close action instead call it manually
+        //   triggerQueryOnInit: false,
+        // )
+      ),
     );
   }
 }

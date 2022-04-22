@@ -70,7 +70,7 @@ class StateProvider extends StatefulWidget {
   /// ```dart
   /// StateProvider(
   ///   ...
-  ///   onChange: (prevState, nextState) {
+  ///   onChange: (nextState, prevState) {
   ///         // do something here
   ///     },
   ///   ...
@@ -114,6 +114,7 @@ class StateProvider extends StatefulWidget {
 
 class _StateProviderState extends State<StateProvider> {
   final Map<String, SearchControllerState> _controllersState = {};
+  final Map<String, SearchControllerState> _prevControllersState = {};
   // _widgetSubscribers will be used for unsubscribing in destroy lifecycle
   final Map<String, Map<String, dynamic>> _widgetSubscribers = {};
 
@@ -157,73 +158,116 @@ class _StateProviderState extends State<StateProvider> {
 
         /* hydrating the initial state, 
         handles an edge case like when StateProvider is used in a drawer */
-        if (mounted) {
-          setState(
-            () {
-              _controllersState[id] = SearchControllerState(
-                results: subscribedKeys.contains(KeysToSubscribe.Results)
-                    ? componentInstance!.results
-                    : null,
-                aggregationData:
-                    subscribedKeys.contains(KeysToSubscribe.AggregationData)
-                        ? componentInstance!.aggregationData
-                        : null,
-                requestStatus:
-                    subscribedKeys.contains(KeysToSubscribe.RequestStatus)
-                        ? componentInstance!.requestStatus
-                        : null,
-                error: subscribedKeys.contains(KeysToSubscribe.Error)
-                    ? componentInstance!.error
-                    : null,
-                value: subscribedKeys.contains(KeysToSubscribe.Value)
-                    ? componentInstance!.value
-                    : null,
-                query: subscribedKeys.contains(KeysToSubscribe.Query)
-                    ? componentInstance!.query
-                    : null,
-                dataField: subscribedKeys.contains(KeysToSubscribe.DataField)
-                    ? componentInstance!.dataField
-                    : null,
-                size: subscribedKeys.contains(KeysToSubscribe.Size)
-                    ? componentInstance!.size
-                    : null,
-                from: subscribedKeys.contains(KeysToSubscribe.From)
-                    ? componentInstance!.from
-                    : null,
-                fuzziness: subscribedKeys.contains(KeysToSubscribe.Fuzziness)
-                    ? componentInstance!.fuzziness
-                    : null,
-                includeFields:
-                    subscribedKeys.contains(KeysToSubscribe.IncludeFields)
-                        ? componentInstance!.includeFields
-                        : null,
-                excludeFields:
-                    subscribedKeys.contains(KeysToSubscribe.ExcludeFields)
-                        ? componentInstance!.excludeFields
-                        : null,
-                sortBy: subscribedKeys.contains(KeysToSubscribe.SortBy)
-                    ? componentInstance!.sortBy
-                    : null,
-                react: subscribedKeys.contains(KeysToSubscribe.React)
-                    ? componentInstance!.react
-                    : null,
-                defaultQuery:
-                    subscribedKeys.contains(KeysToSubscribe.DefaultQuery)
-                        ? componentInstance!.defaultQuery
-                        : null,
-                customQuery:
-                    subscribedKeys.contains(KeysToSubscribe.CustomQuery)
-                        ? componentInstance!.customQuery
-                        : null,
-              );
-            },
-          );
-        }
+        _controllersState[id] = SearchControllerState(
+          results: subscribedKeys.contains(KeysToSubscribe.Results)
+              ? componentInstance!.results
+              : null,
+          aggregationData:
+              subscribedKeys.contains(KeysToSubscribe.AggregationData)
+                  ? componentInstance!.aggregationData
+                  : null,
+          requestStatus: subscribedKeys.contains(KeysToSubscribe.RequestStatus)
+              ? componentInstance!.requestStatus
+              : null,
+          error: subscribedKeys.contains(KeysToSubscribe.Error)
+              ? componentInstance!.error
+              : null,
+          value: subscribedKeys.contains(KeysToSubscribe.Value)
+              ? componentInstance!.value
+              : null,
+          query: subscribedKeys.contains(KeysToSubscribe.Query)
+              ? componentInstance!.query
+              : null,
+          dataField: subscribedKeys.contains(KeysToSubscribe.DataField)
+              ? componentInstance!.dataField
+              : null,
+          size: subscribedKeys.contains(KeysToSubscribe.Size)
+              ? componentInstance!.size
+              : null,
+          from: subscribedKeys.contains(KeysToSubscribe.From)
+              ? componentInstance!.from
+              : null,
+          fuzziness: subscribedKeys.contains(KeysToSubscribe.Fuzziness)
+              ? componentInstance!.fuzziness
+              : null,
+          includeFields: subscribedKeys.contains(KeysToSubscribe.IncludeFields)
+              ? componentInstance!.includeFields
+              : null,
+          excludeFields: subscribedKeys.contains(KeysToSubscribe.ExcludeFields)
+              ? componentInstance!.excludeFields
+              : null,
+          sortBy: subscribedKeys.contains(KeysToSubscribe.SortBy)
+              ? componentInstance!.sortBy
+              : null,
+          react: subscribedKeys.contains(KeysToSubscribe.React)
+              ? componentInstance!.react
+              : null,
+          defaultQuery: subscribedKeys.contains(KeysToSubscribe.DefaultQuery)
+              ? componentInstance!.defaultQuery
+              : null,
+          customQuery: subscribedKeys.contains(KeysToSubscribe.CustomQuery)
+              ? componentInstance!.customQuery
+              : null,
+        );
 
         /* subscriberMethod to handle state changes */
         void subscriberMethod(ChangesController changes) {
           void applyChanges() {
-            final prevState = {..._controllersState};
+            _prevControllersState[id] = SearchControllerState(
+              results: subscribedKeys.contains(KeysToSubscribe.Results)
+                  ? changes.Results?.prev
+                  : null,
+              aggregationData:
+                  subscribedKeys.contains(KeysToSubscribe.AggregationData)
+                      ? changes.AggregationData?.prev
+                      : null,
+              requestStatus:
+                  subscribedKeys.contains(KeysToSubscribe.RequestStatus)
+                      ? changes.RequestStatus?.prev
+                      : null,
+              error: subscribedKeys.contains(KeysToSubscribe.Error)
+                  ? changes.Error?.prev
+                  : null,
+              value: subscribedKeys.contains(KeysToSubscribe.Value)
+                  ? changes.Value?.prev
+                  : null,
+              query: subscribedKeys.contains(KeysToSubscribe.Query)
+                  ? changes.Query?.prev
+                  : null,
+              dataField: subscribedKeys.contains(KeysToSubscribe.DataField)
+                  ? changes.DataField?.prev
+                  : null,
+              size: subscribedKeys.contains(KeysToSubscribe.Size)
+                  ? changes.Size?.prev
+                  : null,
+              from: subscribedKeys.contains(KeysToSubscribe.From)
+                  ? changes.From?.prev
+                  : null,
+              fuzziness: subscribedKeys.contains(KeysToSubscribe.Fuzziness)
+                  ? changes.Fuzziness?.prev
+                  : null,
+              includeFields:
+                  subscribedKeys.contains(KeysToSubscribe.IncludeFields)
+                      ? changes.IncludeFields?.prev
+                      : null,
+              excludeFields:
+                  subscribedKeys.contains(KeysToSubscribe.ExcludeFields)
+                      ? changes.ExcludeFields?.prev
+                      : null,
+              sortBy: subscribedKeys.contains(KeysToSubscribe.SortBy)
+                  ? changes.SortBy?.prev
+                  : null,
+              react: subscribedKeys.contains(KeysToSubscribe.React)
+                  ? changes.React?.prev
+                  : null,
+              defaultQuery:
+                  subscribedKeys.contains(KeysToSubscribe.DefaultQuery)
+                      ? changes.DefaultQuery?.prev
+                      : null,
+              customQuery: subscribedKeys.contains(KeysToSubscribe.CustomQuery)
+                  ? changes.CustomQuery?.prev
+                  : null,
+            );
 
             _controllersState[id] = SearchControllerState(
               results: subscribedKeys.contains(KeysToSubscribe.Results)
@@ -282,7 +326,7 @@ class _StateProviderState extends State<StateProvider> {
             );
 
             if (widget.onChange is Function) {
-              widget.onChange!(prevState, _controllersState);
+              widget.onChange!(_controllersState, _prevControllersState);
             }
           }
 
@@ -302,6 +346,11 @@ class _StateProviderState extends State<StateProvider> {
 
         componentInstance?.subscribeToStateChanges(
             subscriberMethod, subscribedKeys);
+        if (mounted) {
+          setState(
+            () {},
+          );
+        }
       }
     } catch (e) {
       print('error $e');
