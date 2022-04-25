@@ -1,9 +1,9 @@
-## 3.0.0
+## [3.0.0] - 21-04-2022
 
-- Add support for KeysToSuscribe enum.
-- Add support for ChangesController class
-- Breaking Change
+- Add [StateProvider] widget.
+- Breaking Change (as per **searchbase: 3.0.0**)
 
+  - [SearchWidgetConnector]/ [SearchController] accepts subscribeTo as [List<KeysToSubscribe>];
   - `subscribeToStateChanges()` now accepts array of enums (`KeysToSubscribe`) for properties to subscribe, instead of hard-coded strings.
     Also, the subscription callback function receives a `ChangesController` class argument instead of `Changes` type.
 
@@ -25,90 +25,78 @@
 
   > Refer to docs to see the `KeysToSubscribe` enum defined under _types.dart_
 
-## 2.2.4
+## [2.2.4-nullsafety] - 15-01-2022
 
-- Fix callbacks for change events
+- Update searchbase
 
-## 2.2.3
+## [2.2.3-nullsafety] - 03-11-2021
 
-- Apply value returned by `beforeValueChange` method
+- Update beforeValueChange function signature
 
-## 2.2.2
+## [2.2.2-nullsafety] - 26-10-2021
 
-- Fix `beforeValueChange` function signature
+- Update searchbase
 
-## 2.2.1
+## [2.2.1-nullsafety] - 9-09-2021
 
-- Fix `aggregationField` is same as `dataField` issue
-- Export `results.dart`
+- Update provider package
 
-## 2.2.0
+## [2.2.0-nullsafety] - 19-08-2021
 
 - Add support for `clearOnQueryChange` property
 
-## 2.1.0
+## [2.0.1-nullsafety] - 20-07-2021
 
-- Add support for `index` property in search controller
+- Add support for `index` property in search widget connector
 - Remove `dataField` validation (required)
 
-## 2.0.1
-
-- Fix properties parameter in subscribeToStateChanges method
-
-## 2.0.0
+## [2.0.0-nullsafety] - 13-05-2021
 
 - Add support for null safety
 
-## 1.0.1
+## [1.2.0] - 13-03-2021
 
-- Fix docs
+- Add support to customize voice search experience
 
-## 1.0.0
+## [1.1.0] - 25-02-2021
+
+- Add support for voice search in `SearchBox` widget
+
+## [1.0.0] - 19-02-2021
 
 - Add `aggregationSize` property to define size of aggregations
+- Fix an issue with multiple API calls to recent searches when query is empty
 
-## 1.0.0-alpha.9
+## [1.0.0-alpha.6] - 17-02-2021
 
-- Fix type error when `preserveResults` is not defined
+- Update searchbase
 
-## 1.0.0-alpha.8
+## [1.0.0-alpha.5] - 05-02-2021
 
-- Add support to paginate aggregations
+- Add support to implement pagination with aggregations
 
-## 1.0.0-alpha.7
+## [1.0.0-alpha.4] - 22-01-2021
 
-BREAKING: Rename SearchWidget class to SearchController
+- Update searchbase that introduces a breaking change to rename SearchWidget class to SearchController class
 
-## 1.0.0-alpha.6
+## [1.0.0-alpha.3] - 22-01-2021
 
 - Format Docs
 
-## 1.0.0-alpha.5
+## [1.0.0-alpha.2] - 21-01-2021
 
-- Fix suggestions parsing logic if `dataField` is not defined
-- Fix `onError` type error
-- Add more properties in `Suggestion` class to differentiate between recent, popular and relevant suggestions.
+- Update example to fix hot reloading issues
+- Catch error while triggering click analytics
+- Fix suggestions parsing when `dataField` is not defined
+- Display popular suggestions as default suggestions
+- Update example to persist search query
 
-## 1.0.0-alpha.4
+## [1.0.0-alpha.1] - 14-01-2021.
 
 - Format docs
 
-## 1.0.0-alpha.3
+## [1.0.0-alpha] - 14-01-2021.
 
-- Fix docs link
-
-## 1.0.0-alpha.2
-
-- Fix docs link
-
-## 1.0.0-alpha.1
-
-- Fix bugs
-- Add documentation with example
-
-## 1.0.0-alpha
-
-- Add `SearchWidget` and `SearchBase` classes
-- Implement query generation and analytics
-- Recent searches
-- Popular Suggestions
+- Add `SearchBaseProvider` widget
+- Add `SearchBox` widget
+- Add `SearchWidgetConnector` widget
