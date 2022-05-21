@@ -1,6 +1,6 @@
 library flutter_searchbox;
 
-export './state_provider.dart';
+export 'src/components/state_provider.dart';
 
 import 'dart:async';
 import 'package:searchbase/searchbase.dart';
