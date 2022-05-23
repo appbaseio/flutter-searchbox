@@ -99,24 +99,12 @@ class StateProvider extends StatefulWidget {
 
 class _StateProviderState extends State<StateProvider> {
   Map<String, SearchControllerState> _controllersState = {};
-  // _widgetSubscribers will be used for unsubscribing in destroy lifecycle
-  final Map<String, Map<String, dynamic>> _widgetSubscribers = {};
 
   @override
   initState() {
     super.initState();
     WidgetsBinding.instance
         ?.addPostFrameCallback((_) => subscribeToProperties());
-  }
-
-  @override
-  void dispose() {
-    // Remove subscriptions
-    for (var id in _widgetSubscribers.keys) {
-      _widgetSubscribers[id]!['controller'].unsubscribeToStateChanges(
-          _widgetSubscribers[id]!['subscriberFunction']);
-    }
-    super.dispose();
   }
 
   void subscribeToProperties() {
