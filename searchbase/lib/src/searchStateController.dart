@@ -43,7 +43,7 @@ class SearchControllerState {
 }
 
 /// It allows you to access the current state of your widgets along with the search results.
-/// For instance, you can use this class to previous and the next(latest) state of your app widget tree.
+/// For instance, you can use this class to access the previous and the next(latest) state of your app widget tree.
 ///
 /// Examples Use(s):
 ///    - perform side-effects based on the results states of various widgets.
