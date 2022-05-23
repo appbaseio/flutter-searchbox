@@ -95,9 +95,13 @@ class SearchStateController {
   final void Function(Map<String, SearchControllerState>,
       Map<String, SearchControllerState>)? onChange;
 
+  /// It is the reference to the [SearchBase] instance of the app.
   final SearchBase searchBase;
 
+  /// It holds the current state of the subscribed widgets.
   final Map<String, SearchControllerState> current = {};
+
+  /// It holds the just-previous state of the subscribed widgets.
   final Map<String, SearchControllerState> previous = {};
   // _widgetSubscribers will be used for unsubscribing in destroy lifecycle
   final Map<String, Map<String, dynamic>> _widgetSubscribers = {};
