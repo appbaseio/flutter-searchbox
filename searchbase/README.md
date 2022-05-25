@@ -251,7 +251,7 @@ class DefaultUriPolicy implements UriPolicy {
 
 ### Facet example extended to use SearchStateController to handle state changes side-effects
 
-This example is a version of the previous example which uses `SearchStateController` class to watch for state changes and perform relevant side-effects.
+This example is a version of the [previous example](#an-example-with-a-facet) which uses `SearchStateController` class to watch for state changes and perform relevant side-effects.
 
 ```dart
 import 'dart:html';
