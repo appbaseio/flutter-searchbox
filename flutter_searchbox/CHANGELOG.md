@@ -2,12 +2,28 @@
 
 - Add [StateProvider] widget.
 - Breaking Change (as per **searchbase: 3.0.0**)
+
   - [SearchWidgetConnector]/ [SearchController] accepts subscribeTo as [List<KeysToSubscribe>];
-  - `subscribeToStateChanges()` now accepts array of enums ([KeysToSubscribe]) for properties to subscribe, instead of hard-coded strings.
-    Also, the subscription callback function receives a [ChangesController] class argument instead of [Changes] type. - **before**
-    `dart widgetInstance.subscribeToStateChanges((Changes change){ print('${changes['results']!.next}'); }, ['results']); ` - **after**
-    `dart widgetInstance.subscribeToStateChanges((ChangesController change){ print('${changes.Results!.next}'); }, [KeysToSubscribe.Results]); `
-    > Refer to docs to see the [KeysToSubscribe] enum defined under _types.dart_
+  - `subscribeToStateChanges()` now accepts array of enums (`KeysToSubscribe`) for properties to subscribe, instead of hard-coded strings.
+    Also, the subscription callback function receives a `ChangesController` class argument instead of `Changes` type.
+
+    - **before**
+
+    ```dart
+        widgetInstance.subscribeToStateChanges((Changes change){
+            print('${changes['results']!.next}');
+        }, ['results']);
+    ```
+
+    - **after**
+
+    ```dart
+        widgetInstance.subscribeToStateChanges((ChangesController change){
+            print('${changes.Results!.next}');
+        }, [KeysToSubscribe.Results]);
+    ```
+
+  > Refer to docs to see the `KeysToSubscribe` enum defined under _types.dart_
 
 ## [2.3.0-without-speech] - 19-10-2021
 

@@ -1,24 +1,137 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_searchbox/flutter_searchbox.dart';
 import 'package:searchbase/searchbase.dart';
+import 'types.dart';
+import 'searchcontroller.dart';
+import 'constants.dart';
 
 /// It stores the state of the SearchController at any time.
 class SearchControllerState {
+  /// An object that contains the aggregations data for [QueryType.term] queries.
   final Aggregations? aggregationData;
+
+  /// It is an object that represents the elasticsearch query response.
   final Results? results;
+
+  /// It represents the current status of the request.
   final RequestStatus? requestStatus;
+
+  /// Represents the error response returned by elasticsearch.
+
   final dynamic error;
+
+  /// Represents the value for a particular [QueryType].
+  ///
+  /// Depending on the query type, the value format would differ.
+  /// You can refer to the different value formats over [here](https://docs.appbase.io/docs/search/reactivesearch-api/reference#value).
   final dynamic value;
+
+  /// Represents a map of reactivesearch queries associated to the widget.
   final List<Map<dynamic, dynamic>>? query;
+
+  /// The index field(s) to be connected to the component’s UI view.
+  ///
+  /// It accepts an `List<String>` in addition to `<String>`, which is useful for searching across multiple fields with or without field weights.
+  ///
+  /// Field weights allow weighted search for the index fields. A higher number implies a higher relevance weight for the corresponding field in the search results.
+  /// You can define the `dataField` property as a `List<Map>` of to set the field weights. The object must have the `field` and `weight` keys.
+  /// For example,
+  /// ```dart
+  /// [
+  ///   {
+  ///     'field': 'original_title',
+  ///     'weight': 1
+  ///   },
+  ///   {
+  ///     'field': 'original_title.search',
+  ///     'weight': 3
+  ///   },
+  /// ]
+  /// ```
   final dynamic dataField;
+
+  /// Number of suggestions and results to fetch per request.
   final int? size;
+
+  /// To define from which page to start the results, it is important to implement pagination.
+
   final int? from;
+
+  /// Useful for showing the correct results for an incorrect search parameter by taking the fuzziness into account.
+  ///
+  /// For example, with a substitution of one character, `fox` can become `box`.
+  /// Read more about it in the elastic search https://www.elastic.co/guide/en/elasticsearch/guide/current/fuzziness.html.
   final dynamic fuzziness;
+
+  /// It allows to define fields to be included in search results.
+
   final List<String>? includeFields;
+
+  /// It allows to define fields to be excluded in search results.
   final List<String>? excludeFields;
+
+  /// Sorts the results by either [SortType.asc], [SortType.desc] or [SortType.count] order.
+  ///
+  /// Please note that the [SortType.count] is only applicable for [QueryType.term] type of search widgets.
   final SortType? sortBy;
+
+  /// Here, we are specifying that the results should update whenever one of the blacklist items is not present and simultaneously any one of the city or topics matches.
   final Map<String, dynamic>? react;
+
+  /// It is a callback function that takes the [SearchController] instance as parameter and **returns** the data query to be applied to the source component, as defined in Elasticsearch Query DSL, which doesn't get leaked to other components.
+  ///
+  /// In simple words, `defaultQuery` is used with data-driven components to impact their own data.
+  /// It is meant to modify the default query which is used by a component to render the UI.
+  ///
+  ///  Some of the valid use-cases are:
+  ///
+  ///  -   To modify the query to render the `suggestions` or `results` in [QueryType.search] type of components.
+  ///  -   To modify the `aggregations` in [QueryType.term] type of components.
+  ///
+  ///  For example, in a [QueryType.term] type of component showing a list of cities, you may only want to render cities belonging to `India`.
+  ///
+  ///```dart
+  /// Map (SearchController searchController) => ({
+  ///   		'query': {
+  ///   			'terms': {
+  ///   				'country': ['India'],
+  ///   			},
+  ///   		},
+  ///   	}
+  ///   )
+  ///```
   final Map Function(SearchController searchController)? defaultQuery;
+
+  /// It takes [SearchController] instance as parameter and **returns** the query to be applied to the dependent widgets by `react` prop, as defined in Elasticsearch Query DSL.
+  ///
+  /// For example, the following example has two components **search-widget**(to render the suggestions) and **result-widget**(to render the results).
+  /// The **result-widget** depends on the **search-widget** to update the results based on the selected suggestion.
+  /// The **search-widget** has the `customQuery` prop defined that will not affect the query for suggestions(that is how `customQuery` is different from `defaultQuery`)
+  /// but it'll affect the query for **result-widget** because of the `react` dependency on **search-widget**.
+  ///
+  /// ```dart
+  /// SearchWidgetConnector(
+  ///   id: "search-widget",
+  ///   dataField: ["original_title", "original_title.search"],
+  ///   customQuery: (SearchController searchController) => ({
+  ///     'timeout': '1s',
+  ///      'query': {
+  ///       'match_phrase_prefix': {
+  ///         'fieldName': {
+  ///           'query': 'hello world',
+  ///           'max_expansions': 10,
+  ///         },
+  ///       },
+  ///     },
+  ///   })
+  /// )
+  ///
+  /// SearchWidgetConnector(
+  ///   id: "result-widget",
+  ///   dataField: "original_title",
+  ///   react: {
+  ///    'and': ['search-component']
+  ///   }
+  /// )
+  /// ```
   final Map Function(SearchController searchController)? customQuery;
 
   SearchControllerState({
@@ -42,36 +155,27 @@ class SearchControllerState {
 }
 
 /// It allows you to access the current state of your widgets along with the search results.
-/// For instance, you can use this component to create results/no results or query/no query pages.
+/// For instance, you can use this class to access the previous and the next(latest) state of your app widget tree.
 ///
 /// Examples Use(s):
 ///    - perform side-effects based on the results states of various widgets.
-///    - render custom UI based on the current state of app.
 ///
 /// For example,
 /// ```dart
-/// StateProvider(
+/// SearchStateController(
 ///  subscribeTo: {
 ///    'author-filter': [KeysToSubscribe.Value]
 ///  },
 ///  onChange: (next, prev) {
 ///    print("Next state");
-///    print(next['author-filter']?.va
+///    print(next['author-filter']?.value;
 ///    print("Prev state");
 ///    print(prev['author-filter']?.value);
 ///  },
-///  build: (searchState) {
-///    var results =
-///        searchState['result-widget']?.results?.numberOfResults;
-///
-///    if (results != null) {
-///      return Text("results" + results.toString());
-///    }
-///    return Text("results" + "empty");
-///  },
+///  searchBase: searchBaseInstance,
 /// )
 /// ```dart
-class StateProvider extends StatefulWidget {
+class SearchStateController {
   /// A map of widget ids and list of properties to subscribe to.
   ///
   /// This property allows users to select the widgets for which
@@ -103,86 +207,58 @@ class StateProvider extends StatefulWidget {
   final void Function(Map<String, SearchControllerState>,
       Map<String, SearchControllerState>)? onChange;
 
-  /// It is used for rendering a custom UI based on updated state
-  /// For example,
-  /// ```dart
-  /// StateProvider(
-  ///   ...
-  ///   build: (controllerState) {
-  ///     return Text(
-  ///       'Total results on screen--- ${controllerState["result-widget"]?.results?.data?.length ?? ''} ',
-  ///       style: TextStyle(
-  ///         fontSize: 19.0,
-  ///         color: Colors.red,
-  ///       ),
-  ///     );
-  ///   },
-  ///   ...
-  /// )
-  /// ```
-  final Widget Function(Map<String, SearchControllerState>)? build;
+  /// It is the reference to the [SearchBase] instance of the app.
+  final SearchBase searchBase;
 
-  StateProvider({
-    this.subscribeTo,
-    this.onChange,
-    this.build,
-    Key? key,
-  }) : super(key: key) {
-    assert(build != null || onChange != null,
-        "Atleast one, build or onChange prop is required.");
-  }
+  /// It holds the current state of the subscribed widgets.
+  final Map<String, SearchControllerState> current = {};
 
-  @override
-  _StateProviderState createState() => _StateProviderState();
-}
-
-class _StateProviderState extends State<StateProvider> {
-  final Map<String, SearchControllerState> _controllersState = {};
-  final Map<String, SearchControllerState> _prevControllersState = {};
+  /// It holds the just-previous state of the subscribed widgets.
+  final Map<String, SearchControllerState> previous = {};
   // _widgetSubscribers will be used for unsubscribing in destroy lifecycle
   final Map<String, Map<String, dynamic>> _widgetSubscribers = {};
 
-  @override
-  initState() {
-    super.initState();
-    WidgetsBinding.instance
-        ?.addPostFrameCallback((_) => subscribeToProperties());
+  SearchStateController({
+    this.subscribeTo,
+    this.onChange,
+    required this.searchBase,
+  }) {
+    subscribeToProperties();
   }
 
-  Map<String, SearchController> get activeWidgets {
-    return SearchBaseProvider.of(context).getActiveWidgets();
-  }
-
-  @override
   void dispose() {
     // Remove subscriptions
     for (var id in _widgetSubscribers.keys) {
       _widgetSubscribers[id]!['controller'].unsubscribeToStateChanges(
           _widgetSubscribers[id]!['subscriberFunction']);
     }
-    super.dispose();
+    ;
+  }
+
+  Map<String, SearchController> get _activeWidgets {
+    return searchBase.getActiveWidgets();
   }
 
   void subscribeToProperties() {
     try {
-      final activeWidgets = this.activeWidgets;
+      final activeWidgets = this._activeWidgets;
       for (var id in activeWidgets.keys) {
-        if (widget.subscribeTo != null && widget.subscribeTo!.isNotEmpty) {
-          if (widget.subscribeTo?.keys.contains(id) == false) {
+        if (this.subscribeTo != null && this.subscribeTo!.isNotEmpty) {
+          if (this.subscribeTo?.keys.contains(id) == false) {
             continue;
           }
         }
         final componentInstance = activeWidgets[id];
         var subscribedKeys;
-        if (widget.subscribeTo?.keys.contains(id) == true) {
-          subscribedKeys = widget.subscribeTo![id];
+        if (this.subscribeTo?.keys.contains(id) == true) {
+          subscribedKeys = this.subscribeTo![id];
         } else {
           subscribedKeys = KeysToSubscribe.values;
         }
 
         /* hydrating the initial state, 
         handles an edge case like when StateProvider is used in a drawer */
-        _controllersState[id] = SearchControllerState(
+        current[id] = SearchControllerState(
           results: subscribedKeys.contains(KeysToSubscribe.Results)
               ? componentInstance!.results
               : null,
@@ -237,7 +313,7 @@ class _StateProviderState extends State<StateProvider> {
         /* subscriberMethod to handle state changes */
         void subscriberMethod(ChangesController changes) {
           void applyChanges() {
-            _prevControllersState[id] = SearchControllerState(
+            previous[id] = SearchControllerState(
               results: subscribedKeys.contains(KeysToSubscribe.Results)
                   ? changes.Results?.prev
                   : null,
@@ -293,7 +369,7 @@ class _StateProviderState extends State<StateProvider> {
                   : null,
             );
 
-            _controllersState[id] = SearchControllerState(
+            current[id] = SearchControllerState(
               results: subscribedKeys.contains(KeysToSubscribe.Results)
                   ? changes.Results?.next
                   : null,
@@ -349,18 +425,12 @@ class _StateProviderState extends State<StateProvider> {
                   : null,
             );
 
-            if (widget.onChange is Function) {
-              widget.onChange!(_controllersState, _prevControllersState);
+            if (this.onChange is Function) {
+              this.onChange!(current, previous);
             }
           }
 
-          if (mounted) {
-            setState(() {
-              applyChanges();
-            });
-          } else {
-            applyChanges();
-          }
+          applyChanges();
         }
 
         _widgetSubscribers[id] = {
@@ -370,22 +440,9 @@ class _StateProviderState extends State<StateProvider> {
 
         componentInstance?.subscribeToStateChanges(
             subscriberMethod, subscribedKeys);
-        if (mounted) {
-          setState(
-            () {},
-          );
-        }
       }
     } catch (e) {
       print('error $e');
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (widget.build != null) {
-      return widget.build!(_controllersState);
-    }
-    return SizedBox.shrink();
   }
 }
