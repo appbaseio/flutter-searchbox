@@ -856,7 +856,7 @@ class SearchController extends Base {
             }
 
             // Update the results
-            final prev = componentInstance.results;
+            final prev = componentInstance.results.clone();
             // Collect results from the response for a particular component
             Map rawResults = results[id] != null ? results[id] : {};
             // Set results
