@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_searchbox/flutter_searchbox.dart';
 import 'package:searchbase/searchbase.dart';
+import './searchbaseprovider.dart';
 
 /// It allows you to access the current state of your widgets along with the search results.
 /// For instance, you can use this component to create results/no results or query/no query pages.
