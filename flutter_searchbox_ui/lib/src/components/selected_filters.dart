@@ -221,7 +221,7 @@ class _SelectedFiltersState extends State<SelectedFilters> {
   @override
   initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) => setSelectedFilters());
+    WidgetsBinding.instance.addPostFrameCallback((_) => setSelectedFilters());
   }
 
   Map<String, SearchController> get activeWidgets {

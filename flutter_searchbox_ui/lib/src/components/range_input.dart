@@ -1070,7 +1070,7 @@ class _RangeInputInnerState extends State<RangeInputInner> {
         valueObj["end"] = dropdownValues['endValue'];
       }
 
-      WidgetsBinding.instance!.addPostFrameCallback((_) => widget
+      WidgetsBinding.instance.addPostFrameCallback((_) => widget
           .searchController
           .setValue(valueObj, options: Options(triggerCustomQuery: true)));
     } catch (e, stack) {
