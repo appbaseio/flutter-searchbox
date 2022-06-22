@@ -133,7 +133,7 @@ class _MicButtonListening extends StatefulWidget {
 }
 
 class _MicButtonState extends State<_MicButton> {
-  final dynamic? speechToTextInstance;
+  final dynamic speechToTextInstance;
   final void Function()? onStart;
   final MicOptions? micOptions;
   final void Function(String out)? onMicResults;
@@ -385,7 +385,7 @@ class _MicButtonState extends State<_MicButton> {
 class _MicButton extends StatefulWidget {
   final void Function(String out)? onMicResults;
   final void Function()? onStart;
-  final dynamic? speechToTextInstance;
+  final dynamic speechToTextInstance;
   final MicOptions? micOptions;
 
   _MicButton(this.speechToTextInstance,
@@ -875,7 +875,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
   /// )
   ///
   /// ```
-  final dynamic? speechToTextInstance;
+  final dynamic speechToTextInstance;
 
   /// To customize the mic settings if voice search is enabled
   final MicOptions? micOptions;

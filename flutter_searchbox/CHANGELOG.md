@@ -1,3 +1,7 @@
+## 3.2.0-beta
+
+- Upgrade to Flutter 3
+
 ## [3.0.0] - 21-04-2022
 
 - Add [StateProvider] widget.
