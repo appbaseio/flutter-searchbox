@@ -1,9 +1,6 @@
-import 'dart:async';
 import 'package:searchbase/searchbase.dart';
-import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'dart:io' show Platform;
 
 /// If the SearchBaseProvider.of method fails, this error will be thrown.
 ///

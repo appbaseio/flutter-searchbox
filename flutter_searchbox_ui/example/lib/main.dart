@@ -89,8 +89,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
               id: 'range-selector',
               beforeValueChange: (dynamic value) async {
                 if (value is Map<String, dynamic>) {
-                  final Map<String, dynamic> mapValue =
-                      value as Map<String, dynamic>;
+                  final Map<String, dynamic> mapValue = value;
                   if (mapValue['start'] == 0 && mapValue['end'] == null) {
                     return Future.error(value);
                   }

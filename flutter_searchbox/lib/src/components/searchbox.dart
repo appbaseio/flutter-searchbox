@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:searchbase/searchbase.dart';
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import './searchbaseprovider.dart';
 import './searchwidgetconnector.dart';
 import 'dart:io' show Platform;
@@ -956,7 +955,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
 
   @override
   List<Widget> buildActions(BuildContext context) {
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (this.aggregationField != null) {
         debugPrint(
             'Warning(SearchBox): The `aggregationField` prop has been marked as deprecated, please use the `distinctField` prop instead.');
@@ -1018,7 +1017,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
 
   @override
   Widget buildResults(BuildContext context) {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       SearchController? component =
           SearchBaseProvider.of(context).getSearchWidget(id);
       if (component != null && query.isNotEmpty) {
