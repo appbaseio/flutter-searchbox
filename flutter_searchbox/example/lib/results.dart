@@ -42,7 +42,7 @@ class ResultsWidget extends StatelessWidget {
         Expanded(
           child: ListView.builder(
             itemBuilder: (context, index) {
-              WidgetsBinding.instance!.addPostFrameCallback((_) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
                 var offset = (searchController.from != null
                         ? searchController.from
                         : 0)! +
