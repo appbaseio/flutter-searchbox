@@ -1,4 +1,6 @@
-import 'package:searchbase/searchbase.dart';
+import 'searchbase.dart';
+import 'aggregations.dart';
+import 'results.dart';
 import 'types.dart';
 import 'searchcontroller.dart';
 import 'constants.dart';
