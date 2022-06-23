@@ -1,6 +1,6 @@
 # Flutter Searchbox Example
 
-A new Flutter project.
+A basic example to demonstrate the `flutter_searchbox` usage to build search layout with autosuggestions and voice search.
 
 ## Getting Started
 
