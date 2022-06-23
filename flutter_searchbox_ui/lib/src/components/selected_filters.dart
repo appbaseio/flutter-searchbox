@@ -221,7 +221,7 @@ class _SelectedFiltersState extends State<SelectedFilters> {
   @override
   initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) => setSelectedFilters());
+    WidgetsBinding.instance.addPostFrameCallback((_) => setSelectedFilters());
   }
 
   Map<String, SearchController> get activeWidgets {
@@ -236,6 +236,7 @@ class _SelectedFiltersState extends State<SelectedFilters> {
 
       return null;
     } catch (e) {
+      // ignore: avoid_print
       print('error in $e');
     }
   }
@@ -289,6 +290,7 @@ class _SelectedFiltersState extends State<SelectedFilters> {
         }, [KeysToSubscribe.Value]);
       }
     } catch (e) {
+      // ignore: avoid_print
       print('error $e');
     }
   }
@@ -306,6 +308,7 @@ class _SelectedFiltersState extends State<SelectedFilters> {
             triggerCustomQuery: true,
           ));
     } catch (e) {
+      // ignore: avoid_print
       print('Error: $e');
     }
   }

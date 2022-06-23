@@ -1,3 +1,7 @@
+## 3.2.0-beta
+
+- Upgrade to Flutter 3
+
 ## 3.0.0
 
 - Add support for [KeysToSubscribe] enum.

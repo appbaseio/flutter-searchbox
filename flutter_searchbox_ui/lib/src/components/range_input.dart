@@ -1070,10 +1070,11 @@ class _RangeInputInnerState extends State<RangeInputInner> {
         valueObj["end"] = dropdownValues['endValue'];
       }
 
-      WidgetsBinding.instance!.addPostFrameCallback((_) => widget
+      WidgetsBinding.instance.addPostFrameCallback((_) => widget
           .searchController
           .setValue(valueObj, options: Options(triggerCustomQuery: true)));
     } catch (e, stack) {
+      // ignore: avoid_print
       print('$e $stack');
     }
   }
@@ -1158,8 +1159,9 @@ class _RangeInputInnerState extends State<RangeInputInner> {
               .setValue(valueObj, options: Options(triggerCustomQuery: true));
         }
       });
-    } catch (e, stacktrace) {
-      // print('$e');
+    } catch (e) {
+      // ignore: avoid_print
+      print('$e');
     }
   }
 
@@ -1309,8 +1311,9 @@ class _DropdownState extends State<Dropdown> {
         _value = _controller.text;
         return _controller.text;
       }
-    } catch (error, stack) {
-      // print('$error $stack');
+    } catch (error) {
+      // ignore: avoid_print
+      print('$error');
     }
   }
 
@@ -1363,8 +1366,9 @@ class _DropdownState extends State<Dropdown> {
           _value = _controller.text;
         }
       });
-    } catch (e, stack) {
-      // print('$e $stack');
+    } catch (e) {
+      // ignore: avoid_print
+      print('$e');
     }
   }
 
