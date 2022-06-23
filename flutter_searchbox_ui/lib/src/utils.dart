@@ -1,9 +1,11 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:dart_geohash/dart_geohash.dart';
 import 'package:flutter/foundation.dart';
 
 bool isNumeric(var arg) {
   if (arg is String) {
-    if (arg == null || arg.isEmpty) {
+    if (arg.isEmpty) {
       return false;
     }
     final number = num.tryParse(arg);
@@ -66,6 +68,7 @@ Location? getLocationObject(dynamic location) {
       return Location(lat, lng);
     }
   }
+  return null;
 }
 
 List prepareValueList(Map value) {

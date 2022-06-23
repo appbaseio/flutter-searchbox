@@ -105,7 +105,7 @@ class _StateProviderState extends State<StateProvider> {
   initState() {
     super.initState();
     WidgetsBinding.instance
-        ?.addPostFrameCallback((_) => subscribeToProperties());
+        .addPostFrameCallback((_) => subscribeToProperties());
   }
 
   void subscribeToProperties() {

@@ -1,3 +1,7 @@
+## 3.2.0-beta
+
+- Upgrade to Flutter 3
+
 ## [1.1.0] - 21-04-2022
 
 - Breaking changes as per `searchbase: 3.0.0` & `flutter_searchbox: 3.0.0`
