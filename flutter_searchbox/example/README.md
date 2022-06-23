@@ -1,4 +1,4 @@
-# example
+# Flutter Searchbox Example
 
 A new Flutter project.
 
