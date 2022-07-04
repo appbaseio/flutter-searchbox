@@ -328,7 +328,7 @@ class SearchController extends Base {
   /// When set to `true`, the dependent controller's (which is set via react prop) value would get cleared whenever the query changes.
   ///
   /// The default value is `false`
-  bool clearOnQueryChange;
+  bool? clearOnQueryChange;
 
   /// A subject to track state changes and update listeners.
   late Observable stateChanges;
@@ -847,7 +847,9 @@ class SearchController extends Base {
 
             // Reset value for dependent components after fist query is made
             // We wait for first query to not clear filters applied by URL params
-            if (this.clearOnQueryChange && this._query != null) {
+            if (this.clearOnQueryChange != null &&
+                this.clearOnQueryChange == true &&
+                this._query != null) {
               componentInstance.setValue(null,
                   options: new Options(
                       triggerDefaultQuery: false,
