@@ -1,3 +1,7 @@
+## 3.2.1-beta
+
+- Fix a bug in searchController class https://github.com/appbaseio/flutter-searchbox/pull/23
+
 ## 3.2.0-beta
 
 - Upgrade to Flutter 3
