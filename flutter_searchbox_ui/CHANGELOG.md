@@ -1,3 +1,7 @@
+## 3.2.1-beta
+
+- Upgrade searchbase
+
 ## 3.2.0-beta
 
 - Upgrade to Flutter 3
