@@ -14,7 +14,7 @@ dependencies:
   flutter_searchbox: ^3.2.1-beta
   google_maps_cluster_manager: ^3.0.0+1
   google_maps_flutter: ^2.0.11
-  searchbase: ^3.2.1-beta
+  searchbase: ^3.3.0-beta
 dev_dependencies:
   flutter_test:
     sdk: flutter

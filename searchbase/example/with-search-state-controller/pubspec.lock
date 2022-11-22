@@ -322,7 +322,7 @@ packages:
       path: "../.."
       relative: true
     source: path
-    version: "3.2.0-beta"
+    version: "3.2.1-beta"
   shelf:
     dependency: transitive
     description:

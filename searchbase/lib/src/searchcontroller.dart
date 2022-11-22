@@ -619,7 +619,7 @@ class SearchController extends Base {
   void setDataField(dynamic dataField, {Options? options}) {
     final prev = this.dataField;
     this.dataField = dataField;
-    this._applyOptions(options, KeysToSubscribe.DataField, prev, dataField);
+    this.applyOptions(options, KeysToSubscribe.DataField, prev, dataField);
   }
 
   /// can be used to set the `value` property
@@ -640,29 +640,28 @@ class SearchController extends Base {
   void setSize(int size, {Options? options}) {
     final prev = this.size;
     this.size = size;
-    this._applyOptions(options, KeysToSubscribe.Size, prev, this.size);
+    this.applyOptions(options, KeysToSubscribe.Size, prev, this.size);
   }
 
   /// sets the `from` property that is helpful to implement pagination
   void setFrom(int from, {Options? options}) {
     final prev = this.from;
     this.from = from;
-    this._applyOptions(options, KeysToSubscribe.From, prev, this.from);
+    this.applyOptions(options, KeysToSubscribe.From, prev, this.from);
   }
 
   /// sets the `fuzziness` property
   void setFuzziness(dynamic fuzziness, {Options? options}) {
     final prev = this.fuzziness;
     this.fuzziness = fuzziness;
-    this._applyOptions(
-        options, KeysToSubscribe.Fuzziness, prev, this.fuzziness);
+    this.applyOptions(options, KeysToSubscribe.Fuzziness, prev, this.fuzziness);
   }
 
   /// can be used to set the `includeFields` property
   void setIncludeFields(List<String> includeFields, {Options? options}) {
     final prev = this.includeFields;
     this.includeFields = includeFields;
-    this._applyOptions(
+    this.applyOptions(
         options, KeysToSubscribe.IncludeFields, prev, includeFields);
   }
 
@@ -670,7 +669,7 @@ class SearchController extends Base {
   void setExcludeFields(List<String> excludeFields, {Options? options}) {
     final prev = this.excludeFields;
     this.excludeFields = excludeFields;
-    this._applyOptions(
+    this.applyOptions(
         options, KeysToSubscribe.ExcludeFields, prev, excludeFields);
   }
 
@@ -678,14 +677,14 @@ class SearchController extends Base {
   void setSortBy(SortType sortBy, {Options? options}) {
     final prev = this.sortBy;
     this.sortBy = sortBy;
-    this._applyOptions(options, KeysToSubscribe.SortBy, prev, sortBy);
+    this.applyOptions(options, KeysToSubscribe.SortBy, prev, sortBy);
   }
 
   /// to update `react` property
   void setReact(Map<String, dynamic> react, {Options? options}) {
     final prev = this.react;
     this.react = react;
-    this._applyOptions(options, KeysToSubscribe.React, prev, react);
+    this.applyOptions(options, KeysToSubscribe.React, prev, react);
   }
 
   /// to update `defaultQuery` property
@@ -694,7 +693,7 @@ class SearchController extends Base {
       {Options? options}) {
     final prev = this.defaultQuery;
     this.defaultQuery = defaultQuery;
-    this._applyOptions(
+    this.applyOptions(
         options, KeysToSubscribe.DefaultQuery, prev, defaultQuery);
   }
 
@@ -704,7 +703,7 @@ class SearchController extends Base {
       {Options? options}) {
     final prev = this.customQuery;
     this.customQuery = customQuery;
-    this._applyOptions(options, KeysToSubscribe.CustomQuery, prev, customQuery);
+    this.applyOptions(options, KeysToSubscribe.CustomQuery, prev, customQuery);
   }
 
   /// can be used to set the `after` property, which is useful while implementing pagination with [QueryType.term] type of widgets
@@ -712,7 +711,7 @@ class SearchController extends Base {
     final prev = this.after;
     this.after = after;
     this.aggregationData.setAfterKey(after);
-    this._applyOptions(options, KeysToSubscribe.After, prev, after);
+    this.applyOptions(options, KeysToSubscribe.After, prev, after);
   }
 
   /// to record click analytics of a search request.
@@ -749,54 +748,63 @@ class SearchController extends Base {
       return Future<bool>.value(true);
     }
     try {
-      this._updateQuery();
-      this._setRequestStatus(RequestStatus.PENDING, options: options);
-      final results = await this._fetchRequest({
-        'query': this.query is List ? this.query : [this.query],
-        'settings': this.appbaseSettings?.toJSON()
-      }, false);
-      final prev = this.results.clone();
-      final Map? rawResults = results[this.id] is Map ? results[this.id] : {};
-      void afterResponse() {
-        if (rawResults!['aggregations'] != null) {
-          this._handleAggregationResponse(rawResults['aggregations'],
-              options: new Options(stateChanges: options?.stateChanges));
+      this.updateQuery();
+      var searchbaseInstance = this._parent;
+      var shouldAddToWaitList = searchbaseInstance!.shouldAddRequestToWaitList(
+        this.id,
+        true,
+        this.query as List<Map<dynamic, dynamic>>,
+      );
+      if (!shouldAddToWaitList) {
+        this.setRequestStatus(RequestStatus.PENDING, options: options);
+        final results = await this._fetchRequest({
+          'query': this.query is List ? this.query : [this.query],
+          'settings': this.appbaseSettings?.toJSON()
+        }, false);
+        final prev = this.results.clone();
+        final Map? rawResults = results[this.id] is Map ? results[this.id] : {};
+        void afterResponse() {
+          if (rawResults!['aggregations'] != null) {
+            this.handleAggregationResponse(rawResults['aggregations'],
+                options: new Options(stateChanges: options?.stateChanges));
+          }
+          this.setRequestStatus(RequestStatus.INACTIVE, options: options);
+          this.applyOptions(new Options(stateChanges: options?.stateChanges),
+              KeysToSubscribe.Results, prev, this.results);
         }
-        this._setRequestStatus(RequestStatus.INACTIVE, options: options);
-        this._applyOptions(new Options(stateChanges: options?.stateChanges),
-            KeysToSubscribe.Results, prev, this.results);
-      }
 
-      if ((this.type == null || this.type == QueryType.search) &&
-          this.enablePopularSuggestions == true) {
-        final rawPopularSuggestions =
-            await this._fetchRequest(this._getSuggestionsQuery(), true);
-        final popularSuggestionsData = rawPopularSuggestions[suggestionQueryID];
-        // Merge popular suggestions as the top suggestions
-        if (popularSuggestionsData != null &&
-            popularSuggestionsData['hits'] != null &&
-            popularSuggestionsData['hits']['hits'] != null &&
-            rawResults != null &&
-            rawResults['hits'] != null &&
-            rawResults['hits']['hits'] != null) {
-          rawResults['hits']['hits'] = [
-            ...rawResults['hits']['hits'],
-            ...(popularSuggestionsData['hits']['hits'] as List)
-                .map((hit) => ({
-                      ...hit,
-                      // Set the popular suggestion tag for suggestion hits
-                      '_popular_suggestion': true
-                    }))
-                .toList(),
-          ];
+        if ((this.type == null || this.type == QueryType.search) &&
+            this.enablePopularSuggestions == true) {
+          final rawPopularSuggestions =
+              await this._fetchRequest(this._getSuggestionsQuery(), true);
+          final popularSuggestionsData =
+              rawPopularSuggestions[suggestionQueryID];
+          // Merge popular suggestions as the top suggestions
+          if (popularSuggestionsData != null &&
+              popularSuggestionsData['hits'] != null &&
+              popularSuggestionsData['hits']['hits'] != null &&
+              rawResults != null &&
+              rawResults['hits'] != null &&
+              rawResults['hits']['hits'] != null) {
+            rawResults['hits']['hits'] = [
+              ...rawResults['hits']['hits'],
+              ...(popularSuggestionsData['hits']['hits'] as List)
+                  .map((hit) => ({
+                        ...hit,
+                        // Set the popular suggestion tag for suggestion hits
+                        '_popular_suggestion': true
+                      }))
+                  .toList(),
+            ];
+          }
+          this._appendResults(rawResults);
+          afterResponse();
+        } else {
+          this._appendResults(rawResults);
+          afterResponse();
         }
-        this._appendResults(rawResults);
-        afterResponse();
-      } else {
-        this._appendResults(rawResults);
-        afterResponse();
+        return Future.value(rawResults);
       }
-      return Future.value(rawResults);
     } catch (err) {
       return _handleError(err);
     }
@@ -804,87 +812,94 @@ class SearchController extends Base {
 
   /// can be used to execute queries for the dependent/watcher components.
   Future triggerCustomQuery({Option? options}) async {
-    // Generate query again after resetting changes
-    final generatedQuery = this._generateQuery();
-    if (generatedQuery.requestBody.length != 0) {
-      if (isEqual(this._query, generatedQuery.requestBody)) {
-        return Future.value(true);
-      }
-      // set the request loading to true for all the requests
-      generatedQuery.orderOfQueries.forEach((id) {
-        final componentInstance = this._parent!.getSearchWidget(id);
-        if (componentInstance != null) {
-          // Reset `from` and `after` values
-          componentInstance.setFrom(0,
-              options: new Options(
-                  triggerDefaultQuery: false,
-                  triggerCustomQuery: false,
-                  stateChanges: true));
-          componentInstance.setAfter(null,
-              options: new Options(
-                  triggerDefaultQuery: false,
-                  triggerCustomQuery: false,
-                  stateChanges: true));
-          componentInstance._setRequestStatus(RequestStatus.PENDING,
-              options: options);
-          // Update the query
-          componentInstance._updateQuery();
+    var shouldAddToWaitList = this._parent!.shouldAddRequestToWaitList(
+          this.id,
+          true,
+          this.query as List<Map<dynamic, dynamic>>,
+        );
+    if (!shouldAddToWaitList) {
+      // Generate query again after resetting changes
+      final generatedQuery = this._generateQuery();
+      if (generatedQuery.requestBody.length != 0) {
+        if (isEqual(this._query, generatedQuery.requestBody)) {
+          return Future.value(true);
         }
-      });
-      try {
-        // Re-generate query after changes
-        final finalGeneratedQuery = this._generateQuery();
-        final results = await this._fetchRequest({
-          'query': finalGeneratedQuery.requestBody,
-          'settings': this.appbaseSettings?.toJSON()
-        }, false);
-        // Update the state for components
-        finalGeneratedQuery.orderOfQueries.forEach((id) {
+        // set the request loading to true for all the requests
+        generatedQuery.orderOfQueries.forEach((id) {
           final componentInstance = this._parent!.getSearchWidget(id);
           if (componentInstance != null) {
-            componentInstance._setRequestStatus(RequestStatus.INACTIVE,
+            // Reset `from` and `after` values
+            componentInstance.setFrom(0,
+                options: new Options(
+                    triggerDefaultQuery: false,
+                    triggerCustomQuery: false,
+                    stateChanges: true));
+            componentInstance.setAfter(null,
+                options: new Options(
+                    triggerDefaultQuery: false,
+                    triggerCustomQuery: false,
+                    stateChanges: true));
+            componentInstance.setRequestStatus(RequestStatus.PENDING,
                 options: options);
-
-            // Reset value for dependent components after fist query is made
-            // We wait for first query to not clear filters applied by URL params
-            if (this.clearOnQueryChange != null &&
-                this.clearOnQueryChange == true &&
-                this._query != null) {
-              componentInstance.setValue(null,
-                  options: new Options(
-                      triggerDefaultQuery: false,
-                      triggerCustomQuery: false,
-                      stateChanges: true));
-            }
-
-            // Update the results
-            final prev = componentInstance.results.clone();
-            // Collect results from the response for a particular component
-            Map rawResults = results[id] != null ? results[id] : {};
-            // Set results
-            if (rawResults['hits'] != null) {
-              componentInstance.results.setRaw(rawResults);
-              componentInstance._applyOptions(
-                  Options(stateChanges: options?.stateChanges),
-                  KeysToSubscribe.Results,
-                  prev,
-                  componentInstance.results);
-            }
-
-            if (rawResults['aggregations'] != null) {
-              componentInstance._handleAggregationResponse(
-                  rawResults['aggregations'],
-                  options: new Options(stateChanges: options?.stateChanges),
-                  append: false);
-            }
+            // Update the query
+            componentInstance.updateQuery();
           }
         });
-        return Future.value(results);
-      } catch (e) {
-        return _handleError(e);
+        try {
+          // Re-generate query after changes
+          final finalGeneratedQuery = this._generateQuery();
+          final results = await this._fetchRequest({
+            'query': finalGeneratedQuery.requestBody,
+            'settings': this.appbaseSettings?.toJSON()
+          }, false);
+          // Update the state for components
+          finalGeneratedQuery.orderOfQueries.forEach((id) {
+            final componentInstance = this._parent!.getSearchWidget(id);
+            if (componentInstance != null) {
+              componentInstance.setRequestStatus(RequestStatus.INACTIVE,
+                  options: options);
+
+              // Reset value for dependent components after fist query is made
+              // We wait for first query to not clear filters applied by URL params
+              if (this.clearOnQueryChange != null &&
+                  this.clearOnQueryChange == true &&
+                  this._query != null) {
+                componentInstance.setValue(null,
+                    options: new Options(
+                        triggerDefaultQuery: false,
+                        triggerCustomQuery: false,
+                        stateChanges: true));
+              }
+
+              // Update the results
+              final prev = componentInstance.results.clone();
+              // Collect results from the response for a particular component
+              Map rawResults = results[id] != null ? results[id] : {};
+              // Set results
+              if (rawResults['hits'] != null) {
+                componentInstance.results.setRaw(rawResults);
+                componentInstance.applyOptions(
+                    Options(stateChanges: options?.stateChanges),
+                    KeysToSubscribe.Results,
+                    prev,
+                    componentInstance.results);
+              }
+
+              if (rawResults['aggregations'] != null) {
+                componentInstance.handleAggregationResponse(
+                    rawResults['aggregations'],
+                    options: new Options(stateChanges: options?.stateChanges),
+                    append: false);
+              }
+            }
+          });
+          return Future.value(results);
+        } catch (e) {
+          return _handleError(e);
+        }
       }
+      return Future.value(true);
     }
-    return Future.value(true);
   }
 
   /// to subscribe the state changes
@@ -943,7 +958,7 @@ class SearchController extends Base {
     this.results.setRaw({
       'hits': {'hits': []}
     });
-    this._applyOptions(Options(stateChanges: options?.stateChanges),
+    this.applyOptions(Options(stateChanges: options?.stateChanges),
         KeysToSubscribe.Results, prev, this.results);
   }
 
@@ -998,7 +1013,7 @@ class SearchController extends Base {
       this.recentSearches = ((recentSearches as List).map((searchObject) =>
           Suggestion(searchObject['key'], searchObject['key'],
               isRecentSearch: true))).toList();
-      this._applyOptions(new Options(stateChanges: options?.stateChanges),
+      this.applyOptions(new Options(stateChanges: options?.stateChanges),
           KeysToSubscribe.RecentSearches, prev, this.recentSearches);
       return Future.value(this.recentSearches);
     } catch (e) {
@@ -1038,11 +1053,11 @@ class SearchController extends Base {
   void _performUpdate(dynamic value, Options? options) {
     dynamic prev = this.value;
     this.value = value;
-    this._applyOptions(options, KeysToSubscribe.Value, prev, this.value);
+    this.applyOptions(options, KeysToSubscribe.Value, prev, this.value);
   }
 
   Future _handleError(dynamic err, {Option? options}) {
-    this._setError(err,
+    this.setError(err,
         options: new Options(stateChanges: options?.stateChanges));
     print(err);
     return Future.error(err);
@@ -1115,7 +1130,7 @@ class SearchController extends Base {
   }
 
   // Method to apply the changes based on set options
-  void _applyOptions(
+  void applyOptions(
       Options? options, KeysToSubscribe key, prevValue, nextValue) {
     // Trigger events
     if (key == KeysToSubscribe.Query && this.onQueryChange != null) {
@@ -1271,7 +1286,7 @@ class SearchController extends Base {
     return Future<Map>.value(requestOptions);
   }
 
-  _handleAggregationResponse(Map aggsResponse,
+  handleAggregationResponse(Map aggsResponse,
       {Options? options, bool append = true}) {
     String? aggregationField = this.aggregationField;
     if ((aggregationField == null || aggregationField == "") &&
@@ -1289,28 +1304,28 @@ class SearchController extends Base {
         this.aggregationData.setData(aggregationField, data,
             append: this.preserveResults == true && append);
       }
-      this._applyOptions(new Options(stateChanges: options?.stateChanges),
+      this.applyOptions(new Options(stateChanges: options?.stateChanges),
           KeysToSubscribe.AggregationData, prev, this.aggregationData);
     }
   }
 
-  _setError(dynamic error, {Options? options}) {
-    this._setRequestStatus(RequestStatus.ERROR,
+  setError(dynamic error, {Options? options}) {
+    this.setRequestStatus(RequestStatus.ERROR,
         options: Option(stateChanges: options?.stateChanges));
     final prev = this.error;
     this.error = error;
-    this._applyOptions(options, KeysToSubscribe.Error, prev, this.error);
+    this.applyOptions(options, KeysToSubscribe.Error, prev, this.error);
   }
 
-  _setRequestStatus(RequestStatus requestStatus, {Option? options}) {
+  setRequestStatus(RequestStatus requestStatus, {Option? options}) {
     final prev = this.requestStatus;
     this.requestStatus = requestStatus;
-    this._applyOptions(Options(stateChanges: options?.stateChanges),
+    this.applyOptions(Options(stateChanges: options?.stateChanges),
         KeysToSubscribe.RequestStatus, prev, this.requestStatus);
   }
 
   // Method to set the default query value
-  void _updateQuery({List<Map>? query}) {
+  void updateQuery({List<Map>? query}) {
     List<Map>? prevQuery;
     prevQuery = this._query != null ? [...this._query!] : this._query;
     final finalQuery = [this.componentQuery];
@@ -1327,7 +1342,7 @@ class SearchController extends Base {
       }
     });
     this._query = query != null ? query : finalQuery;
-    this._applyOptions(new Options(stateChanges: false), KeysToSubscribe.Query,
+    this.applyOptions(new Options(stateChanges: false), KeysToSubscribe.Query,
         prevQuery, this._query);
   }
 }
