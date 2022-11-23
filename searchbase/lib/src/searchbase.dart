@@ -223,7 +223,7 @@ class SearchBase extends Base {
   }
 
   bool shouldAddRequestToWaitList(
-      String controllerId, bool addToStack, List<Map> query) {
+      String controllerId, bool addToStack, List<Map>? query) {
     var currentTime = new DateTime.now().millisecondsSinceEpoch;
     var shouldWait =
         currentTime - this._initialTimeStamp < this.initialQueriesSyncTime;
@@ -324,7 +324,7 @@ class SearchBase extends Base {
       // Lock request execution
       this.lock();
       // Add component Id to request stack
-      query.forEach((q) {
+      query?.forEach((q) {
         this._requestStack.add(q);
       });
     }

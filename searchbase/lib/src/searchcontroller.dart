@@ -428,6 +428,10 @@ class SearchController extends Base {
   // query search ID
   String? _queryId;
 
+  int? _lastUsedDefaultQueryTimeStamp;
+
+  int? _lastUsedCustomQueryTimeStamp;
+
   SearchController(
     String index,
     String url,
@@ -747,66 +751,70 @@ class SearchController extends Base {
     if (isEqual(this._query, this.componentQuery)) {
       return Future<bool>.value(true);
     }
+    var currentTimeStamp = DateTime.now().microsecondsSinceEpoch;
     try {
       this.updateQuery();
       var searchbaseInstance = this._parent;
-      var shouldAddToWaitList = searchbaseInstance!.shouldAddRequestToWaitList(
-        this.id,
-        true,
-        this.query as List<Map<dynamic, dynamic>>,
-      );
+      var shouldAddToWaitList = searchbaseInstance!
+          .shouldAddRequestToWaitList(this.id, true, this.query);
       if (!shouldAddToWaitList) {
+        this._lastUsedDefaultQueryTimeStamp = currentTimeStamp;
         this.setRequestStatus(RequestStatus.PENDING, options: options);
         final results = await this._fetchRequest({
           'query': this.query is List ? this.query : [this.query],
           'settings': this.appbaseSettings?.toJSON()
         }, false);
-        final prev = this.results.clone();
-        final Map? rawResults = results[this.id] is Map ? results[this.id] : {};
-        void afterResponse() {
-          if (rawResults!['aggregations'] != null) {
-            this.handleAggregationResponse(rawResults['aggregations'],
-                options: new Options(stateChanges: options?.stateChanges));
+        if (currentTimeStamp == this._lastUsedDefaultQueryTimeStamp) {
+          final prev = this.results.clone();
+          final Map? rawResults =
+              results[this.id] is Map ? results[this.id] : {};
+          void afterResponse() {
+            if (rawResults!['aggregations'] != null) {
+              this.handleAggregationResponse(rawResults['aggregations'],
+                  options: new Options(stateChanges: options?.stateChanges));
+            }
+            this.setRequestStatus(RequestStatus.INACTIVE, options: options);
+            this.applyOptions(new Options(stateChanges: options?.stateChanges),
+                KeysToSubscribe.Results, prev, this.results);
           }
-          this.setRequestStatus(RequestStatus.INACTIVE, options: options);
-          this.applyOptions(new Options(stateChanges: options?.stateChanges),
-              KeysToSubscribe.Results, prev, this.results);
-        }
 
-        if ((this.type == null || this.type == QueryType.search) &&
-            this.enablePopularSuggestions == true) {
-          final rawPopularSuggestions =
-              await this._fetchRequest(this._getSuggestionsQuery(), true);
-          final popularSuggestionsData =
-              rawPopularSuggestions[suggestionQueryID];
-          // Merge popular suggestions as the top suggestions
-          if (popularSuggestionsData != null &&
-              popularSuggestionsData['hits'] != null &&
-              popularSuggestionsData['hits']['hits'] != null &&
-              rawResults != null &&
-              rawResults['hits'] != null &&
-              rawResults['hits']['hits'] != null) {
-            rawResults['hits']['hits'] = [
-              ...rawResults['hits']['hits'],
-              ...(popularSuggestionsData['hits']['hits'] as List)
-                  .map((hit) => ({
-                        ...hit,
-                        // Set the popular suggestion tag for suggestion hits
-                        '_popular_suggestion': true
-                      }))
-                  .toList(),
-            ];
+          if ((this.type == null || this.type == QueryType.search) &&
+              this.enablePopularSuggestions == true) {
+            final rawPopularSuggestions =
+                await this._fetchRequest(this._getSuggestionsQuery(), true);
+            final popularSuggestionsData =
+                rawPopularSuggestions[suggestionQueryID];
+            // Merge popular suggestions as the top suggestions
+            if (popularSuggestionsData != null &&
+                popularSuggestionsData['hits'] != null &&
+                popularSuggestionsData['hits']['hits'] != null &&
+                rawResults != null &&
+                rawResults['hits'] != null &&
+                rawResults['hits']['hits'] != null) {
+              rawResults['hits']['hits'] = [
+                ...rawResults['hits']['hits'],
+                ...(popularSuggestionsData['hits']['hits'] as List)
+                    .map((hit) => ({
+                          ...hit,
+                          // Set the popular suggestion tag for suggestion hits
+                          '_popular_suggestion': true
+                        }))
+                    .toList(),
+              ];
+            }
+            this._appendResults(rawResults);
+            afterResponse();
+          } else {
+            this._appendResults(rawResults);
+            afterResponse();
           }
-          this._appendResults(rawResults);
-          afterResponse();
-        } else {
-          this._appendResults(rawResults);
-          afterResponse();
+          return Future.value(rawResults);
         }
-        return Future.value(rawResults);
       }
     } catch (err) {
-      return _handleError(err);
+      if (currentTimeStamp == this._lastUsedDefaultQueryTimeStamp) {
+        return _handleError(err);
+      }
     }
   }
 
@@ -815,9 +823,11 @@ class SearchController extends Base {
     var shouldAddToWaitList = this._parent!.shouldAddRequestToWaitList(
           this.id,
           true,
-          this.query as List<Map<dynamic, dynamic>>,
+          this.query,
         );
     if (!shouldAddToWaitList) {
+      var currentTimeStamp = DateTime.now().microsecondsSinceEpoch;
+      this._lastUsedCustomQueryTimeStamp = currentTimeStamp;
       // Generate query again after resetting changes
       final generatedQuery = this._generateQuery();
       if (generatedQuery.requestBody.length != 0) {
@@ -852,50 +862,55 @@ class SearchController extends Base {
             'query': finalGeneratedQuery.requestBody,
             'settings': this.appbaseSettings?.toJSON()
           }, false);
-          // Update the state for components
-          finalGeneratedQuery.orderOfQueries.forEach((id) {
-            final componentInstance = this._parent!.getSearchWidget(id);
-            if (componentInstance != null) {
-              componentInstance.setRequestStatus(RequestStatus.INACTIVE,
-                  options: options);
+          if (currentTimeStamp == this._lastUsedCustomQueryTimeStamp) {
+            // Update the state for components
+            finalGeneratedQuery.orderOfQueries.forEach((id) {
+              final componentInstance = this._parent!.getSearchWidget(id);
+              if (componentInstance != null) {
+                componentInstance.setRequestStatus(RequestStatus.INACTIVE,
+                    options: options);
 
-              // Reset value for dependent components after fist query is made
-              // We wait for first query to not clear filters applied by URL params
-              if (this.clearOnQueryChange != null &&
-                  this.clearOnQueryChange == true &&
-                  this._query != null) {
-                componentInstance.setValue(null,
-                    options: new Options(
-                        triggerDefaultQuery: false,
-                        triggerCustomQuery: false,
-                        stateChanges: true));
-              }
+                // Reset value for dependent components after fist query is made
+                // We wait for first query to not clear filters applied by URL params
+                if (this.clearOnQueryChange != null &&
+                    this.clearOnQueryChange == true &&
+                    this._query != null) {
+                  componentInstance.setValue(null,
+                      options: new Options(
+                          triggerDefaultQuery: false,
+                          triggerCustomQuery: false,
+                          stateChanges: true));
+                }
 
-              // Update the results
-              final prev = componentInstance.results.clone();
-              // Collect results from the response for a particular component
-              Map rawResults = results[id] != null ? results[id] : {};
-              // Set results
-              if (rawResults['hits'] != null) {
-                componentInstance.results.setRaw(rawResults);
-                componentInstance.applyOptions(
-                    Options(stateChanges: options?.stateChanges),
-                    KeysToSubscribe.Results,
-                    prev,
-                    componentInstance.results);
-              }
+                // Update the results
+                final prev = componentInstance.results.clone();
+                // Collect results from the response for a particular component
+                Map rawResults = results[id] != null ? results[id] : {};
+                // Set results
+                if (rawResults['hits'] != null) {
+                  componentInstance.results.setRaw(rawResults);
+                  componentInstance.applyOptions(
+                      Options(stateChanges: options?.stateChanges),
+                      KeysToSubscribe.Results,
+                      prev,
+                      componentInstance.results);
+                }
 
-              if (rawResults['aggregations'] != null) {
-                componentInstance.handleAggregationResponse(
-                    rawResults['aggregations'],
-                    options: new Options(stateChanges: options?.stateChanges),
-                    append: false);
+                if (rawResults['aggregations'] != null) {
+                  componentInstance.handleAggregationResponse(
+                      rawResults['aggregations'],
+                      options: new Options(stateChanges: options?.stateChanges),
+                      append: false);
+                }
               }
-            }
-          });
+            });
+          }
+
           return Future.value(results);
         } catch (e) {
-          return _handleError(e);
+          if (currentTimeStamp == this._lastUsedCustomQueryTimeStamp) {
+            return _handleError(e);
+          }
         }
       }
       return Future.value(true);
