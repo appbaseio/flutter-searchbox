@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_feather_icons: ^2.0.0+1
-  searchbase: ^3.3.2-beta
+  searchbase: ^3.4.0-beta
   provider: ^6.0.0
 
 dev_dependencies:
