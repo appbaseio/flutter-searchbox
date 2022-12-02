@@ -396,4 +396,136 @@ class SearchBase extends Base {
       return Future.error(e);
     }
   }
+
+  // To set values for controllers and trigger a final query, it accepts a map of controller Id to controller value
+  void setSearchState(Map<String, dynamic> value) {
+    value.keys.forEach((id) {
+      SearchController? controller = getSearchWidget(id);
+      // First set the value for all the controllers
+      controller!.setValue(value[id],
+          options: Options(
+              stateChanges: false,
+              triggerCustomQuery: false,
+              triggerDefaultQuery: false));
+    });
+
+    // Trigger custom queries for all the affected components
+    value.keys.forEach((id) {
+      SearchController? controller = getSearchWidget(id);
+      // Add component Id to request stack
+      final generatedQuery = controller?.generateQuery();
+      if (generatedQuery?.requestBody.length != 0) {
+        generatedQuery?.orderOfQueries.forEach((id) {
+          final componentInstance = this.getSearchWidget(id);
+          if (componentInstance != null) {
+            // Reset `from` and `after` values
+            componentInstance.setFrom(0,
+                options: new Options(
+                    triggerDefaultQuery: false,
+                    triggerCustomQuery: false,
+                    stateChanges: true));
+            componentInstance.setAfter(null,
+                options: new Options(
+                    triggerDefaultQuery: false,
+                    triggerCustomQuery: false,
+                    stateChanges: true));
+            // Update the query
+            componentInstance.updateQuery();
+          }
+        });
+        final finalGeneratedQuery = controller?.generateQuery();
+        finalGeneratedQuery?.requestBody.forEach((q) {
+          this._requestStack.add(q);
+        });
+      }
+    });
+
+    // execute request
+    List executableControllers = [];
+    Map<String, Map> requestsToIdMap = {};
+    this._requestStack.forEach((request) {
+      var controllerId = request["id"] as String;
+      if (requestsToIdMap[controllerId] != null) {
+        requestsToIdMap[controllerId] = request;
+      } else {
+        var shouldExecute =
+            request["execute"] != null ? request["execute"] as bool : false;
+        // check if `execute` was set to `true` in older requests
+        if (shouldExecute) {
+          request["execute"] = true;
+        }
+        requestsToIdMap[controllerId] = request;
+      }
+    });
+    requestsToIdMap.values.forEach((request) {
+      var controllerId = request["id"] as String;
+      var shouldExecute =
+          request["execute"] != null ? request["execute"] as bool : null;
+      // check if `execute` was set to `true` in older requests
+      if (shouldExecute != null) {
+        if (shouldExecute) {
+          executableControllers.add(controllerId);
+        }
+      } else {
+        executableControllers.add(controllerId);
+      }
+    });
+    executableControllers.forEach((id) {
+      final componentInstance = this.getSearchWidget(id);
+      if (componentInstance != null) {
+        // set request status to pending
+        componentInstance.setRequestStatus(RequestStatus.PENDING,
+            options: new Option());
+        // Update the query
+        componentInstance.updateQuery();
+      }
+    });
+    List query = [];
+    requestsToIdMap.values.forEach((element) {
+      query.add(element);
+    });
+    // Execute combined queries in a single request
+    this._fetchRequest({
+      'query': query,
+      'settings': this.appbaseConfig?.toJSON()
+    }).then((results) {
+      requestsToIdMap.keys.forEach((id) {
+        final componentInstance = this.getSearchWidget(id);
+        if (componentInstance != null) {
+          componentInstance.setRequestStatus(RequestStatus.INACTIVE,
+              options: Option());
+
+          // Update the results
+          final prev = componentInstance.results.clone();
+          // Collect results from the response for a particular component
+          Map rawResults = results[id] != null ? results[id] : {};
+          // Set results
+          if (rawResults['hits'] != null) {
+            componentInstance.results.setRaw(rawResults);
+            componentInstance.applyOptions(Options(), KeysToSubscribe.Results,
+                prev, componentInstance.results);
+          }
+
+          if (rawResults['aggregations'] != null) {
+            componentInstance.handleAggregationResponse(
+                rawResults['aggregations'],
+                options: new Options(),
+                append: false);
+          }
+        }
+      });
+    }).catchError((error) {
+      executableControllers.forEach((id) {
+        final componentInstance = this.getSearchWidget(id);
+        if (componentInstance != null) {
+          componentInstance.setRequestStatus(RequestStatus.INACTIVE,
+              options: Option());
+
+          componentInstance.setError(error);
+        }
+      });
+    });
+    this._requestStack.clear();
+    this.unlock();
+  }
 }

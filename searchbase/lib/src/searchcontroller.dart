@@ -10,10 +10,10 @@ import 'types.dart';
 import 'utils.dart';
 
 // Represents the format of query response
-class _GenerateQueryResponse {
+class GenerateQueryResponse {
   List<Map> requestBody;
   List<String> orderOfQueries;
-  _GenerateQueryResponse(this.requestBody, this.orderOfQueries) {}
+  GenerateQueryResponse(this.requestBody, this.orderOfQueries) {}
 }
 
 const suggestionQueryID = 'DataSearch__suggestions';
@@ -829,7 +829,7 @@ class SearchController extends Base {
       var currentTimeStamp = DateTime.now().microsecondsSinceEpoch;
       this._lastUsedCustomQueryTimeStamp = currentTimeStamp;
       // Generate query again after resetting changes
-      final generatedQuery = this._generateQuery();
+      final generatedQuery = this.generateQuery();
       if (generatedQuery.requestBody.length != 0) {
         if (isEqual(this._query, generatedQuery.requestBody)) {
           return Future.value(true);
@@ -857,7 +857,7 @@ class SearchController extends Base {
         });
         try {
           // Re-generate query after changes
-          final finalGeneratedQuery = this._generateQuery();
+          final finalGeneratedQuery = this.generateQuery();
           final results = await this._fetchRequest({
             'query': finalGeneratedQuery.requestBody,
             'settings': this.appbaseSettings?.toJSON()
@@ -1234,7 +1234,7 @@ class SearchController extends Base {
   }
 
   // Method to generate the final query based on the component's value changes
-  _GenerateQueryResponse _generateQuery() {
+  GenerateQueryResponse generateQuery() {
     /**
      * This method performs the following tasks to generate the query
      * 1. Get all the watcher components for a particular component ID
@@ -1281,9 +1281,9 @@ class SearchController extends Base {
         }
       });
       final queries = requestQuery.values.toList();
-      return _GenerateQueryResponse(queries, watcherComponents);
+      return GenerateQueryResponse(queries, watcherComponents);
     }
-    return _GenerateQueryResponse([], []);
+    return GenerateQueryResponse([], []);
   }
 
   Future<Map> _handleTransformResponse(Map? res) {
