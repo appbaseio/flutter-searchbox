@@ -1,4 +1,3 @@
-import 'package:searchbase/src/base.dart';
 import 'types.dart';
 import 'searchcontroller.dart';
 import 'constants.dart';
@@ -401,12 +400,43 @@ class SearchBase extends Base {
   void setSearchState(Map<String, dynamic> value) {
     value.keys.forEach((id) {
       SearchController? controller = getSearchWidget(id);
-      // First set the value for all the controllers
-      controller!.setValue(value[id],
-          options: Options(
-              stateChanges: false,
-              triggerCustomQuery: false,
-              triggerDefaultQuery: false));
+      dynamic valueToBeSet = value[id];
+      if (valueToBeSet is List && valueToBeSet.isNotEmpty) {
+        Type elementType = valueToBeSet[0].runtimeType;
+
+        switch (elementType) {
+          case bool:
+            valueToBeSet = valueToBeSet.map((v) => v as bool).toList();
+            break;
+          case int:
+            valueToBeSet = valueToBeSet.map((v) => v as int).toList();
+            break;
+          case double:
+            valueToBeSet = valueToBeSet.map((v) => v as double).toList();
+            break;
+          case num:
+            valueToBeSet = valueToBeSet.map((v) => v as num).toList();
+            break;
+          case String:
+            valueToBeSet = valueToBeSet.map((v) => v as String).toList();
+            break;
+          default:
+            valueToBeSet = valueToBeSet.map((v) => v as dynamic).toList();
+        }
+        // First set the value for all the controllers
+        controller!.setValue(valueToBeSet,
+            options: Options(
+                stateChanges: false,
+                triggerCustomQuery: false,
+                triggerDefaultQuery: false));
+      } else {
+        // First set the value for all the controllers
+        controller!.setValue(value[id],
+            options: Options(
+                stateChanges: false,
+                triggerCustomQuery: false,
+                triggerDefaultQuery: false));
+      }
     });
 
     // Trigger custom queries for all the affected components
