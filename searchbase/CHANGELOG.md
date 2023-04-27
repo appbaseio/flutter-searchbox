@@ -1,3 +1,7 @@
+## 3.4.2-beta
+
+- Fix selected filters persistence issue with setSearchState
+
 ## 3.4.1-beta
 
 - Fix setSearchState type casting issues with List

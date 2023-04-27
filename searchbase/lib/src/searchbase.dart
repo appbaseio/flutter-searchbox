@@ -424,16 +424,16 @@ class SearchBase extends Base {
             valueToBeSet = valueToBeSet.map((v) => v as dynamic).toList();
         }
         // First set the value for all the controllers
-        controller!.setValue(valueToBeSet,
+        controller!.setValueSilent(valueToBeSet,
             options: Options(
-                stateChanges: false,
+                stateChanges: true,
                 triggerCustomQuery: false,
                 triggerDefaultQuery: false));
       } else {
         // First set the value for all the controllers
-        controller!.setValue(value[id],
+        controller!.setValueSilent(valueToBeSet,
             options: Options(
-                stateChanges: false,
+                stateChanges: true,
                 triggerCustomQuery: false,
                 triggerDefaultQuery: false));
       }

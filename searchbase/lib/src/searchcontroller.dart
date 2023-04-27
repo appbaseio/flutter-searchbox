@@ -640,6 +640,10 @@ class SearchController extends Base {
     }
   }
 
+  void setValueSilent(dynamic value, {Options? options}) {
+    this._performUpdate(value, options);
+  }
+
   /// sets the `size` property
   void setSize(int size, {Options? options}) {
     final prev = this.size;
