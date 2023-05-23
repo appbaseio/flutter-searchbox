@@ -1,3 +1,7 @@
+## 3.4.3-beta
+
+- Avoid consuming stale responses for controllers triggered by custom queries
+
 ## 3.4.2-beta
 
 - Fix selected filters persistence issue with setSearchState
