@@ -842,6 +842,7 @@ class SearchController extends Base {
         generatedQuery.orderOfQueries.forEach((id) {
           final componentInstance = this._parent!.getSearchWidget(id);
           if (componentInstance != null) {
+            componentInstance._lastUsedDefaultQueryTimeStamp = currentTimeStamp;
             // Reset `from` and `after` values
             componentInstance.setFrom(0,
                 options: new Options(
@@ -870,7 +871,9 @@ class SearchController extends Base {
             // Update the state for components
             finalGeneratedQuery.orderOfQueries.forEach((id) {
               final componentInstance = this._parent!.getSearchWidget(id);
-              if (componentInstance != null) {
+              if (componentInstance != null &&
+                  currentTimeStamp ==
+                      componentInstance._lastUsedDefaultQueryTimeStamp) {
                 componentInstance.setRequestStatus(RequestStatus.INACTIVE,
                     options: options);
 
