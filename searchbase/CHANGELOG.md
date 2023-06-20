@@ -1,3 +1,7 @@
+## 3.4.4-beta
+
+- Reuse httpClient to optimize latency for network requests.
+
 ## 3.4.3-beta
 
 - Avoid consuming stale responses for controllers triggered by custom queries
