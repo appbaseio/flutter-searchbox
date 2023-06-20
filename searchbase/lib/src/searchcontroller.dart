@@ -27,6 +27,13 @@ const suggestionQueryID = 'DataSearch__suggestions';
 /// -   a location filter widget,
 /// -   a widget to render the search results.
 class SearchController extends Base {
+  http.Client? _httpClient = null;
+
+  http.Client get httpClient {
+    _httpClient ??= http.Client();
+    return _httpClient!;
+  }
+
   // RS API properties
 
   /// A unique identifier of the component, can be referenced in other widgets' `react` prop to reactively update data.
@@ -1022,7 +1029,7 @@ class SearchController extends Base {
     final String url =
         "${this.url}/_analytics/${this._getSearchIndex(false)}/recent-searches?${queryString}";
     try {
-      final res = await http.get(Uri.parse(url), headers: this.headers);
+      final res = await httpClient.get(Uri.parse(url), headers: this.headers);
       if (res.statusCode >= 500) {
         return Future.error(res);
       }
@@ -1040,6 +1047,8 @@ class SearchController extends Base {
       return Future.value(this.recentSearches);
     } catch (e) {
       return Future.error(e);
+    } finally {
+      httpClient.close();
     }
   }
 
@@ -1201,7 +1210,7 @@ class SearchController extends Base {
       String suffix = '_reactivesearch.v3';
       final String url =
           "${this.url}/${this._getSearchIndex(isPopularSuggestionsAPI)}/$suffix";
-      final http.Response res = await http.post(
+      final http.Response res = await httpClient.post(
         Uri.parse(url),
         headers: finalRequestOptions['headers'],
         body: finalRequestOptions['body'],
@@ -1237,6 +1246,8 @@ class SearchController extends Base {
     } catch (e) {
       print(e);
       return Future.error(e);
+    } finally {
+      httpClient.close();
     }
   }
 
