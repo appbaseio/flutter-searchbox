@@ -1047,8 +1047,6 @@ class SearchController extends Base {
       return Future.value(this.recentSearches);
     } catch (e) {
       return Future.error(e);
-    } finally {
-      httpClient.close();
     }
   }
 
@@ -1246,8 +1244,6 @@ class SearchController extends Base {
     } catch (e) {
       print(e);
       return Future.error(e);
-    } finally {
-      httpClient.close();
     }
   }
 
