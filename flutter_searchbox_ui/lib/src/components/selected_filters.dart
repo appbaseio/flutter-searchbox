@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:searchbase/searchbase.dart';
 import 'package:flutter_searchbox/flutter_searchbox.dart';
+import 'dart:async';
 import '../utils.dart';
 
 class BuildOptions {
@@ -313,13 +314,16 @@ class _SelectedFiltersState extends State<SelectedFilters> {
     }
   }
 
-  void clearAllFilters([Map<String, dynamic>? resetTo]) {
+  void clearAllFilters([Map<String, dynamic>? resetTo]) async {
     final activeWidgets = this.activeWidgets;
     for (var id in activeWidgets.keys) {
       _selectedFilters.remove(id);
       var componentInstance = activeWidgets[id];
-      componentInstance
-          ?.setValue(resetTo != null ? resetTo[id] : getResetValue(id));
+      var completer = Completer();
+      var resetValue = resetTo != null ? resetTo[id] : getResetValue(id);
+      componentInstance?.setValue(resetValue,
+          options: Options(completer: completer));
+      await completer.future;
     }
     for (var id in activeWidgets.keys) {
       var componentInstance = activeWidgets[id];
