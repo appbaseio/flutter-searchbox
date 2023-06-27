@@ -645,6 +645,11 @@ class SearchController extends Base {
     } else {
       this._performUpdate(value, options);
     }
+
+    // Check if options contain a completer
+    if (options?.completer != null) {
+      options!.completer!.complete(); // Complete the completer
+    }
   }
 
   void setValueSilent(dynamic value, {Options? options}) {
@@ -1200,6 +1205,7 @@ class SearchController extends Base {
       'body': jsonEncode(requestBody),
       'headers': {...?this.headers}
     };
+
     try {
       final finalRequestOptions =
           await this._handleTransformRequest(requestOptions);

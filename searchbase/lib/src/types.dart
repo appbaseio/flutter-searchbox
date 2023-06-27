@@ -2,6 +2,7 @@ import 'results.dart';
 import 'aggregations.dart';
 import 'constants.dart';
 import 'searchcontroller.dart';
+import 'dart:async';
 
 typedef TransformRequest = Future<Object> Function(Map requestOptions);
 typedef TransformResponse = Future Function(dynamic response);
@@ -245,10 +246,14 @@ class Options {
   bool? triggerDefaultQuery;
   bool? triggerCustomQuery;
   bool? stateChanges;
-  Options(
-      {this.triggerDefaultQuery,
-      bool? triggerCustomQuery,
-      bool? stateChanges}) {
+  Completer<void>? completer;
+
+  Options({
+    this.triggerDefaultQuery,
+    bool? triggerCustomQuery,
+    bool? stateChanges,
+    this.completer,
+  }) {
     this.triggerDefaultQuery =
         triggerDefaultQuery != null ? triggerDefaultQuery : false;
     this.triggerCustomQuery =

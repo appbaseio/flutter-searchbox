@@ -1,3 +1,13 @@
+## 3.4.6-beta
+
+- filter reset bug
+- remove log statements
+- merge "Reuse httpClient to optimize latency for network requests."
+
+## 3.4.5-beta
+
+- filter reset bug
+
 ## 3.4.4-beta
 
 - Reuse httpClient to optimize latency for network requests.
