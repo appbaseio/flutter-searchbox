@@ -143,10 +143,10 @@ packages:
     dependency: "direct main"
     description:
       name: searchbase
-      sha256: "98b1f6525e2a0d66f4df4c52374d43347d57fc5c50440ea53c6f7e90e4d5a6fd"
+      sha256: "2ee04b83d25bfcbbbbdb750e1cba0ca8dc1b22a332defdd51ff9dba4f45b28e0"
       url: "https://pub.dev"
     source: hosted
-    version: "3.4.6-beta"
+    version: "3.4.7-beta"
   sky_engine:
     dependency: transitive
     description: flutter

@@ -1,3 +1,7 @@
+## 3.2.5-beta
+
+- Upgrade searchbase
+
 ## 3.2.4-beta
 
 - Upgrade searchbase

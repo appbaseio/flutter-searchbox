@@ -1,3 +1,8 @@
+## 3.2.4-beta
+
+- Upgrade searchbase
+- Upgrade flutter_searchbox
+
 ## 3.2.3-beta
 
 - Upgrade searchbase
