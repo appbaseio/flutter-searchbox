@@ -401,41 +401,54 @@ class SearchBase extends Base {
     value.keys.forEach((id) {
       SearchController? controller = getSearchWidget(id);
       dynamic valueToBeSet = value[id];
-      if (valueToBeSet is List && valueToBeSet.isNotEmpty) {
-        Type elementType = valueToBeSet[0].runtimeType;
 
-        switch (elementType) {
-          case bool:
-            valueToBeSet = valueToBeSet.map((v) => v as bool).toList();
-            break;
-          case int:
-            valueToBeSet = valueToBeSet.map((v) => v as int).toList();
-            break;
-          case double:
-            valueToBeSet = valueToBeSet.map((v) => v as double).toList();
-            break;
-          case num:
-            valueToBeSet = valueToBeSet.map((v) => v as num).toList();
-            break;
-          case String:
-            valueToBeSet = valueToBeSet.map((v) => v as String).toList();
-            break;
-          default:
-            valueToBeSet = valueToBeSet.map((v) => v as dynamic).toList();
+      if (controller != null) {
+        if (valueToBeSet is List && valueToBeSet.isNotEmpty) {
+          Type elementType = valueToBeSet[0].runtimeType;
+
+          switch (elementType) {
+            case bool:
+              valueToBeSet = valueToBeSet.map((v) => v as bool).toList();
+              break;
+            case int:
+              valueToBeSet = valueToBeSet.map((v) => v as int).toList();
+              break;
+            case double:
+              valueToBeSet = valueToBeSet.map((v) => v as double).toList();
+              break;
+            case num:
+              valueToBeSet = valueToBeSet.map((v) => v as num).toList();
+              break;
+            case String:
+              valueToBeSet = valueToBeSet.map((v) => v as String).toList();
+              break;
+            default:
+              valueToBeSet = valueToBeSet.map((v) => v as dynamic).toList();
+          }
+          // First set the value for all the controllers
+          controller.setValueSilent(
+            valueToBeSet,
+            options: Options(
+              stateChanges: true,
+              triggerCustomQuery: false,
+              triggerDefaultQuery: false,
+            ),
+          );
+        } else {
+          // First set the value for all the controllers
+          controller.setValueSilent(
+            valueToBeSet,
+            options: Options(
+              stateChanges: true,
+              triggerCustomQuery: false,
+              triggerDefaultQuery: false,
+            ),
+          );
         }
-        // First set the value for all the controllers
-        controller!.setValueSilent(valueToBeSet,
-            options: Options(
-                stateChanges: true,
-                triggerCustomQuery: false,
-                triggerDefaultQuery: false));
       } else {
-        // First set the value for all the controllers
-        controller!.setValueSilent(valueToBeSet,
-            options: Options(
-                stateChanges: true,
-                triggerCustomQuery: false,
-                triggerDefaultQuery: false));
+        // Handle the case when controller is null for a particular id
+        // For example, you can log an error or take appropriate action
+        print('Warning: SearchController is null for id $id');
       }
     });
 
@@ -449,16 +462,22 @@ class SearchBase extends Base {
           final componentInstance = this.getSearchWidget(id);
           if (componentInstance != null) {
             // Reset `from` and `after` values
-            componentInstance.setFrom(0,
-                options: new Options(
-                    triggerDefaultQuery: false,
-                    triggerCustomQuery: false,
-                    stateChanges: true));
-            componentInstance.setAfter(null,
-                options: new Options(
-                    triggerDefaultQuery: false,
-                    triggerCustomQuery: false,
-                    stateChanges: true));
+            componentInstance.setFrom(
+              0,
+              options: Options(
+                triggerDefaultQuery: false,
+                triggerCustomQuery: false,
+                stateChanges: true,
+              ),
+            );
+            componentInstance.setAfter(
+              null,
+              options: Options(
+                triggerDefaultQuery: false,
+                triggerCustomQuery: false,
+                stateChanges: true,
+              ),
+            );
             // Update the query
             componentInstance.updateQuery();
           }
@@ -504,8 +523,10 @@ class SearchBase extends Base {
       final componentInstance = this.getSearchWidget(id);
       if (componentInstance != null) {
         // set request status to pending
-        componentInstance.setRequestStatus(RequestStatus.PENDING,
-            options: new Option());
+        componentInstance.setRequestStatus(
+          RequestStatus.PENDING,
+          options: Option(),
+        );
         // Update the query
         componentInstance.updateQuery();
       }
@@ -517,13 +538,15 @@ class SearchBase extends Base {
     // Execute combined queries in a single request
     this._fetchRequest({
       'query': query,
-      'settings': this.appbaseConfig?.toJSON()
+      'settings': this.appbaseConfig?.toJSON(),
     }).then((results) {
       requestsToIdMap.keys.forEach((id) {
         final componentInstance = this.getSearchWidget(id);
         if (componentInstance != null) {
-          componentInstance.setRequestStatus(RequestStatus.INACTIVE,
-              options: Option());
+          componentInstance.setRequestStatus(
+            RequestStatus.INACTIVE,
+            options: Option(),
+          );
 
           // Update the results
           final prev = componentInstance.results.clone();
@@ -532,15 +555,20 @@ class SearchBase extends Base {
           // Set results
           if (rawResults['hits'] != null) {
             componentInstance.results.setRaw(rawResults);
-            componentInstance.applyOptions(Options(), KeysToSubscribe.Results,
-                prev, componentInstance.results);
+            componentInstance.applyOptions(
+              Options(),
+              KeysToSubscribe.Results,
+              prev,
+              componentInstance.results,
+            );
           }
 
           if (rawResults['aggregations'] != null) {
             componentInstance.handleAggregationResponse(
-                rawResults['aggregations'],
-                options: new Options(),
-                append: false);
+              rawResults['aggregations'],
+              options: Options(),
+              append: false,
+            );
           }
         }
       });
@@ -548,8 +576,10 @@ class SearchBase extends Base {
       executableControllers.forEach((id) {
         final componentInstance = this.getSearchWidget(id);
         if (componentInstance != null) {
-          componentInstance.setRequestStatus(RequestStatus.INACTIVE,
-              options: Option());
+          componentInstance.setRequestStatus(
+            RequestStatus.INACTIVE,
+            options: Option(),
+          );
 
           componentInstance.setError(error);
         }
