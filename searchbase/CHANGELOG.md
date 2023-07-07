@@ -1,3 +1,7 @@
+## 3.4.8-beta
+
+- fix multiple API calls when filters are reset
+
 ## 3.4.7-beta
 
 - null check for controller in setSearchState method

@@ -1,3 +1,8 @@
+## 3.2.5-beta
+
+- Upgrade searchbase - fix multiple API calls when resetting filters
+- Upgrade flutter_searchbox
+
 ## 3.2.4-beta
 
 - Upgrade searchbase
