@@ -327,7 +327,7 @@ class _SelectedFiltersState extends State<SelectedFilters> {
     }
     for (var id in activeWidgets.keys) {
       var componentInstance = activeWidgets[id];
-      componentInstance?.triggerCustomQuery();
+      componentInstance?.triggerCustomQuery(shouldPushToRequestStack: true);
     }
 
     if (widget.onClearAll != null) {

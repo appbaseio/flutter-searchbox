@@ -772,7 +772,7 @@ class SearchController extends Base {
       this.updateQuery();
       var searchbaseInstance = this._parent;
       var shouldAddToWaitList = searchbaseInstance!
-          .shouldAddRequestToWaitList(this.id, true, this.query);
+          .shouldAddRequestToWaitList(this.id, true, this.query, false);
       if (!shouldAddToWaitList) {
         this._lastUsedDefaultQueryTimeStamp = currentTimeStamp;
         this.setRequestStatus(RequestStatus.PENDING, options: options);
@@ -835,12 +835,10 @@ class SearchController extends Base {
   }
 
   /// can be used to execute queries for the dependent/watcher components.
-  Future triggerCustomQuery({Option? options}) async {
+  Future triggerCustomQuery(
+      {Option? options, bool? shouldPushToRequestStack = false}) async {
     var shouldAddToWaitList = this._parent!.shouldAddRequestToWaitList(
-          this.id,
-          true,
-          this.query,
-        );
+        this.id, true, this.query, shouldPushToRequestStack);
     if (!shouldAddToWaitList) {
       var currentTimeStamp = DateTime.now().microsecondsSinceEpoch;
       this._lastUsedCustomQueryTimeStamp = currentTimeStamp;

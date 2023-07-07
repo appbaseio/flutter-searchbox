@@ -221,11 +221,12 @@ class SearchBase extends Base {
     _lock = false;
   }
 
-  bool shouldAddRequestToWaitList(
-      String controllerId, bool addToStack, List<Map>? query) {
+  bool shouldAddRequestToWaitList(String controllerId, bool addToStack,
+      List<Map>? query, bool? overrideShouldWait) {
     var currentTime = new DateTime.now().millisecondsSinceEpoch;
-    var shouldWait =
-        currentTime - this._initialTimeStamp < this.initialQueriesSyncTime;
+    var shouldWait = overrideShouldWait is bool
+        ? overrideShouldWait
+        : currentTime - this._initialTimeStamp < this.initialQueriesSyncTime;
     if (addToStack && shouldWait) {
       // Add future delay to execute request stack
       if (!this.isLocked()) {
