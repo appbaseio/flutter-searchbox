@@ -1397,6 +1397,10 @@ class _DropdownState extends State<Dropdown> {
   void dispose() {
     // Clean up the controller when the widget is removed from the
     // widget tree.
+    if (_value != widget.value) {
+      widget.onChangeHandler(_value);
+      _controller.text = renderLabel(_value);
+    }
     _controller.dispose();
     _focusNode.dispose();
     super.dispose();
