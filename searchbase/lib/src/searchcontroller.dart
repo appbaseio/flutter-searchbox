@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'base.dart';
 import 'searchbase.dart';
@@ -378,6 +380,10 @@ class SearchController extends Base {
   /// ```
   final Map? distinctFieldConfig;
 
+  /// This prop is used to set the timeout value for HTTP requests.
+  /// Defaults to 30 seconds.
+  Duration httpRequestTimeout;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   /// It is a callback function which accepts component's future **value** as a
@@ -495,6 +501,7 @@ class SearchController extends Base {
     this.distinctFieldConfig,
     this.value,
     this.clearOnQueryChange = false,
+    this.httpRequestTimeout = const Duration(seconds: 30),
   }) : super(index, url, credentials,
             appbaseConfig: appbaseConfig,
             transformRequest: transformRequest,
@@ -1197,11 +1204,13 @@ class SearchController extends Base {
   }
 
   Future<Map> _fetchRequest(
-      Map requestBody, bool isPopularSuggestionsAPI) async {
+    Map requestBody,
+    bool isPopularSuggestionsAPI,
+  ) async {
     // remove undefined properties from request body
     final requestOptions = {
       'body': jsonEncode(requestBody),
-      'headers': {...?this.headers}
+      'headers': {...?this.headers},
     };
 
     try {
@@ -1212,11 +1221,19 @@ class SearchController extends Base {
       String suffix = '_reactivesearch.v3';
       final String url =
           "${this.url}/${this._getSearchIndex(isPopularSuggestionsAPI)}/$suffix";
-      final http.Response res = await httpClient.post(
+
+      final timeoutDuration = httpRequestTimeout;
+
+      final http.Response res = await httpClient
+          .post(
         Uri.parse(url),
         headers: finalRequestOptions['headers'],
         body: finalRequestOptions['body'],
-      );
+      )
+          .timeout(timeoutDuration, onTimeout: () {
+        throw TimeoutException('Request took too long to complete');
+      });
+
       final responseHeaders = res.headers;
       // check if search component is present
       final queryID = responseHeaders['x-search-id'];
@@ -1229,22 +1246,28 @@ class SearchController extends Base {
         }
       }
       if (res.statusCode >= 500) {
-        return Future.error(res);
+        throw HttpError(res.statusCode, 'Internal Server Error');
       }
       if (res.statusCode >= 400) {
-        final data = jsonDecode(res.body);
-        return Future.error(data);
+        final errorResponse = jsonDecode(res.body);
+        final errorStatusCode = res.statusCode;
+        final errorMessage = errorResponse['message'] ?? 'Unknown Error';
+        throw HttpError(errorStatusCode, errorMessage);
       }
       final data = jsonDecode(res.body);
       final transformedData = await this._handleTransformResponse(data);
       if (transformedData.containsKey('error')) {
-        return Future.error(transformedData);
+        throw transformedData; // Throw transformed error response
       }
-      return Future.value({
+      return {
         ...transformedData,
         '_timestamp': timestamp,
-        '_headers': responseHeaders
-      });
+        '_headers': responseHeaders,
+      };
+    } on TimeoutException {
+      throw HttpTimeout(); // Throw HttpTimeout error
+    } on SocketException {
+      throw NoInternet(); // Throw NoInternet error
     } catch (e) {
       print(e);
       return Future.error(e);

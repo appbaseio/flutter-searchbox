@@ -513,3 +513,43 @@ extension KeysToSubscribeExtension on KeysToSubscribe {
     }
   }
 }
+
+/// Exception class representing the absence of an internet connection.
+class NoInternet implements Exception {
+  final String message;
+
+  /// Creates a [NoInternet] exception with an optional [message].
+  NoInternet([this.message = 'No internet connection']);
+
+  @override
+  String toString() {
+    return 'NoInternet: $message';
+  }
+}
+
+/// Exception class representing an HTTP request timeout.
+class HttpTimeout implements Exception {
+  final String message;
+
+  /// Creates an [HttpTimeout] exception with an optional [message].
+  HttpTimeout([this.message = 'HTTP request timed out']);
+
+  @override
+  String toString() {
+    return 'HttpTimeout: $message';
+  }
+}
+
+/// Exception class representing an HTTP error with an associated status code and an optional message.
+class HttpError implements Exception {
+  final int statusCode;
+  final String? message;
+
+  /// Creates an [HttpError] exception with the given [statusCode] and an optional [message].
+  HttpError(this.statusCode, [this.message]);
+
+  @override
+  String toString() {
+    return 'HttpError: $statusCode${message != null ? " ($message)" : ""}';
+  }
+}
