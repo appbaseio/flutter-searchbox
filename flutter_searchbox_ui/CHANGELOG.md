@@ -1,3 +1,7 @@
+## 3.2.6-beta
+
+- fix: value not set for range_filter when used on tablets
+
 ## 3.2.5-beta
 
 - Upgrade searchbase - fix multiple API calls when resetting filters
