@@ -179,6 +179,7 @@ class SearchBase extends Base {
         value: searchController["value"],
         distinctField: searchController["distinctField"],
         distinctFieldConfig: searchController["distinctFieldConfig"],
+        httpRequestTimeout: searchController["httpRequestTimeout"],
       );
     } else if (searchController is SearchController) {
       componentInstance = searchController;

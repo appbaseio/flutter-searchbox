@@ -313,8 +313,9 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
     this.distinctField,
     this.distinctFieldConfig,
     this.httpRequestTimeout = const Duration(seconds: 30),
-  }) : super(key: key);
-
+  }) : super(key: key) {
+    print('L317 _SearchWidgetListenerState $httpRequestTimeout');
+  }
   @override
   _SearchWidgetListenerState createState() =>
       _SearchWidgetListenerState<S, ViewModel>(
@@ -816,6 +817,10 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// ```
   final Map? distinctFieldConfig;
 
+  /// This prop is used to set the timeout value for HTTP requests.
+  /// Defaults to 30 seconds.
+  Duration httpRequestTimeout;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   /// It is a callback function which accepts component's future **value** as a
@@ -926,10 +931,12 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
     this.value,
     this.distinctField,
     this.distinctFieldConfig,
+    this.httpRequestTimeout = const Duration(seconds: 30),
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print('L939 httpRequestTimeout $httpRequestTimeout');
     return _SearchBaseConnector(
         child: (searchbase) => _SearchWidgetListener(
               id: id,
@@ -993,6 +1000,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
               value: value,
               distinctField: distinctField,
               distinctFieldConfig: distinctFieldConfig,
+              httpRequestTimeout: httpRequestTimeout,
             ));
   }
 }
