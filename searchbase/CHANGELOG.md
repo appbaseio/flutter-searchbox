@@ -1,3 +1,7 @@
+## 3.4.9-beta
+
+- feat: httpRequestTimeout prop support
+
 ## 3.4.8-beta
 
 - fix multiple API calls when filters are reset

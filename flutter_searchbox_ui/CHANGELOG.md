@@ -1,3 +1,8 @@
+## 3.2.7-beta
+
+- Upgrade searchbase
+- Upgrade flutter_searchbox
+
 ## 3.2.6-beta
 
 - fix: value not set for range_filter when used on tablets
