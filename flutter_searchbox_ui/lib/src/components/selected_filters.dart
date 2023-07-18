@@ -325,10 +325,15 @@ class _SelectedFiltersState extends State<SelectedFilters> {
           options: Options(completer: completer));
       await completer.future;
     }
+
+    Map<String, dynamic> componentValueMap = {};
     for (var id in activeWidgets.keys) {
       var componentInstance = activeWidgets[id];
-      componentInstance?.triggerCustomQuery(shouldPushToRequestStack: true);
+      if (componentInstance != null) {
+        componentValueMap[id] = componentInstance.value;
+      }
     }
+    SearchBaseProvider.of(context).setSearchState(componentValueMap);
 
     if (widget.onClearAll != null) {
       widget.onClearAll!();
