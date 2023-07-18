@@ -1,3 +1,9 @@
+## 3.2.8-beta
+
+- fix: reset filters bug - regression
+- Upgrade searchbase
+- Upgrade flutter_searchbox
+
 ## 3.2.7-beta
 
 - Upgrade searchbase

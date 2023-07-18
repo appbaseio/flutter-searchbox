@@ -1,3 +1,7 @@
+## 3.4.10-beta
+
+- fix: reset filters bug - regression
+
 ## 3.4.9-beta
 
 - feat: httpRequestTimeout prop support

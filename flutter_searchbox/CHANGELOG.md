@@ -1,3 +1,7 @@
+## 3.2.8-beta
+
+- upgrade searchbase
+
 ## 3.2.7-beta
 
 - feat: support httpRequestTimeout prop
