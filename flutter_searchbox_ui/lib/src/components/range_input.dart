@@ -444,6 +444,11 @@ class RangeInput extends StatefulWidget {
   /// ```
   final Map? distinctFieldConfig;
 
+  /// Whether to trigger an initial query based on the initial value when the component is first mounted.
+  ///
+  /// Defaults to true
+  final bool triggerQueryOnMount;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   /// It is a callback function which accepts component's future **value** as a
@@ -748,82 +753,83 @@ class RangeInput extends StatefulWidget {
   /// ```
   final Widget Function(bool showError)? dropdownIcon;
 
-  const RangeInput({
-    Key? key,
-    required this.id,
-    this.subscribeTo,
-    this.shouldListenForChanges,
-    this.destroyOnDispose,
-    this.triggerQueryOnInit,
-    // properties to configure search component
-    this.credentials,
-    this.index,
-    this.url,
-    this.appbaseConfig,
-    this.transformRequest,
-    this.transformResponse,
-    this.headers,
-    this.react,
-    this.queryFormat,
-    this.dataField,
-    this.categoryField,
-    this.categoryValue,
-    this.nestedField,
-    this.from,
-    this.size,
-    this.sortBy,
-    this.aggregationField,
-    this.aggregationSize,
-    this.after,
-    this.includeNullValues,
-    this.includeFields,
-    this.excludeFields,
-    this.fuzziness,
-    this.searchOperators,
-    this.highlight,
-    this.highlightField,
-    this.customHighlight,
-    this.interval,
-    this.aggregations,
-    this.missingLabel,
-    this.showMissing,
-    this.enableSynonyms,
-    this.selectAllLabel,
-    this.pagination,
-    this.queryString,
-    this.defaultQuery,
-    this.customQuery,
-    this.beforeValueChange,
-    this.onValueChange,
-    this.onResults,
-    this.onAggregationData,
-    this.onError,
-    this.onRequestStatusChange,
-    this.onQueryChange,
-    this.enablePopularSuggestions,
-    this.maxPopularSuggestions,
-    this.showDistinctSuggestions,
-    this.preserveResults,
-    this.clearOnQueryChange = false,
-    this.value,
-    this.results,
-    this.distinctField,
-    this.distinctFieldConfig,
-    this.buildTitle,
-    this.buildRangeLabel,
-    required this.range,
-    this.defaultValue,
-    this.rangeLabels,
-    this.validateRange,
-    this.buildErrorMessage,
-    this.inputStyle,
-    this.keyboardType,
-    this.textInputAction,
-    this.dropdownStyle,
-    this.customContainer,
-    this.closeIcon,
-    this.dropdownIcon,
-  }) : super(key: key);
+  const RangeInput(
+      {Key? key,
+      required this.id,
+      this.subscribeTo,
+      this.shouldListenForChanges,
+      this.destroyOnDispose,
+      this.triggerQueryOnInit,
+      // properties to configure search component
+      this.credentials,
+      this.index,
+      this.url,
+      this.appbaseConfig,
+      this.transformRequest,
+      this.transformResponse,
+      this.headers,
+      this.react,
+      this.queryFormat,
+      this.dataField,
+      this.categoryField,
+      this.categoryValue,
+      this.nestedField,
+      this.from,
+      this.size,
+      this.sortBy,
+      this.aggregationField,
+      this.aggregationSize,
+      this.after,
+      this.includeNullValues,
+      this.includeFields,
+      this.excludeFields,
+      this.fuzziness,
+      this.searchOperators,
+      this.highlight,
+      this.highlightField,
+      this.customHighlight,
+      this.interval,
+      this.aggregations,
+      this.missingLabel,
+      this.showMissing,
+      this.enableSynonyms,
+      this.selectAllLabel,
+      this.pagination,
+      this.queryString,
+      this.defaultQuery,
+      this.customQuery,
+      this.beforeValueChange,
+      this.onValueChange,
+      this.onResults,
+      this.onAggregationData,
+      this.onError,
+      this.onRequestStatusChange,
+      this.onQueryChange,
+      this.enablePopularSuggestions,
+      this.maxPopularSuggestions,
+      this.showDistinctSuggestions,
+      this.preserveResults,
+      this.clearOnQueryChange = false,
+      this.value,
+      this.results,
+      this.distinctField,
+      this.distinctFieldConfig,
+      this.buildTitle,
+      this.buildRangeLabel,
+      required this.range,
+      this.defaultValue,
+      this.rangeLabels,
+      this.validateRange,
+      this.buildErrorMessage,
+      this.inputStyle,
+      this.keyboardType,
+      this.textInputAction,
+      this.dropdownStyle,
+      this.customContainer,
+      this.closeIcon,
+      this.dropdownIcon,
+      this.triggerQueryOnMount = true})
+      : super(key: key);
 
   @override
   _RangeInputState createState() => _RangeInputState();
@@ -893,6 +899,7 @@ class _RangeInputState extends State<RangeInput> {
           customContainer: widget.customContainer,
           closeIcon: widget.closeIcon,
           dropdownIcon: widget.dropdownIcon,
+          triggerQueryOnMount: widget.triggerQueryOnMount,
         );
       },
       subscribeTo: widget.subscribeTo,
@@ -973,24 +980,26 @@ class RangeInputInner extends StatefulWidget {
   final Widget Function()? closeIcon;
   final Widget Function(bool showError)? dropdownIcon;
   final SearchController searchController;
-  const RangeInputInner(
-      {Key? key,
-      required this.searchController,
-      required this.title,
-      required this.rangeLabel,
-      required this.range,
-      required this.defaultValue,
-      this.rangeLabels,
-      this.validateRange,
-      this.buildErrorMessage,
-      this.inputStyle,
-      this.textInputAction,
-      this.dropdownStyle,
-      this.customContainer,
-      this.closeIcon,
-      this.dropdownIcon,
-      this.keyboardType})
-      : super(key: key);
+  final bool triggerQueryOnMount;
+  const RangeInputInner({
+    Key? key,
+    required this.searchController,
+    required this.title,
+    required this.rangeLabel,
+    required this.range,
+    required this.defaultValue,
+    required this.triggerQueryOnMount,
+    this.rangeLabels,
+    this.validateRange,
+    this.buildErrorMessage,
+    this.inputStyle,
+    this.textInputAction,
+    this.dropdownStyle,
+    this.customContainer,
+    this.closeIcon,
+    this.dropdownIcon,
+    this.keyboardType,
+  }) : super(key: key);
 
   @override
   _RangeInputInnerState createState() => _RangeInputInnerState();
@@ -1070,9 +1079,10 @@ class _RangeInputInnerState extends State<RangeInputInner> {
         valueObj["end"] = dropdownValues['endValue'];
       }
 
-      WidgetsBinding.instance.addPostFrameCallback((_) => widget
-          .searchController
-          .setValue(valueObj, options: Options(triggerCustomQuery: true)));
+      WidgetsBinding.instance.addPostFrameCallback((_) =>
+          widget.searchController.setValue(valueObj,
+              options:
+                  Options(triggerCustomQuery: widget.triggerQueryOnMount)));
     } catch (e, stack) {
       // ignore: avoid_print
       print('$e $stack');
