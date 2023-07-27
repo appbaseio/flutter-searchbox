@@ -617,6 +617,7 @@ class _ReactiveGoogleMapState extends State<ReactiveGoogleMap> {
       onError: widget.onError,
       onRequestStatusChange: widget.onRequestStatusChange,
       onQueryChange: widget.onQueryChange,
+      httpRequestTimeout: widget.httpRequestTimeout,
     );
   }
 }
@@ -1531,6 +1532,10 @@ class ReactiveGoogleMap extends StatefulWidget {
   /// Zoom level to stop cluster rendering
   final double? stopClusteringZoom;
 
+  /// This prop is used to set the timeout value for HTTP requests.
+  /// Defaults to 30 seconds.
+  final Duration httpRequestTimeout;
+
   const ReactiveGoogleMap({
     Key? key,
     required this.id,
@@ -1601,6 +1606,7 @@ class ReactiveGoogleMap extends StatefulWidget {
     this.results,
     this.distinctField,
     this.distinctFieldConfig,
+    this.httpRequestTimeout = const Duration(seconds: 30),
 
     // Google map props
     required this.initialCameraPosition,
