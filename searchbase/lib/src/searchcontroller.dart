@@ -642,20 +642,19 @@ class SearchController extends Base {
 
   /// can be used to set the `value` property
   void setValue(dynamic value, {Options? options}) async {
-    if (this.beforeValueChange != null) {
-      try {
+    try {
+      if (this.beforeValueChange != null) {
         var val = await beforeValueChange!(value);
         this._performUpdate(val, options);
-      } catch (e) {
-        print(e);
+      } else {
+        this._performUpdate(value, options);
       }
-    } else {
-      this._performUpdate(value, options);
-    }
 
-    // Check if options contain a completer
-    if (options?.completer != null) {
-      options!.completer!.complete(); // Complete the completer
+      // Check if options contain a completer and complete it if it exists
+      options?.completer?.complete();
+    } catch (e) {
+      // If any error occurs, throw an exception for a failed operation
+      throw Exception('Error in setValue: $e');
     }
   }
 

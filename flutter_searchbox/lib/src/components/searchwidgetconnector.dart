@@ -313,9 +313,7 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
     this.distinctField,
     this.distinctFieldConfig,
     this.httpRequestTimeout = const Duration(seconds: 30),
-  }) : super(key: key) {
-    print('L317 _SearchWidgetListenerState $httpRequestTimeout');
-  }
+  }) : super(key: key) {}
   @override
   _SearchWidgetListenerState createState() =>
       _SearchWidgetListenerState<S, ViewModel>(
