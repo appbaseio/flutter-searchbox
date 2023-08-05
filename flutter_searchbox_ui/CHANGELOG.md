@@ -1,3 +1,7 @@
+## 3.2.10-beta
+
+- add support for `compoundClause` property
+
 ## 3.2.9-beta
 
 - RangeInput: triggerQueryOnMount prop support
