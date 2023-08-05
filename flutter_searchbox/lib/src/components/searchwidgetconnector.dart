@@ -224,6 +224,22 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
   /// Defaults to 30 seconds.
   Duration httpRequestTimeout;
 
+  /// Configure whether the DSL query is generated with the compound clause of [CompoundClauseType.must] or [CompoundClauseType.filter]. If nothing is passed the default is to use [CompoundClauseType.must].
+  /// Setting the compound clause to filter allows search engine to cache and allows for higher throughput in cases where scoring isn’t relevant (e.g. term, geo or range type of queries that act as filters on the data)
+  ///
+  /// This property only has an effect when the search engine is either elasticsearch or opensearch.
+  /// > Note: `compoundClause` is supported with v8.16.0 (server) as well as with serverless search.
+  ///
+  ///   ///
+  /// For example,
+  /// ```dart
+  /// SearchBox(
+  ///   ...
+  ///   compoundClause:  CompoundClauseType.filter
+  /// )
+  /// ```
+  CompoundClauseType? compoundClause;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   final Future Function(dynamic value)? beforeValueChange;
@@ -313,6 +329,7 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
     this.distinctField,
     this.distinctFieldConfig,
     this.httpRequestTimeout = const Duration(seconds: 30),
+    this.compoundClause,
   }) : super(key: key) {}
   @override
   _SearchWidgetListenerState createState() =>
@@ -375,6 +392,7 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
           'distinctField': distinctField,
           'distinctFieldConfig': distinctFieldConfig,
           'httpRequestTimeout': httpRequestTimeout,
+          'compoundClause': compoundClause
         },
         builder: builder,
         subscribeTo: subscribeTo,
@@ -819,6 +837,22 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   /// Defaults to 30 seconds.
   Duration httpRequestTimeout;
 
+  /// Configure whether the DSL query is generated with the compound clause of [CompoundClauseType.must] or [CompoundClauseType.filter]. If nothing is passed the default is to use [CompoundClauseType.must].
+  /// Setting the compound clause to filter allows search engine to cache and allows for higher throughput in cases where scoring isn’t relevant (e.g. term, geo or range type of queries that act as filters on the data)
+  ///
+  /// This property only has an effect when the search engine is either elasticsearch or opensearch.
+  /// > Note: `compoundClause` is supported with v8.16.0 (server) as well as with serverless search.
+  ///
+  ///   ///
+  /// For example,
+  /// ```dart
+  /// SearchBox(
+  ///   ...
+  ///   compoundClause:  CompoundClauseType.filter
+  /// )
+  /// ```
+  CompoundClauseType? compoundClause;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   /// It is a callback function which accepts component's future **value** as a
@@ -930,6 +964,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
     this.distinctField,
     this.distinctFieldConfig,
     this.httpRequestTimeout = const Duration(seconds: 30),
+    this.compoundClause,
   }) : super(key: key);
 
   @override
@@ -999,6 +1034,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
               distinctField: distinctField,
               distinctFieldConfig: distinctFieldConfig,
               httpRequestTimeout: httpRequestTimeout,
+              compoundClause: compoundClause,
             ));
   }
 }
