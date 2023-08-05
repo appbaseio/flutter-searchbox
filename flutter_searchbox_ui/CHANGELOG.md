@@ -1,3 +1,8 @@
+## 3.2.9-beta
+
+- RangeInput: triggerQueryOnMount prop support
+- httpRequestTimeout Support for RangeInput and ReactiveGoogleMap
+
 ## 3.2.8-beta
 
 - fix: reset filters bug - regression
