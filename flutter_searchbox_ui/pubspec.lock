@@ -90,10 +90,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_searchbox
-      sha256: "3f71905faad13e1adc94761d6eefb280708182bc9bc7b10891d7ac760d9d5f17"
+      sha256: "5e1d478929e0e1e9820317e5d036bfe923ac11ba7573cf0baf2d487623c57877"
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.9-beta"
+    version: "3.2.10-beta"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -231,10 +231,10 @@ packages:
     dependency: "direct main"
     description:
       name: searchbase
-      sha256: f5e24057061003b50c7a8c24bf421e8fbb873623ef82b8c3ce4d01ca55bd9b06
+      sha256: f627f3baac4837959a172515237fcb7f9fe014345a9a08d7abdcaba69bcd5d3e
       url: "https://pub.dev"
     source: hosted
-    version: "3.4.11-beta"
+    version: "3.4.12-beta"
   sky_engine:
     dependency: transitive
     description: flutter

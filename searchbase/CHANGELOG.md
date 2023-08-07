@@ -1,3 +1,7 @@
+## 3.4.12-beta
+
+- add support to override widget config when re-registered through searchbase instance
+
 ## 3.4.11-beta
 
 - add support for `compoundClause` property

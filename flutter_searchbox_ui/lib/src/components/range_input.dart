@@ -773,7 +773,7 @@ class RangeInput extends StatefulWidget {
   /// ```
   final Widget Function(bool showError)? dropdownIcon;
 
-  const RangeInput({
+  RangeInput({
     Key? key,
     required this.id,
     this.subscribeTo,
