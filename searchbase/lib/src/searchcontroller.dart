@@ -138,7 +138,7 @@ class SearchController extends Base {
   /// To set the number of buckets to be returned by aggregations.
   ///
   /// > Note: This is a new feature and only available for appbase versions >= 7.41.0.
-  final int? aggregationSize;
+  int? aggregationSize;
 
   /// This property can be used to implement the pagination for `aggregations`.
   ///
@@ -354,7 +354,7 @@ class SearchController extends Base {
   /// This prop returns only the distinct value documents for the specified field.
   /// It is equivalent to the DISTINCT clause in SQL. It internally uses the collapse feature of Elasticsearch.
   /// You can read more about it over here - https://www.elastic.co/guide/en/elasticsearch/reference/current/collapse-search-results.html
-  final String? distinctField;
+  String? distinctField;
 
   /// This prop allows specifying additional options to the distinctField prop.
   /// Using the allowed DSL, one can specify how to return K distinct values (default value of K=1),
@@ -378,7 +378,7 @@ class SearchController extends Base {
   ///   'max_concurrent_group_searches': 4, },
   /// )
   /// ```
-  final Map? distinctFieldConfig;
+  Map? distinctFieldConfig;
 
   /// This prop is used to set the timeout value for HTTP requests.
   /// Defaults to 30 seconds.
@@ -419,7 +419,7 @@ class SearchController extends Base {
   ///   // or Future.error()
   /// }
   /// ```
-  final Future Function(dynamic value)? beforeValueChange;
+  Future Function(dynamic value)? beforeValueChange;
 
   /* ------------- change events -------------------------------- */
 
@@ -427,26 +427,25 @@ class SearchController extends Base {
   ///
   /// This property is handy in cases where you want to generate a side-effect on value selection.
   /// For example: You want to show a pop-up modal with the valid discount coupon code when a user searches for a product in a [SearchController].
-  final void Function(dynamic next, {dynamic prev})? onValueChange;
+  void Function(dynamic next, {dynamic prev})? onValueChange;
 
   /// It can be used to listen for the `results` changes.
-  final void Function(Results next, {Results prev})? onResults;
+  void Function(Results next, {Results prev})? onResults;
 
   /// It can be used to listen for the `aggregationData` property changes.
-  final void Function(Aggregations next, {Aggregations prev})?
-      onAggregationData;
+  void Function(Aggregations next, {Aggregations prev})? onAggregationData;
 
   /// It gets triggered in case of an error while fetching results.
-  final void Function(dynamic error)? onError;
+  void Function(dynamic error)? onError;
 
   /// It can be used to listen for the request status changes.
-  final void Function(String? next, {String? prev})? onRequestStatusChange;
+  void Function(String? next, {String? prev})? onRequestStatusChange;
 
   /// It is a callback function which accepts widget's **nextQuery** and **prevQuery** as parameters.
   ///
   /// It is called everytime the widget's query changes.
   /// This property is handy in cases where you want to generate a side-effect whenever the widget's query would change.
-  final void Function(List<Map>? next, {List<Map>? prev})? onQueryChange;
+  void Function(List<Map>? next, {List<Map>? prev})? onQueryChange;
 
   /* ------ Private properties only for the internal use ----------- */
   SearchBase? _parent;
@@ -1188,6 +1187,100 @@ class SearchController extends Base {
         }
       ]
     };
+  }
+
+  void updateConfig(Map searchController) {
+    // Update the componentConfig with the provided values if they are not null
+    this.index = searchController["index"] ?? this.index;
+    this.url = searchController["url"] ?? this.url;
+    this.credentials = searchController["credentials"] ?? this.credentials;
+    this.headers =
+        searchController["headers"] as Map<String, String>? ?? this.headers;
+    this.transformRequest =
+        searchController["transformRequest"] as TransformRequest? ??
+            this.transformRequest;
+    this.transformResponse =
+        searchController["transformResponse"] as TransformResponse? ??
+            this.transformResponse;
+    this.appbaseConfig =
+        searchController["appbaseConfig"] as AppbaseSettings? ??
+            this.appbaseConfig;
+    this.type = searchController["type"] ?? this.type;
+    this.dataField = searchController["dataField"] ?? this.dataField;
+    this.react = searchController["react"] ?? this.react;
+    this.queryFormat = searchController["queryFormat"] ?? this.queryFormat;
+    this.categoryField =
+        searchController["categoryField"] ?? this.categoryField;
+    this.categoryValue =
+        searchController["categoryValue"] ?? this.categoryValue;
+    this.nestedField = searchController["nestedField"] ?? this.nestedField;
+    this.from = searchController["from"] ?? this.from;
+    this.size = searchController["size"] ?? this.size;
+    this.sortBy = searchController["sortBy"] ?? this.sortBy;
+    this.aggregationField =
+        searchController["aggregationField"] ?? this.aggregationField;
+    this.aggregationSize =
+        searchController["aggregationSize"] ?? this.aggregationSize;
+    this.after = searchController["after"] ?? this.after;
+    this.includeNullValues =
+        searchController["includeNullValues"] ?? this.includeNullValues;
+    this.includeFields =
+        searchController["includeFields"] ?? this.includeFields;
+    this.excludeFields =
+        searchController["excludeFields"] ?? this.excludeFields;
+    this.fuzziness = searchController["fuzziness"] ?? this.fuzziness;
+    this.searchOperators =
+        searchController["searchOperators"] ?? this.searchOperators;
+    this.highlight = searchController["highlight"] ?? this.highlight;
+    this.highlightField =
+        searchController["highlightField"] ?? this.highlightField;
+    this.customHighlight =
+        searchController["customHighlight"] ?? this.customHighlight;
+    this.interval = searchController["interval"] ?? this.interval;
+    this.aggregations = searchController["aggregations"] ?? this.aggregations;
+    this.missingLabel = searchController["missingLabel"] ?? this.missingLabel;
+    this.showMissing = searchController["showMissing"] ?? this.showMissing;
+    this.enableSynonyms =
+        searchController["enableSynonyms"] ?? this.enableSynonyms;
+    this.selectAllLabel =
+        searchController["selectAllLabel"] ?? this.selectAllLabel;
+    this.pagination = searchController["pagination"] ?? this.pagination;
+    this.queryString = searchController["queryString"] ?? this.queryString;
+    this.defaultQuery = searchController["defaultQuery"] ?? this.defaultQuery;
+    this.customQuery = searchController["customQuery"] ?? this.customQuery;
+    this.beforeValueChange =
+        searchController["beforeValueChange"] ?? this.beforeValueChange;
+    this.onValueChange =
+        searchController["onValueChange"] ?? this.onValueChange;
+    this.onResults = searchController["onResults"] ?? this.onResults;
+    this.onAggregationData =
+        searchController["onAggregationData"] ?? this.onAggregationData;
+    this.onError = searchController["onError"] ?? this.onError;
+    this.onRequestStatusChange =
+        searchController["onRequestStatusChange"] ?? this.onRequestStatusChange;
+    this.onQueryChange =
+        searchController["onQueryChange"] ?? this.onQueryChange;
+    this.enablePopularSuggestions =
+        searchController["enablePopularSuggestions"] ??
+            this.enablePopularSuggestions;
+    this.maxPopularSuggestions =
+        searchController["maxPopularSuggestions"] ?? this.maxPopularSuggestions;
+    this.showDistinctSuggestions =
+        searchController["showDistinctSuggestions"] ??
+            this.showDistinctSuggestions;
+    this.preserveResults =
+        searchController["preserveResults"] ?? this.preserveResults;
+    this.clearOnQueryChange =
+        searchController["clearOnQueryChange"] ?? this.clearOnQueryChange;
+    this.value = searchController["value"] ?? this.value;
+    this.distinctField =
+        searchController["distinctField"] ?? this.distinctField;
+    this.distinctFieldConfig =
+        searchController["distinctFieldConfig"] ?? this.distinctFieldConfig;
+    this.compoundClause =
+        searchController["compoundClause"] ?? this.compoundClause;
+    this.httpRequestTimeout =
+        searchController['httpRequestTimeout'] ?? this.httpRequestTimeout;
   }
 
   // Method to apply the changes based on set options
