@@ -1553,7 +1553,7 @@ class ReactiveGoogleMap extends StatefulWidget {
   /// Defaults to 30 seconds.
   final Duration httpRequestTimeout;
 
-  const ReactiveGoogleMap({
+  ReactiveGoogleMap({
     Key? key,
     required this.id,
     this.showMarkerClusters = true,
