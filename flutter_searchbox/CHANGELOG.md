@@ -1,3 +1,6 @@
+## 3.2.11-beta
+
+- Upgrade searchbase
 ## 3.2.10-beta
 
 - Upgrade searchbase

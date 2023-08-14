@@ -1,3 +1,6 @@
+## 3.4.13-beta
+
+- remove .v3 suffix for rs API requests
 ## 3.4.12-beta
 
 - add support to override widget config when re-registered through searchbase instance
