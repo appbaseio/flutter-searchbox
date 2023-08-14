@@ -969,7 +969,6 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('L939 httpRequestTimeout $httpRequestTimeout');
     return _SearchBaseConnector(
         child: (searchbase) => _SearchWidgetListener(
               id: id,
