@@ -1333,7 +1333,7 @@ class SearchController extends Base {
           await this._handleTransformRequest(requestOptions);
       // set timestamp in request
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      String suffix = '_reactivesearch.v3';
+      String suffix = '_reactivesearch';
       final String url =
           "${this.url}/${this._getSearchIndex(isPopularSuggestionsAPI)}/$suffix";
 
