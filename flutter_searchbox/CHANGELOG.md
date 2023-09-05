@@ -1,6 +1,10 @@
-## 3.2.8-beta
+## 3.2.10-beta
 
-- upgrade searchbase
+- Upgrade searchbase
+
+## 3.2.9-beta
+
+- add support for `compoundClause` property
 
 ## 3.2.7-beta
 

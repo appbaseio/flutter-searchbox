@@ -105,6 +105,12 @@ class SearchBase extends Base {
     }
     if (this._searchWidgets.containsKey(widgetId)) {
       // return existing instance
+
+      // If the widget is already registered and the componentConfig is a map, update the existing instance with the new configuration
+      if (searchController is Map) {
+        this._searchWidgets[widgetId]!.updateConfig(searchController);
+      }
+
       return this._searchWidgets[widgetId]!;
     }
     SearchController? componentInstance;
@@ -180,6 +186,7 @@ class SearchBase extends Base {
         distinctField: searchController["distinctField"],
         distinctFieldConfig: searchController["distinctFieldConfig"],
         httpRequestTimeout: searchController["httpRequestTimeout"],
+        compoundClause: searchController["compoundClause"],
       );
     } else if (searchController is SearchController) {
       componentInstance = searchController;

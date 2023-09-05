@@ -791,6 +791,22 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
   /// ```
   final Map? distinctFieldConfig;
 
+  /// Configure whether the DSL query is generated with the compound clause of [CompoundClauseType.must] or [CompoundClauseType.filter]. If nothing is passed the default is to use [CompoundClauseType.must].
+  /// Setting the compound clause to filter allows search engine to cache and allows for higher throughput in cases where scoring isn’t relevant (e.g. term, geo or range type of queries that act as filters on the data)
+  ///
+  /// This property only has an effect when the search engine is either elasticsearch or opensearch.
+  /// > Note: `compoundClause` is supported with v8.16.0 (server) as well as with serverless search.
+  ///
+  ///   ///
+  /// For example,
+  /// ```dart
+  /// SearchBox(
+  ///   ...
+  ///   compoundClause:  CompoundClauseType.filter
+  /// )
+  /// ```
+  CompoundClauseType? compoundClause;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   /// It is a callback function which accepts component's future **value** as a
@@ -887,71 +903,73 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
   /// - a search icon to perform search action etc.
   List<Widget>? customActions;
 
-  SearchBox(
-      {Key? key,
-      required this.id,
-      // properties to configure search component
-      this.credentials,
-      this.index,
-      this.url,
-      this.appbaseConfig,
-      this.transformRequest,
-      this.transformResponse,
-      this.headers,
-      this.react,
-      this.queryFormat,
-      this.dataField,
-      this.categoryField,
-      this.categoryValue,
-      this.nestedField,
-      this.from,
-      this.size,
-      this.sortBy,
-      this.aggregationField,
-      this.aggregationSize,
-      this.after,
-      this.includeNullValues,
-      this.includeFields,
-      this.excludeFields,
-      this.fuzziness,
-      this.searchOperators,
-      this.highlight,
-      this.highlightField,
-      this.customHighlight,
-      this.interval,
-      this.aggregations,
-      this.missingLabel,
-      this.showMissing,
-      this.enableSynonyms,
-      this.selectAllLabel,
-      this.pagination,
-      this.queryString,
-      this.defaultQuery,
-      this.customQuery,
-      this.beforeValueChange,
-      this.onValueChange,
-      this.onResults,
-      this.onAggregationData,
-      this.onError,
-      this.onRequestStatusChange,
-      this.onQueryChange,
-      this.enablePopularSuggestions,
-      this.maxPopularSuggestions,
-      this.showDistinctSuggestions = true,
-      this.preserveResults,
-      this.clearOnQueryChange = true,
-      this.distinctField,
-      this.distinctFieldConfig,
-      // searchbox specific properties
-      this.enableRecentSearches = false,
-      this.showAutoFill = false,
-      // to customize ui
-      this.buildSuggestionItem,
-      // voice search
-      this.speechToTextInstance,
-      this.micOptions,
-      // custom actions
-      this.customActions});
+  SearchBox({
+    Key? key,
+    required this.id,
+    // properties to configure search component
+    this.credentials,
+    this.index,
+    this.url,
+    this.appbaseConfig,
+    this.transformRequest,
+    this.transformResponse,
+    this.headers,
+    this.react,
+    this.queryFormat,
+    this.dataField,
+    this.categoryField,
+    this.categoryValue,
+    this.nestedField,
+    this.from,
+    this.size,
+    this.sortBy,
+    this.aggregationField,
+    this.aggregationSize,
+    this.after,
+    this.includeNullValues,
+    this.includeFields,
+    this.excludeFields,
+    this.fuzziness,
+    this.searchOperators,
+    this.highlight,
+    this.highlightField,
+    this.customHighlight,
+    this.interval,
+    this.aggregations,
+    this.missingLabel,
+    this.showMissing,
+    this.enableSynonyms,
+    this.selectAllLabel,
+    this.pagination,
+    this.queryString,
+    this.defaultQuery,
+    this.customQuery,
+    this.beforeValueChange,
+    this.onValueChange,
+    this.onResults,
+    this.onAggregationData,
+    this.onError,
+    this.onRequestStatusChange,
+    this.onQueryChange,
+    this.enablePopularSuggestions,
+    this.maxPopularSuggestions,
+    this.showDistinctSuggestions = true,
+    this.preserveResults,
+    this.clearOnQueryChange = true,
+    this.distinctField,
+    this.distinctFieldConfig,
+    // searchbox specific properties
+    this.enableRecentSearches = false,
+    this.showAutoFill = false,
+    // to customize ui
+    this.buildSuggestionItem,
+    // voice search
+    this.speechToTextInstance,
+    this.micOptions,
+    // custom actions
+    this.customActions,
+    this.compoundClause,
+  });
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -1151,6 +1169,7 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
         value: query,
         distinctField: distinctField,
         distinctFieldConfig: distinctFieldConfig,
+        compoundClause: compoundClause,
         builder: (context, searchController) {
           if (query != searchController.value) {
             // To fetch the suggestions

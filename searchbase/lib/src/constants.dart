@@ -62,3 +62,5 @@ extension SortTypeExtension on SortType? {
     }
   }
 }
+
+enum CompoundClauseType { filter, must }
