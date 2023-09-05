@@ -1,3 +1,7 @@
+## [3.2.0] - 05-09-2022
+
+- stable release
+
 ## 3.2.10-beta
 
 - Upgrade searchbase
