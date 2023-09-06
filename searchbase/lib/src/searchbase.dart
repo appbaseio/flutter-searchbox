@@ -224,7 +224,7 @@ class SearchBase extends Base {
   bool shouldAddRequestToWaitList(
     String controllerId,
     bool addToStack,
-    List<Map<String, dynamic>>? query,
+    List<Map>? query,
   ) {
     var currentTime = DateTime.now().millisecondsSinceEpoch;
     var shouldWait =

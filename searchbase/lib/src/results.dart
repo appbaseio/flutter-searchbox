@@ -6,11 +6,11 @@ class Results {
   List<Map<String, dynamic>> data;
 
   /// Raw response returned by ES query
-  Map<String, dynamic>? raw;
+  Map? raw;
 
   /// To parse the results.
-  List<Map<String, dynamic>> Function(List<Map<String, dynamic>> results,
-      [List<Map<String, dynamic>>? sourceData])? parseResults;
+  List<Map<String, dynamic>> Function(List<Map> results,
+      [List<Map>? sourceData])? parseResults;
 
   Results(this.data) {}
 
@@ -18,8 +18,10 @@ class Results {
   int get numberOfResults {
     // calculate from raw response
     if (this.raw != null && this.raw!.containsKey('hits')) {
-      if (this.raw!['hits'] != null && this.raw!['hits']['total'] != null) {
-        if (this.raw!['hits']['total'] is Map<String, dynamic>) {
+      if (this.raw != null &&
+          this.raw!['hits'] != null &&
+          this.raw!['hits']['total'] != null) {
+        if (this.raw!['hits']['total'] is Map) {
           return this.raw!['hits']['total']['value'];
         }
         if (this.raw!['hits']['total'] is int) {
@@ -50,9 +52,8 @@ class Results {
   }
 
   /// An array of promoted results obtained from the applied query.
-  List<Map<String, dynamic>> get promotedData {
-    if (this.raw != null &&
-        this.raw!['promoted'] is List<Map<String, dynamic>>) {
+  List<Map> get promotedData {
+    if (this.raw != null && this.raw!['promoted'] is List<Map>) {
       return this.raw!['promoted'];
     }
     return [];
@@ -64,20 +65,20 @@ class Results {
   }
 
   // An object of raw response as-is from elasticsearch query.
-  Map<String, dynamic>? get rawData {
+  Map? get rawData {
     return this.raw;
   }
 
   // An object of custom data applied through Appbase query rules.
-  Map<String, dynamic>? get customData {
-    if (this.raw != null && this.raw!['customData'] is Map<String, dynamic>) {
+  Map? get customData {
+    if (this.raw != null && this.raw!['customData'] == Map) {
       return this.raw!['customData'];
     }
     return {};
   }
 
   /// Method to set the raw response form Elasticsearch
-  void setRaw(Map<String, dynamic>? rawResponse) {
+  void setRaw(Map? rawResponse) {
     // set response
     if (rawResponse != null) {
       this.raw = rawResponse;
@@ -97,21 +98,20 @@ class Results {
     // filter results & remove duplicates if any
     if (this.promotedData.length != 0) {
       final List<String> ids =
-          this.promotedData.map((item) => item["_id"] as String).toList();
-      if (ids.isNotEmpty) {
-        filteredResults = filteredResults.where((item) {
+          this.promotedData.map((item) => item["_id"]) as List<String>;
+      if (ids.length != 0) {
+        filteredResults.where((item) {
           // remove duplicate results
-          if (item["_id"] != null && ids.contains(item["_id"])) {
+          if (item["_id"] != null && ids.indexOf(item["_id"]) != -1) {
             return false;
           }
           return true;
-        }).toList();
+        });
       }
 
       filteredResults = [
-        ...this
-            .promotedData
-            .map((dataItem) => ({...dataItem, "_promoted": true})),
+        ...this.promotedData.map((dataItem) =>
+            ({...dataItem as Map<String, dynamic>, "_promoted": true})),
         ...filteredResults
       ];
     }

@@ -22,10 +22,9 @@ bool isNumeric(var arg) {
       // leaving out the first and last elements for other/ no_limit options
       if (isNumeric(arg[i])) {
         return true;
-      } else {
-        return false;
       }
     }
+    return false;
   }
 
   return false;

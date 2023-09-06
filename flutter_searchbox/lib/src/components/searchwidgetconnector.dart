@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:searchbase/searchbase.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart' hide SearchController;
 import './searchbaseprovider.dart';
 
 /// Build a Widget using the [BuildContext] and [ViewModel].
@@ -330,7 +329,7 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
     this.distinctFieldConfig,
     this.httpRequestTimeout = const Duration(seconds: 30),
     this.compoundClause,
-  }) : super(key: key) {}
+  }) : super(key: key);
   @override
   _SearchWidgetListenerState createState() =>
       _SearchWidgetListenerState<S, ViewModel>(
@@ -969,7 +968,6 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('L939 httpRequestTimeout $httpRequestTimeout');
     return _SearchBaseConnector(
         child: (searchbase) => _SearchWidgetListener(
               id: id,

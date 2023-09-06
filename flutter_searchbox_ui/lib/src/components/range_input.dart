@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SearchController;
 import 'package:flutter_searchbox/flutter_searchbox.dart';
 import '../utils.dart';
 import 'package:searchbase/searchbase.dart';
@@ -960,8 +960,10 @@ class _RangeInputState extends State<RangeInput> {
       aggregations: widget.aggregations,
       showMissing: widget.showMissing,
       missingLabel: widget.missingLabel,
-      defaultQuery: widget.defaultQuery,
-      customQuery: widget.customQuery,
+      defaultQuery:
+          widget.defaultQuery as Map<dynamic, dynamic> Function(dynamic)?,
+      customQuery:
+          widget.customQuery as Map<dynamic, dynamic> Function(dynamic)?,
       enableSynonyms: widget.enableSynonyms,
       selectAllLabel: widget.selectAllLabel,
       pagination: widget.pagination,

@@ -1,17 +1,17 @@
 name: flutter_searchbox
 description: Flutter Searchbox provides declarative API to query Elasticsearch, and binds UI widgets with different types of search queries. As the name suggests, it provides a searchbox UI widget for Elasticsearch and Appbase.io.
-version: 3.2.0
+version: 4.0.0-alpha.3
 homepage: https://github.com/appbaseio/flutter-searchbox
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_feather_icons: ^2.0.0+1
-  searchbase: ^3.4.0
+  searchbase: ^4.0.0-alpha.3
   provider: ^6.0.0
 
 dev_dependencies:

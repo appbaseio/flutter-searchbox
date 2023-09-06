@@ -1,3 +1,7 @@
+## 4.0.0-alpha.1
+
+- alpha release for Dart 3 support
+
 ## [3.2.0] - 05-09-2022
 
 - stable release

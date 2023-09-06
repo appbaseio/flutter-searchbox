@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:searchbase/searchbase.dart';
 import 'package:flutter_searchbox/flutter_searchbox.dart';
 import 'results.dart';
-import 'author_filter.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:speech_to_text/speech_to_text_provider.dart' as stp;
 
@@ -52,7 +51,7 @@ class FlutterSearchBoxApp extends StatelessWidget {
 class HomePage extends StatelessWidget {
   final stp.SpeechToTextProvider? speechToTextInstance;
 
-  HomePage({this.speechToTextInstance});
+  const HomePage({this.speechToTextInstance});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

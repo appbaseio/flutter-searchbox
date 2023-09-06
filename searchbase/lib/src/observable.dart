@@ -10,12 +10,12 @@ class Observable {
   }
 
   /// To subscribe a function for updates.
-  void subscribe(Function fn, [List<KeysToSubscribe>? propertiesToSubscribe]) {
+  subscribe(Function fn, [List<KeysToSubscribe>? propertiesToSubscribe]) {
     this.observers.add(new Observer(fn, propertiesToSubscribe));
   }
 
   /// To unsubscribe a function to avoid further updates.
-  void unsubscribe([Function? fn]) {
+  unsubscribe([Function? fn]) {
     if (fn != null) {
       this.observers = this.observers.where((Observer item) {
         if (item.callback != fn) {
@@ -29,7 +29,7 @@ class Observable {
   }
 
   /// To broadcast an update. All the subscribed methods would be invoked.
-  void next(dynamic o, KeysToSubscribe property) {
+  next(dynamic o, KeysToSubscribe property) {
     this.observers.forEach((Observer item) {
       // filter by subscribed properties
       if (item.properties == null) {

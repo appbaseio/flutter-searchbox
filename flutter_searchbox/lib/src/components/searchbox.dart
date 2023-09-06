@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:searchbase/searchbase.dart';
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SearchController;
 import './searchbaseprovider.dart';
 import './searchwidgetconnector.dart';
 import 'dart:io' show Platform;
@@ -1152,8 +1152,8 @@ class SearchBox<S, ViewModel> extends SearchDelegate<String?> {
         selectAllLabel: selectAllLabel,
         pagination: pagination,
         queryString: queryString,
-        defaultQuery: defaultQuery,
-        customQuery: customQuery,
+        defaultQuery: defaultQuery as Map<dynamic, dynamic> Function(dynamic)?,
+        customQuery: customQuery as Map<dynamic, dynamic> Function(dynamic)?,
         beforeValueChange: beforeValueChange,
         onValueChange: onValueChange,
         onResults: onResults,

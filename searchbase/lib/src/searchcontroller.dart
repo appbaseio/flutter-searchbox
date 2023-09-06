@@ -13,7 +13,7 @@ import 'utils.dart';
 
 // Represents the format of query response
 class GenerateQueryResponse {
-  List<Map<String, dynamic>> requestBody;
+  List<Map> requestBody;
   List<String> orderOfQueries;
   GenerateQueryResponse(this.requestBody, this.orderOfQueries) {}
 }
@@ -329,7 +329,7 @@ class SearchController extends Base {
   bool? preserveResults;
 
   /// It is an object that represents the elasticsearch query response.
-  late final Results results;
+  late Results results;
 
   /// Represents the error response returned by elasticsearch.
   dynamic error;
@@ -340,13 +340,13 @@ class SearchController extends Base {
   bool? clearOnQueryChange;
 
   /// A subject to track state changes and update listeners.
-  late final Observable stateChanges;
+  late Observable stateChanges;
 
   /// It represents the current status of the request.
   RequestStatus? requestStatus;
 
   /// An object that contains the aggregations data for [QueryType.term] queries.
-  late final Aggregations aggregationData;
+  late Aggregations aggregationData;
 
   /// A list of recent searches as suggestions.
   List<Suggestion>? recentSearches;
@@ -419,7 +419,7 @@ class SearchController extends Base {
   ///   // or Future.error()
   /// }
   /// ```
-  Future<dynamic> Function(dynamic value)? beforeValueChange;
+  Future Function(dynamic value)? beforeValueChange;
 
   /* ------------- change events -------------------------------- */
 
@@ -523,7 +523,7 @@ class SearchController extends Base {
             transformRequest: transformRequest,
             transformResponse: transformResponse,
             headers: headers) {
-    if (id.isEmpty) {
+    if (id == "") {
       throw (ErrorMessages[InvalidComponentId]);
     }
     // dataField can't be an array for queries other than search
@@ -531,14 +531,14 @@ class SearchController extends Base {
       throw (ErrorMessages[DataFieldAsArray]);
     }
     // Initialize the state changes observable
-    this.stateChanges = Observable();
+    this.stateChanges = new Observable();
 
-    this.results = Results([]);
+    this.results = new Results([]);
 
-    this.aggregationData = Aggregations(data: []);
+    this.aggregationData = new Aggregations(data: []);
 
     if (value != null) {
-      this.setValue(value, options: Options());
+      this.setValue(value, options: new Options());
     } else {
       this.value = value;
     }
@@ -566,7 +566,7 @@ class SearchController extends Base {
       return [];
     }
     List<String> fields = getNormalizedField(this.dataField);
-    if (fields.isEmpty && this.results.data.isNotEmpty) {
+    if (fields.length == 0 && this.results.data.length > 0) {
       // Extract fields from _source
       fields = this.results.data[0].keys.toList();
     }
@@ -627,11 +627,11 @@ class SearchController extends Base {
   /// represents the query id to track Appbase analytics
   String get queryId {
     // Get query ID from parent(searchbase) if exist
-    if (this._parent != null && this._parent!.queryId!.isNotEmpty) {
+    if (this._parent != null && this._parent!.queryId != "") {
       return this._parent!.queryId!;
     }
     // For single components just return the queryId from the component
-    if (this._queryId!.isNotEmpty) {
+    if (this._queryId != "") {
       return this._queryId!;
     }
     return '';
@@ -649,6 +649,7 @@ class SearchController extends Base {
   }
 
   /* -------- Public methods -------- */
+
   /// can be used to set the `dataField` property
   void setDataField(dynamic dataField, {Options? options}) {
     final prev = this.dataField;
@@ -657,7 +658,7 @@ class SearchController extends Base {
   }
 
   /// can be used to set the `value` property
-  Future<void> setValue(dynamic value, {Options? options}) async {
+  void setValue(dynamic value, {Options? options}) async {
     try {
       if (this.beforeValueChange != null) {
         var val = await beforeValueChange!(value);
@@ -765,9 +766,9 @@ class SearchController extends Base {
   ///   'cf827a07-60a6-43ef-ab93-e1f8e1e3e1a8': 2 // [_id]: click_position
   /// }, true);
   /// ```
-  Future<void> recordClick(Map<String, int> objects,
+  Future recordClick(Map<String, int> objects,
       {bool isSuggestionClick = false}) async {
-    await this.click(objects, queryId: this.queryId);
+    return this.click(objects, queryId: this.queryId);
   }
 
   /// to record a search conversion.
@@ -796,7 +797,7 @@ class SearchController extends Base {
       var shouldAddToWaitList = searchbaseInstance!.shouldAddRequestToWaitList(
         this.id,
         true,
-        this.query as List<Map<String, dynamic>>?,
+        this.query,
       );
       if (!shouldAddToWaitList) {
         this._lastUsedDefaultQueryTimeStamp = currentTimeStamp;
@@ -807,8 +808,8 @@ class SearchController extends Base {
         }, false);
         if (currentTimeStamp == this._lastUsedDefaultQueryTimeStamp) {
           final prev = this.results.clone();
-          final Map<String, dynamic>? rawResults =
-              results[this.id] is Map<String, dynamic> ? results[this.id] : {};
+          final Map? rawResults =
+              results[this.id] is Map ? results[this.id] : {};
           void afterResponse() {
             if (rawResults!['aggregations'] != null) {
               this.handleAggregationResponse(rawResults['aggregations'],
@@ -864,7 +865,7 @@ class SearchController extends Base {
     var shouldAddToWaitList = this._parent!.shouldAddRequestToWaitList(
           this.id,
           true,
-          this.query as List<Map<String, dynamic>>?,
+          this.query,
         );
     if (!shouldAddToWaitList) {
       var currentTimeStamp = DateTime.now().microsecondsSinceEpoch;
@@ -932,8 +933,7 @@ class SearchController extends Base {
                 Map rawResults = results[id] != null ? results[id] : {};
                 // Set results
                 if (rawResults['hits'] != null) {
-                  componentInstance.results
-                      .setRaw(rawResults as Map<String, dynamic>);
+                  componentInstance.results.setRaw(rawResults);
                   componentInstance.applyOptions(
                       Options(stateChanges: options?.stateChanges),
                       KeysToSubscribe.Results,
@@ -1106,7 +1106,7 @@ class SearchController extends Base {
         }
       });
     } else {
-      this.results.setRaw(rawResults as Map<String, dynamic>?);
+      this.results.setRaw(rawResults);
     }
   }
 
@@ -1117,7 +1117,8 @@ class SearchController extends Base {
   }
 
   Future _handleError(dynamic err, {Option? options}) {
-    this.setError(err, options: Options(stateChanges: options?.stateChanges));
+    this.setError(err,
+        options: new Options(stateChanges: options?.stateChanges));
     print(err);
     return Future.error(err);
   }
@@ -1410,13 +1411,12 @@ class SearchController extends Base {
           }
         }
       });
-      final Map<String, Map<String, dynamic>> requestQuery = {};
+      final Map<String, Map> requestQuery = {};
       // Generate the request body for watchers
       watcherComponents.forEach((watcherId) {
         final component = this._parent!.getSearchWidget(watcherId);
         if (component != null) {
-          requestQuery[watcherId] =
-              component.componentQuery as Map<String, dynamic>;
+          requestQuery[watcherId] = component.componentQuery;
           // collect queries for all components defined in the `react` property
           // that have some value defined
           final flattenReact = flatReactProp(component.react, component.id);
@@ -1430,7 +1430,7 @@ class SearchController extends Base {
                 final query = dependentComponent.componentQuery;
                 query['execute'] = false;
                 // Add the query to request payload
-                requestQuery[id] = query as Map<String, dynamic>;
+                requestQuery[id] = query;
               }
             }
           });
@@ -1442,24 +1442,22 @@ class SearchController extends Base {
     return GenerateQueryResponse([], []);
   }
 
-  Future<Map<String, dynamic>> _handleTransformResponse(
-      Map<String, dynamic>? res) {
+  Future<Map> _handleTransformResponse(Map? res) {
     if (this.transformResponse != null) {
-      return this.transformResponse!(res) as Future<Map<String, dynamic>>;
+      return this.transformResponse!(res) as Future<Map<dynamic, dynamic>>;
     }
     return Future.value(res);
   }
 
-  Future<Map<String, dynamic>> _handleTransformRequest(
-      Map<String, dynamic> requestOptions) {
+  Future<Map> _handleTransformRequest(Map requestOptions) {
     if (this.transformRequest != null) {
       return this.transformRequest!(requestOptions)
-          as Future<Map<String, dynamic>>;
+          as Future<Map<dynamic, dynamic>>;
     }
-    return Future<Map<String, dynamic>>.value(requestOptions);
+    return Future<Map>.value(requestOptions);
   }
 
-  handleAggregationResponse(Map<String, dynamic> aggsResponse,
+  handleAggregationResponse(Map aggsResponse,
       {Options? options, bool append = true}) {
     String? aggregationField = this.aggregationField;
     if ((aggregationField == null || aggregationField == "") &&
@@ -1472,7 +1470,7 @@ class SearchController extends Base {
       if (aggsResponse[aggregationField] != null &&
           aggsResponse[aggregationField]['buckets'] is List) {
         final mapped = (aggsResponse[aggregationField]['buckets'] as List)
-            .map((model) => Map<String, dynamic>.from(model));
+            .map((model) => Map.from(model));
         final data = mapped.toList();
         this.aggregationData.setData(aggregationField, data,
             append: this.preserveResults == true && append);
@@ -1498,12 +1496,9 @@ class SearchController extends Base {
   }
 
   // Method to set the default query value
-
-  void updateQuery({List<Map<String, dynamic>>? query}) {
-    List<Map<String, dynamic>>? prevQuery;
-    prevQuery = this._query != null
-        ? [...this._query!] as List<Map<String, dynamic>>?
-        : this._query as List<Map<String, dynamic>>?;
+  void updateQuery({List<Map>? query}) {
+    List<Map>? prevQuery;
+    prevQuery = this._query != null ? [...this._query!] : this._query;
     final finalQuery = [this.componentQuery];
     final flattenReact = flatReactProp(this.react, this.id);
     flattenReact.forEach((id) {
