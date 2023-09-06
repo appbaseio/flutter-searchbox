@@ -2,7 +2,7 @@
 import 'types.dart';
 
 class Observer {
-  Function callback;
-  List<KeysToSubscribe>? properties;
+  late Function callback;
+  late List<KeysToSubscribe>? properties;
   Observer(this.callback, this.properties) {}
 }

@@ -35,11 +35,11 @@ class Base {
   /// For example, we will add the `credentials` property in the request using `transformRequest`.
   ///
   /// ```dart
-  /// Future (Map request) =>
-  ///      Future.value({
+  /// Future<Map> transformRequest(Map request) async =>
+  ///      {
   ///          ...request,
   ///          'credentials': 'include',
-  ///      })
+  ///      };
   ///  }
   /// ```
   TransformRequest? transformRequest;
@@ -49,26 +49,26 @@ class Base {
   /// It is an asynchronous function which will accept an Elasticsearch response object as param and is expected to return an updated response as the return value.
   /// For example:
   /// ```dart
-  /// Future (Map elasticsearchResponse) async {
-  ///	 final ids = elasticsearchResponse['hits']['hits'].map(item => item._id);
+  /// Future<Map> transformResponse(Map elasticsearchResponse) async {
+  ///	 final ids = elasticsearchResponse['hits']['hits'].map((item) => item._id);
   ///	 final extraInformation = await getExtraInformation(ids);
-  ///	 final hits = elasticsearchResponse['hits']['hits'].map(item => {
+  ///	 final hits = elasticsearchResponse['hits']['hits'].map((item) => {
   ///		final extraInformationItem = extraInformation.find(
-  ///			otherItem => otherItem._id === item._id,
+  ///			(otherItem) => otherItem._id === item._id,
   ///		);
-  ///		return Future.value({
+  ///		return {
   ///			...item,
   ///			...extraInformationItem,
   ///		};
   ///	}));
   ///
-  ///	return Future.value({
+  ///	return {
   ///		...elasticsearchResponse,
   ///		'hits': {
   ///			...elasticsearchResponse.hits,
   ///			hits,
   ///		},
-  ///	});
+  ///	};
   ///}
   /// ```
   TransformResponse? transformResponse;
@@ -101,7 +101,7 @@ class Base {
     this.headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': 'Basic ${base64Str}'
+      'Authorization': 'Basic $base64Str'
     };
     if (headers != null) {
       this.setHeaders(headers);
@@ -124,7 +124,7 @@ class Base {
   }
 
   /// use this methods to record a search click event
-  Future click(Map<String, int> objects,
+  Future<void> click(Map<String, int> objects,
       {bool isSuggestionClick = false, String? queryId}) async {
     String? queryID = queryId;
     if (queryId == null || queryId == "") {

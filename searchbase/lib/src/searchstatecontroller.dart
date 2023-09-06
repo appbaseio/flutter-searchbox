@@ -17,7 +17,6 @@ class SearchControllerState {
   final RequestStatus? requestStatus;
 
   /// Represents the error response returned by elasticsearch.
-
   final dynamic error;
 
   /// Represents the value for a particular [QueryType].
@@ -26,15 +25,15 @@ class SearchControllerState {
   /// You can refer to the different value formats over [here](https://docs.appbase.io/docs/search/reactivesearch-api/reference#value).
   final dynamic value;
 
-  /// Represents a map of reactivesearch queries associated to the widget.
+  /// Represents a map of reactivesearch queries associated with the widget.
   final List<Map<dynamic, dynamic>>? query;
 
   /// The index field(s) to be connected to the component’s UI view.
   ///
-  /// It accepts an `List<String>` in addition to `<String>`, which is useful for searching across multiple fields with or without field weights.
+  /// It accepts a `List<String>` in addition to `<String>`, which is useful for searching across multiple fields with or without field weights.
   ///
   /// Field weights allow weighted search for the index fields. A higher number implies a higher relevance weight for the corresponding field in the search results.
-  /// You can define the `dataField` property as a `List<Map>` of to set the field weights. The object must have the `field` and `weight` keys.
+  /// You can define the `dataField` property as a `List<Map>` to set the field weights. The object must have the `field` and `weight` keys.
   /// For example,
   /// ```dart
   /// [
@@ -54,13 +53,12 @@ class SearchControllerState {
   final int? size;
 
   /// To define from which page to start the results, it is important to implement pagination.
-
   final int? from;
 
   /// Useful for showing the correct results for an incorrect search parameter by taking the fuzziness into account.
   ///
   /// For example, with a substitution of one character, `fox` can become `box`.
-  /// Read more about it in the elastic search https://www.elastic.co/guide/en/elasticsearch/guide/current/fuzziness.html.
+  /// Read more about it in the Elasticsearch documentation: https://www.elastic.co/guide/en/elasticsearch/guide/current/fuzziness.html.
   final dynamic fuzziness;
 
   /// It allows to define fields to be included in search results.
