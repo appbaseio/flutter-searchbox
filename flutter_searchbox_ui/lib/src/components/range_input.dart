@@ -444,6 +444,31 @@ class RangeInput extends StatefulWidget {
   /// ```
   final Map? distinctFieldConfig;
 
+  /// Whether to trigger an initial query based on the initial value when the component is first mounted.
+  ///
+  /// Defaults to true
+  final bool triggerQueryOnMount;
+
+  /// This prop is used to set the timeout value for HTTP requests.
+  /// Defaults to 30 seconds.
+  final Duration httpRequestTimeout;
+
+  /// Configure whether the DSL query is generated with the compound clause of [CompoundClauseType.must] or [CompoundClauseType.filter]. If nothing is passed the default is to use [CompoundClauseType.must].
+  /// Setting the compound clause to filter allows search engine to cache and allows for higher throughput in cases where scoring isn’t relevant (e.g. term, geo or range type of queries that act as filters on the data)
+  ///
+  /// This property only has an effect when the search engine is either elasticsearch or opensearch.
+  /// > Note: `compoundClause` is supported with v8.16.0 (server) as well as with serverless search.
+  ///
+  ///   ///
+  /// For example,
+  /// ```dart
+  /// SearchBox(
+  ///   ...
+  ///   compoundClause:  CompoundClauseType.filter
+  /// )
+  /// ```
+  CompoundClauseType? compoundClause;
+
   /* ---- callbacks to create the side effects while querying ----- */
 
   /// It is a callback function which accepts component's future **value** as a
@@ -748,7 +773,7 @@ class RangeInput extends StatefulWidget {
   /// ```
   final Widget Function(bool showError)? dropdownIcon;
 
-  const RangeInput({
+  RangeInput({
     Key? key,
     required this.id,
     this.subscribeTo,
@@ -823,6 +848,9 @@ class RangeInput extends StatefulWidget {
     this.customContainer,
     this.closeIcon,
     this.dropdownIcon,
+    this.triggerQueryOnMount = true,
+    this.httpRequestTimeout = const Duration(seconds: 30),
+    this.compoundClause,
   }) : super(key: key);
 
   @override
@@ -893,6 +921,7 @@ class _RangeInputState extends State<RangeInput> {
           customContainer: widget.customContainer,
           closeIcon: widget.closeIcon,
           dropdownIcon: widget.dropdownIcon,
+          triggerQueryOnMount: widget.triggerQueryOnMount,
         );
       },
       subscribeTo: widget.subscribeTo,
@@ -953,6 +982,8 @@ class _RangeInputState extends State<RangeInput> {
       onError: widget.onError,
       onRequestStatusChange: widget.onRequestStatusChange,
       onQueryChange: widget.onQueryChange,
+      httpRequestTimeout: widget.httpRequestTimeout,
+      compoundClause: widget.compoundClause,
     );
   }
 }
@@ -973,24 +1004,26 @@ class RangeInputInner extends StatefulWidget {
   final Widget Function()? closeIcon;
   final Widget Function(bool showError)? dropdownIcon;
   final SearchController searchController;
-  const RangeInputInner(
-      {Key? key,
-      required this.searchController,
-      required this.title,
-      required this.rangeLabel,
-      required this.range,
-      required this.defaultValue,
-      this.rangeLabels,
-      this.validateRange,
-      this.buildErrorMessage,
-      this.inputStyle,
-      this.textInputAction,
-      this.dropdownStyle,
-      this.customContainer,
-      this.closeIcon,
-      this.dropdownIcon,
-      this.keyboardType})
-      : super(key: key);
+  final bool triggerQueryOnMount;
+  const RangeInputInner({
+    Key? key,
+    required this.searchController,
+    required this.title,
+    required this.rangeLabel,
+    required this.range,
+    required this.defaultValue,
+    required this.triggerQueryOnMount,
+    this.rangeLabels,
+    this.validateRange,
+    this.buildErrorMessage,
+    this.inputStyle,
+    this.textInputAction,
+    this.dropdownStyle,
+    this.customContainer,
+    this.closeIcon,
+    this.dropdownIcon,
+    this.keyboardType,
+  }) : super(key: key);
 
   @override
   _RangeInputInnerState createState() => _RangeInputInnerState();
@@ -1070,9 +1103,10 @@ class _RangeInputInnerState extends State<RangeInputInner> {
         valueObj["end"] = dropdownValues['endValue'];
       }
 
-      WidgetsBinding.instance.addPostFrameCallback((_) => widget
-          .searchController
-          .setValue(valueObj, options: Options(triggerCustomQuery: true)));
+      WidgetsBinding.instance.addPostFrameCallback((_) =>
+          widget.searchController.setValue(valueObj,
+              options:
+                  Options(triggerCustomQuery: widget.triggerQueryOnMount)));
     } catch (e, stack) {
       // ignore: avoid_print
       print('$e $stack');
@@ -1397,6 +1431,10 @@ class _DropdownState extends State<Dropdown> {
   void dispose() {
     // Clean up the controller when the widget is removed from the
     // widget tree.
+    if (_value != widget.value) {
+      widget.onChangeHandler(_value);
+      _controller.text = renderLabel(_value);
+    }
     _controller.dispose();
     _focusNode.dispose();
     super.dispose();

@@ -1,3 +1,44 @@
+## 3.4.0
+
+- stable release
+
+## 3.4.12-beta
+
+- add support to override widget config when re-registered through searchbase instance
+
+## 3.4.11-beta
+
+- add support for `compoundClause` property
+## 3.4.10-beta
+
+- fix: reset filters bug - regression
+
+## 3.4.9-beta
+
+- feat: httpRequestTimeout prop support
+
+## 3.4.8-beta
+
+- fix multiple API calls when filters are reset
+
+## 3.4.7-beta
+
+- null check for controller in setSearchState method
+
+## 3.4.6-beta
+
+- filter reset bug
+- remove log statements
+- merge "Reuse httpClient to optimize latency for network requests."
+
+## 3.4.5-beta
+
+- filter reset bug
+
+## 3.4.4-beta
+
+- Reuse httpClient to optimize latency for network requests.
+
 ## 3.4.3-beta
 
 - Avoid consuming stale responses for controllers triggered by custom queries

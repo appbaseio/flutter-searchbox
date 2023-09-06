@@ -1,3 +1,36 @@
+## [3.2.0] - 05-09-2022
+
+- stable release
+
+## 3.2.10-beta
+
+- Upgrade searchbase
+
+## 3.2.9-beta
+
+- add support for `compoundClause` property
+
+## 3.2.7-beta
+
+- feat: support httpRequestTimeout prop
+- upgrade searchbase
+
+## 3.2.6-beta
+
+- Upgrade searchbase
+
+## 3.2.5-beta
+
+- Upgrade searchbase
+
+## 3.2.4-beta
+
+- Upgrade searchbase
+
+## 3.2.2-beta
+
+- Upgrade searchbase
+
 ## 3.2.1-beta
 
 - Upgrade searchbase

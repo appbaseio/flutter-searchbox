@@ -1,3 +1,55 @@
+## [3.2.0] - 05-09-2022
+
+- stable release
+
+## 3.2.11-beta
+
+- Upgrade searchbase
+- Upgrade flutter_searchbox
+
+## 3.2.10-beta
+
+- add support for `compoundClause` property
+
+## 3.2.9-beta
+
+- RangeInput: triggerQueryOnMount prop support
+- httpRequestTimeout Support for RangeInput and ReactiveGoogleMap
+
+## 3.2.8-beta
+
+- fix: reset filters bug - regression
+- Upgrade searchbase
+- Upgrade flutter_searchbox
+
+## 3.2.7-beta
+
+- Upgrade searchbase
+- Upgrade flutter_searchbox
+
+## 3.2.6-beta
+
+- fix: value not set for range_filter when used on tablets
+
+## 3.2.5-beta
+
+- Upgrade searchbase - fix multiple API calls when resetting filters
+- Upgrade flutter_searchbox
+
+## 3.2.4-beta
+
+- Upgrade searchbase
+- Upgrade flutter_searchbox
+
+## 3.2.3-beta
+
+- Upgrade searchbase
+- Upgrade flutter_searchbox
+
+## 3.2.2-beta
+
+- Upgrade searchbase
+
 ## 3.2.1-beta
 
 - Upgrade searchbase
