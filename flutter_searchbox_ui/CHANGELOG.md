@@ -1,3 +1,5 @@
+## 4.0.0-alpha.2
+
 ## 4.0.0-alpha.1
 
 - alpha release for Dart 3 support

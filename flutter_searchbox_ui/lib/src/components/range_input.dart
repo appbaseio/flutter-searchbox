@@ -960,10 +960,8 @@ class _RangeInputState extends State<RangeInput> {
       aggregations: widget.aggregations,
       showMissing: widget.showMissing,
       missingLabel: widget.missingLabel,
-      defaultQuery:
-          widget.defaultQuery as Map<dynamic, dynamic> Function(dynamic)?,
-      customQuery:
-          widget.customQuery as Map<dynamic, dynamic> Function(dynamic)?,
+      defaultQuery: widget.defaultQuery,
+      customQuery: widget.customQuery,
       enableSynonyms: widget.enableSynonyms,
       selectAllLabel: widget.selectAllLabel,
       pagination: widget.pagination,
