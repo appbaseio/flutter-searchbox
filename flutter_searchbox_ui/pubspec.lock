@@ -98,10 +98,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_searchbox
-      sha256: afe2c57ec7e1ea320c2e209b4ee8ffbdf15ac600b8ef686579475ef5ec28780b
+      sha256: "67bcc0f67ab797490d813ddd1d85c0227d51281655c5d1e6d99f6a85dfd25895"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.0-alpha.3"
+    version: "4.0.0-alpha.4"
   flutter_test:
     dependency: "direct dev"
     description: flutter

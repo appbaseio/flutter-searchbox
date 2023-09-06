@@ -29,7 +29,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_searchbox: ^4.0.0-alpha.3
+  flutter_searchbox: ^4.0.0-alpha.4
   searchbase: ^4.0.0-alpha.3
   flutter_searchbox_ui:
     path: ./../
