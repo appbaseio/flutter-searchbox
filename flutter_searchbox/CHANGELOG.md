@@ -1,3 +1,6 @@
+## 4.0.0-alpha.5
+
+- update searchbase
 ## 4.0.0-alpha.4
 
 - bug fixes
