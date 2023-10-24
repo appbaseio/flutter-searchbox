@@ -1,6 +1,6 @@
 name: flutter_searchbox_ui
 description: Flutter Searchbox UI provides ui widgets to perform different type of search queries. As the name suggests, it provides UI widgets for Elasticseasrch.
-version: 4.0.0-alpha.3
+version: 4.0.0-alpha.4
 homepage: https://github.com/appbaseio/flutter-searchbox
 
 environment:
@@ -11,10 +11,10 @@ dependencies:
   dart_geohash: ^2.0.1
   flutter:
     sdk: flutter
-  flutter_searchbox: ^4.0.0-alpha.4
+  flutter_searchbox: ^4.0.0-alpha.5
   google_maps_cluster_manager: ^3.0.0+1
   google_maps_flutter: ^2.0.11
-  searchbase: ^4.0.0-alpha.3
+  searchbase: ^4.0.0-alpha.4
 dev_dependencies:
   flutter_test:
     sdk: flutter

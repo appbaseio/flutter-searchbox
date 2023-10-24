@@ -1,3 +1,8 @@
+## 4.0.0-alpha.4
+
+- upgrade searchbase and flutter_searchbox
+
+
 ## 4.0.0-alpha.3
 
 ## 4.0.0-alpha.1
