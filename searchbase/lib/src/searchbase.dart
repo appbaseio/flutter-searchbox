@@ -238,7 +238,7 @@ class SearchBase extends Base {
           this._requestStack.forEach((request) {
             var controllerId = request["id"] as String;
             if (requestsToIdMap[controllerId] != null) {
-              requestsToIdMap[controllerId] = request as Map<String, dynamic>;
+              requestsToIdMap[controllerId] = Map<String, dynamic>.from(request);
             } else {
               var shouldExecute = request["execute"] != null
                   ? request["execute"] as bool
@@ -247,7 +247,7 @@ class SearchBase extends Base {
               if (shouldExecute) {
                 request["execute"] = true;
               }
-              requestsToIdMap[controllerId] = request as Map<String, dynamic>;
+              requestsToIdMap[controllerId] = Map<String, dynamic>.from(request);
             }
           });
           requestsToIdMap.values.forEach((request) {
@@ -499,7 +499,7 @@ class SearchBase extends Base {
     this._requestStack.forEach((request) {
       var controllerId = request["id"] as String;
       if (requestsToIdMap[controllerId] != null) {
-        requestsToIdMap[controllerId] = request as Map<String, dynamic>;
+        requestsToIdMap[controllerId] = Map<String, dynamic>.from(request);
       } else {
         var shouldExecute =
             request["execute"] != null ? request["execute"] as bool : false;
@@ -507,7 +507,7 @@ class SearchBase extends Base {
         if (shouldExecute) {
           request["execute"] = true;
         }
-        requestsToIdMap[controllerId] = request as Map<String, dynamic>;
+        requestsToIdMap[controllerId] = Map<String, dynamic>.from(request);
       }
     });
     requestsToIdMap.values.forEach((request) {

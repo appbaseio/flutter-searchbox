@@ -1,3 +1,7 @@
+
+## 4.0.0-alpha.3
+- fixes typecasting error
+
 ## 4.0.0-alpha.3
 
 ## 4.0.0-alpha.2
