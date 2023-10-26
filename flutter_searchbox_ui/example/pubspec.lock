@@ -98,25 +98,25 @@ packages:
     dependency: transitive
     description:
       name: flutter_plugin_android_lifecycle
-      sha256: f185ac890306b5779ecbd611f52502d8d4d63d27703ef73161ca0407e815f02c
+      sha256: b068ffc46f82a55844acfa4fdbb61fad72fa2aef0905548419d97f0f95c456da
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.16"
+    version: "2.0.17"
   flutter_searchbox:
     dependency: "direct main"
     description:
       name: flutter_searchbox
-      sha256: afe2c57ec7e1ea320c2e209b4ee8ffbdf15ac600b8ef686579475ef5ec28780b
+      sha256: dec4e64c892b2020496c1714c63a900e292884a22d2764c13c17453dd4dfad6b
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.0-alpha.3"
+    version: "4.0.0-alpha.5"
   flutter_searchbox_ui:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "4.0.0-alpha.1"
+    version: "4.0.0-alpha.4"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -144,7 +144,7 @@ packages:
     source: hosted
     version: "3.0.0+1"
   google_maps_flutter:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: google_maps_flutter
       sha256: d4914cb38b3dcb62c39c085d968d434de0f8050f00f4d9f5ba4a7c7e004934cb
@@ -155,18 +155,18 @@ packages:
     dependency: transitive
     description:
       name: google_maps_flutter_android
-      sha256: e6cb018169e49332f88d23b1d2119b09e8ab4e7d3a1b889a1b7b3fd113e034ba
+      sha256: "1a4375d0ed0e36af4a2c7a7cd97ec8c423b40bff6c4270face40d2c1cba6c8af"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.1"
+    version: "2.5.2"
   google_maps_flutter_ios:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: google_maps_flutter_ios
-      sha256: "2a595c9789070786c654e9772ec0d1bb759ae37d2dd776291af5398531274e06"
+      sha256: "2aa28eb9b9d5dfdce6932a7b7f096430bf83a1a09b4e21e81939351f407c787f"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.1"
+    version: "2.3.2"
   google_maps_flutter_platform_interface:
     dependency: transitive
     description:
@@ -291,18 +291,18 @@ packages:
     dependency: transitive
     description:
       name: sanitize_html
-      sha256: "0a445f19bbaa196f5a4f93461aa066b94e6e025622eb1e9bc77872a5e25233a5"
+      sha256: "12669c4a913688a26555323fb9cec373d8f9fbe091f2d01c40c723b33caa8989"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.0"
   searchbase:
     dependency: "direct main"
     description:
       name: searchbase
-      sha256: "32f949e17763f461507530cb7c5545e37a89b72178b67bfc4a1216f8c425a39e"
+      sha256: fd4e9908aaba3eac06d4f0d9e51ee8a7362916834e56a20749829998e01c2c61
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.0-alpha.3"
+    version: "4.0.0-alpha.4"
   sky_engine:
     dependency: transitive
     description: flutter
