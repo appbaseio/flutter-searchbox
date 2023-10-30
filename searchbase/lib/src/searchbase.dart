@@ -238,7 +238,8 @@ class SearchBase extends Base {
           this._requestStack.forEach((request) {
             var controllerId = request["id"] as String;
             if (requestsToIdMap[controllerId] != null) {
-              requestsToIdMap[controllerId] = Map<String, dynamic>.from(request);
+              requestsToIdMap[controllerId] =
+                  Map<String, dynamic>.from(request);
             } else {
               var shouldExecute = request["execute"] != null
                   ? request["execute"] as bool
@@ -247,7 +248,8 @@ class SearchBase extends Base {
               if (shouldExecute) {
                 request["execute"] = true;
               }
-              requestsToIdMap[controllerId] = Map<String, dynamic>.from(request);
+              requestsToIdMap[controllerId] =
+                  Map<String, dynamic>.from(request);
             }
           });
           requestsToIdMap.values.forEach((request) {
@@ -355,7 +357,10 @@ class SearchBase extends Base {
 
   Future<Map> _fetchRequest(Map requestBody) async {
     // remove undefined properties from request body
+    String suffix = '_reactivesearch';
+    final String url = "${this.url}/${this.index}/$suffix";
     final requestOptions = {
+      'url': url,
       'body': jsonEncode(requestBody),
       'headers': {...?this.headers}
     };
@@ -364,10 +369,8 @@ class SearchBase extends Base {
           await this._handleTransformRequest(requestOptions);
       // set timestamp in request
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      String suffix = '_reactivesearch';
-      final String url = "${this.url}/${this.index}/$suffix";
       final http.Response res = await http.post(
-        Uri.parse(url),
+        Uri.parse(finalRequestOptions['url']),
         headers: finalRequestOptions['headers'],
         body: finalRequestOptions['body'],
       );
