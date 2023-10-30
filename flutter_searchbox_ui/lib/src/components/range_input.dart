@@ -467,7 +467,7 @@ class RangeInput extends StatefulWidget {
   ///   compoundClause:  CompoundClauseType.filter
   /// )
   /// ```
-  CompoundClauseType? compoundClause;
+  final CompoundClauseType? compoundClause;
 
   /* ---- callbacks to create the side effects while querying ----- */
 

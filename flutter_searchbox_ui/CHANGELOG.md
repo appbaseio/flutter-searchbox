@@ -1,3 +1,7 @@
+## 4.0.0-alpha.5
+
+- update searchbase and flutter_searchbox: expose URL through transformRequest function
+
 ## 4.0.0-alpha.4
 
 - upgrade searchbase and flutter_searchbox

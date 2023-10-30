@@ -221,7 +221,7 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
 
   /// This prop is used to set the timeout value for HTTP requests.
   /// Defaults to 30 seconds.
-  Duration httpRequestTimeout;
+  final Duration httpRequestTimeout;
 
   /// Configure whether the DSL query is generated with the compound clause of [CompoundClauseType.must] or [CompoundClauseType.filter]. If nothing is passed the default is to use [CompoundClauseType.must].
   /// Setting the compound clause to filter allows search engine to cache and allows for higher throughput in cases where scoring isn’t relevant (e.g. term, geo or range type of queries that act as filters on the data)
@@ -237,7 +237,7 @@ class _SearchWidgetListener<S, ViewModel> extends StatefulWidget {
   ///   compoundClause:  CompoundClauseType.filter
   /// )
   /// ```
-  CompoundClauseType? compoundClause;
+  final CompoundClauseType? compoundClause;
 
   /* ---- callbacks to create the side effects while querying ----- */
 
@@ -834,7 +834,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
 
   /// This prop is used to set the timeout value for HTTP requests.
   /// Defaults to 30 seconds.
-  Duration httpRequestTimeout;
+  final Duration httpRequestTimeout;
 
   /// Configure whether the DSL query is generated with the compound clause of [CompoundClauseType.must] or [CompoundClauseType.filter]. If nothing is passed the default is to use [CompoundClauseType.must].
   /// Setting the compound clause to filter allows search engine to cache and allows for higher throughput in cases where scoring isn’t relevant (e.g. term, geo or range type of queries that act as filters on the data)
@@ -850,7 +850,7 @@ class SearchWidgetConnector<S, ViewModel> extends StatelessWidget {
   ///   compoundClause:  CompoundClauseType.filter
   /// )
   /// ```
-  CompoundClauseType? compoundClause;
+  final CompoundClauseType? compoundClause;
 
   /* ---- callbacks to create the side effects while querying ----- */
 

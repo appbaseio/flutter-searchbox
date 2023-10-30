@@ -14,13 +14,14 @@ class FlutterSearchBoxApp extends StatelessWidget {
   // Avoid creating searchbase instance in build method
   // to preserve state on hot reloading
   final searchbaseInstance = SearchBase(
-      'good-books-ds',
-      'https://appbase-demo-ansible-abxiydt-arc.searchbase.io',
-      'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61',
-      appbaseConfig: AppbaseSettings(
-          recordAnalytics: true,
-          // Use unique user id to personalize the recent searches
-          userId: 'jon@appbase.io'));
+    'good-books-ds',
+    'https://appbase-demo-ansible-abxiydt-arc.searchbase.io',
+    'a03a1cb71321:75b6603d-9456-4a5a-af6b-a487b309eb61',
+    appbaseConfig: AppbaseSettings(
+        recordAnalytics: true,
+        // Use unique user id to personalize the recent searches
+        userId: 'jon@appbase.io'),
+  );
 
   // Create an instance of speech to text provider at top level of your application
   // It is only required to integrate voice search.

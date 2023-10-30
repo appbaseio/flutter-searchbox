@@ -29,7 +29,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  searchbase: ^4.0.0-alpha.3
+  searchbase: ^4.0.0-alpha.4
   speech_to_text: ^6.1.0
   flutter_searchbox:
     path: ./../
