@@ -49,7 +49,7 @@ class Aggregations {
 
   /// To clone the object
   Aggregations clone() {
-    var aggData = new Aggregations();
+    var aggData = Aggregations();
     aggData.data = data;
     aggData.afterKey = afterKey;
     aggData.raw = raw;

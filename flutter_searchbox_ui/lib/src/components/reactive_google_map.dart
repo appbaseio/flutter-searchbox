@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SearchController;
 import 'package:searchbase/searchbase.dart';
 import 'package:flutter_searchbox/flutter_searchbox.dart';
 import 'package:flutter/foundation.dart';
@@ -1237,7 +1237,7 @@ class ReactiveGoogleMap extends StatefulWidget {
   ///   compoundClause:  CompoundClauseType.filter
   /// )
   /// ```
-  CompoundClauseType? compoundClause;
+  final CompoundClauseType? compoundClause;
 
   /* ---- callbacks to create the side effects while querying ----- */
 

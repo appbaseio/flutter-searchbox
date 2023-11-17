@@ -119,7 +119,9 @@ class _StateProviderState extends State<StateProvider> {
               _controllersState = next;
             });
           }
-          widget.onChange!(next, prev);
+          if (widget.onChange != null) {
+            widget.onChange!(next, prev);
+          }
         },
       ).current;
 

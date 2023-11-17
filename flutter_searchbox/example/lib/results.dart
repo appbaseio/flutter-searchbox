@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SearchController;
 import 'package:searchbase/searchbase.dart';
 
 class StarDisplay extends StatelessWidget {

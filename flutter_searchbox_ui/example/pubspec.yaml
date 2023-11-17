@@ -18,7 +18,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.17.3 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -29,8 +29,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_searchbox: ^3.2.1-beta
-  searchbase: ^3.4.0-beta
+  google_maps_flutter: ^2.5.0
+  google_maps_flutter_ios: ^2.3.2
+  flutter_searchbox: ^4.0.0-alpha.5
+  searchbase: ^4.0.0-alpha.4
   flutter_searchbox_ui:
     path: ./../
 

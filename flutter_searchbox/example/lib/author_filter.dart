@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SearchController;
 import 'package:searchbase/searchbase.dart';
 
 class FilterHeader extends PreferredSize {
   final double height;
   final Widget child;
 
-  FilterHeader({required this.child, this.height = kToolbarHeight})
-      : super(child: child, preferredSize: Size.fromHeight(height));
-
+  FilterHeader({required this.child, this.height = kToolbarHeight, Key? key})
+      : super(key: key, child: child, preferredSize: Size.fromHeight(height));
   @override
   Size get preferredSize => Size.fromHeight(height);
 
@@ -37,7 +36,7 @@ class FilterHeader extends PreferredSize {
 class AuthorFilter extends StatelessWidget {
   final SearchController searchController;
 
-  AuthorFilter(this.searchController);
+  const AuthorFilter(this.searchController, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

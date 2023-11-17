@@ -1,3 +1,18 @@
+
+## 4.0.0-alpha.5
+- feat: expose URL through transformRequest function
+
+## 4.0.0-alpha.4
+- fixes typecasting error
+
+## 4.0.0-alpha.3
+
+## 4.0.0-alpha.2
+
+## 4.0.0-alpha.1
+
+- alpha version for Dart 3 upgrade
+
 ## 3.4.0
 
 - stable release

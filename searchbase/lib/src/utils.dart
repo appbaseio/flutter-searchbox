@@ -5,7 +5,7 @@ const popularSuggestionFields = ['key', 'key.autosuggest'];
 
 List<Map<String, dynamic>> withClickIds(List<Map<String, dynamic>> results) {
   int index = 0;
-  return results.map((result) => ({...result, "_click_id": ++index})).toList();
+  return results.map((result) => {...result, "_click_id": ++index}).toList();
 }
 
 List<Suggestion> withSuggestionClickIds(List<Suggestion> suggestions) {
@@ -76,18 +76,15 @@ List<String> getNormalizedField(dynamic field) {
 List<int> getNormalizedWeights(dynamic field) {
   if (field is List<Map>) {
     List<int> weights = [];
-    field.forEach((dataField) => {
-          if (dataField['weight'] is int)
-            {
-              // if data field is an array of objects
-              weights.add(dataField['weight'])
-            }
-          else
-            {
-              // Add default weight as 1 to maintain order
-              weights.add(1)
-            }
-        });
+    field.forEach((dataField) {
+      if (dataField['weight'] is int) {
+        // if data field is an array of objects
+        weights.add(dataField['weight']);
+      } else {
+        // Add default weight as 1 to maintain order
+        weights.add(1);
+      }
+    });
     return weights;
   }
   return [];
@@ -216,13 +213,11 @@ List<Suggestion> getSuggestions(
   void traverseSuggestions() {
     if (showDistinctSuggestions == true) {
       suggestions
-          .forEach((item) => {fields.any((field) => parseField(item, field))});
+          .forEach((item) => fields.any((field) => parseField(item, field)));
     } else {
-      suggestions.forEach((item) => {
-            fields.forEach((field) {
-              parseField(item, field);
-            })
-          });
+      suggestions.forEach((item) => fields.forEach((field) {
+            parseField(item, field);
+          }));
     }
   }
 
@@ -259,4 +254,3 @@ bool isEqual(dynamic x, dynamic y) {
   Function deepEq = const DeepCollectionEquality().equals;
   return deepEq(x, y);
 }
-

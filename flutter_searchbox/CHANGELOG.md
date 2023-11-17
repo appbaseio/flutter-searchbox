@@ -1,3 +1,19 @@
+## 4.0.0-alpha.6
+
+- update searchbase: expose URL through transformRequest function
+
+## 4.0.0-alpha.5
+
+- update searchbase
+
+## 4.0.0-alpha.4
+
+- bug fixes
+
+## 4.0.0-alpha.1
+
+- alpha version for Dart 3 upgrade
+
 ## [3.2.0] - 05-09-2022
 
 - stable release

@@ -1,7 +1,5 @@
-import 'dart:async';
 import 'dart:html';
 import 'package:searchbase/searchbase.dart';
-import 'dart:developer';
 
 bool areListsEqual(var list1, var list2) {
   // check if both are lists
@@ -114,6 +112,7 @@ void main() {
   filterWidget.triggerDefaultQuery();
   List<Map<dynamic, dynamic>>? prevAggData = [];
 
+  // ignore: unused_local_variable
   final searchStateController = SearchStateController(
     searchBase: searchbase,
     subscribeTo: {

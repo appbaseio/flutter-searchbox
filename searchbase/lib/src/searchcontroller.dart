@@ -1323,7 +1323,11 @@ class SearchController extends Base {
     bool isPopularSuggestionsAPI,
   ) async {
     // remove undefined properties from request body
+    String suffix = '_reactivesearch';
+    final String url =
+        "${this.url}/${this._getSearchIndex(isPopularSuggestionsAPI)}/$suffix";
     final requestOptions = {
+      'url': url,
       'body': jsonEncode(requestBody),
       'headers': {...?this.headers},
     };
@@ -1333,15 +1337,12 @@ class SearchController extends Base {
           await this._handleTransformRequest(requestOptions);
       // set timestamp in request
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      String suffix = '_reactivesearch.v3';
-      final String url =
-          "${this.url}/${this._getSearchIndex(isPopularSuggestionsAPI)}/$suffix";
 
       final timeoutDuration = httpRequestTimeout;
 
       final http.Response res = await httpClient
           .post(
-        Uri.parse(url),
+        Uri.parse(finalRequestOptions['url']),
         headers: finalRequestOptions['headers'],
         body: finalRequestOptions['body'],
       )

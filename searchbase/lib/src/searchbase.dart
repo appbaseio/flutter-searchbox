@@ -53,7 +53,7 @@ class SearchBase extends Base {
     } else {
       this.initialQueriesSyncTime = 100;
     }
-    this._initialTimeStamp = new DateTime.now().millisecondsSinceEpoch;
+    this._initialTimeStamp = DateTime.now().millisecondsSinceEpoch;
   }
 
   // methods
@@ -100,7 +100,7 @@ class SearchBase extends Base {
   /// Additionally, you can override the global configurations by defining it for a particular widget. For example, to register a widget with a different `index` name.
   ///
   SearchController register(String widgetId, dynamic searchController) {
-    if (widgetId == "") {
+    if (widgetId.isEmpty) {
       throw (ErrorMessages[InvalidIndex]);
     }
     if (this._searchWidgets.containsKey(widgetId)) {
@@ -117,28 +117,20 @@ class SearchBase extends Base {
     if (searchController != null && searchController is Map) {
       // create instance from object with all the options
       componentInstance = SearchController(
-        searchController["index"] != null
-            ? searchController["index"]
-            : this.index,
-        searchController["url"] != null ? searchController["url"] : this.url,
-        searchController["credentials"] != null
-            ? searchController["credentials"]
-            : this.credentials,
+        searchController["index"] ?? this.index,
+        searchController["url"] ?? this.url,
+        searchController["credentials"] ?? this.credentials,
         widgetId,
-        headers: searchController["headers"] is Map<String, String>
-            ? searchController["headers"]
-            : this.headers,
+        headers:
+            searchController["headers"] as Map<String, String>? ?? this.headers,
         transformRequest:
-            searchController["transformRequest"] is TransformRequest
-                ? searchController["transformRequest"]
-                : this.transformRequest,
+            searchController["transformRequest"] as TransformRequest? ??
+                this.transformRequest,
         transformResponse:
-            searchController["transformResponse"] is TransformResponse
-                ? searchController["transformResponse"]
-                : this.transformResponse,
-        appbaseConfig: searchController["appbaseConfig"] is AppbaseSettings
-            ? searchController["appbaseConfig"]
-            : this.appbaseConfig,
+            searchController["transformResponse"] as TransformResponse? ??
+                this.transformResponse,
+        appbaseConfig: searchController["appbaseConfig"] as AppbaseSettings? ??
+            this.appbaseConfig,
         type: searchController["type"],
         dataField: searchController["dataField"],
         react: searchController["react"],
@@ -221,11 +213,11 @@ class SearchBase extends Base {
     return this._searchWidgets;
   }
 
-  lock() {
+  void lock() {
     _lock = true;
   }
 
-  unlock() {
+  void unlock() {
     _lock = false;
   }
 
@@ -234,20 +226,20 @@ class SearchBase extends Base {
     bool addToStack,
     List<Map>? query,
   ) {
-    var currentTime = new DateTime.now().millisecondsSinceEpoch;
+    var currentTime = DateTime.now().millisecondsSinceEpoch;
     var shouldWait =
         currentTime - this._initialTimeStamp < this.initialQueriesSyncTime;
     if (addToStack && shouldWait) {
       // Add future delay to execute request stack
       if (!this.isLocked()) {
-        List executableControllers = [];
-        new Future.delayed(Duration(milliseconds: this.initialQueriesSyncTime),
-            () {
-          Map<String, Map> requestsToIdMap = {};
+        List<String> executableControllers = [];
+        Future.delayed(Duration(milliseconds: this.initialQueriesSyncTime), () {
+          Map<String, Map<String, dynamic>> requestsToIdMap = {};
           this._requestStack.forEach((request) {
             var controllerId = request["id"] as String;
             if (requestsToIdMap[controllerId] != null) {
-              requestsToIdMap[controllerId] = request;
+              requestsToIdMap[controllerId] =
+                  Map<String, dynamic>.from(request);
             } else {
               var shouldExecute = request["execute"] != null
                   ? request["execute"] as bool
@@ -256,7 +248,8 @@ class SearchBase extends Base {
               if (shouldExecute) {
                 request["execute"] = true;
               }
-              requestsToIdMap[controllerId] = request;
+              requestsToIdMap[controllerId] =
+                  Map<String, dynamic>.from(request);
             }
           });
           requestsToIdMap.values.forEach((request) {
@@ -277,12 +270,12 @@ class SearchBase extends Base {
             if (componentInstance != null) {
               // set request status to pending
               componentInstance.setRequestStatus(RequestStatus.PENDING,
-                  options: new Option());
+                  options: Option());
               // Update the query
               componentInstance.updateQuery();
             }
           });
-          List query = [];
+          List<Map<String, dynamic>> query = [];
           requestsToIdMap.values.forEach((element) {
             query.add(element);
           });
@@ -300,7 +293,8 @@ class SearchBase extends Base {
                 // Update the results
                 final prev = componentInstance.results.clone();
                 // Collect results from the response for a particular component
-                Map rawResults = results[id] != null ? results[id] : {};
+                Map<String, dynamic> rawResults =
+                    results[id] != null ? results[id] : {};
                 // Set results
                 if (rawResults['hits'] != null) {
                   componentInstance.results.setRaw(rawResults);
@@ -311,7 +305,7 @@ class SearchBase extends Base {
                 if (rawResults['aggregations'] != null) {
                   componentInstance.handleAggregationResponse(
                       rawResults['aggregations'],
-                      options: new Options(),
+                      options: Options(),
                       append: false);
                 }
               }
@@ -345,16 +339,17 @@ class SearchBase extends Base {
     return _lock;
   }
 
-  Future<Map> _handleTransformResponse(Map? res) {
+  Future<Map<String, dynamic>> _handleTransformResponse(
+      Map<String, dynamic>? res) {
     if (this.transformResponse != null) {
-      return this.transformResponse!(res) as Future<Map<dynamic, dynamic>>;
+      return this.transformResponse!(res) as Future<Map<String, dynamic>>;
     }
     return Future.value(res);
   }
 
-  Future<Map> _handleTransformRequest(Map requestOptions) {
+  Future<Map> _handleTransformRequest(Map requestOptions) async {
     if (this.transformRequest != null) {
-      return this.transformRequest!(requestOptions)
+      return await this.transformRequest!(requestOptions)
           as Future<Map<dynamic, dynamic>>;
     }
     return Future<Map>.value(requestOptions);
@@ -362,7 +357,10 @@ class SearchBase extends Base {
 
   Future<Map> _fetchRequest(Map requestBody) async {
     // remove undefined properties from request body
+    String suffix = '_reactivesearch';
+    final String url = "${this.url}/${this.index}/$suffix";
     final requestOptions = {
+      'url': url,
       'body': jsonEncode(requestBody),
       'headers': {...?this.headers}
     };
@@ -371,10 +369,8 @@ class SearchBase extends Base {
           await this._handleTransformRequest(requestOptions);
       // set timestamp in request
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      String suffix = '_reactivesearch';
-      final String url = "${this.url}/${this.index}/$suffix";
       final http.Response res = await http.post(
-        Uri.parse(url),
+        Uri.parse(finalRequestOptions['url']),
         headers: finalRequestOptions['headers'],
         body: finalRequestOptions['body'],
       );
@@ -468,7 +464,7 @@ class SearchBase extends Base {
       SearchController? controller = getSearchWidget(id);
       // Add component Id to request stack
       final generatedQuery = controller?.generateQuery();
-      if (generatedQuery?.requestBody.length != 0) {
+      if (generatedQuery?.requestBody.isNotEmpty == true) {
         generatedQuery?.orderOfQueries.forEach((id) {
           final componentInstance = this.getSearchWidget(id);
           if (componentInstance != null) {
@@ -501,12 +497,12 @@ class SearchBase extends Base {
     });
 
     // execute request
-    List executableControllers = [];
-    Map<String, Map> requestsToIdMap = {};
+    List<String> executableControllers = [];
+    Map<String, Map<String, dynamic>> requestsToIdMap = {};
     this._requestStack.forEach((request) {
       var controllerId = request["id"] as String;
       if (requestsToIdMap[controllerId] != null) {
-        requestsToIdMap[controllerId] = request;
+        requestsToIdMap[controllerId] = Map<String, dynamic>.from(request);
       } else {
         var shouldExecute =
             request["execute"] != null ? request["execute"] as bool : false;
@@ -514,7 +510,7 @@ class SearchBase extends Base {
         if (shouldExecute) {
           request["execute"] = true;
         }
-        requestsToIdMap[controllerId] = request;
+        requestsToIdMap[controllerId] = Map<String, dynamic>.from(request);
       }
     });
     requestsToIdMap.values.forEach((request) {
@@ -542,7 +538,7 @@ class SearchBase extends Base {
         componentInstance.updateQuery();
       }
     });
-    List query = [];
+    List<Map<String, dynamic>> query = [];
     requestsToIdMap.values.forEach((element) {
       query.add(element);
     });
@@ -562,7 +558,8 @@ class SearchBase extends Base {
           // Update the results
           final prev = componentInstance.results.clone();
           // Collect results from the response for a particular component
-          Map rawResults = results[id] != null ? results[id] : {};
+          Map<String, dynamic> rawResults =
+              results[id] != null ? results[id] as Map<String, dynamic> : {};
           // Set results
           if (rawResults['hits'] != null) {
             componentInstance.results.setRaw(rawResults);

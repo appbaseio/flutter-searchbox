@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SearchController;
 import 'package:flutter_searchbox/flutter_searchbox.dart';
 import '../utils.dart';
 import 'package:searchbase/searchbase.dart';
@@ -467,7 +467,7 @@ class RangeInput extends StatefulWidget {
   ///   compoundClause:  CompoundClauseType.filter
   /// )
   /// ```
-  CompoundClauseType? compoundClause;
+  final CompoundClauseType? compoundClause;
 
   /* ---- callbacks to create the side effects while querying ----- */
 

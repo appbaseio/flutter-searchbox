@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:searchbase/searchbase.dart';
+import 'package:searchbase/searchbase.dart' as sb;
 import 'package:flutter_searchbox/flutter_searchbox.dart';
 import 'dart:async';
 import '../utils.dart';
 
 class BuildOptions {
-  /// A map of search controller id to [SearchController]
+  /// A map of search controller id to [sb.SearchController]
   /// One can loop through the map to get the corresponding raw value for each filter.
   /// For example,
   /// selectedValues.forEach((filterId, filterValue){
@@ -225,7 +225,7 @@ class _SelectedFiltersState extends State<SelectedFilters> {
     WidgetsBinding.instance.addPostFrameCallback((_) => setSelectedFilters());
   }
 
-  Map<String, SearchController> get activeWidgets {
+  Map<String, sb.SearchController> get activeWidgets {
     return SearchBaseProvider.of(context).getActiveWidgets();
   }
 
@@ -288,7 +288,7 @@ class _SelectedFiltersState extends State<SelectedFilters> {
           } else {
             applyChanges();
           }
-        }, [KeysToSubscribe.Value]);
+        }, [sb.KeysToSubscribe.Value]);
       }
     } catch (e) {
       // ignore: avoid_print
@@ -305,7 +305,7 @@ class _SelectedFiltersState extends State<SelectedFilters> {
 
       _selectedFilters.remove(id);
       activeWidgets[id]?.setValue(resetTo ?? getResetValue(id),
-          options: Options(
+          options: sb.Options(
             triggerCustomQuery: true,
           ));
     } catch (e) {
@@ -322,7 +322,7 @@ class _SelectedFiltersState extends State<SelectedFilters> {
       var completer = Completer();
       var resetValue = resetTo != null ? resetTo[id] : getResetValue(id);
       componentInstance?.setValue(resetValue,
-          options: Options(completer: completer));
+          options: sb.Options(completer: completer));
       await completer.future;
     }
 

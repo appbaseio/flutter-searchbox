@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:searchbase/searchbase.dart';
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SearchController;
 import './searchbaseprovider.dart';
 import './searchwidgetconnector.dart';
 import 'dart:io' show Platform;

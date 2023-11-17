@@ -500,8 +500,6 @@ extension KeysToSubscribeExtension on KeysToSubscribe {
         return 'defaultQuery';
       case KeysToSubscribe.CustomQuery:
         return 'customQuery';
-      case KeysToSubscribe.CustomQuery:
-        return 'customQuery';
       case KeysToSubscribe.RequestPending:
         return 'requestPending';
       case KeysToSubscribe.RecentSearches:

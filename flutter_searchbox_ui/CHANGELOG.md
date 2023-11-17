@@ -1,3 +1,18 @@
+## 4.0.0-alpha.5
+
+- update searchbase and flutter_searchbox: expose URL through transformRequest function
+
+## 4.0.0-alpha.4
+
+- upgrade searchbase and flutter_searchbox
+
+
+## 4.0.0-alpha.3
+
+## 4.0.0-alpha.1
+
+- alpha release for Dart 3 support
+
 ## [3.2.0] - 05-09-2022
 
 - stable release
