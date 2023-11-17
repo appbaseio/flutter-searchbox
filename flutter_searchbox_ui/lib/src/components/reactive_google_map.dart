@@ -347,6 +347,8 @@ class ReactiveMap extends StatefulWidget {
 class ReactiveMapState extends State<ReactiveMap> {
   ClusterManager? _manager;
 
+  bool _isMapFirstLoad = true;
+
   final Completer<GoogleMapController> _controller = Completer();
 
   Set<Marker> markers = {};
@@ -471,10 +473,13 @@ class ReactiveMapState extends State<ReactiveMap> {
         }
       },
       onCameraIdle: () {
-        if (widget.searchAsMove) {
-          triggerQuery();
+        if (!_isMapFirstLoad) {
+          if (widget.searchAsMove) {
+            triggerQuery();
+          }
+          _manager?.updateMap();
         }
-        _manager?.updateMap();
+        _isMapFirstLoad = false;
         // invoke prop
         if (widget.onCameraIdle != null) {
           widget.onCameraIdle!();
@@ -1553,6 +1558,7 @@ class ReactiveGoogleMap extends StatefulWidget {
   /// Defaults to 30 seconds.
   final Duration httpRequestTimeout;
 
+  // ignore: prefer_const_constructors_in_immutables
   ReactiveGoogleMap({
     Key? key,
     required this.id,
