@@ -1,3 +1,7 @@
+## 4.0.0-alpha.6
+
+- Improved: Map - onCameraIdle callback to prevent unnecessary queries on mount
+
 ## 4.0.0-alpha.5
 
 - update searchbase and flutter_searchbox: expose URL through transformRequest function
