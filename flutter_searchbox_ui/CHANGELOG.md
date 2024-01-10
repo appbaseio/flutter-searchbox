@@ -1,3 +1,7 @@
+## 4.0.0-alpha.7
+
+- Improved: Map - initState - triggerQuery only when triggerQueryOnInit is true
+
 ## 4.0.0-alpha.6
 
 - Improved: Map - onCameraIdle callback to prevent unnecessary queries on mount
