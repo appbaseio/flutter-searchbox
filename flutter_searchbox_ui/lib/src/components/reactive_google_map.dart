@@ -485,8 +485,8 @@ class ReactiveMapState extends State<ReactiveMap> {
           if (widget.searchAsMove) {
             triggerQuery();
           }
-          _manager?.updateMap();
         }
+        _manager?.updateMap();
         _isMapFirstLoad = false;
         // invoke prop
         if (widget.onCameraIdle != null) {

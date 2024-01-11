@@ -1,3 +1,7 @@
+## 4.0.0-alpha.8
+
+- Improved: Map - update Map cluster on map camera initialisation
+
 ## 4.0.0-alpha.7
 
 - Improved: Map - initState - triggerQuery only when triggerQueryOnInit is true
