@@ -353,8 +353,6 @@ class ReactiveMap extends StatefulWidget {
 class ReactiveMapState extends State<ReactiveMap> {
   ClusterManager? _manager;
 
-  bool _isMapFirstLoad = true;
-
   final Completer<GoogleMapController> _controller = Completer();
 
   Set<Marker> markers = {};
@@ -481,13 +479,11 @@ class ReactiveMapState extends State<ReactiveMap> {
         }
       },
       onCameraIdle: () {
-        if (!_isMapFirstLoad) {
-          if (widget.searchAsMove) {
-            triggerQuery();
-          }
+        if (widget.searchAsMove) {
+          triggerQuery();
         }
+
         _manager?.updateMap();
-        _isMapFirstLoad = false;
         // invoke prop
         if (widget.onCameraIdle != null) {
           widget.onCameraIdle!();

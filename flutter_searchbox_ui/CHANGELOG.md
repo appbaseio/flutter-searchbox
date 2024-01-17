@@ -1,3 +1,7 @@
+## 4.0.0-beta
+
+- fix: remove redundant conditional blocking query trigger on first load
+
 ## 4.0.0-alpha.8
 
 - Improved: Map - update Map cluster on map camera initialisation
