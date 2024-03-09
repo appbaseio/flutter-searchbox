@@ -1,3 +1,8 @@
+## 4.0.0-alpha.7
+
+- update searchbase to ^4.0.0-alpha.6
+
+
 ## 4.0.0-alpha.6
 
 - update searchbase: expose URL through transformRequest function
