@@ -3,6 +3,22 @@
 - update searchbase and flutter_searchbox: 
   - flutter SDK 3.19.x compatibility 
   - minimally update outdated packges
+  
+## 4.0.0-beta
+
+- fix: remove redundant conditional blocking query trigger on first load
+
+## 4.0.0-alpha.8
+
+- Improved: Map - update Map cluster on map camera initialisation
+
+## 4.0.0-alpha.7
+
+- Improved: Map - initState - triggerQuery only when triggerQueryOnInit is true
+
+## 4.0.0-alpha.6
+
+- Improved: Map - onCameraIdle callback to prevent unnecessary queries on mount
 
 ## 4.0.0-alpha.5
 

@@ -279,7 +279,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
             // Size of Elasticsearch aggregations
             aggregationSize: 50,
             // To fetch initial results
-            triggerQueryOnInit: true,
+            triggerQueryOnInit: false,
             // To update markers when map bounds change
             searchAsMove: true,
             // [Optipnal] Use a default query to use Elasticsearch `geohash_grid` query.

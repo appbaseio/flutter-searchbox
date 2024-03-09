@@ -291,8 +291,14 @@ class ReactiveMap extends StatefulWidget {
   /// Zoom level to stop cluster rendering
   final double? stopClusteringZoom;
 
+  /// It can be used to prevent the default query execution at the time of initial build.
+  ///
+  /// Defaults to `true`.
+  final bool? triggerQueryOnInit;
+
   const ReactiveMap({
     Key? key,
+    this.triggerQueryOnInit,
     required this.searchController,
     this.showMarkerClusters = true,
     this.autoCenter = false,
@@ -362,8 +368,11 @@ class ReactiveMapState extends State<ReactiveMap> {
     widget.searchController.subscribeToStateChanges((changes) {
       setMarkers();
     }, [KeysToSubscribe.Results, KeysToSubscribe.AggregationData]);
-    // trigger map query
-    triggerQuery();
+
+    if (widget.triggerQueryOnInit == true) {
+      // trigger map query
+      triggerQuery();
+    }
     super.initState();
   }
 
@@ -416,7 +425,6 @@ class ReactiveMapState extends State<ReactiveMap> {
         }
       }
     }
-
     if (widget.showMarkerClusters) {
       _manager?.setItems(items);
     } else {
@@ -474,6 +482,7 @@ class ReactiveMapState extends State<ReactiveMap> {
         if (widget.searchAsMove) {
           triggerQuery();
         }
+
         _manager?.updateMap();
         // invoke prop
         if (widget.onCameraIdle != null) {
@@ -516,6 +525,7 @@ class _ReactiveGoogleMapState extends State<ReactiveGoogleMap> {
       builder: (context, searchController) {
         return ReactiveMap(
           searchController: searchController,
+          triggerQueryOnInit: widget.triggerQueryOnInit,
           // map specific
           showMarkerClusters: widget.showMarkerClusters,
           autoCenter: widget.autoCenter,
@@ -1553,6 +1563,7 @@ class ReactiveGoogleMap extends StatefulWidget {
   /// Defaults to 30 seconds.
   final Duration httpRequestTimeout;
 
+  // ignore: prefer_const_constructors_in_immutables
   ReactiveGoogleMap({
     Key? key,
     required this.id,
