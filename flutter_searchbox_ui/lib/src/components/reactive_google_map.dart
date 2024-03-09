@@ -444,9 +444,9 @@ class ReactiveMapState extends State<ReactiveMap> {
     });
   }
 
-  Future<Marker> Function(Cluster<Place>) get _markerBuilder =>
-      (cluster) async {
-        return widget.buildClusterMarker!(cluster);
+  Future<Marker> Function(dynamic) get _markerBuilder =>
+      (dynamic cluster) async {
+        return widget.buildClusterMarker!(cluster as Cluster<Place>);
       };
 
   @override

@@ -1,3 +1,9 @@
+## 4.0.0-alpha.8
+
+- update searchbase and flutter_searchbox: 
+  - flutter SDK 3.19.x compatibility 
+  - minimally update outdated packges
+
 ## 4.0.0-alpha.5
 
 - update searchbase and flutter_searchbox: expose URL through transformRequest function

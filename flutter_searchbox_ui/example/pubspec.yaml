@@ -31,8 +31,8 @@ dependencies:
     sdk: flutter
   google_maps_flutter: ^2.5.0
   google_maps_flutter_ios: ^2.3.2
-  flutter_searchbox: ^4.0.0-alpha.5
-  searchbase: ^4.0.0-alpha.4
+  flutter_searchbox: ^4.0.0-alpha.7
+  searchbase: ^4.0.0-alpha.6
   flutter_searchbox_ui:
     path: ./../
 
