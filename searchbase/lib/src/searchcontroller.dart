@@ -1381,9 +1381,11 @@ class SearchController extends Base {
         '_headers': responseHeaders,
       };
     } on TimeoutException {
-      throw HttpTimeout(); // Throw HttpTimeout error
+      // Return a Future.error with an instance of HttpTimeout
+      return Future.error(HttpTimeout());
     } on SocketException {
-      throw NoInternet(); // Throw NoInternet error
+      // Return a Future.error with an instance of NoInternet
+      return Future.error(NoInternet());
     } catch (e) {
       print(e);
       return Future.error(e);
