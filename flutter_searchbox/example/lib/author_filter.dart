@@ -129,8 +129,8 @@ class AuthorFilter extends StatelessWidget {
                           flex: 6,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              onPrimary: Colors.black87,
-                              primary: Colors.black,
+                              foregroundColor: Colors.black87,
+                              backgroundColor: Colors.black,
                               minimumSize: Size(88, 36),
                               padding: EdgeInsets.symmetric(
                                   horizontal: 10.0, vertical: 23.0),
@@ -172,8 +172,8 @@ class AuthorFilter extends StatelessWidget {
                           flex: 6,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              onPrimary: Colors.black87,
-                              primary: Colors.black,
+                              foregroundColor: Colors.black87,
+                              backgroundColor: Colors.black,
                               minimumSize: Size(88, 36),
                               padding: EdgeInsets.symmetric(
                                   horizontal: 10.0, vertical: 23.0),

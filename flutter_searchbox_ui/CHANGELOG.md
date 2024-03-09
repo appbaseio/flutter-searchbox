@@ -1,3 +1,9 @@
+## 4.0.0-beta.1
+
+- update searchbase and flutter_searchbox: 
+  - flutter SDK 3.19.x compatibility 
+  - minimally update outdated packges
+  
 ## 4.0.0-beta
 
 - fix: remove redundant conditional blocking query trigger on first load
