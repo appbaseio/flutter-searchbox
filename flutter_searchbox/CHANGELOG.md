@@ -1,3 +1,9 @@
+## 4.0.0
+
+- stable release
+- update searchbase to ^4.0.0
+
+
 ## 4.0.0-alpha.7
 
 - update searchbase to ^4.0.0-alpha.6

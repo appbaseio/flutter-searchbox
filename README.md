@@ -1,6 +1,6 @@
 ## Searchbox
 
-Searchbox is a lightweight and performance focused search UI component library to query and display results from your ElasticSearch index using declarative props. It's available for React, Vue, React Native and Flutter. This repo contains the Flutter variant of the library. If you're looking for other variants, you can go [here](https://github.com/appbaseio/searchbox).
+Searchbox is a lightweight and performance focused search UI component library to query and display results from your Elasticsearch index using declarative props. It's available for React, Vue, React Native and Flutter. This repo contains the Flutter variant of the library. If you're looking for other variants, you can go [here](https://github.com/appbaseio/searchbox).
 
 <p align="center">
   <a href="https://github.com/appbaseio/searchbase/tree/master/packages/searchbox" style="padding: 10px; display: inline;"><img  width="30%" src="https://docs.appbase.io/images/Searchbox_JS@1x.png" alt="searchbox" title="searchbox" /></a>
@@ -49,7 +49,7 @@ Please check the [contribution guide](.github/CONTRIBUTING.md).
 
 - [**ReactiveSearch**](https://github.com/appbaseio/reactivesearch/) React, React Native and Vue UI components for building data-driven apps with Elasticsearch.
 
-- [**arc**](https://github.com/appbaseio/arc) API Gateway for ElasticSearch (Out of the box Security, Rate Limit Features, Record Analytics and Request Logs).
+- [**arc**](https://github.com/appbaseio/arc) API Gateway for Elasticsearch (Out of the box Security, Rate Limit Features, Record Analytics and Request Logs).
 
 - [**dejavu**](https://github.com/appbaseio/dejavu) allows viewing raw data within an appbase.io (or Elasticsearch) app. **Soon to be released feature:** An ability to import custom data from CSV and JSON files, along with a guided walkthrough on applying data mappings.
 
