@@ -39,7 +39,8 @@ $ flutter pub get
 
 The following example renders a `RangeInput` ui widget from the `flutter_searchbox_ui` library with id `range-filter` to render a range input selector,. This widget is being used by `map-widget` to filter the earthquakes markers data based on the range of `magnitude` of earthquakes, selected in `range-filter`(check the `react` property).
 
-```dartimport 'package:flutter/material.dart';
+```dart
+import 'package:flutter/material.dart';
 import 'package:searchbase/searchbase.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
