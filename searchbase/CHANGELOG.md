@@ -1,4 +1,7 @@
 
+## 4.0.0
+- stable release
+
 ## 4.0.0-alpha.6
 - feat: Upgrade http package to latest
 - fix: http exception handling
