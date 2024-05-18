@@ -107,7 +107,7 @@ class ReactiveMap extends StatefulWidget {
   /// If set to `true` then it would update the results as the map bounds change. Defaults to `false`.
   final bool searchAsMove;
 
-  /// The [ReactiveGoogleMap] component uses the ElasticSearch hits to render the markers, if you wish to override the default markers then ``calculateMarkers` prop is the way.
+  /// The [ReactiveGoogleMap] component uses the Elasticsearch hits to render the markers, if you wish to override the default markers then ``calculateMarkers` prop is the way.
   ///
   /// The below example uses the `aggregations` data to calculate the markers.
   ///
@@ -1524,7 +1524,7 @@ class ReactiveGoogleMap extends StatefulWidget {
   /// If set to `true` then it would update the results as the map bounds change. Defaults to `false`.
   final bool searchAsMove;
 
-  /// The [ReactiveGoogleMap] component uses the ElasticSearch hits to render the markers, if you wish to override the default markers then ``calculateMarkers` prop is the way.
+  /// The [ReactiveGoogleMap] component uses the Elasticsearch hits to render the markers, if you wish to override the default markers then ``calculateMarkers` prop is the way.
   ///
   /// The below example uses the `aggregations` data to calculate the markers.
   ///

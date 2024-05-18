@@ -1,3 +1,7 @@
+## 4.0.0
+- stable release
+- update searchbase, flutter_searchbox
+
 ## 4.0.0-beta.1
 
 - update searchbase and flutter_searchbox: 
