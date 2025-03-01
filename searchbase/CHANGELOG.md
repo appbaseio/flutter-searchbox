@@ -6,6 +6,15 @@
 
 - stable release
 
+## 4.0.0
+- stable release
+
+## 4.0.0-alpha.6
+- feat: Upgrade http package to latest
+- fix: http exception handling
+  - Timeout and socketIO exceptions are returned in a Future.error wrapper instead of being thrown
+- Upgrade step to comply with latest Flutter SDK(3.19.x)
+
 ## 4.0.0-alpha.5
 
 - feat: expose URL through transformRequest function
