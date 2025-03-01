@@ -1,8 +1,13 @@
+## 4.0.0
+
+- stable release
 
 ## 4.0.0-alpha.5
+
 - feat: expose URL through transformRequest function
 
 ## 4.0.0-alpha.4
+
 - fixes typecasting error
 
 ## 4.0.0-alpha.3
@@ -24,6 +29,7 @@
 ## 3.4.11-beta
 
 - add support for `compoundClause` property
+
 ## 3.4.10-beta
 
 - fix: reset filters bug - regression
