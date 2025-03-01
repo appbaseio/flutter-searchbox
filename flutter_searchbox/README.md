@@ -1,6 +1,6 @@
 ## Flutter SearchBox
 
-[flutter_searchbox](https://github.com/appbaseio/flutter-searchbox/tree/master/flutter_searchbox) provides declarative API to query Elasticsearch, and binds UI widgets with different types of search queries. As the name suggests, it provides a searchbox UI widget for Elasticsearch and Appbase.io.
+[flutter_searchbox](https://github.com/appbaseio/flutter-searchbox/tree/master/flutter_searchbox) provides a declarative API to query Elasticsearch / OpenSearch and binds UI widgets with various search query types. Designed for use with ReactiveSearch.io.
 
 ## Installation
 
@@ -33,7 +33,7 @@ $ flutter pub get
   <img alt="Voice search" src="https://raw.githubusercontent.com/appbaseio/flutter-assets/master/voicesearch.gif" style="margin-left: 50px" width="250" /> 
 </p>
 
-The following example renders an autosuggestion [SearchBox](`search-widget`) with one custom widget [SearchWidgetConnector](`result-widget`) to render the results. The `result-widget` watches the `search-widget` for input changes and updates its UI when the user selects a suggestion.
+The following example renders an autosuggestion [SearchBox] widget with id `search-widget` with one custom widget [SearchWidgetConnector] with id `result-widget` to render the results. The `result-widget` watches the `search-widget` for input changes and updates its UI when the user selects a suggestion.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -62,7 +62,7 @@ class FlutterSearchBoxApp extends StatelessWidget {
   final stp.SpeechToTextProvider speechToTextInstance =
       stp.SpeechToTextProvider(stt.SpeechToText());
 
-  FlutterSearchBoxApp({Key key}) : super(key: key);
+  FlutterSearchBoxApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -163,9 +163,7 @@ class ResultsWidget extends StatelessWidget {
           child: ListView.builder(
             itemBuilder: (context, index) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                var offset =
-                    (searchController.from != null ? searchController.from : 0) +
-                        searchController.size;
+                var offset = (searchController.from ?? 0) + searchController.size;
                 if (index == offset - 1) {
                   if (searchController.results.numberOfResults > offset) {
                     // Load next set of results
@@ -385,7 +383,7 @@ class FlutterSearchBoxApp extends StatelessWidget {
           // Use unique user id to personalize the recent searches
           userId: 'jon@appbase.io'));
 
-  FlutterSearchBoxApp({Key key}) : super(key: key);
+  FlutterSearchBoxApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -465,7 +463,7 @@ class HomePage extends StatelessWidget {
             dataField: "authors.keyword",
             size: 10,
             // Initialize with default value
-            value: List<String>(),
+            value: <String>[],
             react: {
               'and': ['search-widget']
             },
@@ -505,10 +503,7 @@ class ResultsWidget extends StatelessWidget {
           child: ListView.builder(
             itemBuilder: (context, index) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                var offset = (searchController.from != null
-                        ? searchController.from
-                        : 0) +
-                    searchController.size;
+                var offset = (searchController.from ?? 0) + searchController.size;
                 if (index == offset - 1) {
                   if (searchController.results.numberOfResults > offset) {
                     // Load next set of results
@@ -705,7 +700,7 @@ class FilterHeader extends PreferredSize {
   final double height;
   final Widget child;
 
-  FilterHeader({@required this.child, this.height = kToolbarHeight});
+  FilterHeader({required this.child, this.height = kToolbarHeight});
 
   @override
   Size get preferredSize => Size.fromHeight(height);
@@ -783,17 +778,13 @@ class AuthorFilter extends StatelessWidget {
                                           ListTileControlAffinity.leading,
                                       activeColor: Colors.black54,
                                       dense: true,
-                                      title: new Text(
+                                      title: Text(
                                           "${bucket['_key']} (${bucket['_doc_count']})"),
-                                      value: (searchController.value == null
-                                              ? []
-                                              : searchController.value)
+                                      value: (searchController.value ?? [])
                                           .contains(bucket['_key']),
                                       onChanged: (bool value) {
                                         final List<String> values =
-                                            searchController.value == null
-                                                ? []
-                                                : searchController.value;
+                                            searchController.value ?? [];
                                         if (values.contains(bucket['_key'])) {
                                           values.remove(bucket['_key']);
                                         } else {
@@ -831,13 +822,14 @@ class AuthorFilter extends StatelessWidget {
                       children: [
                         Expanded(
                           flex: 6,
-                          child: RaisedButton(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10.0, vertical: 23.0),
-                            color: Colors.black,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0, vertical: 23.0),
+                                backgroundColor: Colors.black),
                             child: Text(
                               'Apply',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.w300,
                                 color: Colors.white,
@@ -866,13 +858,14 @@ class AuthorFilter extends StatelessWidget {
                         ),
                         Expanded(
                           flex: 6,
-                          child: RaisedButton(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10.0, vertical: 23.0),
-                            color: Colors.black,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0, vertical: 23.0),
+                                backgroundColor: Colors.black),
                             child: Text(
                               'Close',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.w300,
                                 color: Colors.white,

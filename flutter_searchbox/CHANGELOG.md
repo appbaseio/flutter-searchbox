@@ -2,6 +2,7 @@
 
 - updates deprecated API use for onPrimary/primary → foregroundColor/backgroundColor in example / author_filter.dart
 - updates searchbase dependency to 4.0.1
+- updates README, modernizes Flutter code examples
 
 ## 4.0.0
 
