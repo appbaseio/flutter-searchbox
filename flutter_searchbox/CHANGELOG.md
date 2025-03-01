@@ -1,3 +1,12 @@
+## 4.0.1
+
+- updates deprecated API use for onPrimary/primary → foregroundColor/backgroundColor in example / author_filter.dart
+- updates searchbase dependency to 4.0.1
+
+## 4.0.0
+
+- stable release
+
 ## 4.0.0-alpha.6
 
 - update searchbase: expose URL through transformRequest function
