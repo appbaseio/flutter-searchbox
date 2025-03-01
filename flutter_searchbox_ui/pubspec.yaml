@@ -1,20 +1,27 @@
 name: flutter_searchbox_ui
-description: Flutter Searchbox UI provides ui widgets to perform different type of search queries. As the name suggests, it provides UI widgets for Elasticseasrch.
-version: 4.0.0-beta
+description: Flutter Searchbox UI provides UI widgets for handling search queries and state for Elasticsearch / OpenSearch. It is intended for use with ReactiveSearch.io.
+version: 4.0.0
 homepage: https://github.com/appbaseio/flutter-searchbox
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=1.17.0"
+  flutter: ">=3.0.0 <4.0.0"
 
 dependencies:
   dart_geohash: ^2.0.1
   flutter:
     sdk: flutter
   flutter_searchbox: ^4.0.0-alpha.6
-  google_maps_cluster_manager: ^3.0.0+1
-  google_maps_flutter: ^2.0.11
-  searchbase: ^4.0.0-alpha.5
+  google_maps_cluster_manager:
+    git:
+      url: https://github.com/bpillon/google_maps_cluster_manager.git
+      ref: master
+  google_maps_flutter: ^2.10.1
+  google_maps_flutter_android: ^2.14.13
+  google_maps_flutter_ios: ^2.13.2
+  google_maps_flutter_platform_interface: ^2.6.0
+  geolocator: ^13.0.2
+  searchbase: ^4.0.0-alpha.6
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -22,6 +29,13 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+# Commented out the fork since we're trying with downgraded version
+# dependency_overrides:
+#   google_maps_cluster_manager:
+#     git:
+#       url: https://github.com/MacDeveloper1/google_maps_cluster_manager.git
+#       ref: fix/cluster
 
 # The following section is specific to Flutter.
 flutter:

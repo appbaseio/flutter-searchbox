@@ -1,3 +1,17 @@
+## 4.0.0
+
+- Compatibility with Flutter 3.29.0
+- Updated Google Maps related dependencies:
+  - Updated google_maps_flutter to ^2.10.1
+  - Updated google_maps_flutter_android to ^2.14.13
+  - Updated google_maps_flutter_ios to ^2.13.2
+  - Updated google_maps_flutter_platform_interface to ^2.6.0
+  - Updated geolocator to ^13.0.2
+  - Changed google_maps_cluster_manager to use bpillon's fork to resolve class naming conflicts
+- Fix: Resolved class naming conflicts between Google Maps packages
+- Fix: Configured minimum iOS deployment target to 14.0
+- Fix: Remove redundant conditional blocking query trigger on first load
+
 ## 4.0.0-beta
 
 - fix: remove redundant conditional blocking query trigger on first load
@@ -21,7 +35,6 @@
 ## 4.0.0-alpha.4
 
 - upgrade searchbase and flutter_searchbox
-
 
 ## 4.0.0-alpha.3
 

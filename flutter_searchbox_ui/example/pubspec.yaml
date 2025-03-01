@@ -1,5 +1,5 @@
 name: example
-description: A new Flutter project.
+description: A Flutter Maps demo
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -29,10 +29,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  google_maps_flutter: ^2.5.0
-  google_maps_flutter_ios: ^2.3.2
-  flutter_searchbox: ^4.0.0-alpha.5
-  searchbase: ^4.0.0-alpha.4
+  google_maps_flutter: ^2.10.1
+  google_maps_flutter_android: ^2.14.13
+  google_maps_flutter_ios: ^2.13.2
+  google_maps_flutter_platform_interface: ^2.11.1
+  google_maps_cluster_manager:
+    git:
+      url: https://github.com/bpillon/google_maps_cluster_manager.git
+      ref: master
+  geolocator: ^13.0.2
+  flutter_searchbox: ^4.0.0-alpha.6
+  searchbase: ^4.0.0-alpha.6
   flutter_searchbox_ui:
     path: ./../
 
