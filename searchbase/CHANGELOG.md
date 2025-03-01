@@ -1,3 +1,7 @@
+## 4.0.1
+
+- fixes type warnings
+
 ## 4.0.0
 
 - stable release
