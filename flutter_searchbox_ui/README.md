@@ -1,8 +1,8 @@
 ## Flutter SearchBox UI
 
-[flutter_searchbox_ui](https://github.com/appbaseio/flutter-searchbox/tree/master/flutter_searchbox_ui) provides UI widgets for Elasticsearch and Appbase.io, with the ability to make different types of queries.
+[flutter_searchbox_ui](https://github.com/appbaseio/flutter-searchbox/tree/master/flutter_searchbox_ui) provides ready-to-use UI components for Elasticsearch / OpenSearch search queries, designed for use with ReactiveSearch.io.
 
-Currently, We support [RangeInput] and [ReactiveGoogleMap] components
+Currently, we support [RangeInput] and [ReactiveGoogleMap] components
 
 ## Installation
 
@@ -14,9 +14,9 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_searchbox: ^3.1.0
-  searchbase: ^3.4.0-beta
-  flutter_searchbox_ui: 1.0.16-alpha
+  flutter_searchbox: ^4.0.1
+  searchbase: ^4.0.1
+  flutter_searchbox_ui: ^4.0.1
 ```
 
 2. Install it
@@ -27,7 +27,7 @@ You can install packages from the command line:
 $ flutter pub get
 ```
 
-3. To use [ReactiveGoogleMap] please follow the installation guide mentioned at [here](https://pub.dev/packages/google_maps_flutter).
+3. To use [ReactiveGoogleMap] please follow the Google Maps Flutter installation guide [here](https://pub.dev/packages/google_maps_flutter).
 
 ## Basic usage
 
@@ -37,7 +37,7 @@ $ flutter pub get
   <img alt="Basic Example" src="https://raw.githubusercontent.com/appbaseio/flutter-assets/master/map.gif" width="250" />
 </p>
 
-The following example renders a `RangeInput` ui widget from the `flutter_searchbox_ui` library with id `range-filter` to render a range input selector,. This widget is being used by `map-widget` to filter the earthquakes markers data based on the range of `magnitude` of earthquakes, selected in `range-filter`(check the `react` property).
+The following example renders a `RangeInput` UI widget from the `flutter_searchbox_ui` library with id `range-filter` to render a range input selector. This widget is being used by `map-widget` to filter the earthquakes markers data based on the range of `magnitude` of earthquakes, selected in `range-filter` (check the `react` property).
 
 ```dart
 import 'package:flutter/material.dart';
@@ -326,7 +326,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
             triggerQueryOnInit: true,
             // To update markers when map bounds change
             searchAsMove: true,
-            // [Optipnal] Use a default query to use Elasticsearch `geohash_grid` query.
+            // [Optional] Use a default query to use Elasticsearch `geohash_grid` query.
             defaultQuery: (SearchController controller) {
               return {
                 "aggregations": {
@@ -346,7 +346,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
                 }
               };
             },
-            // [Optipnal] Calculate markers from aggregation data
+            // [Optional] Calculate markers from aggregation data
             calculateMarkers: (SearchController controller) {
               List<Place> places = [];
               for (var bucket

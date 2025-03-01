@@ -4,12 +4,13 @@ import 'package:searchbase/searchbase.dart';
 import 'package:flutter_searchbox/flutter_searchbox.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
-import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
+import 'package:google_maps_cluster_manager_appbase_fork/google_maps_cluster_manager_appbase_fork.dart' as cluster_manager;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+// Avoid importing platform interface directly to prevent naming conflicts
 import '../utils.dart';
 
 /// It represents the marker representation of Elasticsearch response.
-class Place with ClusterItem {
+class Place with cluster_manager.ClusterItem {
   /// Represents a unique identifier for each marker.
   final String id;
 
@@ -99,7 +100,7 @@ class ReactiveMap extends StatefulWidget {
   ///      );
   ///  }
   /// ```dart
-  final Future<Marker> Function(Cluster<Place> cluster)? buildClusterMarker;
+  final Future<Marker> Function(cluster_manager.Cluster<Place> cluster)? buildClusterMarker;
 
   /// whether to auto center the map based on the geometric center of all the location markers. Defaults to false.
   final bool autoCenter;
@@ -351,7 +352,7 @@ class ReactiveMap extends StatefulWidget {
 }
 
 class ReactiveMapState extends State<ReactiveMap> {
-  ClusterManager? _manager;
+  cluster_manager.ClusterManager? _manager;
 
   final Completer<GoogleMapController> _controller = Completer();
 
@@ -376,8 +377,8 @@ class ReactiveMapState extends State<ReactiveMap> {
     super.initState();
   }
 
-  ClusterManager _initClusterManager() {
-    return ClusterManager<Place>(items, _updateMarkers,
+  cluster_manager.ClusterManager _initClusterManager() {
+    return cluster_manager.ClusterManager<Place>(items, _updateMarkers,
         markerBuilder: _markerBuilder,
         levels: widget.levels,
         extraPercent: widget.extraPercent,
@@ -396,8 +397,8 @@ class ReactiveMapState extends State<ReactiveMap> {
 
     var value = {
       "geoBoundingBox": {
-        "topLeft": north + "," + west,
-        "bottomRight": south + "," + east,
+        "topLeft": "$north,$west",
+        "bottomRight": "$south,$east",
       }
     };
     widget.searchController.setValue(value,
@@ -452,9 +453,9 @@ class ReactiveMapState extends State<ReactiveMap> {
     });
   }
 
-  Future<Marker> Function(dynamic) get _markerBuilder =>
-      (dynamic cluster) async {
-        return widget.buildClusterMarker!(cluster as Cluster<Place>);
+  Future<Marker> Function(cluster_manager.Cluster<Place>) get _markerBuilder =>
+      (cluster) async {
+        return widget.buildClusterMarker!(cluster);
       };
 
   @override
@@ -466,7 +467,12 @@ class ReactiveMapState extends State<ReactiveMap> {
       markers: markers,
       onMapCreated: (GoogleMapController controller) {
         _controller.complete(controller);
-        _manager?.setMapId(controller.mapId);
+        // Get mapId in a way that's compatible with all platforms
+        if (_manager != null) {
+          controller.getVisibleRegion().then((_) => 
+            _manager!.setMapId(controller.mapId)
+          );
+        }
         // invoke prop
         if (widget.onMapCreated != null) {
           widget.onMapCreated!(controller);
@@ -653,7 +659,7 @@ class _ReactiveGoogleMapState extends State<ReactiveGoogleMap> {
 /// import 'package:flutter_searchbox_ui/flutter_searchbox_ui.dart';
 /// import 'package:google_maps_flutter/google_maps_flutter.dart';
 /// import 'package:dart_geohash/dart_geohash.dart';
-/// import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
+/// import 'package:google_maps_cluster_manager_appbase_fork/google_maps_cluster_manager_appbase_fork.dart';
 
 /// void main() {
 ///   runApp(FlutterSearchBoxUIApp());
@@ -740,7 +746,7 @@ class _ReactiveGoogleMapState extends State<ReactiveGoogleMap> {
 ///               showMarkerClusters: true,
 ///               // Build cluster marker
 ///               // Here we are displaying the [Marker] icon and text based on the number of items present in a cluster.
-///               buildClusterMarker: (Cluster<Place> cluster) async {
+///               buildClusterMarker: (cluster_manager.cluster_manager.Cluster<Place> cluster) async {
 ///                 return Marker(
 ///                   markerId: MarkerId(cluster.getId()),
 ///                   position: cluster.location,
@@ -1516,7 +1522,7 @@ class ReactiveGoogleMap extends StatefulWidget {
   ///      );
   ///  }
   /// ```dart
-  final Future<Marker> Function(Cluster<Place> cluster)? buildClusterMarker;
+  final Future<Marker> Function(cluster_manager.Cluster<Place> cluster)? buildClusterMarker;
 
   /// whether to auto center the map based on the geometric center of all the location markers. Defaults to false.
   final bool autoCenter;

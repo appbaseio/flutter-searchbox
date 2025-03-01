@@ -8,7 +8,9 @@ import 'package:flutter_searchbox/flutter_searchbox.dart';
 import 'package:flutter_searchbox_ui/flutter_searchbox_ui.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:dart_geohash/dart_geohash.dart';
-import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
+import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart' hide ClusterManager;
+// Import with alias to avoid naming conflicts
+import 'package:google_maps_cluster_manager_appbase_fork/google_maps_cluster_manager_appbase_fork.dart' as cluster_manager;
 import 'dart:io';
 
 void main() {
@@ -253,24 +255,14 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
               zoom: 4,
             ),
             // To enable markers' clustering
-            showMarkerClusters: true,
-            // Build cluster marker
-            // Here we are displaying the [Marker] icon and text based on the number of items present in a cluster.
-            buildClusterMarker: (Cluster<Place> cluster) async {
+            showMarkerClusters: false,
+            // Build markers without clustering
+            buildMarker: (Place place) {
               return Marker(
-                markerId: MarkerId(cluster.getId()),
-                position: cluster.location,
-                icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
-                    text: cluster.isMultiple
-                        ? cluster.count.toString()
-                        : cluster.items.first.source?["magnitude"]),
-              );
+                  markerId: MarkerId(place.id), 
+                  position: place.position,
+                  icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange));
             },
-            // To build marker when `showMarkerClusters` is set to `false`
-            // buildMarker: (Place place) {
-            //   return Marker(
-            //       markerId: MarkerId(place.id), position: place.position);
-            // },
             // Database field mapped to geo points.
             dataField: 'location',
             // Size of Elasticsearch hits
@@ -279,7 +271,7 @@ class FlutterSearchBoxUIApp extends StatelessWidget {
             // Size of Elasticsearch aggregations
             aggregationSize: 50,
             // To fetch initial results
-            triggerQueryOnInit: false,
+            triggerQueryOnInit: true,
             // To update markers when map bounds change
             searchAsMove: true,
             // [Optipnal] Use a default query to use Elasticsearch `geohash_grid` query.

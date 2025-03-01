@@ -1,6 +1,6 @@
 name: searchbase
-version: 4.0.0
-description: Searchbase allows building search UIs for ReactiveSearch, powered by Elasticsearch or OpenSearch
+version: 4.0.1
+description: SearchBase is a library to build the search UIs with Elasticsearch.
 homepage: https://github.com/appbaseio/flutter-searchbox
 environment:
   sdk: ">=3.0.0 <4.0.0"

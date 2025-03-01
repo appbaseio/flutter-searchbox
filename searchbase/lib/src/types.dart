@@ -89,8 +89,6 @@ class ChangesController {
       case KeysToSubscribe.After:
         this.After = DynamicMapTypeChanges(prev, next);
         break;
-      default:
-        break;
     }
   }
 }
@@ -506,8 +504,6 @@ extension KeysToSubscribeExtension on KeysToSubscribe {
         return 'recentSearches';
       case KeysToSubscribe.After:
         return 'after';
-      default:
-        return "";
     }
   }
 }
