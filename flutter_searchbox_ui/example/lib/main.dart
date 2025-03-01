@@ -10,7 +10,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:dart_geohash/dart_geohash.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart' hide ClusterManager;
 // Import with alias to avoid naming conflicts
-import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart' as cluster_manager;
+import 'package:google_maps_cluster_manager_appbase_fork/google_maps_cluster_manager_appbase_fork.dart' as cluster_manager;
 import 'dart:io';
 
 void main() {

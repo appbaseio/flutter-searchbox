@@ -12,6 +12,7 @@
 - Fix: Configured minimum iOS deployment target to 14.0
 - Fix: Remove redundant conditional blocking query trigger on first load
 - Updates README, modernizes Flutter code examples
+- Forks google_maps_cluster_manager dependency to fix import conflicts and update its dependencies
 
 ## 4.0.0
 

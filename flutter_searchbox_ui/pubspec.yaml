@@ -12,14 +12,11 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_searchbox: ^4.0.1
-  google_maps_cluster_manager:
-    git:
-      url: https://github.com/bpillon/google_maps_cluster_manager.git
-      ref: master
+  google_maps_cluster_manager_appbase_fork: ^3.1.1
   google_maps_flutter: ^2.10.1
   google_maps_flutter_android: ^2.14.13
   google_maps_flutter_ios: ^2.13.2
-  google_maps_flutter_platform_interface: ^2.6.0
+  google_maps_flutter_platform_interface: ^2.11.1
   geolocator: ^13.0.2
   searchbase: ^4.0.1
 dev_dependencies:
@@ -29,13 +26,6 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
-# Commented out the fork since we're trying with downgraded version
-# dependency_overrides:
-#   google_maps_cluster_manager:
-#     git:
-#       url: https://github.com/MacDeveloper1/google_maps_cluster_manager.git
-#       ref: fix/cluster
 
 # The following section is specific to Flutter.
 flutter:

@@ -4,7 +4,7 @@ import 'package:searchbase/searchbase.dart';
 import 'package:flutter_searchbox/flutter_searchbox.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
-import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart' as cluster_manager;
+import 'package:google_maps_cluster_manager_appbase_fork/google_maps_cluster_manager_appbase_fork.dart' as cluster_manager;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 // Avoid importing platform interface directly to prevent naming conflicts
 import '../utils.dart';
@@ -659,7 +659,7 @@ class _ReactiveGoogleMapState extends State<ReactiveGoogleMap> {
 /// import 'package:flutter_searchbox_ui/flutter_searchbox_ui.dart';
 /// import 'package:google_maps_flutter/google_maps_flutter.dart';
 /// import 'package:dart_geohash/dart_geohash.dart';
-/// import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
+/// import 'package:google_maps_cluster_manager_appbase_fork/google_maps_cluster_manager_appbase_fork.dart';
 
 /// void main() {
 ///   runApp(FlutterSearchBoxUIApp());

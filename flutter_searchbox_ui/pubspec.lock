@@ -184,15 +184,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.1.1"
-  google_maps_cluster_manager:
+  google_maps_cluster_manager_appbase_fork:
     dependency: "direct main"
     description:
-      path: "."
-      ref: master
-      resolved-ref: "7ab2a6363f70cbc775a84fb09a0abcf0d546cdae"
-      url: "https://github.com/bpillon/google_maps_cluster_manager.git"
-    source: git
-    version: "3.1.0"
+      name: google_maps_cluster_manager_appbase_fork
+      sha256: "098e3016ee061641588ea96f6fc6652927eebc6ca6e46f734f47042d452f9a81"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
   google_maps_flutter:
     dependency: "direct main"
     description:

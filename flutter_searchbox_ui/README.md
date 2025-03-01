@@ -29,8 +29,6 @@ $ flutter pub get
 
 3. To use [ReactiveGoogleMap] please follow the Google Maps Flutter installation guide [here](https://pub.dev/packages/google_maps_flutter).
 
-   Note: This package uses [bpillon's fork](https://github.com/bpillon/google_maps_cluster_manager) of google_maps_cluster_manager for compatibility with Flutter 3.29.0 and above.
-
 ## Basic usage
 
 ### ReactiveGoogleMap example with RangeInput
