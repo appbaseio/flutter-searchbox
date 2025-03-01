@@ -1,4 +1,4 @@
-## 4.0.0
+## 4.0.1
 
 - Compatibility with Flutter 3.29.0
 - Updated Google Maps related dependencies:
@@ -11,6 +11,11 @@
 - Fix: Resolved class naming conflicts between Google Maps packages
 - Fix: Configured minimum iOS deployment target to 14.0
 - Fix: Remove redundant conditional blocking query trigger on first load
+- Updates README, modernizes Flutter code examples
+
+## 4.0.0
+
+- stable release
 
 ## 4.0.0-beta
 
@@ -18,7 +23,7 @@
 
 ## 4.0.0-alpha.8
 
-- Improved: Map - update Map cluster on map camera initialisation
+- Improved: Map - update Map cluster on map camera initialization
 
 ## 4.0.0-alpha.7
 

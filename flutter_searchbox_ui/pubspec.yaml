@@ -1,17 +1,17 @@
 name: flutter_searchbox_ui
-description: Flutter Searchbox UI provides UI widgets for handling search queries and state for Elasticsearch / OpenSearch. It is intended for use with ReactiveSearch.io.
-version: 4.0.0
+description: Flutter Searchbox UI provides ready-to-use UI components for Elasticsearch / OpenSearch search queries, designed for use with ReactiveSearch.io.
+version: 4.0.1
 homepage: https://github.com/appbaseio/flutter-searchbox
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.0.0 <4.0.0"
+  flutter: ">=3.0.0"
 
 dependencies:
   dart_geohash: ^2.0.1
   flutter:
     sdk: flutter
-  flutter_searchbox: ^4.0.0-alpha.6
+  flutter_searchbox: ^4.0.1
   google_maps_cluster_manager:
     git:
       url: https://github.com/bpillon/google_maps_cluster_manager.git
@@ -21,7 +21,7 @@ dependencies:
   google_maps_flutter_ios: ^2.13.2
   google_maps_flutter_platform_interface: ^2.6.0
   geolocator: ^13.0.2
-  searchbase: ^4.0.0-alpha.6
+  searchbase: ^4.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
