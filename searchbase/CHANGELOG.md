@@ -1,3 +1,7 @@
+## 4.0.2
+
+- Fixes http dependency constraint to use ^1.2.1 instead of ^0.13.3
+
 ## 4.0.1
 
 - fixes type warnings

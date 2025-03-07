@@ -3,19 +3,19 @@
   "packages": [
     {
       "name": "_fe_analyzer_shared",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-55.0.0",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-67.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "analyzer",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/analyzer-5.7.1",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/analyzer-6.4.1",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "args",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/args-2.4.0",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/args-2.4.2",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -33,7 +33,7 @@
     },
     {
       "name": "collection",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/collection-1.17.1",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/collection-1.18.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -45,19 +45,19 @@
     },
     {
       "name": "coverage",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/coverage-1.6.3",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/coverage-1.7.2",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "crypto",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/crypto-3.0.2",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/crypto-3.0.3",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
     {
       "name": "file",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/file-6.1.4",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/file-7.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -69,13 +69,13 @@
     },
     {
       "name": "glob",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/glob-2.1.1",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/glob-2.1.2",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
     {
       "name": "http",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/http-0.13.5",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/http-1.2.1",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -99,31 +99,31 @@
     },
     {
       "name": "js",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/js-0.6.7",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/js-0.7.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "logging",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/logging-1.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
     {
-      "name": "logging",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/logging-1.1.1",
-      "packageUri": "lib/",
-      "languageVersion": "2.18"
-    },
-    {
       "name": "matcher",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/matcher-0.12.14",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/matcher-0.12.16+1",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "meta",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/meta-1.9.0",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/meta-1.12.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "mime",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/mime-1.0.4",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/mime-1.0.5",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -141,7 +141,7 @@
     },
     {
       "name": "path",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/path-1.8.3",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/path-1.9.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -153,31 +153,31 @@
     },
     {
       "name": "pub_semver",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/pub_semver-2.1.3",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/pub_semver-2.1.4",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "shelf",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/shelf-1.4.0",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/shelf-1.4.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "shelf_packages_handler",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/shelf_packages_handler-3.0.1",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/shelf_packages_handler-3.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "shelf_static",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/shelf_static-1.1.1",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/shelf_static-1.1.2",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "shelf_web_socket",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/shelf_web_socket-1.0.3",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/shelf_web_socket-1.0.4",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -195,19 +195,19 @@
     },
     {
       "name": "source_span",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/source_span-1.9.1",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/source_span-1.10.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "stack_trace",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/stack_trace-1.11.0",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/stack_trace-1.11.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "stream_channel",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/stream_channel-2.1.1",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/stream_channel-2.1.2",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -225,61 +225,61 @@
     },
     {
       "name": "test",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/test-1.23.1",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/test-1.25.2",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/test_api-0.4.18",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/test_api-0.7.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "test_core",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/test_core-0.4.24",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/test_core-0.6.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "typed_data",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/typed_data-1.3.1",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/typed_data-1.3.2",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/vm_service-11.2.0",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/vm_service-14.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "watcher",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/watcher-1.0.2",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/watcher-1.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "web",
-      "rootUri": "file:///Users/mohdashraf/.pub-cache/hosted/pub.dev/web-0.5.1",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/web-0.5.1",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "web_socket_channel",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/web_socket_channel-2.3.0",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/web_socket_channel-2.4.4",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "webkit_inspection_protocol",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/webkit_inspection_protocol-1.2.0",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/webkit_inspection_protocol-1.2.1",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "yaml",
-      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/yaml-3.1.1",
+      "rootUri": "file:///Users/sid/.pub-cache/hosted/pub.dev/yaml-3.1.2",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -290,7 +290,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2025-03-01T05:24:06.000002Z",
+  "generated": "2025-03-07T14:33:06.536986Z",
   "generator": "pub",
   "generatorVersion": "3.7.0",
   "flutterRoot": "file:///Users/sid/dev/flutter/flutter",
