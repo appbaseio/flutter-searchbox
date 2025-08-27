@@ -132,7 +132,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "4.0.1"
+    version: "4.0.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -203,10 +203,10 @@ packages:
     dependency: "direct main"
     description:
       name: google_maps_cluster_manager_appbase_fork
-      sha256: dad42b67a86baaf106b8e09b48cb464ece55a8a0121efbdae0a4ef416422775b
+      sha256: "098e3016ee061641588ea96f6fc6652927eebc6ca6e46f734f47042d452f9a81"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.0"
+    version: "3.1.1"
   google_maps_flutter:
     dependency: "direct main"
     description:
@@ -259,10 +259,10 @@ packages:
     dependency: transitive
     description:
       name: http
-      sha256: "761a297c042deedc1ffbb156d6e2af13886bb305c2a343a4d972504cd67dd938"
+      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.1"
+    version: "0.13.6"
   http_parser:
     dependency: transitive
     description:

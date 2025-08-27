@@ -1,3 +1,7 @@
+## 4.0.2
+
+- Adds mount check for ReactiveMap component
+
 ## 4.0.1
 
 - Compatibility with Flutter 3.29.0

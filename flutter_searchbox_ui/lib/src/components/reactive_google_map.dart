@@ -367,6 +367,7 @@ class ReactiveMapState extends State<ReactiveMap> {
     }
     // subscribe to the results and aggregationData to update markers
     widget.searchController.subscribeToStateChanges((changes) {
+      if (!mounted) return;
       setMarkers();
     }, [KeysToSubscribe.Results, KeysToSubscribe.AggregationData]);
 
@@ -449,6 +450,7 @@ class ReactiveMapState extends State<ReactiveMap> {
 
   void _updateMarkers(Set<Marker> markers) {
     setState(() {
+      if (!mounted) return;
       this.markers = markers;
     });
   }

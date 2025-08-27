@@ -35,8 +35,8 @@ dependencies:
   google_maps_flutter_platform_interface: ^2.11.1
   google_maps_cluster_manager_appbase_fork: ^3.1.0
   geolocator: ^13.0.2
-  flutter_searchbox: ^4.0.0-alpha.6
-  searchbase: ^4.0.0-alpha.6
+  flutter_searchbox: ^4.0.1
+  searchbase: ^4.0.1
   flutter_searchbox_ui:
     path: ./../
 
